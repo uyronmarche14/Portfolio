@@ -22,59 +22,32 @@ const Home: React.FC = () => {
   return (
     <>
       <section className="relative min-h-screen flex flex-col items-center justify-center bg-background overflow-hidden">
-        {/* Enhanced animated background spots */}
+        {/* Animated background spots */}
         <motion.div
-          className="absolute w-[400px] h-[400px] rounded-full bg-gradient-to-r from-primary/30 to-secondary/30 blur-[100px]"
+          className="absolute w-[300px] h-[300px] rounded-full bg-primary/20 blur-3xl"
           animate={{
-            x: [0, 100, -100, 0],
-            y: [0, -100, 100, 0],
-            scale: [1, 1.2, 0.8, 1],
-            opacity: [0.4, 0.7, 0.4],
-          }}
-          transition={{
-            duration: 30,
-            repeat: Infinity,
-            repeatType: "reverse",
-            ease: "easeInOut",
-          }}
-          style={{ top: "20%", left: "15%" }}
-        />
-        <motion.div
-          className="absolute w-[300px] h-[300px] rounded-full bg-gradient-to-l from-secondary/30 to-primary/30 blur-[80px]"
-          animate={{
-            x: [0, -50, 50, 0],
-            y: [0, 50, -50, 0],
-            scale: [1, 0.8, 1.2, 1],
-            opacity: [0.3, 0.6, 0.3],
-          }}
-          transition={{
-            duration: 25,
-            repeat: Infinity,
-            repeatType: "reverse",
-            ease: "easeInOut",
-          }}
-          style={{ bottom: "20%", right: "15%" }}
-        />
-        {/* Additional floating light spot */}
-        <motion.div
-          className="absolute w-[250px] h-[250px] rounded-full bg-gradient-to-tr from-primary/20 via-secondary/20 to-primary/20 blur-[60px]"
-          animate={{
-            x: [0, 70, -70, 0],
-            y: [0, -70, 70, 0],
-            scale: [1, 1.1, 0.9, 1],
-            opacity: [0.2, 0.5, 0.2],
+            x: [0, 100, 0],
+            y: [0, -100, 0],
           }}
           transition={{
             duration: 20,
             repeat: Infinity,
-            repeatType: "mirror",
-            ease: "easeInOut",
+            repeatType: "reverse",
           }}
-          style={{
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
+          style={{ top: "20%", left: "15%" }}
+        />
+        <motion.div
+          className="absolute w-[200px] h-[200px] rounded-full bg-secondary/20 blur-3xl"
+          animate={{
+            x: [0, -50, 0],
+            y: [0, 50, 0],
           }}
+          transition={{
+            duration: 15,
+            repeat: Infinity,
+            repeatType: "reverse",
+          }}
+          style={{ bottom: "20%", right: "15%" }}
         />
 
         <div className="container mx-auto px-4 text-center relative z-10">
@@ -104,7 +77,7 @@ const Home: React.FC = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.8 }}
             >
-              My Journey To Be A Developer.
+              My Journey Of Development.
             </motion.span>
           </motion.h1>
           <motion.p
@@ -114,12 +87,70 @@ const Home: React.FC = () => {
             className="mt-4 text-lg md:text-xl text-paragraph max-w-2xl mx-auto"
           >
             I&apos;m a backend, frontend, and mobile developer with a passion
-            for data and a love for learning new things related to technology.
+            for data and a love for learning new things related to technology
           </motion.p>
         </div>
       </section>
 
       {/* Update work section background to be more consistent */}
+      <section
+        id="works"
+        className="bg-background/95 backdrop-blur-sm py-16 md:py-20 relative"
+      >
+        {/* Add subtle background spot for works section */}
+        <motion.div
+          className="absolute w-[400px] h-[400px] rounded-full bg-primary/10 blur-3xl"
+          animate={{
+            scale: [1, 1.2, 1],
+            opacity: [0.3, 0.2, 0.3],
+          }}
+          transition={{
+            duration: 8,
+            repeat: Infinity,
+            repeatType: "reverse",
+          }}
+          style={{
+            top: "30%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+          }}
+        />
+
+        <div className="max-w-7xl mx-auto px-4">
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="text-3xl md:text-4xl font-bold text-center mb-10 text-headline"
+          >
+            My Recent Works
+          </motion.h2>
+
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+            className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3"
+          >
+            {[1, 2, 3].map((index) => (
+              <motion.div
+                key={index}
+                whileHover={{ y: -5 }}
+                className="bg-background border border-paragraph/20 rounded-xl overflow-hidden hover:border-primary transition-colors duration-300 p-6"
+              >
+                <h3 className="text-xl font-semibold mb-2 text-headline">
+                  Project {index}
+                </h3>
+                <p className="text-paragraph">
+                  Minimal design solution focusing on user experience.
+                </p>
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
+      </section>
     </>
   );
 };
