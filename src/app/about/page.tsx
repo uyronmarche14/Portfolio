@@ -285,7 +285,7 @@ export default function About() {
                 <p>
                   My passion for programming began in senior high school. I was
                   fascinated by how applications work and how they can make
-                  people's lives easier.
+                  people&apos;s lives easier.
                 </p>
                 <p>
                   What drives me is the endless possibility of creating
@@ -297,9 +297,9 @@ export default function About() {
                   environment with my peers.
                 </p>
                 <p>
-                  Currently, I'm focused on expanding my knowledge in both web
-                  and mobile development, and I enjoy sharing what I've learned
-                  with others through tutoring and mentorship.
+                  Currently, I&apos;m focused on expanding my knowledge in both
+                  web and mobile development, and I enjoy sharing what I&apos;ve
+                  learned with others through tutoring and mentorship.
                 </p>
               </div>
             </div>
@@ -407,7 +407,7 @@ export default function About() {
                       {card.experience}
                     </p>
                     <p className="text-sm text-paragraph/80 italic">
-                      "{card.highlight}"
+                      &quot;{card.highlight}&quot;
                     </p>
                   </div>
                 </div>

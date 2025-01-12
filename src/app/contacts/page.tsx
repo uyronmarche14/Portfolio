@@ -88,15 +88,15 @@ export default function page() {
               Contact Us
             </span>
             <h1 className="text-5xl md:text-6xl font-bold text-headline mb-6">
-              Let's
+              Let&apos;s
               <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
                 {" "}
                 Connect
               </span>
             </h1>
             <p className="text-paragraph text-lg max-w-2xl">
-              I'am here to help and answer any questions you might have. I look
-              forward to hearing from you!
+              I&apos;m here to help and answer any questions you might have. I
+              look forward to hearing from you!
             </p>
           </motion.div>
         </motion.div>
