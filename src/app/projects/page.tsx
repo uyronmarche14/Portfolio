@@ -379,7 +379,7 @@ const Projects = () => {
               animate={{ opacity: 1 }}
               className="text-center py-20 text-paragraph"
             >
-              No projects found matching the selected filter.
+              None projects found matching the selected filter.
             </motion.div>
           )}
 
