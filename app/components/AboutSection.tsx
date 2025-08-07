@@ -10,6 +10,7 @@ import AboutTimeline from "./ui/aboutTimeline";
 import { getTechIcon } from "../utils/techIcons";
 import AnimatedBackground from "./AnimatedBackground";
 import { AboutDoGrid } from "./ui/aboutDo";
+import { CldImage } from "next-cloudinary";
 
 const AboutSection = () => {
   const { scrollYProgress } = useScroll();
@@ -17,7 +18,10 @@ const AboutSection = () => {
   const scale = useTransform(scrollYProgress, [0, 0.2], [1, 0.95]);
 
   return (
-    <section id="about" className="bg-background min-h-screen py-16 px-4 flex justify-center relative overflow-hidden snap-start">
+    <section
+      id="about"
+      className="bg-background min-h-screen py-16 px-4 flex justify-center relative overflow-hidden snap-start"
+    >
       <AnimatedBackground />
 
       <div className="relative max-w-7xl w-full rounded-2xl p-8 md:p-12 backdrop-blur-sm">
@@ -93,8 +97,8 @@ const AboutSection = () => {
             {/* Profile Info */}
             <div className="relative">
               <div className="w-[550px] h-[400px] rounded-2xl overflow-hidden border-2 border-primary/20 shadow-lg">
-                <Image
-                  src={profile}
+                <CldImage
+                  src="https://res.cloudinary.com/ddnxfpziq/image/upload/v1753097383/113_UY_RON_MARCHE_RHYSS_TCU02311_vvabi3.jpg"
                   alt="Profile photo"
                   fill
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
@@ -131,13 +135,13 @@ const AboutSection = () => {
                 </span>
               </h2>
               <p className="text-paragraph text-lg leading-relaxed">
-                I&apos;m a developer who loves building all kinds of applications,
-                from web to mobile and beyond. I enjoy creating awesome UIs and
-                adding features that make applications feel more alive and
-                interactive. I&apos;ve been developing applications for two years
-                now, and I&apos;ve learned a lot from my experiences. I&apos;m a
-                self-taught developer, and much of my knowledge comes from
-                resources available on the internet.
+                I&apos;m a developer who loves building all kinds of
+                applications, from web to mobile and beyond. I enjoy creating
+                awesome UIs and adding features that make applications feel more
+                alive and interactive. I&apos;ve been developing applications
+                for two years now, and I&apos;ve learned a lot from my
+                experiences. I&apos;m a self-taught developer, and much of my
+                knowledge comes from resources available on the internet.
               </p>
             </div>
 
@@ -159,14 +163,18 @@ const AboutSection = () => {
                       const iconData = getTechIcon(tech.iconName);
                       if (!iconData) return null;
                       const IconComponent = iconData.icon;
-                      return <IconComponent className="w-4 h-4" color={iconData.color} />;
+                      return (
+                        <IconComponent
+                          className="w-4 h-4"
+                          color={iconData.color}
+                        />
+                      );
                     })()}
                     {tech.name}
                   </motion.div>
                 ))}
               </div>
             </div>
-
           </motion.div>
         </div>
 

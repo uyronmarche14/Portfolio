@@ -3,10 +3,14 @@ import { motion } from "framer-motion";
 import { useState, useEffect, useMemo } from "react";
 import { Menu, X, Music, FileText } from "lucide-react";
 import { NAV_ITEMS, NAVBAR_LABELS } from "../data/navbar";
-import { Button } from "./ui/button";
+import { Button } from "@/components/ui/shadcn/button";
 import ResumeDrawer from "./ui/drawer/resumeDrawer";
 import MusicDrawer from "./ui/drawer/musicDrawer";
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import {
+  Avatar,
+  AvatarImage,
+  AvatarFallback,
+} from "@/components/ui/shadcn/avatar";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -71,7 +75,7 @@ const Navbar = () => {
             {/* Avatar Section */}
             <div className="flex items-center px-4 py-3">
               <Avatar className="w-8 h-8">
-                <AvatarImage src="https://github.com/shadcn.png" />
+                <AvatarImage src="https://res.cloudinary.com/ddnxfpziq/image/upload/v1753097383/113_UY_RON_MARCHE_RHYSS_TCU02311_vvabi3.jpg" />
                 <AvatarFallback>CN</AvatarFallback>
               </Avatar>
             </div>

@@ -52,15 +52,11 @@ const AboutDoCard: React.FC<AboutDoCardProps> = ({
               </div>
             )}
           </div>
-          <h4 className="text-xl font-bold text-headline">
-            {title}
-          </h4>
+          <h4 className="text-xl font-bold text-headline">{title}</h4>
         </div>
 
         {/* Description */}
-        <p className="text-paragraph text-sm leading-relaxed">
-          {description}
-        </p>
+        <p className="text-paragraph text-sm leading-relaxed">{description}</p>
 
         {/* Skills */}
         <div className="flex flex-wrap gap-2">
@@ -120,18 +116,15 @@ export const AboutDoGrid: React.FC<AboutDoGridProps> = ({
         {title}
         {subtitle && (
           <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-            {" "}{subtitle}
+            {" "}
+            {subtitle}
           </span>
         )}
       </motion.h2>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {cards.map((card, index) => (
-          <AboutDoCard
-            key={card.title}
-            {...card}
-            index={index}
-          />
+          <AboutDoCard key={card.title} {...card} index={index} />
         ))}
       </div>
     </section>

@@ -11,17 +11,17 @@ import {
   DrawerDescription,
   DrawerFooter,
   DrawerClose,
-} from "@/components/ui/drawer";
-import { Button } from "@/components/ui/button";
+} from "@/components/ui/shadcn/drawer";
+import { Button } from "@/components/ui/shadcn/button";
 
 interface ResumeDrawerProps {
   trigger?: React.ReactNode;
   resumeUrl?: string; // Allow custom resume URL
 }
 
-const ResumeDrawer: React.FC<ResumeDrawerProps> = ({ 
-  trigger, 
-  resumeUrl = "/resume.pdf" 
+const ResumeDrawer: React.FC<ResumeDrawerProps> = ({
+  trigger,
+  resumeUrl = "/resume.pdf",
 }) => {
   const [isLoading, setIsLoading] = useState(false);
 
@@ -29,17 +29,17 @@ const ResumeDrawer: React.FC<ResumeDrawerProps> = ({
     setIsLoading(true);
     try {
       // Create a temporary link to download the file
-      const link = document.createElement('a');
+      const link = document.createElement("a");
       link.href = resumeUrl;
-      link.download = 'resume.pdf';
-      link.target = '_blank';
+      link.download = "resume.pdf";
+      link.target = "_blank";
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
     } catch (error) {
-      console.error('Download failed:', error);
+      console.error("Download failed:", error);
       // Fallback: open in new tab
-      window.open(resumeUrl, '_blank');
+      window.open(resumeUrl, "_blank");
     } finally {
       setIsLoading(false);
     }
@@ -49,13 +49,12 @@ const ResumeDrawer: React.FC<ResumeDrawerProps> = ({
     <Drawer direction="right">
       <DrawerTrigger asChild>
         {trigger || (
-          <Button 
-            variant="ghost" 
-            size="sm" 
+          <Button
+            variant="ghost"
+            size="sm"
             className="text-white/70 hover:text-white hover:bg-white/10 transition-all duration-300 rounded-xl px-4 py-2 border border-white/20 hover:border-white/40"
           >
             <FileText className="w-4 h-4" />
-            
           </Button>
         )}
       </DrawerTrigger>
@@ -73,38 +72,38 @@ const ResumeDrawer: React.FC<ResumeDrawerProps> = ({
             </Button>
           </DrawerClose>
         </DrawerHeader>
-        
+
         <div className="flex-1 p-4 overflow-hidden">
           <div className="h-full w-full border rounded-lg overflow-hidden bg-gray-50">
-            <iframe 
+            <iframe
               src={resumeUrl}
-              width="100%" 
+              width="100%"
               height="100%"
               className="border-none"
               title="Resume PDF Viewer"
               onError={() => {
-                console.error('Failed to load resume PDF');
+                console.error("Failed to load resume PDF");
               }}
             />
           </div>
         </div>
-        
+
         <DrawerFooter className="border-t">
           <div className="flex gap-2 justify-end">
-            <Button 
-              variant="outline" 
-              onClick={() => window.open(resumeUrl, '_blank')}
+            <Button
+              variant="outline"
+              onClick={() => window.open(resumeUrl, "_blank")}
             >
               <FileText className="w-4 h-4 mr-2" />
               View in New Tab
             </Button>
-            <Button 
+            <Button
               onClick={handleDownload}
               disabled={isLoading}
               className="bg-primary hover:bg-blue-700"
             >
               <Download className="w-4 h-4 mr-2" />
-              {isLoading ? 'Downloading...' : 'Download Resume'}
+              {isLoading ? "Downloading..." : "Download Resume"}
             </Button>
           </div>
         </DrawerFooter>

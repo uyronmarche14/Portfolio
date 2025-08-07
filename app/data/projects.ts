@@ -24,10 +24,10 @@ export const projects: Project[] = [
     githubUrl: "https://github.com/your-username/portfolio",
     liveUrl: "https://uyronmarche14.github.io/CodexExpress/login",
     screenshots: [
-      "/images/Screenshot 2025-01-12 193709.png",
-      "/images/Screenshot 2025-01-12 193718.png",
-      "/images/Screenshot 2025-01-12 193727.png",
-      "/images/Screenshot 2025-01-12 193738.png",
+      "https://res.cloudinary.com/ddnxfpziq/image/upload/v1754572290/Screenshot_2025-01-12_193709_pbh8ue.png",
+      "https://res.cloudinary.com/ddnxfpziq/image/upload/v1754572290/Screenshot_2025-01-12_193718_mmsb4q.png",
+      "https://res.cloudinary.com/ddnxfpziq/image/upload/v1754572291/Screenshot_2025-01-12_193727_ncdsz6.png",
+      "https://res.cloudinary.com/ddnxfpziq/image/upload/v1754572291/Screenshot_2025-01-12_193738_tlpqdr.png",
     ],
     timeline: [
       {
