@@ -2,8 +2,14 @@
 
 import React from "react";
 import { motion } from "framer-motion";
+import { Mail, Phone, MapPin } from "lucide-react";
 import { contactInfo, socialLinks } from "../data/contacts";
 import { CONTACT_CONTENT } from "../data/contactContent";
+import { Input } from "@/components/ui/input";
+import { Card, CardHeader, CardTitle , CardContent } from "@/components/ui/card";
+import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
 import AnimatedBackground from "./AnimatedBackground";
 
 const ContactSection = () => {
@@ -60,10 +66,11 @@ const ContactSection = () => {
                 transition={{ duration: 0.6, delay: 0.2 }}
                 className="space-y-8"
               >
-                <div className="backdrop-blur-md bg-background/30 p-6 rounded-2xl border border-primary/10 shadow-lg">
-                  <h2 className="text-2xl font-semibold text-headline mb-6">
-                    Quick Contact 
-                  </h2>
+                <Card className="backdrop-blur-md bg-background/30 p-6 rounded-2xl border border-primary/10 shadow-lg">
+                  <CardHeader>
+                    <CardTitle className="text-2xl font-semibold text-headline mb-6">Quick Contact</CardTitle>
+                  </CardHeader>
+                  <CardContent>
                   <div className="space-y-6">
                     {/* Emails */}
                     <div className="space-y-2">
@@ -72,20 +79,7 @@ const ContactSection = () => {
                         whileHover={{ x: 5 }}
                         className="flex items-center gap-3 text-paragraph hover:text-primary transition-colors"
                       >
-                        <svg
-                          className="w-5 h-5 text-primary"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-                          />
-                        </svg>
+                        <Mail className="w-5 h-5 text-primary" />
                         <a
                           href={`mailto:${contactInfo.emails[0]?.address}`}
                           className="hover:underline"
@@ -102,20 +96,7 @@ const ContactSection = () => {
                         whileHover={{ x: 5 }}
                         className="flex items-center gap-3 text-paragraph hover:text-primary transition-colors"
                       >
-                        <svg
-                          className="w-5 h-5 text-primary"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
-                          />
-                        </svg>
+                        <Phone className="w-5 h-5 text-primary" />
                         <a
                           href={`tel:${contactInfo.phones[0]?.number.replace(/\s+/g, "")}`}
                           className="hover:underline"
@@ -134,42 +115,25 @@ const ContactSection = () => {
                         whileHover={{ x: 5 }}
                         className="flex items-center gap-3 text-paragraph"
                       >
-                        <svg
-                          className="w-5 h-5 text-primary"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-                          />
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-                          />
-                        </svg>
+                        <MapPin className="w-5 h-5 text-primary" />
                         <span>{contactInfo.location.address}</span>
                       </motion.div>
                     </div>
                   </div>
-                </div>
+                  </CardContent>
+                </Card>
 
                 {/* Social Links */}
                 <motion.div
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ duration: 0.6, delay: 0.4 }}
-                  className="backdrop-blur-md bg-background/30 p-6 rounded-2xl border border-primary/10 shadow-lg"
                 >
-                  <h2 className="text-2xl font-semibold text-headline mb-6">
-                    Connect With Me
-                  </h2>
+                  <Card className="backdrop-blur-md bg-background/30 p-6 rounded-2xl border border-primary/10 shadow-lg">
+                    <CardHeader>
+                      <CardTitle className="text-2xl font-semibold text-headline mb-6">Connect With Me</CardTitle>
+                    </CardHeader>
+                    <CardContent>
                   <div className="grid grid-cols-2 gap-4">
                     {socialLinks.slice(0, 4).map((social, index) => {
                       const IconComponent = social.icon;
@@ -193,6 +157,8 @@ const ContactSection = () => {
                       );
                     })}
                   </div>
+                  </CardContent>
+                  </Card>
                 </motion.div>
               </motion.div>
 
@@ -203,94 +169,93 @@ const ContactSection = () => {
                 transition={{ duration: 0.6, delay: 0.4 }}
                 className="h-full"
               >
-                <div className="backdrop-blur-md bg-background/30 p-6 rounded-2xl border border-primary/10 shadow-lg h-full">
-                  <h2 className="text-2xl font-semibold text-headline mb-6">
-                    {CONTACT_CONTENT.formTitle}
-                  </h2>
-                  <form
-                    action={`mailto:${contactInfo.emails[0]?.address}`}
-                    method="post"
-                    encType="text/plain"
-                    className="space-y-4"
-                  >
-                    <div>
-                      <label htmlFor="name" className="block text-sm font-medium text-paragraph mb-2">
-                        Name
-                      </label>
-                      <input
-                        type="text"
-                        id="name"
-                        name="name"
-                        required
-                        className="w-full px-4 py-2 bg-background/50 border border-paragraph/20 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all"
-                        placeholder={CONTACT_CONTENT.namePlaceholder}
-                      />
-                    </div>
-                    
-                    <div>
-                      <label htmlFor="email" className="block text-sm font-medium text-paragraph mb-2">
-                        Email
-                      </label>
-                      <input
-                        type="email"
-                        id="email"
-                        name="email"
-                        required
-                        className="w-full px-4 py-2 bg-background/50 border border-paragraph/20 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all"
-                        placeholder={CONTACT_CONTENT.emailPlaceholder}
-                      />
-                    </div>
-                    
-                    <div>
-                      <label htmlFor="subject" className="block text-sm font-medium text-paragraph mb-2">
-                        Subject
-                      </label>
-                      <input
-                        type="text"
-                        id="subject"
-                        name="subject"
-                        required
-                        className="w-full px-4 py-2 bg-background/50 border border-paragraph/20 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all"
-                        placeholder={CONTACT_CONTENT.subjectPlaceholder}
-                      />
-                    </div>
-                    
-                    <div>
-                      <label htmlFor="message" className="block text-sm font-medium text-paragraph mb-2">
-                        Message
-                      </label>
-                      <textarea
-                        id="message"
-                        name="message"
-                        rows={4}
-                        required
-                        className="w-full px-4 py-2 bg-background/50 border border-paragraph/20 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all resize-none"
-                        placeholder={CONTACT_CONTENT.messagePlaceholder}
-                      />
-                    </div>
-                    
-                    <motion.button
-                      type="submit"
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
-                      className="w-full bg-primary text-white py-3 px-6 rounded-lg font-semibold hover:bg-primary/90 transition-colors focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background"
+                <Card className="backdrop-blur-md bg-background/30 p-6 rounded-2xl border border-primary/10 shadow-lg h-full">
+                  <CardHeader>
+                    <CardTitle className="text-2xl font-semibold text-headline mb-6">
+                      {CONTACT_CONTENT.formTitle}
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <form
+                      action={`mailto:${contactInfo.emails[0]?.address}`}
+                      method="post"
+                      encType="text/plain"
+                      className="space-y-4"
                     >
-                      {CONTACT_CONTENT.sendButton}
-                    </motion.button>
-                  </form>
-                  
-                  <div className="mt-6 text-center">
-                    <p className="text-sm text-paragraph/60">
-                      Or reach out directly at{' '}
-                      <a
-                        href={`mailto:${contactInfo.emails[0]?.address}`}
-                        className="text-primary hover:underline"
+                      <div>
+                        <Label htmlFor="name" className="block text-sm font-medium text-paragraph mb-2">
+                          Name
+                        </Label>
+                        <Input
+                          type="text"
+                          id="name"
+                          name="name"
+                          required
+                          placeholder={CONTACT_CONTENT.namePlaceholder}
+                          className=""
+                        />
+                      </div>
+                      
+                      <div>
+                        <Label htmlFor="email" className="block text-sm font-medium text-paragraph mb-2">
+                          Email
+                        </Label>
+                        <Input
+                          type="email"
+                          id="email"
+                          name="email"
+                          required
+                          placeholder={CONTACT_CONTENT.emailPlaceholder}
+                        />
+                      </div>
+                      
+                      <div>
+                        <Label htmlFor="subject" className="block text-sm font-medium text-paragraph mb-2">
+                          Subject
+                        </Label>
+                        <Input
+                          type="text"
+                          id="subject"
+                          name="subject"
+                          required
+                          placeholder={CONTACT_CONTENT.subjectPlaceholder}
+                        />
+                      </div>
+                      
+                      <div>
+                        <Label htmlFor="message" className="block text-sm font-medium text-paragraph mb-2">
+                          Message
+                        </Label>
+                        <Textarea
+                          id="message"
+                          name="message"
+                          rows={4}
+                          required
+                          placeholder={CONTACT_CONTENT.messagePlaceholder}
+                        />
+                      </div>
+                      
+                      <Button
+                        type="submit"
+                        className="w-full"
                       >
-                        {contactInfo.emails[0]?.address}
-                      </a>
-                    </p>
-                  </div>
-                </div>
+                        {CONTACT_CONTENT.sendButton}
+                      </Button>
+                    </form>
+                    
+                    <div className="mt-6 text-center">
+                      <p className="text-sm text-paragraph/60">
+                        Or reach out directly at{' '}
+                        <a
+                          href={`mailto:${contactInfo.emails[0]?.address}`}
+                          className="text-primary hover:underline"
+                        >
+                          {contactInfo.emails[0]?.address}
+                        </a>
+                      </p>
+                    </div>
+                  </CardContent>
+                </Card>
               </motion.div>
             </div>
           </div>

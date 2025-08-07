@@ -4,9 +4,10 @@ import React from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { getTechIcon } from "../../utils/techIcons";
-import Timeline from "../Timeline";
+import Timeline from "@/components/ui/Timeline";
 import { PROJECTS_CONTENT } from "../../data/projectsContent";
 import { FiExternalLink, FiGithub, FiImage } from "react-icons/fi";
+import { ChevronDown } from "lucide-react";
 
 interface ProjectCardProps {
   project: {
@@ -138,21 +139,11 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
               aria-controls={`timeline-${project.id}`}
             >
               <span>{PROJECTS_CONTENT.timelineTitle}</span>
-              <svg
+              <ChevronDown
                 className={`w-4 h-4 transition-transform duration-200 ${
                   isExpanded ? "rotate-180" : ""
                 }`}
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M19 9l-7 7-7-7"
-                />
-              </svg>
+              />
             </button>
             
             <motion.div

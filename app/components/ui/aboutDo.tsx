@@ -105,7 +105,8 @@ interface AboutDoGridProps {
 
 export const AboutDoGrid: React.FC<AboutDoGridProps> = ({
   cards,
-  title = "What I Do",
+  title = "Experiences",
+
   subtitle,
 }) => {
   return (

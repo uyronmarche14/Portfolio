@@ -1,8 +1,12 @@
 "use client";
 import { motion } from "framer-motion";
 import { useState, useEffect, useMemo } from "react";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Music, FileText } from "lucide-react";
 import { NAV_ITEMS, NAVBAR_LABELS } from "../data/navbar";
+import { Button } from "./ui/button";
+import ResumeDrawer from "./ui/drawer/resumeDrawer";
+import MusicDrawer from "./ui/drawer/musicDrawer";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -15,7 +19,10 @@ const Navbar = () => {
   const navItems = useMemo(() => NAV_ITEMS, []);
 
   // Handle scroll to section with smooth behavior
-  const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, sectionId: string) => {
+  const scrollToSection = (
+    e: React.MouseEvent<HTMLAnchorElement>,
+    sectionId: string
+  ) => {
     e.preventDefault();
     const element = document.getElementById(sectionId);
     if (element) {
@@ -29,8 +36,8 @@ const Navbar = () => {
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
-      const sections = navItems.map(item => item.href.substring(1));
-      
+      const sections = navItems.map((item) => item.href.substring(1));
+
       for (const section of sections) {
         const element = document.getElementById(section);
         if (element) {
@@ -43,8 +50,8 @@ const Navbar = () => {
       }
     };
 
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
   }, [navItems]);
 
   return (
@@ -52,35 +59,70 @@ const Navbar = () => {
       initial={{ y: -20, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       className={`fixed w-full z-50 transition-all duration-500 ${
-        isScrolled 
-          ? 'bg-slate-950/50 backdrop-blur-xl shadow-xl shadow-black/20 border-b border-white/5' 
-          : 'bg-transparent'
+        isScrolled
+          ? "bg-gradient-to-b from-white/[0.05] to-transparent backdrop-blur-2xl border-b border-white/[0.08] shadow-2xl shadow-black/30"
+          : "bg-transparent"
       }`}
     >
-      <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-center">
+      <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-center relative ">
+        {/* Center - Main Navigation */}
         <div className="hidden md:flex items-center">
-          <div className="flex items-center space-x-1 px-2 py-2 rounded-full bg-white/5 backdrop-blur-md border border-white/10 shadow-xl shadow-black/10">
-            {navItems.map((item) => (
-              <a
-                key={item.label}
-                href={item.href}
-                onClick={(e) => scrollToSection(e, item.href.substring(1))}
-                className={`relative px-5 py-2.5 rounded-full transition-all duration-300 text-sm font-medium tracking-wide ${
-                  activeSection === item.href.substring(1)
-                    ? "bg-white/10 text-white shadow-lg shadow-black/20"
-                    : "text-white/60 hover:text-white/90 hover:bg-white/5"
-                }`}
-              >
-                {item.label}
-              </a>
-            ))}
+          <div className="flex items-center rounded-2xl bg-white/[0.03] backdrop-blur-xl border border-white/[0.05] shadow-2xl shadow-black/20 hover:shadow-3xl hover:shadow-black/30 transition-all duration-500">
+            {/* Avatar Section */}
+            <div className="flex items-center px-4 py-3">
+              <Avatar className="w-8 h-8">
+                <AvatarImage src="https://github.com/shadcn.png" />
+                <AvatarFallback>CN</AvatarFallback>
+              </Avatar>
+            </div>
+
+            {/* Vertical Separator */}
+            <div className="w-px h-8 bg-white/[0.12]" />
+
+            {/* Navigation Items */}
+            <div className="flex items-center px-2">
+              {navItems.map((item) => (
+                <a
+                  key={item.label}
+                  href={item.href}
+                  onClick={(e) => scrollToSection(e, item.href.substring(1))}
+                  className={`relative px-4 py-2.5 mx-1 rounded-xl transition-all duration-300 text-sm font-medium tracking-wide ${
+                    activeSection === item.href.substring(1)
+                      ? "bg-white/20 text-white shadow-lg shadow-black/20 backdrop-blur-sm"
+                      : "text-white/60 hover:text-white/90 hover:bg-white/[0.08]"
+                  }`}
+                >
+                  {item.label}
+                  {activeSection === item.href.substring(1) && (
+                    <motion.div
+                      className="absolute inset-0 rounded-xl bg-gradient-to-r from-blue-400/20 to-purple-400/20 border border-white/10"
+                      layoutId="activeTab"
+                      transition={{
+                        type: "spring",
+                        bounce: 0.2,
+                        duration: 0.6,
+                      }}
+                    />
+                  )}
+                </a>
+              ))}
+            </div>
+
+            {/* Vertical Separator */}
+            <div className="w-px h-8 bg-white/[0.12]" />
+
+            {/* Action Buttons */}
+            <div className="flex items-center gap-2 px-4 py-3">
+              <MusicDrawer />
+              <ResumeDrawer />
+            </div>
           </div>
         </div>
 
-        {/* Mobile button */}
+        {/* Mobile Menu Button */}
         <button
           onClick={toggleMenu}
-          className="md:hidden p-3 rounded-xl hover:bg-paragraph/5 transition-all duration-300 text-paragraph hover:text-primary absolute right-6 focus:outline-none focus:ring-2 focus:ring-primary/50"
+          className="md:hidden p-3 rounded-2xl bg-white/[0.03] backdrop-blur-xl border border-white/[0.05] shadow-2xl shadow-black/20 hover:bg-white/[0.08] hover:shadow-3xl hover:shadow-black/30 transition-all duration-500 text-white/70 hover:text-white focus:outline-none focus:ring-2 focus:ring-white/20"
           aria-label={isOpen ? NAVBAR_LABELS.closeMenu : NAVBAR_LABELS.openMenu}
           aria-expanded={isOpen}
         >
@@ -94,36 +136,80 @@ const Navbar = () => {
       </div>
 
       {/* Mobile Navigation */}
-      <motion.nav
+      <motion.div
         initial={{ opacity: 0, height: 0 }}
         animate={{
           opacity: isOpen ? 1 : 0,
-          height: isOpen ? 'auto' : 0,
+          height: isOpen ? "auto" : 0,
         }}
         transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
-        className="md:hidden overflow-hidden bg-slate-950/80 backdrop-blur-xl border-t border-white/5"
+        className="md:hidden overflow-hidden bg-white/[0.03] backdrop-blur-2xl border-t border-white/[0.08]"
         aria-hidden={!isOpen}
       >
-        <div className="flex flex-col p-4 space-y-1">
-          {navItems.map((item, index) => (
-            <motion.a
-              key={item.label}
-              href={item.href}
-              onClick={(e) => scrollToSection(e, item.href.substring(1))}
-              className={`block py-3 px-4 rounded-2xl transition-all duration-300 text-base font-medium ${
-                activeSection === item.href.substring(1)
-                  ? "bg-white/10 text-white shadow-lg shadow-black/20"
-                  : "text-white/70 hover:text-white hover:bg-white/5"
-              }`}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.05, duration: 0.3 }}
-            >
-              {item.label}
-            </motion.a>
-          ))}
+        <div className="p-6 space-y-4">
+          {/* Mobile Avatar Section */}
+          <div className="flex items-center gap-3 pb-4 border-b border-white/[0.08]">
+            <Avatar className="w-10 h-10">
+              <AvatarImage src="https://github.com/shadcn.png" />
+              <AvatarFallback>CN</AvatarFallback>
+            </Avatar>
+            <div className="text-white/80 text-sm font-medium">Menu</div>
+          </div>
+
+          {/* Mobile Navigation Items */}
+          <div className="space-y-2">
+            {navItems.map((item, index) => (
+              <motion.a
+                key={item.label}
+                href={item.href}
+                onClick={(e) => scrollToSection(e, item.href.substring(1))}
+                className={`block py-3 px-4 rounded-2xl transition-all duration-300 text-base font-medium ${
+                  activeSection === item.href.substring(1)
+                    ? "bg-white/20 text-white shadow-lg shadow-black/20 backdrop-blur-sm"
+                    : "text-white/60 hover:text-white/90 hover:bg-white/[0.08]"
+                }`}
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: index * 0.1, duration: 0.3 }}
+              >
+                {item.label}
+              </motion.a>
+            ))}
+          </div>
+
+          {/* Mobile Action Buttons */}
+          <motion.div
+            className="flex flex-col space-y-3 pt-4 border-t border-white/[0.08]"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3, duration: 0.3 }}
+          >
+            <ResumeDrawer
+              trigger={
+                <Button
+                  variant="ghost"
+                  className="justify-start text-white/60 hover:text-white/90 hover:bg-white/[0.08] transition-all duration-300 rounded-2xl py-3 px-4 border border-white/[0.08] backdrop-blur-sm w-full"
+                >
+                  <FileText className="w-4 h-4 mr-3" />
+                  View Resume
+                </Button>
+              }
+            />
+
+            <MusicDrawer
+              trigger={
+                <Button
+                  variant="ghost"
+                  className="justify-start text-white/60 hover:text-white/90 hover:bg-white/[0.08] transition-all duration-300 rounded-2xl py-3 px-4 border border-white/[0.08] backdrop-blur-sm w-full"
+                >
+                  <Music className="w-4 h-4 mr-3" />
+                  Music Player
+                </Button>
+              }
+            />
+          </motion.div>
         </div>
-      </motion.nav>
+      </motion.div>
     </motion.nav>
   );
 };
