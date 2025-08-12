@@ -3,8 +3,8 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { Mail, Phone, MapPin } from "lucide-react";
-import { contactInfo, socialLinks } from "../data/contacts";
-import { CONTACT_CONTENT } from "../data/contactContent";
+import { contactInfo, socialLinks } from "@/lib/data/contacts";
+import { CONTACT_CONTENT } from "@/lib/data/contactContent";
 import { Input } from "@/components/ui/shadcn/input";
 import {
   Card,

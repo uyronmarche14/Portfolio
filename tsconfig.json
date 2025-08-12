@@ -13,9 +13,16 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
-    "baseUrl": "./app",
+    "baseUrl": ".",
     "paths": {
-      "@/*": ["./*"]
+      "@/*": ["./app/*"],
+      "@/components/*": ["./app/components/*"],
+      "@/lib/*": ["./app/lib/*"],
+      "@/content/*": ["./app/content/*"],
+      "@/types/*": ["./app/lib/types/*"],
+      "@/data/*": ["./app/lib/data/*"],
+      "@/hooks/*": ["./app/lib/hooks/*"],
+      "@/utils/*": ["./app/lib/utils/*"]
     },
     "plugins": [
       {

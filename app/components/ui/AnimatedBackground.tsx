@@ -2,7 +2,7 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import { BACKGROUND_ANIMATIONS, BACKGROUND_TRANSITIONS } from "@/data/animatedBackground";
+import { BACKGROUND_ANIMATIONS, BACKGROUND_TRANSITIONS } from "@/lib/data/animatedBackground";
 
 const AnimatedBackground = React.memo(() => (
   <div className="absolute inset-0 overflow-hidden pointer-events-none">

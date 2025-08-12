@@ -2,14 +2,10 @@
 
 import React from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
-import Image from "next/image";
-import profile from "../../public/images/ronron.jpg";
-import { serviceCards } from "../data/services";
-import { technologies } from "../data/about";
-import AboutTimeline from "./ui/aboutTimeline";
-import { getTechIcon } from "../utils/techIcons";
+import { serviceCards } from "@/lib/data/services";
+import AboutTimeline from "@/components/ui/aboutTimeline";
 import AnimatedBackground from "@/components/ui/AnimatedBackground";
-import { AboutDoGrid } from "./ui/aboutDo";
+import { AboutDoGrid } from "@/components/ui/aboutDo";
 import { CldImage } from "next-cloudinary";
 
 const AboutSection = () => {

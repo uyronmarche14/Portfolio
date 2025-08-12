@@ -1,14 +1,12 @@
 "use client";
 
 import React from "react";
-import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { getTechIcon } from "../../utils/techIcons";
+import { getTechIcon } from "@/lib/utils/techIcons";
 import Timeline from "@/components/ui/Timeline";
-import { PROJECTS_CONTENT } from "../../data/projectsContent";
+import { PROJECTS_CONTENT } from "@/lib/data/projectsContent";
 import { FiExternalLink, FiGithub, FiImage } from "react-icons/fi";
-import { ChevronDown } from "lucide-react";
 import { Avatar } from "@/components/ui/shadcn/avatar";
 import { Button } from "./shadcn/button";
 import {
@@ -20,7 +18,7 @@ import {
 
 interface ProjectCardProps {
   project: {
-    id: number;
+    id: string;
     title: string;
     description: string;
     image: string;
@@ -34,59 +32,12 @@ interface ProjectCardProps {
     liveUrl?: string;
     githubUrl?: string;
   };
-  isExpanded: boolean;
-  onToggleTimeline: () => void;
 }
 
-interface ActionButtonProps {
-  text: string;
-  icon: "screenshots" | "external" | "github";
-  href?: string;
-  onClick?: () => void;
-}
 
-const ActionButton: React.FC<ActionButtonProps> = ({
-  text,
-  icon,
-  href,
-  onClick,
-}) => {
-  const icons = {
-    screenshots: <FiImage className="w-4 h-4" />,
-    external: <FiExternalLink className="w-4 h-4" />,
-    github: <FiGithub className="w-4 h-4" />,
-  };
-
-  const buttonContent = (
-    <span className="flex items-center gap-2">
-      {icons[icon]}
-      {text}
-    </span>
-  );
-
-  const commonProps = {
-    className:
-      "inline-flex items-center gap-2 px-2 py-1 rounded-md text-primary hover:text-primary/80 transition-colors text-sm",
-    children: buttonContent,
-  };
-
-  if (href) {
-    return (
-      <a
-        {...commonProps}
-        href={href}
-        target="_blank"
-        rel="noopener noreferrer"
-      />
-    );
-  }
-  return <button {...commonProps} onClick={onClick} />;
-};
 
 const ProjectCard: React.FC<ProjectCardProps> = ({
   project,
-  isExpanded,
-  onToggleTimeline,
 }) => {
   return (
     <motion.div

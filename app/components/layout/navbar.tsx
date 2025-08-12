@@ -2,7 +2,7 @@
 import { motion } from "framer-motion";
 import { useState, useEffect, useMemo } from "react";
 import { Menu, X, Music, FileText } from "lucide-react";
-import { NAV_ITEMS, NAVBAR_LABELS } from "@/data/navbar";
+import { NAV_ITEMS, NAVBAR_LABELS } from "@/lib/data/navbar";
 import { Button } from "@/components/ui/shadcn/button";
 import ResumeDrawer from "@/components/ui/drawer/resumeDrawer";
 import MusicDrawer from "@/components/ui/drawer/musicDrawer";

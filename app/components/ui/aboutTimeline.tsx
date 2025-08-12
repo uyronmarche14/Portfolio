@@ -2,7 +2,7 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import { timelineEvents } from "@/data/about";
+import { timelineEvents } from "@/lib/data/about";
 
 const AboutTimeline = () => {
   return (

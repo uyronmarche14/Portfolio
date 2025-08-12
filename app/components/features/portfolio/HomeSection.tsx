@@ -6,7 +6,7 @@ import {
   HOME_CONTENT,
   BACKGROUND_ANIMATIONS,
   LETTER_ANIMATION,
-} from "../data/homeContent";
+} from "@/lib/data/homeContent";
 
 const HomeSection: React.FC = () => {
   return (

@@ -5,10 +5,10 @@ import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowLeft, ExternalLink, Github } from "lucide-react";
-import { projects } from "../../data/projects";
-import ScreenshotCarousel from "../../components/ui/ScreenshotCarousel";
-import TechBadge from "../../components/ui/TechBadge";
-import Timeline from "../../components/ui/Timeline";
+import { projects } from "@/lib/data/projects";
+import ScreenshotCarousel from "@/components/ui/ScreenshotCarousel";
+import TechBadge from "@/components/ui/TechBadge";
+import Timeline from "@/components/ui/Timeline";
 
 import { useParams } from "next/navigation";
 

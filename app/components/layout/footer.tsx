@@ -1,7 +1,7 @@
 "use client";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { contactInfo, socialLinks } from "@/data/contacts";
+import { contactInfo, socialLinks } from "@/lib/data/contacts";
 
 const Footer = () => {
   return (

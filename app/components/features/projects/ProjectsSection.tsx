@@ -2,11 +2,11 @@
 
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { projects } from "../data/projects";
-import { PROJECTS_CONTENT, ANIMATION_VARIANTS } from "../data/projectsContent";
+import { projects } from "@/lib/data/projects";
+import { PROJECTS_CONTENT, ANIMATION_VARIANTS } from "@/lib/data/projectsContent";
 
-import ProjectCard from "./ui/projectCard";
-import { getTechIcon } from "../utils/techIcons";
+import ProjectCard from "@/components/ui/projectCard";
+import { getTechIcon } from "@/lib/utils/techIcons";
 import AnimatedBackground from "@/components/ui/AnimatedBackground";
 
 interface FilterButtonProps {
@@ -44,7 +44,7 @@ const FilterButton: React.FC<FilterButtonProps> = ({
 };
 
 const ProjectsSection = () => {
-  const [expandedTimelines, setExpandedTimelines] = useState<number[]>([]);
+  const [expandedTimelines, setExpandedTimelines] = useState<string[]>([]);
   const [filter, setFilter] = useState<string>("all");
 
   const technologies = React.useMemo(
@@ -64,7 +64,7 @@ const ProjectsSection = () => {
     [filter]
   );
 
-  const toggleTimeline = (projectId: number) => {
+  const toggleTimeline = (projectId: string) => {
     setExpandedTimelines((prev) =>
       prev.includes(projectId)
         ? prev.filter((id) => id !== projectId)
