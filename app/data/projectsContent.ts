@@ -1,10 +1,11 @@
 export const PROJECTS_CONTENT = {
   sectionTitle: "Featured Projects",
   sectionSubtitle: "My Work",
-  sectionDescription: "Explore a collection of my latest works, showcasing innovative solutions and creative development approaches.",
+  sectionDescription:
+    "Explore a collection of my latest works, showcasing innovative solutions and creative development approaches.",
   filterAll: "All",
   timelineTitle: "Development Timeline",
-  viewScreenshots: "View Screenshots",
+  viewScreenshots: "View Porject",
   liveDemo: "Live Demo",
   github: "GitHub",
 };

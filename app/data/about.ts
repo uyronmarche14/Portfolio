@@ -25,31 +25,36 @@ export const timelineEvents: TimelineEvent[] = [
   {
     year: "2020",
     title: "Started Learning Programming",
-    description: "Began my journey with Python fundamentals and algorithmic thinking, building a strong foundation in computer science concepts.",
-    icon: "laptop"
+    description:
+      "Began my journey with Python fundamentals and algorithmic thinking, building a strong foundation in computer science concepts.",
+    icon: "laptop",
   },
   {
     year: "2021",
     title: "Web Development Bootcamp",
-    description: "Completed intensive web development training covering HTML, CSS, JavaScript, and React fundamentals.",
-    icon: "code"
+    description:
+      "Completed intensive web development training covering HTML, CSS, JavaScript, and React fundamentals.",
+    icon: "code",
   },
   {
     year: "2022",
     title: "First Professional Project",
-    description: "Delivered first production-ready web application using React, Node.js, and PostgreSQL for a local business.",
-    icon: "briefcase"
+    description:
+      "Delivered first production-ready web application using React, Node.js, and PostgreSQL for a local business.",
+    icon: "briefcase",
   },
   {
     year: "2023",
     title: "Mobile Development Specialization",
-    description: "Mastered React Native and Expo, building cross-platform mobile applications with native performance.",
-    icon: "smartphone"
+    description:
+      "Mastered React Native and Expo, building cross-platform mobile applications with native performance.",
+    icon: "smartphone",
   },
   {
     year: "2024",
     title: "Full-Stack Mastery",
-    description: "Advanced to senior-level full-stack development, specializing in performance optimization, scalable architectures, and modern DevOps practices.",
-    icon: "rocket"
-  }
+    description:
+      "Advanced to senior-level full-stack development, specializing in performance optimization, scalable architectures, and modern DevOps practices.",
+    icon: "rocket",
+  },
 ];

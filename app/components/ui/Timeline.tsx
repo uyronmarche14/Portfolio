@@ -1,5 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
+import { Calendar, CheckCircle } from "lucide-react";
 
 interface TimelineEvent {
   id?: string;
@@ -42,45 +43,52 @@ const Timeline: React.FC<TimelineProps> = ({ events, className = "" }) => {
   }
 
   return (
-    <motion.ol
-      variants={timelineVariants}
-      initial="hidden"
-      animate="visible"
-      className={`space-y-4 mt-4 ${className}`}
-      aria-label="Timeline of events"
-    >
-      {events.map((event, index) => (
-        <motion.li 
-          key={event.id || `${event.date}-${index}`} 
-          variants={eventVariants} 
-          className="flex gap-4 group"
-        >
-          <div 
-            className="flex flex-col items-center flex-shrink-0"
-            aria-hidden="true"
+    <div className={`relative ${className}`}>
+      <h3 className="text-2xl font-bold mb-6 text-headline">Project Timeline</h3>
+      
+      <motion.div 
+        variants={timelineVariants}
+        initial="hidden"
+        animate="visible"
+        className="relative pl-8"
+      >
+        {/* Vertical line */}
+        <div className="absolute left-3 top-0 bottom-0 w-0.5 bg-border"></div>
+        
+        {events.map((event, index) => (
+          <motion.div
+            key={event.id || `${event.date}-${index}`}
+            variants={eventVariants}
+            className="relative mb-8 last:mb-0"
           >
-            <div className="w-3 h-3 bg-primary rounded-full transition-all duration-300 group-hover:scale-125 group-hover:bg-primary/80"></div>
-            {index !== events.length - 1 && (
-              <div className="w-0.5 h-full bg-primary/20 transition-colors duration-300 group-hover:bg-primary/30"></div>
-            )}
-          </div>
-          <article className="flex-1 pb-4 transition-transform duration-300 group-hover:translate-x-1">
-            <time 
-              className="text-sm font-medium text-primary mb-1 block"
-              dateTime={new Date(event.date).toISOString()}
-            >
-              {event.date}
-            </time>
-            <h3 className="font-semibold text-headline mb-2 text-base sm:text-lg">
-              {event.title}
-            </h3>
-            <p className="text-sm text-paragraph leading-relaxed">
-              {event.description}
-            </p>
-          </article>
-        </motion.li>
-      ))}
-    </motion.ol>
+            {/* Timeline dot */}
+            <div className="absolute -left-8 top-1 w-6 h-6 bg-primary rounded-full border-4 border-background flex items-center justify-center">
+              <CheckCircle className="w-3 h-3 text-primary-foreground" />
+            </div>
+            
+            {/* Content */}
+            <div className="bg-card p-4 rounded-lg shadow-sm border border-border">
+              <div className="flex items-center gap-2 mb-2">
+                <Calendar className="w-4 h-4 text-muted-foreground" />
+                <time className="text-sm font-medium text-muted-foreground">
+                  {new Date(event.date).toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                  })}
+                </time>
+              </div>
+              <h4 className="text-lg font-semibold text-headline mb-1">
+                {event.title}
+              </h4>
+              <p className="text-paragraph text-sm">
+                {event.description}
+              </p>
+            </div>
+          </motion.div>
+        ))}
+      </motion.div>
+    </div>
   );
 };
 

@@ -15,7 +15,7 @@ import {
 import { Textarea } from "@/components/ui/shadcn/textarea";
 import { Button } from "@/components/ui/shadcn/button";
 import { Label } from "@/components/ui/shadcn/label";
-import AnimatedBackground from "./AnimatedBackground";
+import AnimatedBackground from "@/components/ui/AnimatedBackground";
 
 const ContactSection = () => {
   return (

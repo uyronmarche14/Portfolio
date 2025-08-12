@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Roboto_Slab } from 'next/font/google';
 import { Providers } from "./providers";
-import Navbar from "@/components/navbar";
+import Navbar from "@/components/ui/navbar";
 import "./globals.css";
 
 

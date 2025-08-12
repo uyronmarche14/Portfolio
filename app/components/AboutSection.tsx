@@ -8,7 +8,7 @@ import { serviceCards } from "../data/services";
 import { technologies } from "../data/about";
 import AboutTimeline from "./ui/aboutTimeline";
 import { getTechIcon } from "../utils/techIcons";
-import AnimatedBackground from "./AnimatedBackground";
+import AnimatedBackground from "@/components/ui/AnimatedBackground";
 import { AboutDoGrid } from "./ui/aboutDo";
 import { CldImage } from "next-cloudinary";
 
@@ -98,11 +98,11 @@ const AboutSection = () => {
             <div className="relative">
               <div className="w-[550px] h-[400px] rounded-2xl overflow-hidden border-2 border-primary/20 shadow-lg">
                 <CldImage
-                  src="https://res.cloudinary.com/ddnxfpziq/image/upload/v1753097383/113_UY_RON_MARCHE_RHYSS_TCU02311_vvabi3.jpg"
+                  src="https://res.cloudinary.com/ddnxfpziq/image/upload/v1754899437/CHOSEN_113_UY_RON_MARCHE_RHYSS_TCU02303_q6ybc1.jpg"
                   alt="Profile photo"
                   fill
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                  className="object-cover transform hover:scale-105 transition-transform duration-700"
+                  className="object-cover transform hover:scale-105 transition-transform duration-700 rounded-xl "
                   priority
                 />
               </div>
@@ -146,31 +146,31 @@ const AboutSection = () => {
             </div>
 
             {/* Skills (No More Percentages) */}
-            <div className="space-y-4">
-              <h3 className="text-xl font-semibold text-headline">
-                Technologies
-              </h3>
-              <div className="grid grid-cols-2 md:grid-cols-2 gap-4">
-                {technologies.map((tech, index) => (
+            <div className="space-y-6">
+              <h3 className="text-2xl font-bold text-headline">Quick Facts</h3>
+              <div className="space-y-4">
+                {[
+                  { label: "Based in", value: "Philippines" },
+                  { label: "Education", value: "Computer Science" },
+                  { label: "Favorite Tech", value: "React & React Native" },
+                  { label: "Learning", value: "Advanced Backend Development" },
+                  {
+                    label: "Hobbies",
+                    value: "Gaming, Learning, Teaching, and Coding",
+                  },
+                ].map((fact, index) => (
                   <motion.div
-                    key={tech.name}
-                    initial={{ x: 20, opacity: 0 }}
-                    whileInView={{ x: 0, opacity: 1 }}
-                    transition={{ delay: 0.2 + index * 0.1, duration: 0.8 }}
-                    className="p-3 rounded-lg border border-primary/10 hover:border-primary/30 bg-background/50 shadow-sm flex items-center justify-center gap-2 text-base font-medium text-headline transition-all hover:scale-105"
+                    key={fact.label}
+                    initial={{ opacity: 0, x: 20 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    transition={{ delay: index * 0.1, duration: 0.5 }}
+                    className="flex items-center gap-4"
                   >
-                    {(() => {
-                      const iconData = getTechIcon(tech.iconName);
-                      if (!iconData) return null;
-                      const IconComponent = iconData.icon;
-                      return (
-                        <IconComponent
-                          className="w-4 h-4"
-                          color={iconData.color}
-                        />
-                      );
-                    })()}
-                    {tech.name}
+                    <span className="w-2 h-2 rounded-full bg-primary"></span>
+                    <span className="text-headline font-medium">
+                      {fact.label}:
+                    </span>
+                    <span className="text-paragraph">{fact.value}</span>
                   </motion.div>
                 ))}
               </div>
@@ -178,7 +178,10 @@ const AboutSection = () => {
           </motion.div>
         </div>
 
-        {/* After the Technologies section and before Services section */}
+        {/* After the Technologies section and before Services section 
+            - Personal Story 
+            - Quick Facts 
+        
         <section className="mt-24">
           <motion.div
             className="grid grid-cols-1 md:grid-cols-2 gap-12 bg-background/50 rounded-2xl p-8 border border-primary/10"
@@ -186,7 +189,7 @@ const AboutSection = () => {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            {/* Personal Story */}
+            
             <div className="space-y-6">
               <h3 className="text-2xl font-bold text-headline">
                 My Journey
@@ -218,7 +221,6 @@ const AboutSection = () => {
               </div>
             </div>
 
-            {/* Quick Facts */}
             <div className="space-y-6">
               <h3 className="text-2xl font-bold text-headline">Quick Facts</h3>
               <div className="space-y-4">
@@ -250,6 +252,7 @@ const AboutSection = () => {
             </div>
           </motion.div>
         </section>
+        */}
 
         <AboutDoGrid cards={serviceCards} />
 

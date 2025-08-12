@@ -2,10 +2,10 @@
 import { motion } from "framer-motion";
 import { useState, useEffect, useMemo } from "react";
 import { Menu, X, Music, FileText } from "lucide-react";
-import { NAV_ITEMS, NAVBAR_LABELS } from "../data/navbar";
+import { NAV_ITEMS, NAVBAR_LABELS } from "@/data/navbar";
 import { Button } from "@/components/ui/shadcn/button";
-import ResumeDrawer from "./ui/drawer/resumeDrawer";
-import MusicDrawer from "./ui/drawer/musicDrawer";
+import ResumeDrawer from "@/components/ui/drawer/resumeDrawer";
+import MusicDrawer from "@/components/ui/drawer/musicDrawer";
 import {
   Avatar,
   AvatarImage,
@@ -34,29 +34,7 @@ const Navbar = () => {
       setActiveSection(sectionId);
     }
     setIsOpen(false); // Close mobile menu after clicking
-  };
-
-  // Update active section and scroll state based on scroll position
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
-      const sections = navItems.map((item) => item.href.substring(1));
-
-      for (const section of sections) {
-        const element = document.getElementById(section);
-        if (element) {
-          const rect = element.getBoundingClientRect();
-          if (rect.top <= 100 && rect.bottom >= 100) {
-            setActiveSection(section);
-            break;
-          }
-        }
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [navItems]);
+  };  
 
   return (
     <motion.nav

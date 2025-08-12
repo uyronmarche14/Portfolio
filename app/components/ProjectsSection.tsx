@@ -4,15 +4,10 @@ import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { projects } from "../data/projects";
 import { PROJECTS_CONTENT, ANIMATION_VARIANTS } from "../data/projectsContent";
-import ScreenshotModal from "./ScreenshotModal";
+
 import ProjectCard from "./ui/projectCard";
 import { getTechIcon } from "../utils/techIcons";
-import AnimatedBackground from "./AnimatedBackground";
-
-interface SelectedProject {
-  title: string;
-  screenshots: string[];
-}
+import AnimatedBackground from "@/components/ui/AnimatedBackground";
 
 interface FilterButtonProps {
   tech: string;
@@ -20,9 +15,11 @@ interface FilterButtonProps {
   onClick: () => void;
 }
 
-
-
-const FilterButton: React.FC<FilterButtonProps> = ({ tech, isActive, onClick }) => {
+const FilterButton: React.FC<FilterButtonProps> = ({
+  tech,
+  isActive,
+  onClick,
+}) => {
   const techIcon = getTechIcon(tech);
   const isAll = tech === PROJECTS_CONTENT.filterAll;
 
@@ -47,8 +44,6 @@ const FilterButton: React.FC<FilterButtonProps> = ({ tech, isActive, onClick }) 
 };
 
 const ProjectsSection = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedProject, setSelectedProject] = useState<SelectedProject | null>(null);
   const [expandedTimelines, setExpandedTimelines] = useState<number[]>([]);
   const [filter, setFilter] = useState<string>("all");
 
@@ -69,14 +64,6 @@ const ProjectsSection = () => {
     [filter]
   );
 
-  const handleScreenshotsClick = (project: typeof projects[0]) => {
-    setSelectedProject({
-      title: project.title,
-      screenshots: project.screenshots,
-    });
-    setIsModalOpen(true);
-  };
-
   const toggleTimeline = (projectId: number) => {
     setExpandedTimelines((prev) =>
       prev.includes(projectId)
@@ -85,10 +72,11 @@ const ProjectsSection = () => {
     );
   };
 
-
-
   return (
-    <section id="projects" className="bg-background min-h-screen py-16 px-4 flex justify-center relative overflow-hidden snap-start">
+    <section
+      id="projects"
+      className="bg-background min-h-screen py-16 px-4 flex justify-center relative overflow-hidden snap-start"
+    >
       <AnimatedBackground />
 
       <div className="relative max-w-7xl w-full rounded-2xl p-8 md:p-12 backdrop-blur-sm">
@@ -112,16 +100,16 @@ const ProjectsSection = () => {
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.3 }}
                 className="text-primary/60 uppercase tracking-wider text-sm mb-2 block"
-                >
-                  {PROJECTS_CONTENT.sectionSubtitle}
-                </motion.span>
-                <div className="flex flex-col gap-4 relative">
-                  <h1 className="text-5xl font-bold text-headline">
-                    {PROJECTS_CONTENT.sectionTitle}
-                  </h1>
-                  <p className="text-paragraph/80 max-w-2xl text-lg">
-                    {PROJECTS_CONTENT.sectionDescription}
-                  </p>
+              >
+                {PROJECTS_CONTENT.sectionSubtitle}
+              </motion.span>
+              <div className="flex flex-col gap-4 relative">
+                <h1 className="text-5xl font-bold text-headline">
+                  {PROJECTS_CONTENT.sectionTitle}
+                </h1>
+                <p className="text-paragraph/80 max-w-2xl text-lg">
+                  {PROJECTS_CONTENT.sectionDescription}
+                </p>
                 <motion.div
                   initial={{ width: 0 }}
                   animate={{ width: "100%" }}
@@ -164,7 +152,6 @@ const ProjectsSection = () => {
                     project={project}
                     isExpanded={expandedTimelines.includes(project.id)}
                     onToggleTimeline={() => toggleTimeline(project.id)}
-                    onScreenshotsClick={() => handleScreenshotsClick(project)}
                   />
                 ))}
               </motion.div>
@@ -172,14 +159,6 @@ const ProjectsSection = () => {
           </div>
         </motion.div>
       </div>
-      {isModalOpen && selectedProject && (
-        <ScreenshotModal
-          isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
-          projectTitle={selectedProject.title}
-          screenshots={selectedProject.screenshots}
-        />
-      )}
     </section>
   );
 };

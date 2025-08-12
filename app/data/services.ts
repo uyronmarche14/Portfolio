@@ -32,8 +32,9 @@ export const serviceCards: ServiceCard[] = [
     description:
       "Building modern web and mobile applications for clients around the world.",
     skills: ["React.js", "React Native", "Node.js"],
-    experience: "1 years",
-    highlight: "Client-focused approach",
+    experience: "2 years",
+    highlight:
+      "I had provided over 8 clients with different project mobile, web and such more",
     icon: Code,
     additionalIcons: [FaReact, MdSmartphone],
   },
