@@ -1,4 +1,8 @@
-export interface Project {
+import { validateProject } from "@/lib/validation";
+
+// Legacy project interface for backward compatibility
+// This will be transformed by the ProjectRepository to match the new Project interface
+export interface LegacyProject {
   id: string;
   title: string;
   description: string;
@@ -17,13 +21,14 @@ export interface Project {
   }[];
 }
 
-export const projects: Project[] = [
+export const projects: LegacyProject[] = [
   {
     id: "codex-express",
     title: "Codex Express",
-    description: "A modern appointment scheduling web application built with Next.js and TypeScript for seamless booking management.",
+    description:
+      "A modern appointment scheduling web application built with Next.js and TypeScript for seamless booking management.",
     image: "/images/codex-express-preview.png",
-    technologies: ["Next.js", "TypeScript", "TailwindCSS", "React",],
+    technologies: ["Next.js", "TypeScript", "TailwindCSS", "React"],
     githubUrl: "https://github.com/ronmarche14/codex-express",
     liveUrl: "https://uyronmarche14.github.io/CodexExpress/login",
     liveDemoUrl: "https://uyronmarche14.github.io/CodexExpress/login",
@@ -32,7 +37,7 @@ export const projects: Project[] = [
       "Automated email notifications for appointments",
       "Comprehensive admin dashboard",
       "Multi-location appointment management",
-      "Interactive calendar scheduling interface"
+      "Interactive calendar scheduling interface",
     ],
     paragraph:
       "Codex Express revolutionizes appointment scheduling with a modern, intuitive interface that simplifies booking, tracking, and managing appointments. Built with cutting-edge technologies including Next.js 14 for optimal performance, TypeScript for type safety, and TailwindCSS for responsive design. The application features real-time availability checking, automated email notifications, and a comprehensive admin dashboard for managing appointments across multiple locations.",
@@ -63,17 +68,19 @@ export const projects: Project[] = [
   {
     id: "reservation-desktop",
     title: "Reservation Desktop Application",
-    description: "A comprehensive clinic reservation system built with C# and MySQL for efficient appointment management.",
+    description:
+      "A comprehensive clinic reservation system built with C# and MySQL for efficient appointment management.",
     image: "/images/reservation-desktop-preview.png",
     technologies: ["C#", "MySQL", "WinForms"],
     githubUrl: "https://github.com/ronmarche14/clinic-reservation-system",
-    liveDemoUrl: "https://github.com/ronmarche14/clinic-reservation-system/releases",
+    liveDemoUrl:
+      "https://github.com/ronmarche14/clinic-reservation-system/releases",
     features: [
       "Multi-user access control system",
       "Automated SMS appointment reminders",
       "Crystal Reports integration for analytics",
       "Real-time clinic availability tracking",
-      "Integrated billing management system"
+      "Integrated billing management system",
     ],
     paragraph:
       "A robust desktop application designed specifically for medical clinics to manage patient appointments, doctor schedules, and billing processes. Features include multi-user access control, automated appointment reminders via SMS, comprehensive reporting with Crystal Reports integration, and real-time availability checking across multiple clinic locations.",
@@ -88,7 +95,8 @@ export const projects: Project[] = [
       {
         date: "2024-01-30",
         title: "Requirements Analysis",
-        description: "Conducted detailed requirements gathering with clinic staff",
+        description:
+          "Conducted detailed requirements gathering with clinic staff",
       },
       {
         date: "2024-03-15",
@@ -105,17 +113,19 @@ export const projects: Project[] = [
   {
     id: "jobint-ai-interview",
     title: "Jobint AI Interview",
-    description: "AI-powered mobile application for interview preparation and communication skills enhancement.",
+    description:
+      "AI-powered mobile application for interview preparation and communication skills enhancement.",
     image: "/images/jobint-ai-preview.png",
     technologies: ["React Native", "Firebase", "Node.js", "JavaScript"],
     githubUrl: "https://github.com/ronmarche14/jobint-ai-interview",
-    liveDemoUrl: "https://play.google.com/store/apps/details?id=com.jobint.ai.interview",
+    liveDemoUrl:
+      "https://play.google.com/store/apps/details?id=com.jobint.ai.interview",
     features: [
       "AI-powered mock interview simulations",
       "Real-time speech analysis and feedback",
       "Personalized interview preparation plans",
       "Performance analytics dashboard",
-      "Industry-specific question banks"
+      "Industry-specific question banks",
     ],
     paragraph:
       "Jobint AI Interview is a cutting-edge mobile application designed to help job seekers prepare for interviews through AI-powered mock interviews and personalized feedback. The app uses advanced AI algorithms to simulate real interview scenarios, analyze user responses, and provide actionable insights to improve communication and soft skills.",
@@ -134,7 +144,8 @@ export const projects: Project[] = [
       {
         date: "2024-01-30",
         title: "Concept Development",
-        description: "Research and concept validation for AI interview training",
+        description:
+          "Research and concept validation for AI interview training",
       },
       {
         date: "2024-05-15",
@@ -156,17 +167,19 @@ export const projects: Project[] = [
   {
     id: "best-brew-coffee",
     title: "Best Brew Coffee",
-    description: "A mobile coffee shop application for ordering, loyalty rewards, and store management.",
+    description:
+      "A mobile coffee shop application for ordering, loyalty rewards, and store management.",
     image: "/images/best-brew-coffee-preview.png",
     technologies: ["Android Studio", "Firebase", "Java"],
     githubUrl: "https://github.com/ronmarche14/best-brew-coffee",
-    liveDemoUrl: "https://play.google.com/store/apps/details?id=com.bestbrew.coffee",
+    liveDemoUrl:
+      "https://play.google.com/store/apps/details?id=com.bestbrew.coffee",
     features: [
       "Mobile ordering and payment system",
       "Loyalty rewards program",
       "Store locator with real-time updates",
       "Inventory management dashboard",
-      "Personalized drink recommendations"
+      "Personalized drink recommendations",
     ],
     paragraph:
       "Best Brew Coffee is a comprehensive mobile application that transforms the coffee shop experience. Customers can browse the menu, place orders ahead of time, earn loyalty points, and locate nearby stores. For coffee shop owners, the app provides inventory management, sales analytics, and customer engagement tools. Features include real-time order tracking, mobile payments, and personalized recommendations based on purchase history.",
@@ -198,9 +211,19 @@ export const projects: Project[] = [
   {
     id: "swiftpass-guard",
     title: "SwiftPass Guard",
-    description: "A QR code-based identification and attendance monitoring platform designed for students of Taguig City University, ensuring secure, efficient, and reliable entry/exit logging.",
+    description:
+      "A QR code-based identification and attendance monitoring platform designed for students of Taguig City University, ensuring secure, efficient, and reliable entry/exit logging.",
     image: "/images/swiftpass-guard-preview.png",
-    technologies: ["QR Code Scanner","Express Js" ,"Supabase", "HTML", "Node Js", "JavaScript", "ESP32", "C++"],
+    technologies: [
+      "QR Code Scanner",
+      "Express Js",
+      "Supabase",
+      "HTML",
+      "Node Js",
+      "JavaScript",
+      "ESP32",
+      "C++",
+    ],
     githubUrl: "",
     liveDemoUrl: "",
     features: [
@@ -213,37 +236,41 @@ export const projects: Project[] = [
       "QR code validity checks for security",
       "Admin control panel for log monitoring and reporting",
       "Power failure backup mode with battery operation",
-      "Durable wooden frame and secure lock mechanism"
+      "Durable wooden frame and secure lock mechanism",
     ],
     paragraph:
       "SwiftPass Guard is an automated Entry and Exit ID System built to enhance campus security and streamline attendance tracking. Using QR code scanning, the system records student entry and exit in real-time, storing the data in a cloud database while offering offline caching during network disruptions. It enforces department and schedule-based restrictions, grants professors unrestricted access, and prevents unauthorized entry through rigorous QR code validity checks. The admin control panel provides real-time monitoring, report generation, and log management. The system also features a backup battery power mode for uninterrupted operation during power outages.",
     screenshots: [
       "https://res.cloudinary.com/ddnxfpziq/image/upload/v1754572284/swiftpass1.jpg",
       "https://res.cloudinary.com/ddnxfpziq/image/upload/v1754572284/swiftpass2.jpg",
-      "https://res.cloudinary.com/ddnxfpziq/image/upload/v1754572285/swiftpass3.jpg"
+      "https://res.cloudinary.com/ddnxfpziq/image/upload/v1754572285/swiftpass3.jpg",
     ],
     timeline: [
       {
         date: "2023-08-30",
         title: "Concept & Design",
-        description: "Conducted market research, designed UI/UX, and defined system features."
+        description:
+          "Conducted market research, designed UI/UX, and defined system features.",
       },
       {
         date: "2023-10-15",
         title: "Prototype Development",
-        description: "Integrated QR scanning, cloud database, and access control."
+        description:
+          "Integrated QR scanning, cloud database, and access control.",
       },
       {
         date: "2023-12-16",
         title: "Pilot Testing",
-        description: "Successfully tested usability, functionality, and reliability with students."
-      }
-    ]
+        description:
+          "Successfully tested usability, functionality, and reliability with students.",
+      },
+    ],
   },
   {
     id: "solace-hotel",
     title: "Solace Hotel",
-    description: "A hotel booking platform with user and admin portals. Users can register, browse room categories, check availability, and reserve rooms. Admins can manage rooms, view all bookings, and oversee users.",
+    description:
+      "A hotel booking platform with user and admin portals. Users can register, browse room categories, check availability, and reserve rooms. Admins can manage rooms, view all bookings, and oversee users.",
     image: "/images/solace-hotel-preview.png",
     technologies: [
       "Next.js",
@@ -253,7 +280,7 @@ export const projects: Project[] = [
       "Express.js (API)",
       "Supabase (Postgres, Auth, RLS)",
       "Render (Express API hosting)",
-      "Netlify (Next.js hosting)"
+      "Netlify (Next.js hosting)",
     ],
     githubUrl: "",
     liveDemoUrl: "",
@@ -266,33 +293,33 @@ export const projects: Project[] = [
       "Admin dashboard: rooms CRUD, pricing, inventory, bookings, users",
       "Server-side validation on Express API + client-side form validation",
       "Image upload via Supabase Storage",
-      "Deployed split: Netlify (web) + Render (API)"
+      "Deployed split: Netlify (web) + Render (API)",
     ],
     paragraph:
       "Solace Hotel is a full-stack booking system built with a modern TypeScript stack. Next.js/React powers the user-facing app on Netlify, while an Express.js API—hosted on Render—handles secure server logic. Supabase provides Postgres, authentication, storage, and row-level security. Guests can register, browse categories, check availability, and reserve rooms. Administrators manage rooms, pricing, and inventory and can review every booking and user. The architecture cleanly separates the web client and API, making it scalable and easy to maintain.",
     screenshots: [
       "https://res.cloudinary.com/demo/image/upload/solace-hotel-home.jpg",
       "https://res.cloudinary.com/demo/image/upload/solace-hotel-rooms.jpg",
-      "https://res.cloudinary.com/demo/image/upload/solace-hotel-admin.jpg"
+      "https://res.cloudinary.com/demo/image/upload/solace-hotel-admin.jpg",
     ],
     timeline: [
       {
         date: "2025-01-10",
         title: "Planning",
-        description: "Defined user stories, data model, and API contract."
+        description: "Defined user stories, data model, and API contract.",
       },
       {
         date: "2025-02-15",
         title: "Core Build",
-        description: "Implemented Supabase Auth, room catalog, availability & booking flow."
+        description:
+          "Implemented Supabase Auth, room catalog, availability & booking flow.",
       },
       {
         date: "2025-03-05",
         title: "Admin & Deploy",
-        description: "Finished admin features and deployed to Netlify (web) and Render (API)."
-      }
+        description:
+          "Finished admin features and deployed to Netlify (web) and Render (API).",
+      },
     ],
-  }
-  
-
+  },
 ];

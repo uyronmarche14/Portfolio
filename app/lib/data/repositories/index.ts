@@ -4,14 +4,17 @@
  */
 
 // Base repository exports
-export * from './base';
+export * from "./base";
 
 // Specific repository exports
-export * from './project-repository';
-export * from './technology-repository';
-export * from './contact-repository';
-export * from './about-repository';
+export * from "./project-repository";
+export * from "./technology-repository";
+export * from "./contact-repository";
+export * from "./about-repository";
 
 // Repository factory and registry
-export * from './factory';
-export * from './registry';
+export * from "./factory";
+export * from "./registry";
+
+// Export the main RepositoryRegistry class for convenience
+export { RepositoryRegistry } from "./registry";

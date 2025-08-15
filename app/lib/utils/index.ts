@@ -1,29 +1,38 @@
 /**
  * Utils Index
- * 
+ *
  * This file exports all utility functions and helpers.
  */
 
 // Main utils (cn function for className merging)
-export * from '../utils';
+export * from "../utils";
 
 // Common utilities
-export * from './common';
+export * from "./common";
 
 // Animation utilities
-export * from './animations';
+export * from "./animations";
 
 // Data transformation utilities
-export * from './dataTransformation';
+export * from "./dataTransformation";
 
 // Validation utilities
-export * from './validation';
+export * from "./validation";
 
 // Error handling utilities
-export * from './errorHandling';
+export * from "./errorHandling";
 
 // UI interaction utilities
-export * from './uiInteractions';
+export * from "./uiInteractions";
 
 // Tech icons utility
-export { getTechIcon } from './techIcons';
+export { getTechIcon } from "./techIcons";
+
+// Code splitting utilities
+export * from "./codeSplitting";
+
+// Performance utilities
+export * from "./performance";
+
+// Caching utilities
+export * from "./caching";

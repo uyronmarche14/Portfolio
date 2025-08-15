@@ -2,12 +2,8 @@
 
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { 
-  Send, 
-  MessageCircle, 
-  CheckCircle2,
-  ArrowRight
-} from "lucide-react";
+import { Send, MessageCircle, CheckCircle2, ArrowRight } from "lucide-react";
+
 import { contactInfo } from "@/lib/data/contacts";
 import { Input } from "@/components/ui/shadcn/input";
 import { Textarea } from "@/components/ui/shadcn/textarea";
@@ -18,76 +14,86 @@ interface ContactFormProps {
 }
 
 const ContactForm: React.FC<ContactFormProps> = ({ className = "" }) => {
-  const [formState, setFormState] = useState<'idle' | 'sending' | 'sent'>('idle');
+  const [formState, setFormState] = useState<"idle" | "sending" | "sent">(
+    "idle"
+  );
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    subject: '',
-    message: ''
+    name: "",
+    email: "",
+    subject: "",
+    message: "",
   });
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setFormState('sending');
-    
+    setFormState("sending");
+
     // Create mailto link with form data
     const subject = encodeURIComponent(formData.subject);
     const body = encodeURIComponent(
       `Name: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`
     );
     const mailtoLink = `mailto:${contactInfo.emails[0]?.address}?subject=${subject}&body=${body}`;
-    
+
     // Open email client
     window.location.href = mailtoLink;
-    
+
     // Simulate form submission feedback
     setTimeout(() => {
-      setFormState('sent');
+      setFormState("sent");
       setTimeout(() => {
-        setFormState('idle');
+        setFormState("idle");
         // Reset form
         setFormData({
-          name: '',
-          email: '',
-          subject: '',
-          message: ''
+          name: "",
+          email: "",
+          subject: "",
+          message: "",
         });
       }, 3000);
     }, 1000);
   };
 
   return (
-    <div className={`relative p-8 rounded-3xl bg-gradient-to-br from-background/80 to-background/60 backdrop-blur-xl border border-primary/10 shadow-2xl ${className}`}>
+    <div
+      className={`relative rounded-3xl border border-primary/10 bg-gradient-to-br from-background/80 to-background/60 p-8 shadow-2xl backdrop-blur-xl ${className}`}
+    >
       {/* Form Header */}
       <div className="mb-8">
-        <div className="flex items-center gap-3 mb-4">
-          <MessageCircle className="w-6 h-6 text-primary" />
+        <div className="mb-4 flex items-center gap-3">
+          <MessageCircle className="h-6 w-6 text-primary" />
           <h2 className="text-2xl font-light text-foreground">
             Send a Message
           </h2>
         </div>
         <p className="text-muted-foreground">
-          Tell me about your project and let's create something amazing together.
+          Tell me about your project and let's create something amazing
+          together.
         </p>
       </div>
 
       {/* Form */}
       <form onSubmit={handleSubmit} className="space-y-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
           >
-            <label htmlFor="name" className="block text-sm font-medium text-foreground mb-2">
+            <label
+              htmlFor="name"
+              className="mb-2 block text-sm font-medium text-foreground"
+            >
               Name
             </label>
             <Input
@@ -98,7 +104,7 @@ const ContactForm: React.FC<ContactFormProps> = ({ className = "" }) => {
               value={formData.name}
               onChange={handleInputChange}
               placeholder="Your full name"
-              className="h-12 rounded-xl border-muted/30 focus:border-primary/50 bg-background/50"
+              className="h-12 rounded-xl border-muted/30 bg-background/50 focus:border-primary/50"
             />
           </motion.div>
 
@@ -107,7 +113,10 @@ const ContactForm: React.FC<ContactFormProps> = ({ className = "" }) => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
           >
-            <label htmlFor="email" className="block text-sm font-medium text-foreground mb-2">
+            <label
+              htmlFor="email"
+              className="mb-2 block text-sm font-medium text-foreground"
+            >
               Email
             </label>
             <Input
@@ -118,7 +127,7 @@ const ContactForm: React.FC<ContactFormProps> = ({ className = "" }) => {
               value={formData.email}
               onChange={handleInputChange}
               placeholder="your.email@example.com"
-              className="h-12 rounded-xl border-muted/30 focus:border-primary/50 bg-background/50"
+              className="h-12 rounded-xl border-muted/30 bg-background/50 focus:border-primary/50"
             />
           </motion.div>
         </div>
@@ -128,7 +137,10 @@ const ContactForm: React.FC<ContactFormProps> = ({ className = "" }) => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
         >
-          <label htmlFor="subject" className="block text-sm font-medium text-foreground mb-2">
+          <label
+            htmlFor="subject"
+            className="mb-2 block text-sm font-medium text-foreground"
+          >
             Subject
           </label>
           <Input
@@ -139,7 +151,7 @@ const ContactForm: React.FC<ContactFormProps> = ({ className = "" }) => {
             value={formData.subject}
             onChange={handleInputChange}
             placeholder="What's this about?"
-            className="h-12 rounded-xl border-muted/30 focus:border-primary/50 bg-background/50"
+            className="h-12 rounded-xl border-muted/30 bg-background/50 focus:border-primary/50"
           />
         </motion.div>
 
@@ -148,7 +160,10 @@ const ContactForm: React.FC<ContactFormProps> = ({ className = "" }) => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
         >
-          <label htmlFor="message" className="block text-sm font-medium text-foreground mb-2">
+          <label
+            htmlFor="message"
+            className="mb-2 block text-sm font-medium text-foreground"
+          >
             Message
           </label>
           <Textarea
@@ -159,7 +174,7 @@ const ContactForm: React.FC<ContactFormProps> = ({ className = "" }) => {
             value={formData.message}
             onChange={handleInputChange}
             placeholder="Tell me about your project, timeline, and any specific requirements..."
-            className="rounded-xl border-muted/30 focus:border-primary/50 bg-background/50 resize-none"
+            className="resize-none rounded-xl border-muted/30 bg-background/50 focus:border-primary/50"
           />
         </motion.div>
 
@@ -171,7 +186,7 @@ const ContactForm: React.FC<ContactFormProps> = ({ className = "" }) => {
           className="pt-4"
         >
           <AnimatePresence mode="wait">
-            {formState === 'idle' && (
+            {formState === "idle" && (
               <motion.div
                 key="idle"
                 initial={{ opacity: 0 }}
@@ -180,15 +195,15 @@ const ContactForm: React.FC<ContactFormProps> = ({ className = "" }) => {
               >
                 <Button
                   type="submit"
-                  className="group h-12 px-8 bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 rounded-xl font-medium transition-all duration-300 shadow-lg hover:shadow-xl"
+                  className="group h-12 rounded-xl bg-gradient-to-r from-primary to-secondary px-8 font-medium shadow-lg transition-all duration-300 hover:from-primary/90 hover:to-secondary/90 hover:shadow-xl"
                 >
                   <span>Send Message</span>
-                  <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+                  <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
                 </Button>
               </motion.div>
             )}
 
-            {formState === 'sending' && (
+            {formState === "sending" && (
               <motion.div
                 key="sending"
                 initial={{ opacity: 0 }}
@@ -197,20 +212,24 @@ const ContactForm: React.FC<ContactFormProps> = ({ className = "" }) => {
               >
                 <Button
                   disabled
-                  className="h-12 px-8 bg-primary/50 rounded-xl font-medium"
+                  className="h-12 rounded-xl bg-primary/50 px-8 font-medium"
                 >
                   <motion.div
                     animate={{ rotate: 360 }}
-                    transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                    transition={{
+                      duration: 1,
+                      repeat: Infinity,
+                      ease: "linear",
+                    }}
                   >
-                    <Send className="w-4 h-4 mr-2" />
+                    <Send className="mr-2 h-4 w-4" />
                   </motion.div>
                   Sending...
                 </Button>
               </motion.div>
             )}
 
-            {formState === 'sent' && (
+            {formState === "sent" && (
               <motion.div
                 key="sent"
                 initial={{ opacity: 0, scale: 0.8 }}
@@ -219,9 +238,9 @@ const ContactForm: React.FC<ContactFormProps> = ({ className = "" }) => {
               >
                 <Button
                   disabled
-                  className="h-12 px-8 bg-green-500 hover:bg-green-500 rounded-xl font-medium"
+                  className="h-12 rounded-xl bg-green-500 px-8 font-medium hover:bg-green-500"
                 >
-                  <CheckCircle2 className="w-4 h-4 mr-2" />
+                  <CheckCircle2 className="mr-2 h-4 w-4" />
                   Message Sent!
                 </Button>
               </motion.div>
@@ -235,13 +254,13 @@ const ContactForm: React.FC<ContactFormProps> = ({ className = "" }) => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.7 }}
-        className="mt-8 pt-6 border-t border-muted/20 text-center"
+        className="mt-8 border-t border-muted/20 pt-6 text-center"
       >
-        <p className="text-sm text-muted-foreground">
+        <p className="text-muted-foreground text-sm">
           Prefer email? Reach out directly at{" "}
           <a
             href={`mailto:${contactInfo.emails[0]?.address}`}
-            className="text-primary hover:text-primary/80 font-medium transition-colors"
+            className="font-medium text-primary transition-colors hover:text-primary/80"
           >
             {contactInfo.emails[0]?.address}
           </a>

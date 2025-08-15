@@ -16,24 +16,24 @@ const AboutSection = () => {
   return (
     <section
       id="about"
-      className="bg-background min-h-screen py-16 px-4 flex justify-center relative overflow-hidden snap-start"
+      className="relative flex min-h-screen snap-start justify-center overflow-hidden bg-background px-4 py-16"
     >
       <AnimatedBackground />
 
-      <div className="relative max-w-7xl w-full rounded-2xl p-8 md:p-12 backdrop-blur-sm">
+      <div className="relative w-full max-w-7xl rounded-2xl p-8 backdrop-blur-sm md:p-12">
         {/* Header Section with enhanced animations */}
         <motion.div className="relative mb-24" style={{ opacity, scale }}>
           <motion.div
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ duration: 0.5 }}
-            className="absolute -top-6 -left-6 w-12 h-12 bg-primary/20 rounded-lg rotate-12"
+            className="absolute -left-6 -top-6 h-12 w-12 rotate-12 rounded-lg bg-primary/20"
           />
           <motion.div
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ duration: 0.5, delay: 0.2 }}
-            className="absolute -bottom-4 -right-4 w-8 h-8 bg-secondary/20 rounded-full"
+            className="absolute -bottom-4 -right-4 h-8 w-8 rounded-full bg-secondary/20"
           />
 
           {/* Section Title */}
@@ -42,10 +42,10 @@ const AboutSection = () => {
             animate={{ y: 0, opacity: 1 }}
             className="relative z-10"
           >
-            <span className="text-primary/60 uppercase tracking-wider text-sm mb-2 block">
+            <span className="mb-2 block text-sm uppercase tracking-wider text-primary/60">
               About Me
             </span>
-            <h1 className="text-5xl font-bold text-headline mb-6">
+            <h1 className="mb-6 text-5xl font-bold text-headline">
               Developing Application
               <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
                 {" "}
@@ -53,7 +53,7 @@ const AboutSection = () => {
               </span>
             </h1>
             <motion.div
-              className="absolute w-[300px] h-[300px] rounded-full bg-primary/20 blur-3xl"
+              className="absolute h-[300px] w-[300px] rounded-full bg-primary/20 blur-3xl"
               animate={{
                 x: [0, 100, 0],
                 y: [0, -100, 0],
@@ -66,7 +66,7 @@ const AboutSection = () => {
               style={{ top: "20%", left: "15%" }}
             />
             <motion.div
-              className="absolute w-[200px] h-[200px] rounded-full bg-secondary/20 blur-3xl"
+              className="absolute h-[200px] w-[200px] rounded-full bg-secondary/20 blur-3xl"
               animate={{
                 x: [0, -50, 0],
                 y: [0, 50, 0],
@@ -82,7 +82,7 @@ const AboutSection = () => {
         </motion.div>
 
         {/* Main Content Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
+        <div className="grid grid-cols-1 gap-16 lg:grid-cols-2">
           {/* Left Column */}
           <motion.div
             initial={{ x: -20, opacity: 0 }}
@@ -92,13 +92,13 @@ const AboutSection = () => {
           >
             {/* Profile Info */}
             <div className="relative">
-              <div className="w-[550px] h-[400px] rounded-2xl overflow-hidden border-2 border-primary/20 shadow-lg">
+              <div className="h-[400px] w-[550px] overflow-hidden rounded-2xl border-2 border-primary/20 shadow-lg">
                 <CldImage
-                  src="https://res.cloudinary.com/ddnxfpziq/image/upload/v1754899437/CHOSEN_113_UY_RON_MARCHE_RHYSS_TCU02303_q6ybc1.jpg"
+                  src="https://res.cloudinary.com/ddnxfpziq/image/upload/v1754823296/photo_7_2025-08-10_18-53-55_y00lcx.jpg"
                   alt="Profile photo"
                   fill
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                  className="object-cover transform hover:scale-105 transition-transform duration-700 rounded-xl "
+                  className="transform rounded-xl object-cover transition-transform duration-700 hover:scale-105 "
                   priority
                 />
               </div>
@@ -107,7 +107,7 @@ const AboutSection = () => {
                 initial={{ scale: 0, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 transition={{ delay: 0.5 }}
-                className="absolute -bottom-4 -right-4 bg-primary text-white px-4 py-2 rounded-lg shadow-lg"
+                className="absolute -bottom-4 -right-4 rounded-lg bg-primary px-4 py-2 text-white shadow-lg"
               >
                 Beginner
               </motion.div>
@@ -130,7 +130,7 @@ const AboutSection = () => {
                   Ron Marche Rhyss Q. Uy
                 </span>
               </h2>
-              <p className="text-paragraph text-lg leading-relaxed">
+              <p className="text-lg leading-relaxed text-paragraph">
                 I&apos;m a developer who loves building all kinds of
                 applications, from web to mobile and beyond. I enjoy creating
                 awesome UIs and adding features that make applications feel more
@@ -162,8 +162,8 @@ const AboutSection = () => {
                     transition={{ delay: index * 0.1, duration: 0.5 }}
                     className="flex items-center gap-4"
                   >
-                    <span className="w-2 h-2 rounded-full bg-primary"></span>
-                    <span className="text-headline font-medium">
+                    <span className="h-2 w-2 rounded-full bg-primary"></span>
+                    <span className="font-medium text-headline">
                       {fact.label}:
                     </span>
                     <span className="text-paragraph">{fact.value}</span>

@@ -1,20 +1,13 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import Link from "next/link";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { getTechIcon } from "@/lib/utils/techIcons";
-import Timeline from "@/components/ui/Timeline";
-import { PROJECTS_CONTENT } from "@/lib/data/projectsContent";
-import { FiExternalLink, FiGithub, FiImage, FiFilter, FiX } from "react-icons/fi";
+import { FiGithub, FiImage, FiFilter } from "react-icons/fi";
 import { Avatar } from "@/components/ui/shadcn/avatar";
 import { Button } from "./shadcn/button";
-import {
-  Accordion,
-  AccordionItem,
-  AccordionTrigger,
-  AccordionContent,
-} from "@/components/ui/shadcn/accordion";
+import { PROJECTS_CONTENT } from "@/lib/data";
 
 interface Project {
   id: string;
@@ -38,15 +31,7 @@ interface ProjectCardProps {
   project: Project;
 }
 
-interface ProjectsWithFilterProps {
-  projects: Project[];
-}
-
-
-
-const ProjectCard: React.FC<ProjectCardProps> = ({
-  project,
-}) => {
+const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
   return (
     <motion.div
       variants={{
@@ -54,8 +39,10 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
         visible: { opacity: 1, y: 0 },
       }}
       whileHover={{ y: -2 }}
-      className="bg-background/50 border border-paragraph/10 rounded-xl overflow-hidden hover:border-primary/20 transition-all duration-300 hover:shadow-xl hover:shadow-primary"
+      className="relative overflow-hidden rounded-xl border border-paragraph/10 bg-gradient-to-tl from-primary/10 via-background/50 to-background/50 transition-all duration-300 hover:border-primary/20 hover:from-primary/20 hover:shadow-xl hover:shadow-primary"
     >
+      {/* Shining Bottom-Right Border */}
+
       {/* Image
       <div className="relative h-56 w-full overflow-hidden">
         <Image
@@ -69,10 +56,10 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
        */}
 
       {/* Content */}
-      <div className="p-6 space-y-5">
+      <div className="space-y-5 p-6">
         {/* Title + Icons */}
         <div className="space-y-2">
-          <div className="flex items-start justify-between flex-row gap-3">
+          <div className="flex flex-row items-start justify-between gap-3">
             <h3 className="text-xl font-semibold text-headline">
               {project.title}
             </h3>
@@ -82,11 +69,11 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
                 return (
                   <Avatar
                     key={tech + index}
-                    className="bg-accent/10 border border-paragraph/10 shadow-sm w-8 h-8 flex items-center justify-center hover:bg-primary/20"
+                    className="flex h-8 w-8 items-center justify-center border border-paragraph/10 bg-accent/10 shadow-sm hover:bg-primary/20"
                   >
                     {techIcon && (
                       <techIcon.icon
-                        className="w-5 h-5"
+                        className="h-5 w-5"
                         color={techIcon.color}
                       />
                     )}
@@ -96,33 +83,29 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
             </div>
           </div>
 
-          <p className="text-paragraph text-sm leading-relaxed">
+          <p className="text-sm leading-relaxed text-paragraph">
             {project.description}
           </p>
         </div>
-
 
         {/* Features List */}
         {project.features && project.features.length > 0 && (
           <div className="space-y-2">
             <div className="flex items-center gap-2 text-sm font-medium text-foreground">
-              <FiFilter className="w-4 h-4 text-primary" />
+              <FiFilter className="h-4 w-4 text-primary" />
               Key Features
             </div>
             <div className="space-y-1.5">
               {project.features.slice(0, 3).map((feature, index) => (
-                <div 
-                  key={index}
-                  className="flex items-start gap-2 text-sm"
-                >
-                  <div className="w-1.5 h-1.5 rounded-full bg-primary mt-2 flex-shrink-0" />
+                <div key={index} className="flex items-start gap-2 text-sm">
+                  <div className="mt-2 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-primary" />
                   <span className="text-xs leading-relaxed text-paragraph">
                     {feature}
                   </span>
                 </div>
               ))}
               {project.features.length > 3 && (
-                <div className="text-xs text-paragraph/60 pl-4">
+                <div className="pl-4 text-xs text-paragraph/60">
                   +{project.features.length - 3} more features
                 </div>
               )}
@@ -137,9 +120,9 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
               <Button
                 variant="outline"
                 size="sm"
-                className="rounded-[8px] flex items-center gap-2 hover:bg-primary"
+                className="flex items-center gap-2 rounded-[8px] hover:bg-primary"
               >
-                <FiImage className="w-4 h-4" />
+                <FiImage className="h-4 w-4" />
                 {PROJECTS_CONTENT.viewScreenshots}
               </Button>
             </Link>
@@ -150,14 +133,14 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
               variant="outline"
               size="sm"
               asChild
-              className="rounded-[8px] flex items-center gap-2 hover:bg-primary"
+              className="flex items-center gap-2 rounded-[8px] hover:bg-primary"
             >
               <a
                 href={project.githubUrl}
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <FiGithub className="w-4 h-4" />
+                <FiGithub className="h-4 w-4" />
                 {PROJECTS_CONTENT.github}
               </a>
             </Button>

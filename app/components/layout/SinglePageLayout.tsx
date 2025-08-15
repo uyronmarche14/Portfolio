@@ -1,41 +1,43 @@
 "use client";
 
 import React from "react";
-import dynamic from "next/dynamic";
+import { PageLayout } from "./PageLayout";
+import { SectionLayout } from "./SectionLayout";
+import { HomeSection } from "@/components/features/portfolio";
+import { AboutSection } from "@/components/features/about";
+import { ProjectsSection } from "@/components/features/projects";
+import { ContactSection } from "@/components/features/contact";
+import { Footer } from "@/components/layout";
 
-// Use dynamic imports to avoid SSR issues
-const HomeSection = dynamic(() => import("@/components/features/portfolio").then(mod => ({ default: mod.HomeSection })), { ssr: false });
-const AboutSection = dynamic(() => import("@/components/features/about").then(mod => ({ default: mod.AboutSection })), { ssr: false });
-const ProjectsSection = dynamic(() => import("@/components/features/projects").then(mod => ({ default: mod.ProjectsSection })), {
-  ssr: false,
-});
-const ContactSection = dynamic(() => import("@/components/features/contact").then(mod => ({ default: mod.ContactSection })), {
-  ssr: false,
-});
-
-const Footer = dynamic(() => import("@/components/layout").then(mod => ({ default: mod.Footer })), { ssr: false });
-
+/**
+ * SinglePageLayout component using the new architecture
+ *
+ * This component has been refactored to:
+ * - Use the new PageLayout and SectionLayout components
+ * - Remove unnecessary dynamic imports for better SSR support
+ * - Follow the new component structure patterns
+ * - Maintain the same functionality with improved architecture
+ */
 export default function SinglePageLayout() {
   return (
-    <div className="h-screen overflow-y-scroll">
-      <section id="home">
+    <PageLayout
+      className="h-screen overflow-y-scroll"
+      withPadding={false}
+      maxWidth="full"
+    >
+      <SectionLayout id="home" spacing="xl">
         <HomeSection />
-      </section>
+      </SectionLayout>
 
-      <section id="about">
-        <AboutSection />
-      </section>
+      <AboutSection />
 
-      <section id="projects">
-        <ProjectsSection />
-      </section>
+      <ProjectsSection />
 
-      <section id="contact">
-        <ContactSection />
-      </section>
-      <section id="footer">
+      <ContactSection />
+
+      <SectionLayout id="footer" spacing="sm">
         <Footer />
-      </section>
-    </div>
+      </SectionLayout>
+    </PageLayout>
   );
 }

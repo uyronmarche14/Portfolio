@@ -9,7 +9,15 @@ import {
   FaMedium,
 } from "react-icons/fa";
 import { IconType } from "react-icons";
+import {
+  EmailContact,
+  PhoneContact,
+  LocationInfo,
+  SocialLink,
+} from "@/lib/types";
 
+// Legacy contact info structure for backward compatibility
+// This will be transformed by the ContactRepository to match the new ContactInfo interface
 export const contactInfo = {
   emails: [
     {
@@ -39,6 +47,7 @@ export const contactInfo = {
   },
 };
 
+// Legacy social links structure for backward compatibility
 export const socialLinks: {
   icon: IconType;
   href: string;

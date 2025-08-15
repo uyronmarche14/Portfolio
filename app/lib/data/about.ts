@@ -1,4 +1,7 @@
-export interface Technology {
+import { Technology } from "@/lib/types";
+
+// Legacy interfaces for backward compatibility
+export interface LegacyTechnology {
   name: string;
   iconName: string;
 }
@@ -10,7 +13,7 @@ export interface TimelineEvent {
   icon: string;
 }
 
-export const technologies: Technology[] = [
+export const technologies: LegacyTechnology[] = [
   { name: "Python", iconName: "python" },
   { name: "JavaScript", iconName: "javascript" },
   { name: "C#", iconName: "csharp" },

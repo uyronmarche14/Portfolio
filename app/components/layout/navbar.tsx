@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { useState, useEffect, useMemo } from "react";
 import { Menu, X, Music, FileText } from "lucide-react";
 import { NAV_ITEMS, NAVBAR_LABELS } from "@/lib/data/navbar";
+import { Navigation, type NavigationItem } from "./Navigation";
 import { Button } from "@/components/ui/shadcn/button";
 import ResumeDrawer from "@/components/ui/drawer/resumeDrawer";
 import MusicDrawer from "@/components/ui/drawer/musicDrawer";
@@ -19,65 +20,83 @@ const Navbar = () => {
 
   const toggleMenu = () => setIsOpen(!isOpen);
 
-  // Nav items for single page layout
-  const navItems = useMemo(() => NAV_ITEMS, []);
+  // Handle scroll detection
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 50);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  // Convert nav items to Navigation component format
+  const navigationItems = useMemo(
+    (): NavigationItem[] =>
+      NAV_ITEMS.map((item) => ({
+        label: item.label,
+        href: item.href,
+        active: activeSection === item.href.substring(1),
+      })),
+    [activeSection]
+  );
 
   // Handle scroll to section with smooth behavior
-  const scrollToSection = (
-    e: React.MouseEvent<HTMLAnchorElement>,
-    sectionId: string
+  const handleNavigationClick = (
+    item: NavigationItem,
+    event: React.MouseEvent
   ) => {
-    e.preventDefault();
+    event.preventDefault();
+    const sectionId = item.href.substring(1);
     const element = document.getElementById(sectionId);
     if (element) {
       element.scrollIntoView({ behavior: "smooth", block: "start" });
       setActiveSection(sectionId);
     }
     setIsOpen(false); // Close mobile menu after clicking
-  };  
+  };
 
   return (
     <motion.nav
       initial={{ y: -20, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
-      className={`fixed w-full z-50 transition-all duration-500 ${
+      className={`fixed z-50 w-full transition-all duration-500 ${
         isScrolled
-          ? "bg-gradient-to-b from-white/[0.05] to-transparent backdrop-blur-2xl border-b border-white/[0.08] shadow-2xl shadow-black/30"
+          ? "border-b border-white/[0.08] bg-gradient-to-b from-white/[0.05] to-transparent shadow-2xl shadow-black/30 backdrop-blur-2xl"
           : "bg-transparent"
       }`}
     >
-      <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-center relative ">
+      <div className="relative mx-auto flex max-w-7xl items-center justify-center px-6 py-4 ">
         {/* Center - Main Navigation */}
-        <div className="hidden md:flex items-center">
-          <div className="flex items-center rounded-2xl bg-white/[0.03] backdrop-blur-xl border border-white/[0.05] shadow-2xl shadow-black/20 hover:shadow-3xl hover:shadow-black/30 transition-all duration-500">
+        <div className="hidden items-center md:flex">
+          <div className="hover:shadow-3xl flex items-center rounded-2xl border border-white/[0.05] bg-white/[0.03] shadow-2xl shadow-black/20 backdrop-blur-xl transition-all duration-500 hover:shadow-black/30">
             {/* Avatar Section */}
             <div className="flex items-center px-4 py-3">
-              <Avatar className="w-8 h-8">
+              <Avatar className="h-8 w-8">
                 <AvatarImage src="https://res.cloudinary.com/ddnxfpziq/image/upload/v1753097383/113_UY_RON_MARCHE_RHYSS_TCU02311_vvabi3.jpg" />
                 <AvatarFallback>CN</AvatarFallback>
               </Avatar>
             </div>
 
             {/* Vertical Separator */}
-            <div className="w-px h-8 bg-white/[0.12]" />
+            <div className="h-8 w-px bg-white/[0.12]" />
 
             {/* Navigation Items */}
             <div className="flex items-center px-2">
-              {navItems.map((item) => (
-                <a
+              {navigationItems.map((item) => (
+                <button
                   key={item.label}
-                  href={item.href}
-                  onClick={(e) => scrollToSection(e, item.href.substring(1))}
-                  className={`relative px-4 py-2.5 mx-1 rounded-xl transition-all duration-300 text-sm font-medium tracking-wide ${
-                    activeSection === item.href.substring(1)
+                  onClick={(e) => handleNavigationClick(item, e)}
+                  className={`relative mx-1 rounded-xl px-4 py-2.5 text-sm font-medium tracking-wide transition-all duration-300 ${
+                    item.active
                       ? "bg-white/20 text-white shadow-lg shadow-black/20 backdrop-blur-sm"
-                      : "text-white/60 hover:text-white/90 hover:bg-white/[0.08]"
+                      : "text-white/60 hover:bg-white/[0.08] hover:text-white/90"
                   }`}
                 >
                   {item.label}
-                  {activeSection === item.href.substring(1) && (
+                  {item.active && (
                     <motion.div
-                      className="absolute inset-0 rounded-xl bg-gradient-to-r from-blue-400/20 to-purple-400/20 border border-white/10"
+                      className="absolute inset-0 rounded-xl border border-white/10 bg-gradient-to-r from-blue-400/20 to-purple-400/20"
                       layoutId="activeTab"
                       transition={{
                         type: "spring",
@@ -86,12 +105,12 @@ const Navbar = () => {
                       }}
                     />
                   )}
-                </a>
+                </button>
               ))}
             </div>
 
             {/* Vertical Separator */}
-            <div className="w-px h-8 bg-white/[0.12]" />
+            <div className="h-8 w-px bg-white/[0.12]" />
 
             {/* Action Buttons */}
             <div className="flex items-center gap-2 px-4 py-3">
@@ -104,7 +123,7 @@ const Navbar = () => {
         {/* Mobile Menu Button */}
         <button
           onClick={toggleMenu}
-          className="md:hidden p-3 rounded-2xl bg-white/[0.03] backdrop-blur-xl border border-white/[0.05] shadow-2xl shadow-black/20 hover:bg-white/[0.08] hover:shadow-3xl hover:shadow-black/30 transition-all duration-500 text-white/70 hover:text-white focus:outline-none focus:ring-2 focus:ring-white/20"
+          className="hover:shadow-3xl rounded-2xl border border-white/[0.05] bg-white/[0.03] p-3 text-white/70 shadow-2xl shadow-black/20 backdrop-blur-xl transition-all duration-500 hover:bg-white/[0.08] hover:text-white hover:shadow-black/30 focus:outline-none focus:ring-2 focus:ring-white/20 md:hidden"
           aria-label={isOpen ? NAVBAR_LABELS.closeMenu : NAVBAR_LABELS.openMenu}
           aria-expanded={isOpen}
         >
@@ -125,43 +144,42 @@ const Navbar = () => {
           height: isOpen ? "auto" : 0,
         }}
         transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
-        className="md:hidden overflow-hidden bg-white/[0.03] backdrop-blur-2xl border-t border-white/[0.08]"
+        className="overflow-hidden border-t border-white/[0.08] bg-white/[0.03] backdrop-blur-2xl md:hidden"
         aria-hidden={!isOpen}
       >
-        <div className="p-6 space-y-4">
+        <div className="space-y-4 p-6">
           {/* Mobile Avatar Section */}
-          <div className="flex items-center gap-3 pb-4 border-b border-white/[0.08]">
-            <Avatar className="w-10 h-10">
+          <div className="flex items-center gap-3 border-b border-white/[0.08] pb-4">
+            <Avatar className="h-10 w-10">
               <AvatarImage src="https://github.com/shadcn.png" />
               <AvatarFallback>CN</AvatarFallback>
             </Avatar>
-            <div className="text-white/80 text-sm font-medium">Menu</div>
+            <div className="text-sm font-medium text-white/80">Menu</div>
           </div>
 
           {/* Mobile Navigation Items */}
           <div className="space-y-2">
-            {navItems.map((item, index) => (
-              <motion.a
+            {navigationItems.map((item, index) => (
+              <motion.button
                 key={item.label}
-                href={item.href}
-                onClick={(e) => scrollToSection(e, item.href.substring(1))}
-                className={`block py-3 px-4 rounded-2xl transition-all duration-300 text-base font-medium ${
-                  activeSection === item.href.substring(1)
+                onClick={(e) => handleNavigationClick(item, e)}
+                className={`block w-full rounded-2xl px-4 py-3 text-left text-base font-medium transition-all duration-300 ${
+                  item.active
                     ? "bg-white/20 text-white shadow-lg shadow-black/20 backdrop-blur-sm"
-                    : "text-white/60 hover:text-white/90 hover:bg-white/[0.08]"
+                    : "text-white/60 hover:bg-white/[0.08] hover:text-white/90"
                 }`}
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: index * 0.1, duration: 0.3 }}
               >
                 {item.label}
-              </motion.a>
+              </motion.button>
             ))}
           </div>
 
           {/* Mobile Action Buttons */}
           <motion.div
-            className="flex flex-col space-y-3 pt-4 border-t border-white/[0.08]"
+            className="flex flex-col space-y-3 border-t border-white/[0.08] pt-4"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3, duration: 0.3 }}
@@ -170,9 +188,9 @@ const Navbar = () => {
               trigger={
                 <Button
                   variant="ghost"
-                  className="justify-start text-white/60 hover:text-white/90 hover:bg-white/[0.08] transition-all duration-300 rounded-2xl py-3 px-4 border border-white/[0.08] backdrop-blur-sm w-full"
+                  className="w-full justify-start rounded-2xl border border-white/[0.08] px-4 py-3 text-white/60 backdrop-blur-sm transition-all duration-300 hover:bg-white/[0.08] hover:text-white/90"
                 >
-                  <FileText className="w-4 h-4 mr-3" />
+                  <FileText className="mr-3 h-4 w-4" />
                   View Resume
                 </Button>
               }
@@ -182,9 +200,9 @@ const Navbar = () => {
               trigger={
                 <Button
                   variant="ghost"
-                  className="justify-start text-white/60 hover:text-white/90 hover:bg-white/[0.08] transition-all duration-300 rounded-2xl py-3 px-4 border border-white/[0.08] backdrop-blur-sm w-full"
+                  className="w-full justify-start rounded-2xl border border-white/[0.08] px-4 py-3 text-white/60 backdrop-blur-sm transition-all duration-300 hover:bg-white/[0.08] hover:text-white/90"
                 >
-                  <Music className="w-4 h-4 mr-3" />
+                  <Music className="mr-3 h-4 w-4" />
                   Music Player
                 </Button>
               }

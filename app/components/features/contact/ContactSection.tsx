@@ -2,13 +2,7 @@
 
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { 
-  Mail, 
-  Phone, 
-  MapPin, 
-  Clock,
-  Sparkles
-} from "lucide-react";
+import { Mail, Phone, MapPin, Clock, Sparkles } from "lucide-react";
 import { contactInfo, socialLinks } from "@/lib/data/contacts";
 import { Badge } from "@/components/ui/shadcn/badge";
 import ContactForm from "./ContactForm";
@@ -19,20 +13,20 @@ const ContactSection = () => {
   return (
     <section
       id="contact"
-      className="relative min-h-screen bg-gradient-to-br from-background via-background/98 to-background/95 overflow-hidden"
+      className="via-background/98 relative min-h-screen overflow-hidden bg-gradient-to-br from-background to-background/95"
     >
       {/* Unique Background Pattern */}
       <div className="absolute inset-0">
-        <div className="absolute top-0 left-0 w-full h-full opacity-30">
-          <div className="absolute top-1/4 left-1/4 w-2 h-2 bg-primary rounded-full animate-pulse" />
-          <div className="absolute top-1/3 right-1/3 w-1 h-1 bg-secondary rounded-full animate-pulse delay-1000" />
-          <div className="absolute bottom-1/4 left-1/3 w-1.5 h-1.5 bg-primary/60 rounded-full animate-pulse delay-2000" />
-          <div className="absolute bottom-1/3 right-1/4 w-1 h-1 bg-secondary/60 rounded-full animate-pulse delay-3000" />
+        <div className="absolute left-0 top-0 h-full w-full opacity-30">
+          <div className="absolute left-1/4 top-1/4 h-2 w-2 animate-pulse rounded-full bg-primary" />
+          <div className="absolute right-1/3 top-1/3 h-1 w-1 animate-pulse rounded-full bg-secondary delay-1000" />
+          <div className="delay-2000 absolute bottom-1/4 left-1/3 h-1.5 w-1.5 animate-pulse rounded-full bg-primary/60" />
+          <div className="delay-3000 absolute bottom-1/3 right-1/4 h-1 w-1 animate-pulse rounded-full bg-secondary/60" />
         </div>
-        
+
         {/* Floating Orbs */}
         <motion.div
-          className="absolute top-20 right-20 w-32 h-32 bg-gradient-to-r from-primary/10 to-secondary/10 rounded-full blur-xl"
+          className="absolute right-20 top-20 h-32 w-32 rounded-full bg-gradient-to-r from-primary/10 to-secondary/10 blur-xl"
           animate={{
             y: [0, -20, 0],
             scale: [1, 1.1, 1],
@@ -40,11 +34,11 @@ const ContactSection = () => {
           transition={{
             duration: 6,
             repeat: Infinity,
-            ease: "easeInOut"
+            ease: "easeInOut",
           }}
         />
         <motion.div
-          className="absolute bottom-32 left-16 w-24 h-24 bg-gradient-to-r from-secondary/10 to-primary/10 rounded-full blur-xl"
+          className="absolute bottom-32 left-16 h-24 w-24 rounded-full bg-gradient-to-r from-secondary/10 to-primary/10 blur-xl"
           animate={{
             y: [0, 15, 0],
             scale: [1.1, 1, 1.1],
@@ -52,69 +46,72 @@ const ContactSection = () => {
           transition={{
             duration: 8,
             repeat: Infinity,
-            ease: "easeInOut"
+            ease: "easeInOut",
           }}
         />
       </div>
 
-      <div className="relative max-w-7xl mx-auto px-6 py-24">
+      <div className="relative mx-auto max-w-7xl px-6 py-24">
         {/* Hero Header */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          className="text-center mb-20"
+          className="mb-20 text-center"
         >
           <motion.div
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             transition={{ delay: 0.3, type: "spring" }}
-            className="inline-flex items-center gap-2 mb-6 px-4 py-2 bg-primary/10 rounded-full border border-primary/20"
+            className="mb-6 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-4 py-2"
           >
-            <Sparkles className="w-4 h-4 text-primary" />
-            <span className="text-sm font-medium text-primary">Let's Connect</span>
+            <Sparkles className="h-4 w-4 text-primary" />
+            <span className="text-sm font-medium text-primary">
+              Let's Connect
+            </span>
           </motion.div>
-          
-          <h1 className="text-6xl md:text-7xl font-light text-foreground mb-6 tracking-tight">
+
+          <h1 className="mb-6 text-6xl font-light tracking-tight text-foreground md:text-7xl">
             Get In
-            <span className="block text-5xl md:text-6xl font-normal bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+            <span className="block bg-gradient-to-r from-primary to-secondary bg-clip-text text-5xl font-normal text-transparent md:text-6xl">
               Touch
             </span>
           </h1>
-          
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-            Ready to bring your ideas to life? Let's start a conversation about your next project.
+
+          <p className="text-muted-foreground mx-auto max-w-2xl text-xl leading-relaxed">
+            Ready to bring your ideas to life? Let's start a conversation about
+            your next project.
           </p>
         </motion.div>
 
         {/* Main Content */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+        <div className="grid grid-cols-1 items-start gap-12 lg:grid-cols-12">
           {/* Contact Info Sidebar */}
           <motion.div
             initial={{ opacity: 0, x: -50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="lg:col-span-4 space-y-8"
+            className="space-y-8 lg:col-span-4"
           >
             {/* Quick Contact */}
             <div className="space-y-6">
-              <h2 className="text-2xl font-light text-foreground mb-8">
+              <h2 className="mb-8 text-2xl font-light text-foreground">
                 Quick Contact
               </h2>
-              
+
               {/* Contact Methods */}
               <div className="space-y-4">
                 <motion.a
                   href={`mailto:${contactInfo.emails[0]?.address}`}
                   whileHover={{ x: 8 }}
-                  className="group flex items-center gap-4 p-4 rounded-2xl bg-muted/20 hover:bg-primary/5 transition-all duration-300 border border-transparent hover:border-primary/20"
+                  className="group flex items-center gap-4 rounded-2xl border border-transparent bg-muted/20 p-4 transition-all duration-300 hover:border-primary/20 hover:bg-primary/5"
                 >
-                  <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
-                    <Mail className="w-5 h-5 text-primary" />
+                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 transition-colors group-hover:bg-primary/20">
+                    <Mail className="h-5 w-5 text-primary" />
                   </div>
                   <div>
-                    <div className="text-sm text-muted-foreground">Email</div>
-                    <div className="font-medium text-foreground group-hover:text-primary transition-colors">
+                    <div className="text-muted-foreground text-sm">Email</div>
+                    <div className="font-medium text-foreground transition-colors group-hover:text-primary">
                       {contactInfo.emails[0]?.address}
                     </div>
                   </div>
@@ -123,14 +120,14 @@ const ContactSection = () => {
                 <motion.a
                   href={`tel:${contactInfo.phones[0]?.number.replace(/\s+/g, "")}`}
                   whileHover={{ x: 8 }}
-                  className="group flex items-center gap-4 p-4 rounded-2xl bg-muted/20 hover:bg-primary/5 transition-all duration-300 border border-transparent hover:border-primary/20"
+                  className="group flex items-center gap-4 rounded-2xl border border-transparent bg-muted/20 p-4 transition-all duration-300 hover:border-primary/20 hover:bg-primary/5"
                 >
-                  <div className="w-12 h-12 rounded-xl bg-secondary/10 flex items-center justify-center group-hover:bg-secondary/20 transition-colors">
-                    <Phone className="w-5 h-5 text-secondary" />
+                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-secondary/10 transition-colors group-hover:bg-secondary/20">
+                    <Phone className="h-5 w-5 text-secondary" />
                   </div>
                   <div>
-                    <div className="text-sm text-muted-foreground">Phone</div>
-                    <div className="font-medium text-foreground group-hover:text-secondary transition-colors">
+                    <div className="text-muted-foreground text-sm">Phone</div>
+                    <div className="font-medium text-foreground transition-colors group-hover:text-secondary">
                       {contactInfo.phones[0]?.number}
                     </div>
                   </div>
@@ -138,13 +135,15 @@ const ContactSection = () => {
 
                 <motion.div
                   whileHover={{ x: 8 }}
-                  className="group flex items-center gap-4 p-4 rounded-2xl bg-muted/20 transition-all duration-300"
+                  className="group flex items-center gap-4 rounded-2xl bg-muted/20 p-4 transition-all duration-300"
                 >
-                  <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
-                    <MapPin className="w-5 h-5 text-primary" />
+                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10">
+                    <MapPin className="h-5 w-5 text-primary" />
                   </div>
                   <div>
-                    <div className="text-sm text-muted-foreground">Location</div>
+                    <div className="text-muted-foreground text-sm">
+                      Location
+                    </div>
                     <div className="font-medium text-foreground">
                       {contactInfo.location.address}
                     </div>
@@ -158,17 +157,19 @@ const ContactSection = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.6 }}
-              className="p-6 rounded-2xl bg-gradient-to-br from-green-500/10 to-emerald-500/10 border border-green-500/20"
+              className="rounded-2xl border border-green-500/20 bg-gradient-to-br from-green-500/10 to-emerald-500/10 p-6"
             >
-              <div className="flex items-center gap-3 mb-3">
-                <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse" />
-                <Badge className="bg-green-500/20 text-green-700 border-green-500/30">
+              <div className="mb-3 flex items-center gap-3">
+                <div className="h-3 w-3 animate-pulse rounded-full bg-green-500" />
+                <Badge className="border-green-500/30 bg-green-500/20 text-green-700">
                   Available
                 </Badge>
               </div>
-              <div className="text-sm text-muted-foreground mb-2">Response Time</div>
+              <div className="text-muted-foreground mb-2 text-sm">
+                Response Time
+              </div>
               <div className="flex items-center gap-2 text-foreground">
-                <Clock className="w-4 h-4" />
+                <Clock className="h-4 w-4" />
                 <span className="font-medium">Usually within 24 hours</span>
               </div>
             </motion.div>
@@ -189,23 +190,29 @@ const ContactSection = () => {
                       whileTap={{ scale: 0.95 }}
                       onHoverStart={() => setHoveredSocial(index)}
                       onHoverEnd={() => setHoveredSocial(null)}
-                      className="group relative p-4 rounded-xl bg-muted/20 hover:bg-muted/30 transition-all duration-300 border border-transparent hover:border-primary/20"
+                      className="group relative rounded-xl border border-transparent bg-muted/20 p-4 transition-all duration-300 hover:border-primary/20 hover:bg-muted/30"
                     >
                       <div className="flex items-center gap-3">
                         <div
-                          className="w-8 h-8 rounded-lg flex items-center justify-center transition-colors"
-                          style={{ 
-                            backgroundColor: hoveredSocial === index ? social.color + '20' : 'transparent'
+                          className="flex h-8 w-8 items-center justify-center rounded-lg transition-colors"
+                          style={{
+                            backgroundColor:
+                              hoveredSocial === index
+                                ? social.color + "20"
+                                : "transparent",
                           }}
                         >
                           <IconComponent
-                            className="w-4 h-4 transition-colors"
-                            style={{ 
-                              color: hoveredSocial === index ? social.color : 'currentColor'
+                            className="h-4 w-4 transition-colors"
+                            style={{
+                              color:
+                                hoveredSocial === index
+                                  ? social.color
+                                  : "currentColor",
                             }}
                           />
                         </div>
-                        <span className="text-sm font-medium text-foreground group-hover:text-primary transition-colors">
+                        <span className="text-sm font-medium text-foreground transition-colors group-hover:text-primary">
                           {social.label}
                         </span>
                       </div>
