@@ -23,7 +23,7 @@ export const projects: Project[] = [
     title: "Codex Express",
     description: "A modern appointment scheduling web application built with Next.js and TypeScript for seamless booking management.",
     image: "/images/codex-express-preview.png",
-    technologies: ["Next.js", "TypeScript", "TailwindCSS", "React", "Prisma", "PostgreSQL"],
+    technologies: ["Next.js", "TypeScript", "TailwindCSS", "React",],
     githubUrl: "https://github.com/ronmarche14/codex-express",
     liveUrl: "https://uyronmarche14.github.io/CodexExpress/login",
     liveDemoUrl: "https://uyronmarche14.github.io/CodexExpress/login",
@@ -65,7 +65,7 @@ export const projects: Project[] = [
     title: "Reservation Desktop Application",
     description: "A comprehensive clinic reservation system built with C# and MySQL for efficient appointment management.",
     image: "/images/reservation-desktop-preview.png",
-    technologies: ["C#", "MySQL", "WinForms", "Entity Framework", "Crystal Reports"],
+    technologies: ["C#", "MySQL", "WinForms"],
     githubUrl: "https://github.com/ronmarche14/clinic-reservation-system",
     liveDemoUrl: "https://github.com/ronmarche14/clinic-reservation-system/releases",
     features: [
@@ -107,7 +107,7 @@ export const projects: Project[] = [
     title: "Jobint AI Interview",
     description: "AI-powered mobile application for interview preparation and communication skills enhancement.",
     image: "/images/jobint-ai-preview.png",
-    technologies: ["React Native", "Firebase", "Node.js", "JavaScript", "OpenAI API", "Redux"],
+    technologies: ["React Native", "Firebase", "Node.js", "JavaScript"],
     githubUrl: "https://github.com/ronmarche14/jobint-ai-interview",
     liveDemoUrl: "https://play.google.com/store/apps/details?id=com.jobint.ai.interview",
     features: [
@@ -158,7 +158,7 @@ export const projects: Project[] = [
     title: "Best Brew Coffee",
     description: "A mobile coffee shop application for ordering, loyalty rewards, and store management.",
     image: "/images/best-brew-coffee-preview.png",
-    technologies: ["Android Studio", "Firebase", "Java", "Google Maps API", "Stripe API"],
+    technologies: ["Android Studio", "Firebase", "Java"],
     githubUrl: "https://github.com/ronmarche14/best-brew-coffee",
     liveDemoUrl: "https://play.google.com/store/apps/details?id=com.bestbrew.coffee",
     features: [
@@ -195,4 +195,104 @@ export const projects: Project[] = [
       },
     ],
   },
+  {
+    id: "swiftpass-guard",
+    title: "SwiftPass Guard",
+    description: "A QR code-based identification and attendance monitoring platform designed for students of Taguig City University, ensuring secure, efficient, and reliable entry/exit logging.",
+    image: "/images/swiftpass-guard-preview.png",
+    technologies: ["QR Code Scanner","Express Js" ,"Supabase", "HTML", "Node Js", "JavaScript", "ESP32", "C++"],
+    githubUrl: "",
+    liveDemoUrl: "",
+    features: [
+      "QR Code-based scanning for entry/exit",
+      "Real-time data logging and cloud synchronization",
+      "Offline caching with auto-sync on reconnection",
+      "Department verification for access control",
+      "Schedule-based access restrictions",
+      "Professor unrestricted access",
+      "QR code validity checks for security",
+      "Admin control panel for log monitoring and reporting",
+      "Power failure backup mode with battery operation",
+      "Durable wooden frame and secure lock mechanism"
+    ],
+    paragraph:
+      "SwiftPass Guard is an automated Entry and Exit ID System built to enhance campus security and streamline attendance tracking. Using QR code scanning, the system records student entry and exit in real-time, storing the data in a cloud database while offering offline caching during network disruptions. It enforces department and schedule-based restrictions, grants professors unrestricted access, and prevents unauthorized entry through rigorous QR code validity checks. The admin control panel provides real-time monitoring, report generation, and log management. The system also features a backup battery power mode for uninterrupted operation during power outages.",
+    screenshots: [
+      "https://res.cloudinary.com/ddnxfpziq/image/upload/v1754572284/swiftpass1.jpg",
+      "https://res.cloudinary.com/ddnxfpziq/image/upload/v1754572284/swiftpass2.jpg",
+      "https://res.cloudinary.com/ddnxfpziq/image/upload/v1754572285/swiftpass3.jpg"
+    ],
+    timeline: [
+      {
+        date: "2023-08-30",
+        title: "Concept & Design",
+        description: "Conducted market research, designed UI/UX, and defined system features."
+      },
+      {
+        date: "2023-10-15",
+        title: "Prototype Development",
+        description: "Integrated QR scanning, cloud database, and access control."
+      },
+      {
+        date: "2023-12-16",
+        title: "Pilot Testing",
+        description: "Successfully tested usability, functionality, and reliability with students."
+      }
+    ]
+  },
+  {
+    id: "solace-hotel",
+    title: "Solace Hotel",
+    description: "A hotel booking platform with user and admin portals. Users can register, browse room categories, check availability, and reserve rooms. Admins can manage rooms, view all bookings, and oversee users.",
+    image: "/images/solace-hotel-preview.png",
+    technologies: [
+      "Next.js",
+      "React",
+      "TypeScript",
+      "Tailwind CSS",
+      "Express.js (API)",
+      "Supabase (Postgres, Auth, RLS)",
+      "Render (Express API hosting)",
+      "Netlify (Next.js hosting)"
+    ],
+    githubUrl: "",
+    liveDemoUrl: "",
+    features: [
+      "Supabase Auth (email/password, OAuth optional) with Row Level Security",
+      "Room categories (Standard, Deluxe, Suite, Family, Executive)",
+      "Availability search with date range and guest count",
+      "Create, view, cancel reservations",
+      "User dashboard: upcoming stays, history, profile",
+      "Admin dashboard: rooms CRUD, pricing, inventory, bookings, users",
+      "Server-side validation on Express API + client-side form validation",
+      "Image upload via Supabase Storage",
+      "Deployed split: Netlify (web) + Render (API)"
+    ],
+    paragraph:
+      "Solace Hotel is a full-stack booking system built with a modern TypeScript stack. Next.js/React powers the user-facing app on Netlify, while an Express.js API—hosted on Render—handles secure server logic. Supabase provides Postgres, authentication, storage, and row-level security. Guests can register, browse categories, check availability, and reserve rooms. Administrators manage rooms, pricing, and inventory and can review every booking and user. The architecture cleanly separates the web client and API, making it scalable and easy to maintain.",
+    screenshots: [
+      "https://res.cloudinary.com/demo/image/upload/solace-hotel-home.jpg",
+      "https://res.cloudinary.com/demo/image/upload/solace-hotel-rooms.jpg",
+      "https://res.cloudinary.com/demo/image/upload/solace-hotel-admin.jpg"
+    ],
+    timeline: [
+      {
+        date: "2025-01-10",
+        title: "Planning",
+        description: "Defined user stories, data model, and API contract."
+      },
+      {
+        date: "2025-02-15",
+        title: "Core Build",
+        description: "Implemented Supabase Auth, room catalog, availability & booking flow."
+      },
+      {
+        date: "2025-03-05",
+        title: "Admin & Deploy",
+        description: "Finished admin features and deployed to Netlify (web) and Render (API)."
+      }
+    ],
+  }
+  
+
 ];

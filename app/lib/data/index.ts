@@ -9,3 +9,4 @@ export * from "./projects";
 export * from "./projectsContent";
 export * from "./screenshotModal";
 export * from "./services";
+export * from "./timeline";

@@ -9,6 +9,8 @@ import { projects } from "@/lib/data/projects";
 import ScreenshotCarousel from "@/components/ui/ScreenshotCarousel";
 import TechBadge from "@/components/ui/TechBadge";
 import Timeline from "@/components/ui/Timeline";
+import AnimatedBackground from "@/components/ui/AnimatedBackground";
+import Footer from "@/components/layout/footer"
 
 import { useParams } from "next/navigation";
 
@@ -44,13 +46,15 @@ const ProjectPage = () => {
 
   return (
     <main className="min-h-screen bg-background pt-20 pb-16">
+            <AnimatedBackground />
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Back button */}
         <motion.div
           initial={{ x: -20, opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
           transition={{ duration: 0.5 }}
-          className="mb-16"
+          className="mb-4 mt-12"
         >
           <Link
             href="/"
@@ -65,27 +69,27 @@ const ProjectPage = () => {
           variants={containerVariants}
           initial="hidden"
           animate="visible"
-          className="space-y-12"
+          className="space-y-8"
         >
           {/* Project Header */}
-          <motion.section variants={itemVariants} className="text-center py-8">
+          <motion.section variants={itemVariants} className="text-start">
             <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-headline mb-6 leading-tight">
               {project.title}
             </h1>
-            <p className="text-xl md:text-2xl text-paragraph max-w-4xl mx-auto leading-relaxed">
+            <p className="text-xl md:text-lg text-paragraph text-start max-w-4xl leading-relaxed">
               {project.description}
             </p>
           </motion.section>
 
 
           {/* Action Buttons */}
-          <motion.section variants={itemVariants} className="flex flex-row gap-4 items-center justify-center">
+          <motion.section variants={itemVariants} className="flex flex-row gap-4 items-center justify-start pb-4">
             {project.githubUrl && (
               <a
                 href={project.githubUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center px-6 py-3 bg-secondary text-secondary-foreground rounded-lg hover:bg-secondary/80 transition-colors"
+                className="inline-flex items-center px-6 py-3 bg-secondary text-secondary-foreground rounded-xl hover:bg-secondary/80 transition-colors "
               >
                 <Github className="w-5 h-5 mr-2" />
                 View on GitHub
@@ -96,7 +100,7 @@ const ProjectPage = () => {
                 href={project.liveDemoUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/80 transition-colors"
+                className="inline-flex items-center px-6 py-3 bg-primary text-primary-foreground rounded-xl hover:bg-primary/80 transition-colors"
               >
                 <ExternalLink className="w-5 h-5 mr-2" />
                 Live Demo
@@ -104,9 +108,11 @@ const ProjectPage = () => {
             )}
           </motion.section>
 
+
+
           {/* Technologies */}
           <motion.section variants={itemVariants}>
-            <h2 className="text-2xl md:text-3xl font-bold text-headline mb-6">
+            <h2 className="text-2xl md:text-2xl font-bold text-headline mb-6">
               Technologies Used
             </h2>
             <div className="flex flex-wrap gap-3">
@@ -116,9 +122,12 @@ const ProjectPage = () => {
             </div>
           </motion.section>
 
+          <motion.section variants={itemVariants} className="max-w-7xl mx-auto border-t border-primary/20 my-12" />
+
+
           {/* Project Description */}
           <motion.section variants={itemVariants}>
-            <h2 className="text-2xl md:text-3xl font-bold text-headline mb-6">
+            <h2 className="text-2xl md:text-2xl font-bold text-headline mb-6">
               About This Project
             </h2>
             <div className="prose prose-lg dark:prose-invert max-w-none">
@@ -131,7 +140,7 @@ const ProjectPage = () => {
           {/* Screenshots */}
           {project.screenshots && project.screenshots.length > 0 && (
             <motion.section variants={itemVariants}>
-              <h2 className="text-2xl md:text-3xl font-bold text-headline mb-6">
+              <h2 className="text-2xl md:text-2xl font-bold text-headline mb-6">
                 Project Screenshots
               </h2>
               <ScreenshotCarousel screenshots={project.screenshots} alt={`${project.title} screenshots`} />
@@ -146,6 +155,7 @@ const ProjectPage = () => {
           )}
         </motion.div>
       </div>
+      <Footer />
     </main>
   );
 };

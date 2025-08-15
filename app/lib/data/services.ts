@@ -11,6 +11,15 @@ import {
   AppWindow,
   LayoutGrid,
 } from "lucide-react";
+
+import {
+  SiReact,
+  SiNextdotjs,
+  SiTailwindcss,
+  SiExpo,
+  SiAndroid,
+  SiCanva
+} from "react-icons/si";
 import { FaReact, FaAndroid } from "react-icons/fa";
 import { MdSmartphone } from "react-icons/md";
 
@@ -43,7 +52,7 @@ export const serviceCards: ServiceCard[] = [
     description:
       "Leading student organizations and clubs to success through effective planning and execution.",
     skills: ["Leadership", "Event Planning", "Team Management"],
-    experience: "4 years",
+    experience: "4 years in College",
     highlight: "Organizational leadership",
     icon: Crown,
     additionalIcons: [BookOpen],
@@ -53,10 +62,10 @@ export const serviceCards: ServiceCard[] = [
     description:
       "Building cross-platform mobile applications with modern frameworks and best practices.",
     skills: ["React Native", "Android Studio", "Expo"],
-    experience: "2 years",
+    experience: "3 years",
     highlight: "Specialized in modern mobile applications",
     icon: MdSmartphone,
-    additionalIcons: [FaAndroid, AppWindow],
+    additionalIcons: [FaAndroid, AppWindow, SiExpo, SiAndroid, SiReact],
   },
   {
     title: "1:1 Tutoring",
@@ -83,9 +92,9 @@ export const serviceCards: ServiceCard[] = [
     description:
       "Building responsive and intuitive user interfaces with modern frameworks and best practices.",
     skills: ["React.js", "Next.js", "Tailwind CSS"],
-    experience: "6 months",
+    experience: "1 year",
     highlight: "Specialized in modern web applications",
     icon: Globe,
-    additionalIcons: [FaReact, LayoutGrid],
+    additionalIcons: [ LayoutGrid, SiReact, SiNextdotjs, SiTailwindcss],
   },
 ];

@@ -43,7 +43,7 @@ const Timeline: React.FC<TimelineProps> = ({ events, className = "" }) => {
   }
 
   return (
-    <div className={`relative ${className}`}>
+    <div className={`relative ${className} mb-12` }>
       <h3 className="text-2xl font-bold mb-6 text-headline">Project Timeline</h3>
       
       <motion.div 

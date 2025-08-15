@@ -101,26 +101,30 @@ interface AboutDoGridProps {
 
 export const AboutDoGrid: React.FC<AboutDoGridProps> = ({
   cards,
-  title = "Experiences",
-
-  subtitle,
 }) => {
   return (
     <section className="mt-24">
-      <motion.h2
-        className="text-3xl font-extrabold text-headline mb-12 text-center"
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        transition={{ duration: 0.8 }}
-      >
-        {title}
-        {subtitle && (
-          <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-            {" "}
-            {subtitle}
-          </span>
-        )}
-      </motion.h2>
+      <div className="text-center mb-16">
+          <motion.h3 
+            className="text-3xl md:text-4xl font-bold text-headline mb-4"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+          >
+            My{" "}
+            <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+              Experiences
+            </span>
+          </motion.h3>
+          <motion.p 
+            className="text-paragraph/70 max-w-md mx-auto"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            transition={{ delay: 0.4 }}
+          >
+            Your nonstop to experience everything
+          </motion.p>
+        </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {cards.map((card, index) => (

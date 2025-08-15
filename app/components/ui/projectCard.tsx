@@ -1,12 +1,12 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { getTechIcon } from "@/lib/utils/techIcons";
 import Timeline from "@/components/ui/Timeline";
 import { PROJECTS_CONTENT } from "@/lib/data/projectsContent";
-import { FiExternalLink, FiGithub, FiImage } from "react-icons/fi";
+import { FiExternalLink, FiGithub, FiImage, FiFilter, FiX } from "react-icons/fi";
 import { Avatar } from "@/components/ui/shadcn/avatar";
 import { Button } from "./shadcn/button";
 import {
@@ -16,22 +16,30 @@ import {
   AccordionContent,
 } from "@/components/ui/shadcn/accordion";
 
-interface ProjectCardProps {
-  project: {
-    id: string;
+interface Project {
+  id: string;
+  title: string;
+  description: string;
+  image: string;
+  technologies: string[];
+  category?: string;
+  screenshots?: string[];
+  features: string[];
+  timeline?: Array<{
+    date: string;
     title: string;
     description: string;
-    image: string;
-    technologies: string[];
-    screenshots?: string[];
-    timeline?: Array<{
-      date: string;
-      title: string;
-      description: string;
-    }>;
-    liveUrl?: string;
-    githubUrl?: string;
-  };
+  }>;
+  liveUrl?: string;
+  githubUrl?: string;
+}
+
+interface ProjectCardProps {
+  project: Project;
+}
+
+interface ProjectsWithFilterProps {
+  projects: Project[];
 }
 
 
@@ -93,20 +101,33 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
           </p>
         </div>
 
-        {/* Technology Tags */}
 
-        {/* Timeline (shadcn Accordion) */}
-        {project.timeline && project.timeline.length > 0 && (
-          <Accordion type="single" collapsible>
-            <AccordionItem value={`timeline-${project.id}`}>
-              <AccordionTrigger>
-                {PROJECTS_CONTENT.timelineTitle}
-              </AccordionTrigger>
-              <AccordionContent>
-                <Timeline events={project.timeline} />
-              </AccordionContent>
-            </AccordionItem>
-          </Accordion>
+        {/* Features List */}
+        {project.features && project.features.length > 0 && (
+          <div className="space-y-2">
+            <div className="flex items-center gap-2 text-sm font-medium text-foreground">
+              <FiFilter className="w-4 h-4 text-primary" />
+              Key Features
+            </div>
+            <div className="space-y-1.5">
+              {project.features.slice(0, 3).map((feature, index) => (
+                <div 
+                  key={index}
+                  className="flex items-start gap-2 text-sm"
+                >
+                  <div className="w-1.5 h-1.5 rounded-full bg-primary mt-2 flex-shrink-0" />
+                  <span className="text-xs leading-relaxed text-paragraph">
+                    {feature}
+                  </span>
+                </div>
+              ))}
+              {project.features.length > 3 && (
+                <div className="text-xs text-paragraph/60 pl-4">
+                  +{project.features.length - 3} more features
+                </div>
+              )}
+            </div>
+          </div>
         )}
 
         {/* Action Buttons (shadcn Button) */}

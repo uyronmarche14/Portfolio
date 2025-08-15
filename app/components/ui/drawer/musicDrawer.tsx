@@ -14,6 +14,8 @@ import {
   Heart,
   X,
   Upload,
+  MoreHorizontal,
+  ListMusic,
 } from "lucide-react";
 import {
   Drawer,
@@ -22,11 +24,13 @@ import {
   DrawerHeader,
   DrawerTitle,
   DrawerDescription,
-  DrawerFooter,
   DrawerClose,
 } from "@/components/ui/shadcn/drawer";
 import { Button } from "@/components/ui/shadcn/button";
 import { Slider } from "@/components/ui/shadcn/slider";
+import { Card } from "@/components/ui/shadcn/card";
+import { Badge } from "@/components/ui/shadcn/badge";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface Track {
   id: number;
@@ -242,43 +246,68 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ trigger }) => {
             </Button>
           )}
         </DrawerTrigger>
-        <DrawerContent className="h-full md:w-[50%] mt-24 ml-auto">
-          <DrawerHeader className="flex flex-row items-center justify-between border-b">
-            <div>
-              <DrawerTitle className="text-xl font-semibold">
-                Music Player
-              </DrawerTitle>
-              <DrawerDescription>
-                Your personal music collection
-              </DrawerDescription>
+        <DrawerContent className="h-full md:w-[420px] mt-0 ml-auto bg-gradient-to-b from-background to-background/95 backdrop-blur-xl border-l border-primary/10">
+          {/* Header */}
+          <DrawerHeader className="flex flex-row items-center justify-between border-b border-primary/10 bg-background/80 backdrop-blur-sm">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-secondary flex items-center justify-center">
+                <Music className="w-4 h-4 text-white" />
+              </div>
+              <div>
+                <DrawerTitle className="text-lg font-semibold text-foreground">
+                  Music Player
+                </DrawerTitle>
+                <DrawerDescription className="text-xs text-muted-foreground">
+                  {allTracks.length} tracks available
+                </DrawerDescription>
+              </div>
             </div>
             <DrawerClose asChild>
-              <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+              <Button variant="ghost" size="sm" className="h-8 w-8 p-0 hover:bg-primary/10">
                 <X className="h-4 w-4" />
               </Button>
             </DrawerClose>
           </DrawerHeader>
 
-          <div className="flex-1 flex flex-col p-6 space-y-6">
-            {/* Current Track Display */}
-            <div className="bg-gradient-to-br from-purple-500/10 to-blue-500/10 rounded-xl p-6 border border-white/10">
-              <div className="text-center space-y-4">
-                <div className="w-32 h-32 bg-gradient-to-br from-purple-500 to-blue-500 rounded-full mx-auto flex items-center justify-center">
-                  <Music className="w-16 h-16 text-white" />
-                </div>
-                <div>
-                  <h3 className="text-lg font-semibold">
+          <div className="flex-1 flex flex-col overflow-hidden">
+            {/* Now Playing Section */}
+            <div className="p-6 bg-gradient-to-br from-primary/5 to-secondary/5 border-b border-primary/10">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="text-center space-y-4"
+              >
+                <motion.div
+                  className="relative w-40 h-40 mx-auto"
+                  animate={{ rotate: isPlaying ? 360 : 0 }}
+                  transition={{ duration: 20, repeat: isPlaying ? Infinity : 0, ease: "linear" }}
+                >
+                  <div className="w-full h-full bg-gradient-to-br from-primary via-secondary to-primary rounded-full flex items-center justify-center shadow-2xl">
+                    <div className="w-32 h-32 bg-background/20 rounded-full flex items-center justify-center backdrop-blur-sm">
+                      <Music className="w-12 h-12 text-white" />
+                    </div>
+                  </div>
+                  <div className="absolute inset-0 rounded-full bg-gradient-to-t from-black/20 to-transparent" />
+                </motion.div>
+                
+                <div className="space-y-1">
+                  <h3 className="text-lg font-semibold text-foreground truncate">
                     {currentTrack?.title || "No track selected"}
                   </h3>
-                  <p className="text-sm text-muted-foreground">
+                  <p className="text-sm text-muted-foreground truncate">
                     {currentTrack?.artist || "Select a track to play"}
                   </p>
+                  {currentTrack && (
+                    <Badge variant="secondary" className="text-xs">
+                      {isPlaying ? "Now Playing" : "Paused"}
+                    </Badge>
+                  )}
                 </div>
-              </div>
+              </motion.div>
             </div>
 
-            {/* Progress Bar */}
-            <div className="space-y-2">
+            {/* Progress Section */}
+            <div className="px-6 py-4 space-y-3 bg-background/50">
               <Slider
                 value={[currentTime]}
                 max={duration || 100}
@@ -287,181 +316,226 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ trigger }) => {
                 className="w-full"
                 disabled={!currentTrack}
               />
-              <div className="flex justify-between text-xs text-muted-foreground">
+              <div className="flex justify-between text-xs text-muted-foreground font-mono">
                 <span>{formatTime(currentTime)}</span>
                 <span>{formatTime(duration)}</span>
               </div>
             </div>
 
-            {/* Player Controls */}
-            <div className="flex items-center justify-center space-x-4">
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={toggleShuffle}
-                className={
-                  isShuffled ? "text-blue-500" : "text-muted-foreground"
-                }
-              >
-                <Shuffle className="w-4 h-4" />
-              </Button>
+            {/* Controls Section */}
+            <div className="px-6 py-4 bg-background/80 border-b border-primary/10">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={toggleShuffle}
+                    className={`h-8 w-8 p-0 ${isShuffled ? "text-primary bg-primary/10" : "text-muted-foreground hover:text-foreground"}`}
+                  >
+                    <Shuffle className="w-4 h-4" />
+                  </Button>
+                  
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={toggleRepeat}
+                    className={`h-8 w-8 p-0 relative ${repeatMode !== "none" ? "text-primary bg-primary/10" : "text-muted-foreground hover:text-foreground"}`}
+                  >
+                    <Repeat className="w-4 h-4" />
+                    {repeatMode === "one" && (
+                      <div className="absolute -top-1 -right-1 w-2 h-2 bg-primary rounded-full" />
+                    )}
+                  </Button>
+                </div>
 
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={handlePrevious}
-                disabled={!currentTrack}
-              >
-                <SkipBack className="w-5 h-5" />
-              </Button>
+                <div className="flex items-center gap-3">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={handlePrevious}
+                    disabled={!currentTrack}
+                    className="h-10 w-10 p-0 hover:bg-primary/10 disabled:opacity-50"
+                  >
+                    <SkipBack className="w-5 h-5" />
+                  </Button>
 
-              <Button
-                onClick={() => handlePlay(currentTrack || allTracks[0])}
-                disabled={allTracks.length === 0}
-                className="w-12 h-12 rounded-full bg-blue-500 hover:bg-blue-600"
-              >
-                {isPlaying ? (
-                  <Pause className="w-5 h-5" />
-                ) : (
-                  <Play className="w-5 h-5 ml-0.5" />
-                )}
-              </Button>
+                  <Button
+                    onClick={() => handlePlay(currentTrack || allTracks[0])}
+                    disabled={allTracks.length === 0}
+                    className="h-12 w-12 rounded-full bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 shadow-lg hover:shadow-xl transition-all duration-200"
+                  >
+                    {isPlaying ? (
+                      <Pause className="w-5 h-5" />
+                    ) : (
+                      <Play className="w-5 h-5 ml-0.5" />
+                    )}
+                  </Button>
 
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={handleNext}
-                disabled={!currentTrack}
-              >
-                <SkipForward className="w-5 h-5" />
-              </Button>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={handleNext}
+                    disabled={!currentTrack}
+                    className="h-10 w-10 p-0 hover:bg-primary/10 disabled:opacity-50"
+                  >
+                    <SkipForward className="w-5 h-5" />
+                  </Button>
+                </div>
 
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={toggleRepeat}
-                className={
-                  repeatMode !== "none"
-                    ? "text-blue-500"
-                    : "text-muted-foreground"
-                }
-              >
-                <Repeat className="w-4 h-4" />
-                {repeatMode === "one" && (
-                  <span className="absolute -top-1 -right-1 w-2 h-2 bg-blue-500 rounded-full" />
-                )}
-              </Button>
+                <div className="flex items-center gap-2">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={toggleLike}
+                    className={`h-8 w-8 p-0 ${isLiked ? "text-red-500" : "text-muted-foreground hover:text-foreground"}`}
+                  >
+                    <Heart className={`w-4 h-4 ${isLiked ? "fill-current" : ""}`} />
+                  </Button>
+                  
+                  <Button variant="ghost" size="sm" className="h-8 w-8 p-0 text-muted-foreground hover:text-foreground">
+                    <MoreHorizontal className="w-4 h-4" />
+                  </Button>
+                </div>
+              </div>
+
+              {/* Volume Control */}
+              <div className="flex items-center gap-3 mt-4">
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  onClick={toggleMute}
+                  className="h-8 w-8 p-0 text-muted-foreground hover:text-foreground"
+                >
+                  {isMuted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
+                </Button>
+                <Slider
+                  value={[isMuted ? 0 : volume * 100]}
+                  max={100}
+                  step={1}
+                  onValueChange={handleVolumeChange}
+                  className="flex-1"
+                />
+                <span className="text-xs text-muted-foreground font-mono w-8 text-right">
+                  {Math.round(isMuted ? 0 : volume * 100)}
+                </span>
+              </div>
             </div>
 
-            {/* Volume Control */}
-            <div className="flex items-center space-x-3">
-              <Button variant="ghost" size="sm" onClick={toggleMute}>
-                {isMuted ? (
-                  <VolumeX className="w-4 h-4" />
-                ) : (
-                  <Volume2 className="w-4 h-4" />
-                )}
-              </Button>
-              <Slider
-                value={[isMuted ? 0 : volume * 100]}
-                max={100}
-                step={1}
-                onValueChange={handleVolumeChange}
-                className="flex-1"
-              />
-            </div>
-
-            {/* Track List */}
-            <div className="flex-1 overflow-auto">
-              <div className="flex items-center justify-between mb-4">
-                <h4 className="font-medium">Playlist</h4>
+            {/* Playlist Section */}
+            <div className="flex-1 overflow-hidden flex flex-col">
+              <div className="flex items-center justify-between p-4 border-b border-primary/10 bg-background/50">
+                <div className="flex items-center gap-2">
+                  <ListMusic className="w-4 h-4 text-primary" />
+                  <h4 className="font-medium text-foreground">Queue</h4>
+                  <Badge variant="outline" className="text-xs">
+                    {allTracks.length}
+                  </Badge>
+                </div>
                 <Button
                   variant="outline"
                   size="sm"
                   onClick={() => fileInputRef.current?.click()}
+                  className="h-8 text-xs hover:bg-primary/10"
                 >
-                  <Upload className="w-4 h-4 mr-2" />
-                  Add Music
+                  <Upload className="w-3 h-3 mr-1" />
+                  Add
                 </Button>
               </div>
 
-              <div className="space-y-2">
-                {allTracks.map((track) => (
-                  <div
-                    key={track.id}
-                    className={`flex items-center justify-between p-3 rounded-lg border cursor-pointer transition-colors ${
-                      currentTrack?.id === track.id
-                        ? "bg-blue-500/10 border-blue-500/30"
-                        : "hover:bg-muted/50 border-transparent"
-                    }`}
-                    onClick={() => handlePlay(track)}
-                  >
-                    <div className="flex items-center space-x-3">
-                      <div className="w-8 h-8 bg-gradient-to-br from-purple-500 to-blue-500 rounded flex items-center justify-center">
-                        <Music className="w-4 h-4 text-white" />
-                      </div>
-                      <div>
-                        <p className="font-medium text-sm">{track.title}</p>
-                        <p className="text-xs text-muted-foreground">
-                          {track.artist}
-                        </p>
-                      </div>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      {currentTrack?.id === track.id && (
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            toggleLike();
-                          }}
+              <div className="flex-1 overflow-auto">
+                <AnimatePresence>
+                  {allTracks.length > 0 ? (
+                    <div className="p-2">
+                      {allTracks.map((track, index) => (
+                        <motion.div
+                          key={track.id}
+                          initial={{ opacity: 0, x: -20 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          exit={{ opacity: 0, x: 20 }}
+                          transition={{ delay: index * 0.05 }}
+                          className={`group flex items-center gap-3 p-3 rounded-lg cursor-pointer transition-all duration-200 ${
+                            currentTrack?.id === track.id
+                              ? "bg-primary/10 border border-primary/20"
+                              : "hover:bg-muted/50 border border-transparent"
+                          }`}
+                          onClick={() => handlePlay(track)}
                         >
-                          <Heart
-                            className={`w-4 h-4 ${
-                              isLiked
-                                ? "fill-red-500 text-red-500"
-                                : "text-muted-foreground"
-                            }`}
-                          />
-                        </Button>
-                      )}
-                      <span className="text-xs text-muted-foreground">
-                        {formatTime(track.duration)}
-                      </span>
+                          <div className="relative">
+                            <div className="w-10 h-10 bg-gradient-to-br from-primary/20 to-secondary/20 rounded-lg flex items-center justify-center">
+                              {currentTrack?.id === track.id && isPlaying ? (
+                                <motion.div
+                                  animate={{ scale: [1, 1.2, 1] }}
+                                  transition={{ duration: 1, repeat: Infinity }}
+                                >
+                                  <Music className="w-4 h-4 text-primary" />
+                                </motion.div>
+                              ) : (
+                                <Music className="w-4 h-4 text-muted-foreground" />
+                              )}
+                            </div>
+                            {currentTrack?.id === track.id && (
+                              <div className="absolute -top-1 -right-1 w-3 h-3 bg-primary rounded-full flex items-center justify-center">
+                                <div className="w-1.5 h-1.5 bg-white rounded-full" />
+                              </div>
+                            )}
+                          </div>
+                          
+                          <div className="flex-1 min-w-0">
+                            <p className={`font-medium text-sm truncate ${
+                              currentTrack?.id === track.id ? "text-primary" : "text-foreground"
+                            }`}>
+                              {track.title}
+                            </p>
+                            <p className="text-xs text-muted-foreground truncate">
+                              {track.artist}
+                            </p>
+                          </div>
+                          
+                          <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <span className="text-xs text-muted-foreground font-mono">
+                              {formatTime(track.duration)}
+                            </span>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              className="h-6 w-6 p-0 hover:bg-primary/10"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                // Add more options here
+                              }}
+                            >
+                              <MoreHorizontal className="w-3 h-3" />
+                            </Button>
+                          </div>
+                        </motion.div>
+                      ))}
                     </div>
-                  </div>
-                ))}
+                  ) : (
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      className="flex flex-col items-center justify-center h-full p-8 text-center"
+                    >
+                      <div className="w-16 h-16 bg-muted/20 rounded-full flex items-center justify-center mb-4">
+                        <Music className="w-8 h-8 text-muted-foreground/50" />
+                      </div>
+                      <h3 className="font-medium text-foreground mb-2">No tracks yet</h3>
+                      <p className="text-sm text-muted-foreground mb-4 max-w-xs">
+                        Upload your favorite music files to start building your playlist
+                      </p>
+                      <Button
+                        onClick={() => fileInputRef.current?.click()}
+                        className="bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90"
+                      >
+                        <Upload className="w-4 h-4 mr-2" />
+                        Upload Music
+                      </Button>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
-
-              {allTracks.length === 0 && (
-                <div className="text-center py-8 text-muted-foreground">
-                  <Music className="w-12 h-12 mx-auto mb-4 opacity-50" />
-                  <p>No tracks available</p>
-                  <p className="text-sm">
-                    Upload some music files to get started
-                  </p>
-                </div>
-              )}
             </div>
           </div>
-
-          <DrawerFooter className="border-t">
-            <div className="flex gap-2 justify-end">
-              <Button variant="outline" onClick={toggleShuffle}>
-                <Shuffle
-                  className={`w-4 h-4 mr-2 ${
-                    isShuffled ? "text-blue-500" : ""
-                  }`}
-                />
-                Shuffle
-              </Button>
-              <Button onClick={() => fileInputRef.current?.click()}>
-                <Upload className="w-4 h-4 mr-2" />
-                Add Music
-              </Button>
-            </div>
-          </DrawerFooter>
         </DrawerContent>
       </Drawer>
 
