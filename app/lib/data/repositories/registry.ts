@@ -2,7 +2,7 @@
  * Repository registry for managing multiple repositories
  */
 
-import { BaseRepository, RepositoryRegistry } from "@/types";
+import { BaseRepository, RepositoryRegistry } from "@/lib/types";
 
 /**
  * Default repository registry implementation

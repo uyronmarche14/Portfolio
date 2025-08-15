@@ -2,8 +2,8 @@
  * Validation utility functions and error handling
  */
 
-import { z } from 'zod';
-import { ValidationError, ValidationResult } from '@/types';
+import { z } from "zod";
+import { ValidationError, ValidationResult } from "@/lib/types";
 
 /**
  * Generic validation function that returns a standardized result
@@ -13,20 +13,20 @@ export function validateData<T>(
   data: unknown
 ): ValidationResult {
   const result = schema.safeParse(data);
-  
+
   if (result.success) {
     return {
       isValid: true,
       errors: [],
     };
   }
-  
+
   const errors: ValidationError[] = result.error.errors.map((error) => ({
-    field: error.path.join('.'),
+    field: error.path.join("."),
     message: error.message,
     code: error.code,
   }));
-  
+
   return {
     isValid: false,
     errors,
@@ -42,20 +42,20 @@ export async function validateDataAsync<T>(
 ): Promise<ValidationResult> {
   try {
     const result = await schema.safeParseAsync(data);
-    
+
     if (result.success) {
       return {
         isValid: true,
         errors: [],
       };
     }
-    
+
     const errors: ValidationError[] = result.error.errors.map((error) => ({
-      field: error.path.join('.'),
+      field: error.path.join("."),
       message: error.message,
       code: error.code,
     }));
-    
+
     return {
       isValid: false,
       errors,
@@ -63,11 +63,14 @@ export async function validateDataAsync<T>(
   } catch (error) {
     return {
       isValid: false,
-      errors: [{
-        field: 'unknown',
-        message: error instanceof Error ? error.message : 'Unknown validation error',
-        code: 'VALIDATION_ERROR',
-      }],
+      errors: [
+        {
+          field: "unknown",
+          message:
+            error instanceof Error ? error.message : "Unknown validation error",
+          code: "VALIDATION_ERROR",
+        },
+      ],
     };
   }
 }
@@ -81,15 +84,15 @@ export function parseAndValidate<T>(
   errorMessage?: string
 ): T {
   const result = schema.safeParse(data);
-  
+
   if (!result.success) {
-    const errors = result.error.errors.map(error => 
-      `${error.path.join('.')}: ${error.message}`
-    ).join(', ');
-    
+    const errors = result.error.errors
+      .map((error) => `${error.path.join(".")}: ${error.message}`)
+      .join(", ");
+
     throw new Error(errorMessage || `Validation failed: ${errors}`);
   }
-  
+
   return result.data;
 }
 
@@ -104,21 +107,21 @@ export function validateMultiple(
   }>
 ): ValidationResult {
   const allErrors: ValidationError[] = [];
-  
+
   for (const validation of validations) {
     const result = validateData(validation.schema, validation.data);
-    
+
     if (!result.isValid) {
       // Prefix field names with the validation name
-      const prefixedErrors = result.errors.map(error => ({
+      const prefixedErrors = result.errors.map((error) => ({
         ...error,
         field: `${validation.name}.${error.field}`,
       }));
-      
+
       allErrors.push(...prefixedErrors);
     }
   }
-  
+
   return {
     isValid: allErrors.length === 0,
     errors: allErrors,
@@ -136,7 +139,7 @@ export function createValidationError(
   return {
     field,
     message,
-    code: code || 'VALIDATION_ERROR',
+    code: code || "VALIDATION_ERROR",
   };
 }
 
@@ -144,13 +147,13 @@ export function createValidationError(
  * Format validation errors for display
  */
 export function formatValidationErrors(errors: ValidationError[]): string {
-  if (errors.length === 0) return '';
-  
+  if (errors.length === 0) return "";
+
   if (errors.length === 1) {
     return errors[0].message;
   }
-  
-  return errors.map(error => `• ${error.message}`).join('\n');
+
+  return errors.map((error) => `• ${error.message}`).join("\n");
 }
 
 /**
@@ -160,8 +163,9 @@ export function getFieldErrors(
   errors: ValidationError[],
   fieldName: string
 ): ValidationError[] {
-  return errors.filter(error => 
-    error.field === fieldName || error.field.startsWith(`${fieldName}.`)
+  return errors.filter(
+    (error) =>
+      error.field === fieldName || error.field.startsWith(`${fieldName}.`)
   );
 }
 
@@ -193,14 +197,14 @@ export function groupErrorsByField(
   errors: ValidationError[]
 ): Record<string, ValidationError[]> {
   const grouped: Record<string, ValidationError[]> = {};
-  
+
   for (const error of errors) {
     if (!grouped[error.field]) {
       grouped[error.field] = [];
     }
     grouped[error.field].push(error);
   }
-  
+
   return grouped;
 }
 
@@ -210,8 +214,8 @@ export function groupErrorsByField(
 export function sanitizeInput(input: string): string {
   return input
     .trim()
-    .replace(/\s+/g, ' ') // Replace multiple spaces with single space
-    .replace(/[<>]/g, ''); // Remove potential HTML tags
+    .replace(/\s+/g, " ") // Replace multiple spaces with single space
+    .replace(/[<>]/g, ""); // Remove potential HTML tags
 }
 
 /**
@@ -239,19 +243,17 @@ export function isValidUrl(url: string): boolean {
  */
 export function isValidPhoneNumber(phone: string): boolean {
   const phoneRegex = /^[\+]?[1-9][\d]{0,15}$/;
-  return phoneRegex.test(phone.replace(/[\s\-\(\)]/g, ''));
+  return phoneRegex.test(phone.replace(/[\s\-\(\)]/g, ""));
 }
 
 /**
  * Custom Zod refinement for unique array values
  */
-export function uniqueArray<T>(
-  message = 'Array must contain unique values'
-) {
+export function uniqueArray<T>(message = "Array must contain unique values") {
   return (arr: T[]) => {
     const seen = new Set();
     for (const item of arr) {
-      const key = typeof item === 'object' ? JSON.stringify(item) : item;
+      const key = typeof item === "object" ? JSON.stringify(item) : item;
       if (seen.has(key)) {
         return false;
       }
@@ -267,14 +269,14 @@ export function uniqueArray<T>(
 export function validDateRange(
   startField: string,
   endField: string,
-  message = 'End date must be after start date'
+  message = "End date must be after start date"
 ) {
   return (obj: Record<string, any>) => {
     const start = obj[startField];
     const end = obj[endField];
-    
+
     if (!start || !end) return true; // Skip validation if either date is missing
-    
+
     return new Date(start) <= new Date(end);
   };
 }
@@ -286,11 +288,15 @@ export function conditionalRequired(
   conditionField: string,
   conditionValue: any,
   requiredField: string,
-  message = 'This field is required'
+  message = "This field is required"
 ) {
   return (obj: Record<string, any>) => {
     if (obj[conditionField] === conditionValue) {
-      return obj[requiredField] !== undefined && obj[requiredField] !== null && obj[requiredField] !== '';
+      return (
+        obj[requiredField] !== undefined &&
+        obj[requiredField] !== null &&
+        obj[requiredField] !== ""
+      );
     }
     return true;
   };
@@ -304,10 +310,10 @@ export function createDebouncedValidator<T>(
   delay = 300
 ) {
   let timeoutId: NodeJS.Timeout;
-  
+
   return (data: unknown, callback: (result: ValidationResult) => void) => {
     clearTimeout(timeoutId);
-    
+
     timeoutId = setTimeout(() => {
       const result = validateData(schema, data);
       callback(result);
@@ -321,17 +327,17 @@ export function createDebouncedValidator<T>(
 export function createValidationMiddleware<T>(schema: z.ZodSchema<T>) {
   return (data: unknown) => {
     const result = schema.safeParse(data);
-    
+
     if (!result.success) {
-      const errors = result.error.errors.map(error => ({
-        field: error.path.join('.'),
+      const errors = result.error.errors.map((error) => ({
+        field: error.path.join("."),
         message: error.message,
         code: error.code,
       }));
-      
+
       throw new Error(`Validation failed: ${JSON.stringify(errors)}`);
     }
-    
+
     return result.data;
   };
 }

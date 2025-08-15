@@ -3,16 +3,16 @@
  * Provides specialized functionality for project data with filtering, searching, and caching
  */
 
-import { useState, useEffect, useCallback, useMemo } from 'react';
-import { 
-  Project, 
-  ProjectFilters, 
-  ProjectSearchParams, 
+import { useState, useEffect, useCallback, useMemo } from "react";
+import {
+  Project,
+  ProjectFilters,
+  ProjectSearchParams,
   ProjectStatistics,
   DataResult,
-  PaginationParams 
-} from '@/lib/types';
-import { RepositoryRegistry } from '@/data/repositories';
+  PaginationParams,
+} from "@/lib/types";
+import { RepositoryRegistry } from "@/lib/data/repositories";
 
 export interface UseProjectsOptions {
   initialFilters?: ProjectFilters;
@@ -30,34 +30,34 @@ export interface UseProjectsReturn {
   filteredProjects: Project[];
   featuredProjects: Project[];
   statistics: ProjectStatistics | null;
-  
+
   // State
   isLoading: boolean;
   isSearching: boolean;
   isRefreshing: boolean;
   error: string | null;
   lastUpdated: Date | null;
-  
+
   // Filters and Search
   filters: ProjectFilters;
   searchParams: ProjectSearchParams;
   searchQuery: string;
-  
+
   // Actions
   setFilters: (filters: ProjectFilters) => void;
   setSearchParams: (params: ProjectSearchParams) => void;
   setSearchQuery: (query: string) => void;
   clearFilters: () => void;
   clearSearch: () => void;
-  
+
   // Data Operations
   refetch: () => Promise<void>;
   refresh: () => Promise<void>;
   searchProjects: (query: string) => Promise<void>;
   getProjectById: (id: string) => Project | undefined;
   getProjectsByTechnology: (technology: string) => Project[];
-  getProjectsByCategory: (category: Project['category']) => Project[];
-  
+  getProjectsByCategory: (category: Project["category"]) => Project[];
+
   // Utilities
   clearCache: () => void;
   exportProjects: () => void;
@@ -66,7 +66,9 @@ export interface UseProjectsReturn {
 /**
  * Custom hook for managing project data with advanced filtering and search capabilities
  */
-export function useProjects(options: UseProjectsOptions = {}): UseProjectsReturn {
+export function useProjects(
+  options: UseProjectsOptions = {}
+): UseProjectsReturn {
   const {
     initialFilters = {},
     initialSearchParams = {},
@@ -88,8 +90,9 @@ export function useProjects(options: UseProjectsOptions = {}): UseProjectsReturn
 
   // Filters and Search
   const [filters, setFilters] = useState<ProjectFilters>(initialFilters);
-  const [searchParams, setSearchParams] = useState<ProjectSearchParams>(initialSearchParams);
-  const [searchQuery, setSearchQuery] = useState(searchParams.query || '');
+  const [searchParams, setSearchParams] =
+    useState<ProjectSearchParams>(initialSearchParams);
+  const [searchQuery, setSearchQuery] = useState(searchParams.query || "");
 
   /**
    * Get project repository instance
@@ -101,82 +104,91 @@ export function useProjects(options: UseProjectsOptions = {}): UseProjectsReturn
   /**
    * Fetch all projects
    */
-  const fetchProjects = useCallback(async (isRefresh = false) => {
-    try {
-      if (isRefresh) {
-        setIsRefreshing(true);
-      } else {
-        setIsLoading(true);
+  const fetchProjects = useCallback(
+    async (isRefresh = false) => {
+      try {
+        if (isRefresh) {
+          setIsRefreshing(true);
+        } else {
+          setIsLoading(true);
+        }
+
+        setError(null);
+
+        const repository = getRepository();
+
+        // Fetch projects and statistics in parallel
+        const [projectsResult, statsResult] = await Promise.all([
+          repository.getAll(),
+          repository.getStatistics(),
+        ]);
+
+        if (projectsResult.error) {
+          throw new Error(projectsResult.error.message);
+        }
+
+        if (statsResult.error) {
+          console.warn(
+            "Failed to fetch project statistics:",
+            statsResult.error.message
+          );
+        }
+
+        const projectData = projectsResult.data || [];
+        const statsData = statsResult.data || null;
+
+        setProjects(projectData);
+        setStatistics(statsData);
+        setLastUpdated(new Date());
+
+        onSuccess?.(projectData);
+      } catch (error) {
+        const errorMessage =
+          error instanceof Error ? error.message : "Failed to fetch projects";
+        setError(errorMessage);
+        onError?.(errorMessage);
+      } finally {
+        setIsLoading(false);
+        setIsRefreshing(false);
       }
-      
-      setError(null);
-
-      const repository = getRepository();
-      
-      // Fetch projects and statistics in parallel
-      const [projectsResult, statsResult] = await Promise.all([
-        repository.getAll(),
-        repository.getStatistics(),
-      ]);
-
-      if (projectsResult.error) {
-        throw new Error(projectsResult.error.message);
-      }
-
-      if (statsResult.error) {
-        console.warn('Failed to fetch project statistics:', statsResult.error.message);
-      }
-
-      const projectData = projectsResult.data || [];
-      const statsData = statsResult.data || null;
-
-      setProjects(projectData);
-      setStatistics(statsData);
-      setLastUpdated(new Date());
-      
-      onSuccess?.(projectData);
-
-    } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Failed to fetch projects';
-      setError(errorMessage);
-      onError?.(errorMessage);
-    } finally {
-      setIsLoading(false);
-      setIsRefreshing(false);
-    }
-  }, [getRepository, onError, onSuccess]);
+    },
+    [getRepository, onError, onSuccess]
+  );
 
   /**
    * Search projects with current search parameters
    */
-  const performSearch = useCallback(async (query?: string) => {
-    try {
-      setIsSearching(true);
-      setError(null);
+  const performSearch = useCallback(
+    async (query?: string) => {
+      try {
+        setIsSearching(true);
+        setError(null);
 
-      const repository = getRepository();
-      const searchParameters: ProjectSearchParams = {
-        ...searchParams,
-        query: query || searchQuery,
-      };
+        const repository = getRepository();
+        const searchParameters: ProjectSearchParams = {
+          ...searchParams,
+          query: query || searchQuery,
+        };
 
-      const result = await repository.searchProjects(searchParameters);
+        const result = await repository.searchProjects(searchParameters);
 
-      if (result.error) {
-        throw new Error(result.error.message);
+        if (result.error) {
+          throw new Error(result.error.message);
+        }
+
+        setProjects(result.data || []);
+        setLastUpdated(new Date());
+      } catch (error) {
+        const errorMessage =
+          error instanceof Error ? error.message : "Failed to search projects";
+        setError(errorMessage);
+        onError?.(errorMessage);
+      } finally {
+        setIsSearching(false);
       }
-
-      setProjects(result.data || []);
-      setLastUpdated(new Date());
-
-    } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Failed to search projects';
-      setError(errorMessage);
-      onError?.(errorMessage);
-    } finally {
-      setIsSearching(false);
-    }
-  }, [getRepository, searchParams, searchQuery, onError]);
+    },
+    [getRepository, searchParams, searchQuery, onError]
+  );
 
   /**
    * Apply filters to projects
@@ -184,9 +196,12 @@ export function useProjects(options: UseProjectsOptions = {}): UseProjectsReturn
   const filteredProjects = useMemo(() => {
     if (!projects.length) return [];
 
-    return projects.filter(project => {
+    return projects.filter((project) => {
       // Category filter
-      if (filters.category?.length && !filters.category.includes(project.category)) {
+      if (
+        filters.category?.length &&
+        !filters.category.includes(project.category)
+      ) {
         return false;
       }
 
@@ -197,8 +212,8 @@ export function useProjects(options: UseProjectsOptions = {}): UseProjectsReturn
 
       // Technology filter
       if (filters.technologies?.length) {
-        const hasMatchingTech = filters.technologies.some(tech =>
-          project.technologies.some(projectTech =>
+        const hasMatchingTech = filters.technologies.some((tech) =>
+          project.technologies.some((projectTech) =>
             projectTech.name.toLowerCase().includes(tech.toLowerCase())
           )
         );
@@ -206,14 +221,17 @@ export function useProjects(options: UseProjectsOptions = {}): UseProjectsReturn
       }
 
       // Featured filter
-      if (filters.featured !== undefined && project.featured !== filters.featured) {
+      if (
+        filters.featured !== undefined &&
+        project.featured !== filters.featured
+      ) {
         return false;
       }
 
       // Tags filter
       if (filters.tags?.length) {
-        const hasMatchingTag = filters.tags.some(tag =>
-          project.tags.some(projectTag =>
+        const hasMatchingTag = filters.tags.some((tag) =>
+          project.tags.some((projectTag) =>
             projectTag.toLowerCase().includes(tag.toLowerCase())
           )
         );
@@ -239,7 +257,7 @@ export function useProjects(options: UseProjectsOptions = {}): UseProjectsReturn
    * Get featured projects
    */
   const featuredProjects = useMemo(() => {
-    return projects.filter(project => project.featured);
+    return projects.filter((project) => project.featured);
   }, [projects]);
 
   /**
@@ -255,35 +273,47 @@ export function useProjects(options: UseProjectsOptions = {}): UseProjectsReturn
   /**
    * Search projects with a new query
    */
-  const searchProjects = useCallback(async (query: string) => {
-    setSearchQuery(query);
-    await performSearch(query);
-  }, [performSearch]);
+  const searchProjects = useCallback(
+    async (query: string) => {
+      setSearchQuery(query);
+      await performSearch(query);
+    },
+    [performSearch]
+  );
 
   /**
    * Get project by ID
    */
-  const getProjectById = useCallback((id: string): Project | undefined => {
-    return projects.find(project => project.id === id);
-  }, [projects]);
+  const getProjectById = useCallback(
+    (id: string): Project | undefined => {
+      return projects.find((project) => project.id === id);
+    },
+    [projects]
+  );
 
   /**
    * Get projects by technology
    */
-  const getProjectsByTechnology = useCallback((technology: string): Project[] => {
-    return projects.filter(project =>
-      project.technologies.some(tech =>
-        tech.name.toLowerCase().includes(technology.toLowerCase())
-      )
-    );
-  }, [projects]);
+  const getProjectsByTechnology = useCallback(
+    (technology: string): Project[] => {
+      return projects.filter((project) =>
+        project.technologies.some((tech) =>
+          tech.name.toLowerCase().includes(technology.toLowerCase())
+        )
+      );
+    },
+    [projects]
+  );
 
   /**
    * Get projects by category
    */
-  const getProjectsByCategory = useCallback((category: Project['category']): Project[] => {
-    return projects.filter(project => project.category === category);
-  }, [projects]);
+  const getProjectsByCategory = useCallback(
+    (category: Project["category"]): Project[] => {
+      return projects.filter((project) => project.category === category);
+    },
+    [projects]
+  );
 
   /**
    * Clear all filters
@@ -296,7 +326,7 @@ export function useProjects(options: UseProjectsOptions = {}): UseProjectsReturn
    * Clear search
    */
   const clearSearch = useCallback(() => {
-    setSearchQuery('');
+    setSearchQuery("");
     setSearchParams({});
     fetchProjects(false);
   }, [fetchProjects]);
@@ -318,13 +348,14 @@ export function useProjects(options: UseProjectsOptions = {}): UseProjectsReturn
    */
   const exportProjects = useCallback(() => {
     const dataStr = JSON.stringify(filteredProjects, null, 2);
-    const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
-    
-    const exportFileDefaultName = `projects-${new Date().toISOString().split('T')[0]}.json`;
-    
-    const linkElement = document.createElement('a');
-    linkElement.setAttribute('href', dataUri);
-    linkElement.setAttribute('download', exportFileDefaultName);
+    const dataUri =
+      "data:application/json;charset=utf-8," + encodeURIComponent(dataStr);
+
+    const exportFileDefaultName = `projects-${new Date().toISOString().split("T")[0]}.json`;
+
+    const linkElement = document.createElement("a");
+    linkElement.setAttribute("href", dataUri);
+    linkElement.setAttribute("download", exportFileDefaultName);
     linkElement.click();
   }, [filteredProjects]);
 
@@ -347,7 +378,7 @@ export function useProjects(options: UseProjectsOptions = {}): UseProjectsReturn
   // Update search params when query changes
   useEffect(() => {
     if (searchQuery !== searchParams.query) {
-      setSearchParams(prev => ({ ...prev, query: searchQuery }));
+      setSearchParams((prev) => ({ ...prev, query: searchQuery }));
     }
   }, [searchQuery, searchParams.query]);
 
@@ -357,26 +388,26 @@ export function useProjects(options: UseProjectsOptions = {}): UseProjectsReturn
     filteredProjects,
     featuredProjects,
     statistics,
-    
+
     // State
     isLoading,
     isSearching,
     isRefreshing,
     error,
     lastUpdated,
-    
+
     // Filters and Search
     filters,
     searchParams,
     searchQuery,
-    
+
     // Actions
     setFilters,
     setSearchParams,
     setSearchQuery,
     clearFilters,
     clearSearch,
-    
+
     // Data Operations
     refetch,
     refresh,
@@ -384,7 +415,7 @@ export function useProjects(options: UseProjectsOptions = {}): UseProjectsReturn
     getProjectById,
     getProjectsByTechnology,
     getProjectsByCategory,
-    
+
     // Utilities
     clearCache,
     exportProjects,

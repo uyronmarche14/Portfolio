@@ -13,7 +13,7 @@ import {
   TechnologySummary,
   DataResult,
   PaginationParams
-} from '@/types';
+} from '@/lib/types';
 import { FileBasedRepository } from './base';
 import { generateId } from '@/lib/utils';
 

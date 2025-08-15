@@ -3,18 +3,18 @@
  * Provides specialized functionality for about content with caching and error handling
  */
 
-import { useState, useEffect, useCallback, useMemo } from 'react';
-import { 
-  AboutContent, 
-  AboutFilters, 
+import { useState, useEffect, useCallback, useMemo } from "react";
+import {
+  AboutContent,
+  AboutFilters,
   AboutStatistics,
   Experience,
   Education,
   Skill,
   SkillGroup,
-  DataResult 
-} from '@/types';
-import { RepositoryRegistry } from '@/data/repositories';
+  DataResult,
+} from "@/lib/types";
+import { RepositoryRegistry } from "@/lib/data/repositories";
 
 export interface UseAboutContentOptions {
   initialFilters?: AboutFilters;
@@ -32,41 +32,43 @@ export interface UseAboutContentReturn {
   education: Education[];
   skills: SkillGroup[];
   statistics: AboutStatistics | null;
-  
+
   // Filtered Data
   filteredExperience: Experience[];
   filteredEducation: Education[];
   filteredSkills: SkillGroup[];
   featuredExperience: Experience[];
   featuredSkills: Skill[];
-  
+
   // State
   isLoading: boolean;
   isRefreshing: boolean;
   error: string | null;
   lastUpdated: Date | null;
-  
+
   // Filters
   filters: AboutFilters;
   setFilters: (filters: AboutFilters) => void;
   clearFilters: () => void;
-  
+
   // Actions
   refetch: () => Promise<void>;
   refresh: () => Promise<void>;
   clearCache: () => void;
-  
+
   // Utilities
-  getExperienceByType: (type: Experience['type']) => Experience[];
-  getSkillsByCategory: (category: Skill['category']) => Skill[];
-  getEducationByLevel: (level: Education['level']) => Education[];
+  getExperienceByType: (type: Experience["type"]) => Experience[];
+  getSkillsByCategory: (category: Skill["category"]) => Skill[];
+  getEducationByLevel: (level: Education["level"]) => Education[];
   exportData: () => void;
 }
 
 /**
  * Custom hook for managing about content data
  */
-export function useAboutContent(options: UseAboutContentOptions = {}): UseAboutContentReturn {
+export function useAboutContent(
+  options: UseAboutContentOptions = {}
+): UseAboutContentReturn {
   const {
     initialFilters = {},
     enableCaching = true,
@@ -95,52 +97,60 @@ export function useAboutContent(options: UseAboutContentOptions = {}): UseAboutC
   /**
    * Fetch about content
    */
-  const fetchAboutContent = useCallback(async (isRefresh = false) => {
-    try {
-      if (isRefresh) {
-        setIsRefreshing(true);
-      } else {
-        setIsLoading(true);
+  const fetchAboutContent = useCallback(
+    async (isRefresh = false) => {
+      try {
+        if (isRefresh) {
+          setIsRefreshing(true);
+        } else {
+          setIsLoading(true);
+        }
+
+        setError(null);
+
+        const repository = getRepository();
+
+        // Fetch about content and statistics in parallel
+        const [contentResult, statsResult] = await Promise.all([
+          repository.get(),
+          repository.getStatistics(),
+        ]);
+
+        if (contentResult.error) {
+          throw new Error(contentResult.error.message);
+        }
+
+        if (statsResult.error) {
+          console.warn(
+            "Failed to fetch about statistics:",
+            statsResult.error.message
+          );
+        }
+
+        const content = contentResult.data || null;
+        const stats = statsResult.data || null;
+
+        setAboutContent(content);
+        setStatistics(stats);
+        setLastUpdated(new Date());
+
+        if (content) {
+          onSuccess?.(content);
+        }
+      } catch (error) {
+        const errorMessage =
+          error instanceof Error
+            ? error.message
+            : "Failed to fetch about content";
+        setError(errorMessage);
+        onError?.(errorMessage);
+      } finally {
+        setIsLoading(false);
+        setIsRefreshing(false);
       }
-      
-      setError(null);
-
-      const repository = getRepository();
-      
-      // Fetch about content and statistics in parallel
-      const [contentResult, statsResult] = await Promise.all([
-        repository.get(),
-        repository.getStatistics(),
-      ]);
-
-      if (contentResult.error) {
-        throw new Error(contentResult.error.message);
-      }
-
-      if (statsResult.error) {
-        console.warn('Failed to fetch about statistics:', statsResult.error.message);
-      }
-
-      const content = contentResult.data || null;
-      const stats = statsResult.data || null;
-
-      setAboutContent(content);
-      setStatistics(stats);
-      setLastUpdated(new Date());
-      
-      if (content) {
-        onSuccess?.(content);
-      }
-
-    } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Failed to fetch about content';
-      setError(errorMessage);
-      onError?.(errorMessage);
-    } finally {
-      setIsLoading(false);
-      setIsRefreshing(false);
-    }
-  }, [getRepository, onError, onSuccess]);
+    },
+    [getRepository, onError, onSuccess]
+  );
 
   /**
    * Extract experience from about content
@@ -169,9 +179,12 @@ export function useAboutContent(options: UseAboutContentOptions = {}): UseAboutC
   const filteredExperience = useMemo(() => {
     if (!experience.length) return [];
 
-    return experience.filter(exp => {
+    return experience.filter((exp) => {
       // Experience type filter
-      if (filters.experienceType?.length && !filters.experienceType.includes(exp.type)) {
+      if (
+        filters.experienceType?.length &&
+        !filters.experienceType.includes(exp.type)
+      ) {
         return false;
       }
 
@@ -201,9 +214,12 @@ export function useAboutContent(options: UseAboutContentOptions = {}): UseAboutC
   const filteredEducation = useMemo(() => {
     if (!education.length) return [];
 
-    return education.filter(edu => {
+    return education.filter((edu) => {
       // Education level filter
-      if (filters.educationLevel?.length && !filters.educationLevel.includes(edu.level)) {
+      if (
+        filters.educationLevel?.length &&
+        !filters.educationLevel.includes(edu.level)
+      ) {
         return false;
       }
 
@@ -233,58 +249,77 @@ export function useAboutContent(options: UseAboutContentOptions = {}): UseAboutC
   const filteredSkills = useMemo(() => {
     if (!skills.length) return [];
 
-    return skills.filter(skillGroup => {
-      // Skill category filter
-      if (filters.skillCategory?.length && !filters.skillCategory.includes(skillGroup.category)) {
-        return false;
-      }
-
-      // Filter skills within the group
-      const filteredGroupSkills = skillGroup.skills.filter(skill => {
-        // Featured filter
-        if (filters.featured !== undefined && skill.featured !== filters.featured) {
+    return skills
+      .filter((skillGroup) => {
+        // Skill category filter
+        if (
+          filters.skillCategory?.length &&
+          !filters.skillCategory.includes(skillGroup.category)
+        ) {
           return false;
         }
 
-        return true;
-      });
+        // Filter skills within the group
+        const filteredGroupSkills = skillGroup.skills.filter((skill) => {
+          // Featured filter
+          if (
+            filters.featured !== undefined &&
+            skill.featured !== filters.featured
+          ) {
+            return false;
+          }
 
-      // Return the group with filtered skills
-      return filteredGroupSkills.length > 0;
-    }).map(skillGroup => ({
-      ...skillGroup,
-      skills: skillGroup.skills.filter(skill => {
-        if (filters.featured !== undefined && skill.featured !== filters.featured) {
-          return false;
-        }
-        return true;
-      }),
-    }));
+          return true;
+        });
+
+        // Return the group with filtered skills
+        return filteredGroupSkills.length > 0;
+      })
+      .map((skillGroup) => ({
+        ...skillGroup,
+        skills: skillGroup.skills.filter((skill) => {
+          if (
+            filters.featured !== undefined &&
+            skill.featured !== filters.featured
+          ) {
+            return false;
+          }
+          return true;
+        }),
+      }));
   }, [skills, filters]);
 
   /**
    * Get featured experience
    */
   const featuredExperience = useMemo(() => {
-    return experience.filter(exp => exp.featured);
+    return experience.filter((exp) => exp.featured);
   }, [experience]);
 
   /**
    * Get featured skills (flattened from all skill groups)
    */
   const featuredSkills = useMemo(() => {
-    return skills.flatMap(group => group.skills.filter(skill => skill.featured));
+    return skills.flatMap((group) =>
+      group.skills.filter((skill) => skill.featured)
+    );
   }, [skills]);
 
   /**
    * Refetch about content
    */
-  const refetch = useCallback(() => fetchAboutContent(false), [fetchAboutContent]);
+  const refetch = useCallback(
+    () => fetchAboutContent(false),
+    [fetchAboutContent]
+  );
 
   /**
    * Refresh about content (maintains current state while fetching)
    */
-  const refresh = useCallback(() => fetchAboutContent(true), [fetchAboutContent]);
+  const refresh = useCallback(
+    () => fetchAboutContent(true),
+    [fetchAboutContent]
+  );
 
   /**
    * Clear all filters
@@ -308,25 +343,34 @@ export function useAboutContent(options: UseAboutContentOptions = {}): UseAboutC
   /**
    * Get experience by type
    */
-  const getExperienceByType = useCallback((type: Experience['type']): Experience[] => {
-    return experience.filter(exp => exp.type === type);
-  }, [experience]);
+  const getExperienceByType = useCallback(
+    (type: Experience["type"]): Experience[] => {
+      return experience.filter((exp) => exp.type === type);
+    },
+    [experience]
+  );
 
   /**
    * Get skills by category (flattened from all skill groups)
    */
-  const getSkillsByCategory = useCallback((category: Skill['category']): Skill[] => {
-    return skills
-      .filter(group => group.category === category)
-      .flatMap(group => group.skills);
-  }, [skills]);
+  const getSkillsByCategory = useCallback(
+    (category: Skill["category"]): Skill[] => {
+      return skills
+        .filter((group) => group.category === category)
+        .flatMap((group) => group.skills);
+    },
+    [skills]
+  );
 
   /**
    * Get education by level
    */
-  const getEducationByLevel = useCallback((level: Education['level']): Education[] => {
-    return education.filter(edu => edu.level === level);
-  }, [education]);
+  const getEducationByLevel = useCallback(
+    (level: Education["level"]): Education[] => {
+      return education.filter((edu) => edu.level === level);
+    },
+    [education]
+  );
 
   /**
    * Export about content data
@@ -335,13 +379,14 @@ export function useAboutContent(options: UseAboutContentOptions = {}): UseAboutC
     if (!aboutContent) return;
 
     const dataStr = JSON.stringify(aboutContent, null, 2);
-    const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
-    
-    const exportFileDefaultName = `about-content-${new Date().toISOString().split('T')[0]}.json`;
-    
-    const linkElement = document.createElement('a');
-    linkElement.setAttribute('href', dataUri);
-    linkElement.setAttribute('download', exportFileDefaultName);
+    const dataUri =
+      "data:application/json;charset=utf-8," + encodeURIComponent(dataStr);
+
+    const exportFileDefaultName = `about-content-${new Date().toISOString().split("T")[0]}.json`;
+
+    const linkElement = document.createElement("a");
+    linkElement.setAttribute("href", dataUri);
+    linkElement.setAttribute("download", exportFileDefaultName);
     linkElement.click();
   }, [aboutContent]);
 
@@ -368,30 +413,30 @@ export function useAboutContent(options: UseAboutContentOptions = {}): UseAboutC
     education,
     skills,
     statistics,
-    
+
     // Filtered Data
     filteredExperience,
     filteredEducation,
     filteredSkills,
     featuredExperience,
     featuredSkills,
-    
+
     // State
     isLoading,
     isRefreshing,
     error,
     lastUpdated,
-    
+
     // Filters
     filters,
     setFilters,
     clearFilters,
-    
+
     // Actions
     refetch,
     refresh,
     clearCache,
-    
+
     // Utilities
     getExperienceByType,
     getSkillsByCategory,
