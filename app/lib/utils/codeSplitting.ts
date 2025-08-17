@@ -1,114 +1,61 @@
-/**
- * Code splitting utilities for dynamic imports and lazy loading
- */
+import React, { lazy, ComponentType } from 'react';
 
-import { ComponentType, lazy, LazyExoticComponent } from 'react';
-import { AppError } from '@/lib/types/error';
-import { createNetworkError, logError } from './errorHandling';
-
-/**
- * Options for dynamic imports
- */
-interface DynamicImportOptions {
-  /**
-   * Retry attempts for failed imports
-   */
-  retries?: number;
-  /**
-   * Delay between retry attempts (ms)
-   */
-  retryDelay?: number;
-  /**
-   * Timeout for import attempts (ms)
-   */
-  timeout?: number;
-  /**
-   * Whether to preload the component
-   */
+interface LazyComponentOptions {
+  displayName?: string;
   preload?: boolean;
-  /**
-   * Error handler for failed imports
-   */
-  onError?: (error: AppError) => void;
+  retryCount?: number;
+  retryDelay?: number;
+}
+
+interface LazyComponentResult<T = any> {
+  default: ComponentType<T>;
 }
 
 /**
- * Enhanced dynamic import with retry logic and error handling
+ * Create a lazy component with enhanced error handling and preloading
  */
-export function createDynamicImport<T extends ComponentType<any>>(
-  importFn: () => Promise<{ default: T }>,
-  options: DynamicImportOptions = {}
-): LazyExoticComponent<T> {
+export function createLazyComponent<T = any>(
+  importFn: () => Promise<LazyComponentResult<T>>,
+  options: LazyComponentOptions = {}
+): ComponentType<T> {
   const {
-    retries = 3,
-    retryDelay = 1000,
-    timeout = 30000,
+    displayName = 'LazyComponent',
     preload = false,
-    onError,
+    retryCount = 3,
+    retryDelay = 1000
   } = options;
 
-  let retryCount = 0;
-
-  const enhancedImportFn = async (): Promise<{ default: T }> => {
-    const attemptImport = async (): Promise<{ default: T }> => {
-      const timeoutPromise = new Promise<never>((_, reject) => {
-        setTimeout(() => {
-          reject(createNetworkError(
-            `Dynamic import timeout after ${timeout}ms`,
-            undefined,
-            'dynamic-import',
-            'GET'
-          ));
-        }, timeout);
-      });
-
+  // Enhanced import function with retry logic
+  const enhancedImportFn = async (): Promise<LazyComponentResult<T>> => {
+    let lastError: Error;
+    
+    for (let attempt = 0; attempt <= retryCount; attempt++) {
       try {
-        const result = await Promise.race([importFn(), timeoutPromise]);
-        retryCount = 0; // Reset on success
+        const result = await importFn();
         return result;
       } catch (error) {
-        const appError = error instanceof Error 
-          ? createNetworkError(
-              `Failed to load component: ${error.message}`,
-              undefined,
-              'dynamic-import',
-              'GET'
-            )
-          : createNetworkError(
-              'Failed to load component',
-              undefined,
-              'dynamic-import',
-              'GET'
-            );
-
-        logError(appError, {
-          retryCount,
-          maxRetries: retries,
-          component: 'createDynamicImport',
-        });
-
-        if (retryCount < retries) {
-          retryCount++;
-          await new Promise(resolve => setTimeout(resolve, retryDelay * retryCount));
-          return attemptImport();
+        lastError = error as Error;
+        
+        if (attempt < retryCount) {
+          // Wait before retrying
+          await new Promise(resolve => setTimeout(resolve, retryDelay * (attempt + 1)));
+          console.warn(`Retry ${attempt + 1}/${retryCount} for ${displayName}:`, error);
         }
-
-        onError?.(appError);
-        throw appError;
       }
-    };
-
-    return attemptImport();
+    }
+    
+    throw lastError!;
   };
 
   const LazyComponent = lazy(enhancedImportFn);
+  LazyComponent.displayName = displayName;
 
-  // Preload if requested
+  // Preload the component if requested
   if (preload && typeof window !== 'undefined') {
     // Preload after a short delay to not block initial render
     setTimeout(() => {
-      enhancedImportFn().catch(() => {
-        // Ignore preload errors
+      enhancedImportFn().catch(error => {
+        console.warn(`Preload failed for ${displayName}:`, error);
       });
     }, 100);
   }
@@ -117,225 +64,95 @@ export function createDynamicImport<T extends ComponentType<any>>(
 }
 
 /**
- * Create a lazy-loaded component with loading and error states
+ * Preload a lazy component
  */
-export function createLazyComponent<T extends ComponentType<any>>(
-  importFn: () => Promise<{ default: T }>,
-  options: DynamicImportOptions & {
-    displayName?: string;
-  } = {}
-): LazyExoticComponent<T> {
-  const LazyComponent = createDynamicImport(importFn, options);
-  
-  if (options.displayName) {
-    LazyComponent.displayName = `Lazy(${options.displayName})`;
-  }
-
-  return LazyComponent;
+export function preloadComponent<T = any>(
+  importFn: () => Promise<LazyComponentResult<T>>
+): Promise<LazyComponentResult<T>> {
+  return importFn();
 }
 
 /**
- * Preload a dynamic component
+ * Create a lazy component with route-based code splitting
  */
-export async function preloadComponent<T extends ComponentType<any>>(
-  importFn: () => Promise<{ default: T }>
-): Promise<T | null> {
-  try {
-    const module = await importFn();
-    return module.default;
-  } catch (error) {
-    console.warn('Failed to preload component:', error);
-    return null;
-  }
+export function createLazyRoute<T = any>(
+  routePath: string,
+  importFn: () => Promise<LazyComponentResult<T>>,
+  options: LazyComponentOptions = {}
+): ComponentType<T> {
+  return createLazyComponent(importFn, {
+    displayName: `Route(${routePath})`,
+    ...options
+  });
 }
 
 /**
- * Batch preload multiple components
+ * Higher-order component for lazy loading with loading states
  */
-export async function preloadComponents(
-  importFns: Array<() => Promise<{ default: ComponentType<any> }>>
-): Promise<Array<ComponentType<any> | null>> {
-  const results = await Promise.allSettled(
-    importFns.map(fn => preloadComponent(fn))
-  );
+export function withLazyLoading<P extends object>(
+  importFn: () => Promise<LazyComponentResult<ComponentType<P>>>,
+  LoadingComponent?: ComponentType,
+  ErrorComponent?: ComponentType<{ error: Error; retry: () => void }>
+) {
+  const LazyComponent = createLazyComponent(importFn);
 
-  return results.map(result => 
-    result.status === 'fulfilled' ? result.value : null
-  );
+  return React.forwardRef<any, P>((props, ref) => {
+    const [error, setError] = React.useState<Error | null>(null);
+    const [retryKey, setRetryKey] = React.useState(0);
+
+    const handleRetry = React.useCallback(() => {
+      setError(null);
+      setRetryKey(prev => prev + 1);
+    }, []);
+
+    if (error && ErrorComponent) {
+      return <ErrorComponent error={error} retry={handleRetry} />;
+    }
+
+    return (
+      <React.Suspense
+        fallback={LoadingComponent ? <LoadingComponent /> : <div>Loading...</div>}
+      >
+        <React.ErrorBoundary
+          fallback={({ error }) => {
+            setError(error);
+            return ErrorComponent ? (
+              <ErrorComponent error={error} retry={handleRetry} />
+            ) : (
+              <div>Error loading component</div>
+            );
+          }}
+        >
+          <LazyComponent key={retryKey} {...props} ref={ref} />
+        </React.ErrorBoundary>
+      </React.Suspense>
+    );
+  });
 }
 
 /**
- * Route-based code splitting helper
+ * Utility to check if a component is currently loading
  */
-export const createRouteComponent = <T extends ComponentType<any>>(
-  importFn: () => Promise<{ default: T }>,
-  routeName: string
-) => {
-  return createLazyComponent(importFn, {
-    displayName: `Route(${routeName})`,
-    retries: 2,
-    timeout: 15000,
-    onError: (error) => {
-      logError(error, {
-        route: routeName,
-        component: 'RouteComponent',
-      });
-    },
-  });
-};
+export function useComponentLoadingState() {
+  const [isLoading, setIsLoading] = React.useState(false);
+  const [error, setError] = React.useState<Error | null>(null);
 
-/**
- * Feature-based code splitting helper
- */
-export const createFeatureComponent = <T extends ComponentType<any>>(
-  importFn: () => Promise<{ default: T }>,
-  featureName: string,
-  options: { preload?: boolean } = {}
-) => {
-  return createLazyComponent(importFn, {
-    displayName: `Feature(${featureName})`,
-    retries: 3,
-    timeout: 20000,
-    preload: options.preload,
-    onError: (error) => {
-      logError(error, {
-        feature: featureName,
-        component: 'FeatureComponent',
-      });
-    },
-  });
-};
-
-/**
- * Heavy component code splitting helper (for components with large dependencies)
- */
-export const createHeavyComponent = <T extends ComponentType<any>>(
-  importFn: () => Promise<{ default: T }>,
-  componentName: string
-) => {
-  return createLazyComponent(importFn, {
-    displayName: `Heavy(${componentName})`,
-    retries: 2,
-    timeout: 30000,
-    preload: false, // Don't preload heavy components
-    onError: (error) => {
-      logError(error, {
-        component: componentName,
-        type: 'HeavyComponent',
-      });
-    },
-  });
-};
-
-/**
- * Utility to check if dynamic imports are supported
- */
-export const supportsDynamicImports = (): boolean => {
-  try {
-    // Check if dynamic import is supported
-    return typeof import === 'function';
-  } catch {
-    return false;
-  }
-};
-
-/**
- * Fallback component loader for environments that don't support dynamic imports
- */
-export const createFallbackLoader = <T extends ComponentType<any>>(
-  component: T,
-  importFn: () => Promise<{ default: T }>
-): LazyExoticComponent<T> | T => {
-  if (supportsDynamicImports()) {
-    return createLazyComponent(importFn);
-  }
-  return component;
-};
-
-/**
- * Bundle analyzer helper - logs chunk information in development
- */
-export const logChunkInfo = (chunkName: string, size?: number) => {
-  if (process.env.NODE_ENV === 'development') {
-    console.log(`📦 Loaded chunk: ${chunkName}${size ? ` (${size} bytes)` : ''}`);
-  }
-};
-
-/**
- * Performance monitoring for dynamic imports
- */
-export const measureImportPerformance = async <T>(
-  importFn: () => Promise<T>,
-  label: string
-): Promise<T> => {
-  const startTime = performance.now();
-  
-  try {
-    const result = await importFn();
-    const endTime = performance.now();
-    const duration = endTime - startTime;
+  const loadComponent = React.useCallback(async <T,>(
+    importFn: () => Promise<LazyComponentResult<T>>
+  ) => {
+    setIsLoading(true);
+    setError(null);
     
-    if (process.env.NODE_ENV === 'development') {
-      console.log(`⚡ Import "${label}" took ${duration.toFixed(2)}ms`);
+    try {
+      const result = await importFn();
+      return result;
+    } catch (err) {
+      setError(err as Error);
+      throw err;
+    } finally {
+      setIsLoading(false);
     }
-    
-    // Report to analytics in production
-    if (process.env.NODE_ENV === 'production' && typeof window !== 'undefined') {
-      // You could integrate with performance monitoring services here
-      if ((window as any).gtag) {
-        (window as any).gtag('event', 'timing_complete', {
-          name: 'dynamic_import',
-          value: Math.round(duration),
-          custom_map: {
-            component: label,
-          },
-        });
-      }
-    }
-    
-    return result;
-  } catch (error) {
-    const endTime = performance.now();
-    const duration = endTime - startTime;
-    
-    console.error(`❌ Import "${label}" failed after ${duration.toFixed(2)}ms:`, error);
-    throw error;
-  }
-};
+  }, []);
 
-/**
- * Smart preloader that considers network conditions
- */
-export const createSmartPreloader = () => {
-  const isSlowConnection = (): boolean => {
-    if (typeof navigator === 'undefined' || !('connection' in navigator)) {
-      return false;
-    }
-    
-    const connection = (navigator as any).connection;
-    return connection.effectiveType === 'slow-2g' || 
-           connection.effectiveType === '2g' ||
-           connection.saveData === true;
-  };
-
-  const shouldPreload = (priority: 'high' | 'medium' | 'low' = 'medium'): boolean => {
-    if (isSlowConnection()) {
-      return priority === 'high';
-    }
-    return true;
-  };
-
-  return {
-    preloadComponent: async <T extends ComponentType<any>>(
-      importFn: () => Promise<{ default: T }>,
-      priority: 'high' | 'medium' | 'low' = 'medium'
-    ): Promise<T | null> => {
-      if (!shouldPreload(priority)) {
-        return null;
-      }
-      return preloadComponent(importFn);
-    },
-    shouldPreload,
-    isSlowConnection,
-  };
-};
+  return { isLoading, error, loadComponent };
+}

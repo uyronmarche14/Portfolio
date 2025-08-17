@@ -34,34 +34,34 @@ const FilterDropdown: React.FC<FilterDropdownProps> = ({
     <div className="relative w-full">
       <motion.button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex w-full items-center justify-between rounded-2xl border border-primary/20 bg-gradient-to-r from-background/90 to-background/70 p-4 shadow-lg backdrop-blur-xl transition-all duration-300 hover:border-primary/40 hover:shadow-xl"
+        className="flex w-full items-center justify-between rounded-xl sm:rounded-2xl border border-primary/20 bg-gradient-to-r from-background/90 to-background/70 p-3 sm:p-4 shadow-lg backdrop-blur-xl transition-all duration-300 hover:border-primary/40 hover:shadow-xl"
         whileHover={{ scale: 1.01 }}
         whileTap={{ scale: 0.99 }}
       >
-        <div className="flex items-center gap-3">
-          <div className="rounded-lg bg-primary/10 p-2">
-            <Filter className="h-4 w-4 text-primary" />
+        <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
+          <div className="rounded-lg bg-primary/10 p-1.5 sm:p-2 flex-shrink-0">
+            <Filter className="h-3 w-3 sm:h-4 sm:w-4 text-primary" />
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1 sm:gap-2 min-w-0">
             {filter !== "all" && selectedIcon && (
               <selectedIcon.icon
-                className="h-4 w-4"
+                className="h-3 w-3 sm:h-4 sm:w-4 flex-shrink-0"
                 color={selectedIcon.color}
               />
             )}
-            <span className="font-medium text-foreground">{selectedTech}</span>
+            <span className="font-medium text-foreground text-sm sm:text-base truncate">{selectedTech}</span>
           </div>
         </div>
 
-        <div className="flex items-center gap-3">
-          <span className="text-muted-foreground rounded-full bg-primary/10 px-2 py-1 text-sm">
+        <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0">
+          <span className="text-muted-foreground rounded-full bg-primary/10 px-2 py-1 text-xs sm:text-sm">
             {filteredCount} project{filteredCount !== 1 ? "s" : ""}
           </span>
           <motion.div
             animate={{ rotate: isOpen ? 180 : 0 }}
             transition={{ duration: 0.2 }}
           >
-            <ChevronDown className="text-muted-foreground h-4 w-4" />
+            <ChevronDown className="text-muted-foreground h-3 w-3 sm:h-4 sm:w-4" />
           </motion.div>
         </div>
       </motion.button>
@@ -73,33 +73,33 @@ const FilterDropdown: React.FC<FilterDropdownProps> = ({
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -10, scale: 0.95 }}
             transition={{ duration: 0.2 }}
-            className="absolute left-0 right-0 top-full z-50 mt-2 max-h-80 overflow-y-auto rounded-2xl border border-primary/20 bg-background/95 shadow-2xl backdrop-blur-xl"
+            className="absolute left-0 right-0 top-full z-50 mt-2 max-h-60 sm:max-h-80 overflow-y-auto rounded-xl sm:rounded-2xl border border-primary/20 bg-background/95 shadow-2xl backdrop-blur-xl"
           >
-            <div className="p-2">
+            <div className="p-1.5 sm:p-2">
               {/* All Projects Option */}
               <motion.button
                 onClick={() => {
                   onFilterChange("all");
                   setIsOpen(false);
                 }}
-                className={`flex w-full items-center justify-between rounded-xl p-3 transition-all duration-200 ${
+                className={`flex w-full items-center justify-between rounded-lg sm:rounded-xl p-2.5 sm:p-3 transition-all duration-200 ${
                   filter === "all"
                     ? "bg-primary text-white shadow-lg"
                     : "text-foreground hover:bg-primary/10"
                 }`}
                 whileHover={{ x: 4 }}
               >
-                <div className="flex items-center gap-3">
-                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-primary/20 to-secondary/20">
-                    <Filter className="h-4 w-4" />
+                <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+                  <div className="flex h-6 w-6 sm:h-8 sm:w-8 items-center justify-center rounded-lg bg-gradient-to-br from-primary/20 to-secondary/20 flex-shrink-0">
+                    <Filter className="h-3 w-3 sm:h-4 sm:w-4" />
                   </div>
-                  <span className="font-medium">
+                  <span className="font-medium text-sm sm:text-base truncate">
                     {PROJECTS_CONTENT.filterAll}
                   </span>
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-1 sm:gap-2 flex-shrink-0">
                   <span className="text-xs opacity-70">{projects.length}</span>
-                  {filter === "all" && <Check className="h-4 w-4" />}
+                  {filter === "all" && <Check className="h-3 w-3 sm:h-4 sm:w-4" />}
                 </div>
               </motion.button>
 
@@ -120,27 +120,27 @@ const FilterDropdown: React.FC<FilterDropdownProps> = ({
                       onFilterChange(tech);
                       setIsOpen(false);
                     }}
-                    className={`flex w-full items-center justify-between rounded-xl p-3 transition-all duration-200 ${
+                    className={`flex w-full items-center justify-between rounded-lg sm:rounded-xl p-2.5 sm:p-3 transition-all duration-200 ${
                       filter === tech
                         ? "bg-primary text-white shadow-lg"
                         : "text-foreground hover:bg-primary/10"
                     }`}
                     whileHover={{ x: 4 }}
                   >
-                    <div className="flex items-center gap-3">
-                      <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-muted/50">
+                    <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+                      <div className="flex h-6 w-6 sm:h-8 sm:w-8 items-center justify-center rounded-lg bg-muted/50 flex-shrink-0">
                         {techIcon && (
                           <techIcon.icon
-                            className="h-4 w-4"
+                            className="h-3 w-3 sm:h-4 sm:w-4"
                             color={filter === tech ? "white" : techIcon.color}
                           />
                         )}
                       </div>
-                      <span className="font-medium">{tech}</span>
+                      <span className="font-medium text-sm sm:text-base truncate">{tech}</span>
                     </div>
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-1 sm:gap-2 flex-shrink-0">
                       <span className="text-xs opacity-70">{count}</span>
-                      {filter === tech && <Check className="h-4 w-4" />}
+                      {filter === tech && <Check className="h-3 w-3 sm:h-4 sm:w-4" />}
                     </div>
                   </motion.button>
                 );
@@ -238,45 +238,45 @@ const ProjectsSection = () => {
   return (
     <section
       id="projects"
-      className="relative flex min-h-screen snap-start justify-center overflow-hidden bg-background px-4 py-16"
+      className="relative flex min-h-screen snap-start justify-center overflow-hidden bg-background px-4 sm:px-6 lg:px-8 py-8 sm:py-12 md:py-16"
     >
       <AnimatedBackground />
 
-      <div className="relative w-full max-w-7xl rounded-2xl p-8 backdrop-blur-sm md:p-12">
+      <div className="relative w-full max-w-7xl rounded-xl md:rounded-2xl p-4 sm:p-6 md:p-8 lg:p-12 backdrop-blur-sm">
         {/* Main Content */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5 }}
-          className="relative mx-auto max-w-6xl px-4 pb-16 pt-24"
+          className="relative mx-auto max-w-6xl px-2 sm:px-4 pb-8 sm:pb-12 md:pb-16 pt-12 sm:pt-16 md:pt-24"
         >
           <div className="relative z-10 backdrop-blur-sm">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8 }}
-              className="mb-10 text-center"
+              className="mb-8 sm:mb-10 text-center"
             >
               <motion.div
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
                 transition={{ delay: 0.3, type: "spring" }}
-                className="mb-6 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-4 py-2"
+                className="mb-4 sm:mb-6 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-3 py-1.5 sm:px-4 sm:py-2"
               >
-                <Sparkles className="h-4 w-4 text-primary" />
-                <span className="text-sm font-medium text-primary">
+                <Sparkles className="h-3 w-3 sm:h-4 sm:w-4 text-primary" />
+                <span className="text-xs sm:text-sm font-medium text-primary">
                   Explore Projects
                 </span>
               </motion.div>
 
-              <h1 className="mb-6 text-6xl font-light tracking-tight text-foreground md:text-7xl">
+              <h1 className="mb-4 sm:mb-6 text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-light tracking-tight text-foreground leading-tight">
                 Featured
-                <span className="block bg-gradient-to-r from-primary to-secondary bg-clip-text pb-4 text-5xl font-normal text-transparent md:text-6xl">
+                <span className="block bg-gradient-to-r from-primary to-secondary bg-clip-text pb-2 sm:pb-4 text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-normal text-transparent">
                   Projects
                 </span>
               </h1>
 
-              <p className="text-muted-foreground mx-auto max-w-2xl text-xl leading-relaxed">
+              <p className="text-muted-foreground mx-auto max-w-2xl text-sm sm:text-base md:text-lg lg:text-xl leading-relaxed px-4">
                 {PROJECTS_CONTENT.sectionDescription}
               </p>
             </motion.div>
@@ -314,20 +314,12 @@ const ProjectsSection = () => {
             */}
 
             <motion.div
-              className="mb-12"
+              className="mb-8 sm:mb-10 md:mb-12"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5 }}
             >
-              <div className="space-y-4">
-                {/*
-                <div className="text-center">
-                  <h3 className="text-lg font-semibold text-headline mb-2">Filter Projects</h3>
-                  <p className="text-sm text-muted-foreground">
-                    Explore projects by technology stack
-                  </p>
-                </div>
-                */}
+              <div className="space-y-3 sm:space-y-4">
                 <FilterDropdown
                   filter={filter}
                   technologies={technologies}
@@ -344,7 +336,7 @@ const ProjectsSection = () => {
                 initial="hidden"
                 animate="visible"
                 exit="hidden"
-                className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-2"
+                className="grid grid-cols-1 gap-4 sm:gap-6 md:gap-8 sm:grid-cols-2 lg:grid-cols-2"
               >
                 {filteredProjects.map((project) => (
                   <ProjectCard key={project.id} project={project} />
