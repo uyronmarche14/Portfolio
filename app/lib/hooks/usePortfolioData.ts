@@ -4,15 +4,16 @@
  */
 
 import { useState, useEffect, useCallback, useRef } from "react";
-import { Project, AboutContent, DataResult } from "@/lib/types";
-import { AppError } from "@/lib/types/error";
+
+import type { Project, AboutContent, DataResult } from "@/lib/types";
+import type { AppError } from "@/lib/types/error";
+
 import { RepositoryRegistry } from "@/lib/data/repositories";
 import {
   createNetworkError,
   createDataError,
+  createRepositoryError,
   logError,
-  handleAsyncError,
-  retryOperation,
   getUserErrorMessage,
 } from "@/lib/utils/errorHandling";
 
@@ -74,8 +75,8 @@ export function usePortfolioData(
 
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [retryCount, setRetryCount] = useState(0);
-  const retryTimeoutRef = useRef<NodeJS.Timeout>();
-  const abortControllerRef = useRef<AbortController>();
+  const retryTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const abortControllerRef = useRef<AbortController | null>(null);
 
   /**
    * Create abort controller for request cancellation
@@ -103,12 +104,13 @@ export function usePortfolioData(
         }
 
         // Clear any existing retry timeout
-        if (retryTimeoutRef.current) {
+    if (retryTimeoutRef.current) {
           clearTimeout(retryTimeoutRef.current);
         }
 
-        const projectRepository = RepositoryRegistry.getProjectRepository();
-        const aboutRepository = RepositoryRegistry.getAboutRepository();
+        // Prefix unused variables with underscore
+        const _projectRepository = RepositoryRegistry.getProjectRepository();
+        const _aboutRepository = RepositoryRegistry.getAboutRepository();
 
         // Create timeout promise
         const timeoutPromise = new Promise((_, reject) => {
@@ -131,8 +133,8 @@ export function usePortfolioData(
 
         // Fetch data with timeout
         const dataPromise = Promise.all([
-          projectRepository.getAll(),
-          aboutRepository.get(),
+          _projectRepository.getAll(),
+          _aboutRepository.getPrimary(),
         ]);
 
         const [projectsResult, aboutResult] = (await Promise.race([
@@ -146,22 +148,14 @@ export function usePortfolioData(
         }
 
         // Handle projects result
-        if (projectsResult.error) {
-          throw createDataError(
-            projectsResult.error.message,
-            "PROJECT_FETCH_ERROR",
-            projectsResult.error
-          );
-        }
+          if (projectsResult.error) {
+            throw createRepositoryError(projectsResult.error);
+          }
 
-        // Handle about content result
-        if (aboutResult.error) {
-          throw createDataError(
-            aboutResult.error.message,
-            "ABOUT_FETCH_ERROR",
-            aboutResult.error
-          );
-        }
+          // Handle about content result
+          if (aboutResult.error) {
+            throw createRepositoryError(aboutResult.error);
+          }
 
         const portfolioData: PortfolioData = {
           projects: projectsResult.data || [],
@@ -209,7 +203,7 @@ export function usePortfolioData(
             "Failed to fetch portfolio data",
             "UNKNOWN_ERROR",
             error
-          );
+          ) as AppError;
         }
 
         // Log the error
@@ -278,8 +272,8 @@ export function usePortfolioData(
   const clearCache = useCallback(() => {
     if (enableCaching) {
       // Clear repository caches
-      const projectRepository = RepositoryRegistry.getProjectRepository();
-      const aboutRepository = RepositoryRegistry.getAboutRepository();
+      const _projectRepository = RepositoryRegistry.getProjectRepository();
+    const _aboutRepository = RepositoryRegistry.getAboutRepository();
 
       // Note: This would need to be implemented in the repositories
       // projectRepository.clearCache?.();
@@ -368,21 +362,32 @@ export function usePortfolioDataWithUserFriendlyErrors(
 ) {
   return usePortfolioData({
     ...options,
-    onError: (error) => {
-      // Show user-friendly error message
-      const userMessage = getUserErrorMessage(error);
+    onError: (_error) => {
+      // Error handling logic here
+      const userMessage = getUserErrorMessage(_error);
       console.error("Portfolio data error:", userMessage);
 
-      // You could integrate with a toast notification system here
-      if (typeof window !== "undefined" && (window as any).showToast) {
-        (window as any).showToast({
-          type: "error",
-          title: "Failed to load portfolio data",
-          message: userMessage,
-        });
+      if (typeof window !== "undefined") {
+        const toast = (
+          window as Window & {
+            showToast?: (options: {
+              type: string;
+              title: string;
+              message: string;
+            }) => void;
+          }
+        ).showToast;
+
+        if (toast) {
+          toast({
+            type: "error",
+            title: "Failed to load portfolio data",
+            message: userMessage,
+          });
+        }
       }
 
-      options.onError?.(error);
+      options.onError?.(_error);
     },
   });
 }

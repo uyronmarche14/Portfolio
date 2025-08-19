@@ -3,7 +3,7 @@
  * Functions for transforming, formatting, and manipulating data structures
  */
 
-import { Project, AboutContent, Experience, Education, Skill, Technology } from '@/lib/types';
+import type { Project, Technology } from '@/lib/types';
 
 /**
  * Transform raw project data to Project interface
@@ -411,7 +411,7 @@ export function paginate<T>(
  */
 export function unique<T>(array: T[], key?: keyof T | ((item: T) => any)): T[] {
   if (!key) {
-    return [...new Set(array)];
+    return Array.from(new Set(array));
   }
   
   const seen = new Set();

@@ -2,7 +2,6 @@
 
 import * as React from "react";
 import { motion } from "framer-motion";
-import { cn } from "@/lib/utils";
 import {
   SiNextdotjs,
   SiTypescript,
@@ -18,7 +17,8 @@ import {
   SiStripe,
   SiRedux,
 } from "react-icons/si";
-import { IconType } from "react-icons";
+import type { IconType } from "react-icons";
+import { cn } from "@/lib/utils";
 
 const techIconMap: Record<string, IconType> = {
   "Next.js": SiNextdotjs,

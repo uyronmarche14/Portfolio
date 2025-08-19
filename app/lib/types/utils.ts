@@ -6,7 +6,7 @@
  * Type guard to check if a value is a valid email
  */
 export function isValidEmail(value: unknown): value is string {
-  if (typeof value !== 'string') return false;
+  if (typeof value !== "string") return false;
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return emailRegex.test(value);
 }
@@ -15,7 +15,7 @@ export function isValidEmail(value: unknown): value is string {
  * Type guard to check if a value is a valid URL
  */
 export function isValidUrl(value: unknown): value is string {
-  if (typeof value !== 'string') return false;
+  if (typeof value !== "string") return false;
   try {
     new URL(value);
     return true;
@@ -28,10 +28,10 @@ export function isValidUrl(value: unknown): value is string {
  * Type guard to check if a value is a valid phone number
  */
 export function isValidPhoneNumber(value: unknown): value is string {
-  if (typeof value !== 'string') return false;
+  if (typeof value !== "string") return false;
   // Basic phone number validation - can be enhanced based on requirements
   const phoneRegex = /^[\+]?[1-9][\d]{0,15}$/;
-  return phoneRegex.test(value.replace(/[\s\-\(\)]/g, ''));
+  return phoneRegex.test(value.replace(/[\s\-\(\)]/g, ""));
 }
 
 /**
@@ -45,15 +45,16 @@ export function isValidDate(value: unknown): value is Date {
  * Type guard to check if a value is a non-empty string
  */
 export function isNonEmptyString(value: unknown): value is string {
-  return typeof value === 'string' && value.trim().length > 0;
+  return typeof value === "string" && value.trim().length > 0;
 }
 
 /**
  * Type guard to check if a value is a valid UUID
  */
 export function isValidUUID(value: unknown): value is string {
-  if (typeof value !== 'string') return false;
-  const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+  if (typeof value !== "string") return false;
+  const uuidRegex =
+    /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
   return uuidRegex.test(value);
 }
 
@@ -64,11 +65,12 @@ export function hasRequiredProperties<T extends Record<string, unknown>>(
   obj: unknown,
   properties: (keyof T)[]
 ): obj is T {
-  if (typeof obj !== 'object' || obj === null) return false;
-  
-  return properties.every(prop => 
-    Object.prototype.hasOwnProperty.call(obj, prop) && 
-    (obj as Record<string, unknown>)[prop] !== undefined
+  if (typeof obj !== "object" || obj === null) return false;
+
+  return properties.every(
+    (prop) =>
+      Object.prototype.hasOwnProperty.call(obj, prop) &&
+      (obj as Record<string, unknown>)[prop as string] !== undefined
   );
 }
 
@@ -100,9 +102,9 @@ export function safeJsonParse<T>(
 /**
  * Utility function to create a type-safe object pick
  */
-export function pick<T, K extends keyof T>(obj: T, keys: K[]): Pick<T, K> {
+export function pick<T extends object, K extends keyof T>(obj: T, keys: K[]): Pick<T, K> {
   const result = {} as Pick<T, K>;
-  keys.forEach(key => {
+  keys.forEach((key) => {
     if (key in obj) {
       result[key] = obj[key];
     }
@@ -113,9 +115,9 @@ export function pick<T, K extends keyof T>(obj: T, keys: K[]): Pick<T, K> {
 /**
  * Utility function to create a type-safe object omit
  */
-export function omit<T, K extends keyof T>(obj: T, keys: K[]): Omit<T, K> {
+export function omit<T extends object, K extends keyof T>(obj: T, keys: K[]): Omit<T, K> {
   const result = { ...obj };
-  keys.forEach(key => {
+  keys.forEach((key) => {
     delete result[key];
   });
   return result;
@@ -125,12 +127,12 @@ export function omit<T, K extends keyof T>(obj: T, keys: K[]): Omit<T, K> {
  * Utility function to deep clone an object
  */
 export function deepClone<T>(obj: T): T {
-  if (obj === null || typeof obj !== 'object') return obj;
+  if (obj === null || typeof obj !== "object") return obj;
   if (obj instanceof Date) return new Date(obj.getTime()) as T;
-  if (obj instanceof Array) return obj.map(item => deepClone(item)) as T;
-  if (typeof obj === 'object') {
+  if (obj instanceof Array) return obj.map((item) => deepClone(item)) as T;
+  if (typeof obj === "object") {
     const cloned = {} as T;
-    Object.keys(obj).forEach(key => {
+    Object.keys(obj).forEach((key) => {
       (cloned as any)[key] = deepClone((obj as any)[key]);
     });
     return cloned;
@@ -145,24 +147,49 @@ export function deepEqual<T>(a: T, b: T): boolean {
   if (a === b) return true;
   if (a === null || b === null) return false;
   if (typeof a !== typeof b) return false;
-  
-  if (typeof a === 'object') {
+
+  if (typeof a === "object" && a !== null && b !== null) {
     if (Array.isArray(a) !== Array.isArray(b)) return false;
-    
+
     if (Array.isArray(a) && Array.isArray(b)) {
       if (a.length !== b.length) return false;
       return a.every((item, index) => deepEqual(item, b[index]));
     }
-    
-    const keysA = Object.keys(a);
-    const keysB = Object.keys(b);
-    
+
+    const keysA = Object.keys(a as Record<string, unknown>);
+    const keysB = Object.keys(b as Record<string, unknown>);
+
     if (keysA.length !== keysB.length) return false;
-    
-    return keysA.every(key => 
-      keysB.includes(key) && deepEqual((a as any)[key], (b as any)[key])
+
+    return keysA.every(
+      (key) =>
+        keysB.includes(key) && deepEqual((a as Record<string, unknown>)[key], (b as Record<string, unknown>)[key])
     );
   }
-  
+
   return false;
+}
+
+// Replace any with unknown or specific types
+export type AsyncHandler<T = unknown> = (data: T) => Promise<void>;
+export type ErrorCallback = (error: Error) => void;
+
+export interface ErrorHandlerOptions {
+  retry?: boolean;
+  maxAttempts?: number;
+  onRetry?: (attempt: number, error: Error) => void;
+}
+
+export type ValidationFunction<T = unknown> = (
+  data: T
+) => boolean | Promise<boolean>;
+
+type _Handler<T = unknown, R = unknown> = (input: T) => R;
+
+export function safeCall(fn: (...args: unknown[]) => unknown) {
+  try {
+    return fn();
+  } catch {
+    return undefined;
+  }
 }

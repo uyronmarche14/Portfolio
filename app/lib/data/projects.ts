@@ -1,6 +1,3 @@
-import { validateProject } from "@/lib/validation";
-
-// Legacy project interface for backward compatibility
 // This will be transformed by the ProjectRepository to match the new Project interface
 export interface LegacyProject {
   id: string;

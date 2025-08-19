@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { AppError, ErrorConfig, ErrorNotification } from '@/lib/types/error';
+import type { AppError, ErrorConfig, ErrorNotification } from '@/lib/types/error';
 import { createAppError, logError, getUserErrorMessage } from '@/lib/utils/errorHandling';
 
 interface ErrorContextValue {
@@ -153,7 +153,7 @@ export const ErrorProvider: React.FC<ErrorProviderProps> = ({
     // Report to external service if enabled
     if (config.enableReporting) {
       // This would integrate with an external error reporting service
-      console.log('Reporting error to external service:', {
+      console.warn('Reporting error to external service:', {
         error: appError,
         context,
         timestamp: new Date().toISOString(),
@@ -290,18 +290,16 @@ export const useErrorReporter = () => {
  */
 export const useAsyncError = () => {
   const reportError = useErrorReporter();
-  
-  return React.useCallback(async <T>(
-    operation: () => Promise<T>,
-    context?: Record<string, unknown>
-  ): Promise<T | null> => {
-    try {
-      return await operation();
-    } catch (error) {
-      reportError(error instanceof Error ? error : new Error(String(error)), context);
-      return null;
-    }
-  }, [reportError]);
+
+  return React.useCallback(
+    (operation: () => Promise<unknown>, context?: Record<string, unknown>): Promise<unknown | null> => {
+      return operation().catch((error: unknown) => {
+        reportError(error instanceof Error ? error : new Error(String(error)), context);
+        return null;
+      });
+    },
+    [reportError]
+  );
 };
 
 /**

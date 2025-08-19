@@ -130,7 +130,6 @@ const nextConfig: NextConfig = {
   // Performance optimizations
   poweredByHeader: false,
   reactStrictMode: true,
-  swcMinify: true,
 
   // Static file caching
   async rewrites() {

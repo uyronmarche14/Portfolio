@@ -1,13 +1,14 @@
 "use client";
 
 import React, { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Send, MessageCircle, CheckCircle2, ArrowRight } from "lucide-react";
 
-import { contactInfo } from "@/lib/data/contacts";
+import { motion, AnimatePresence } from "framer-motion";
+import { ArrowRight, CheckCircle2, MessageCircle, Send } from "lucide-react";
+
+import { Button } from "@/components/ui/shadcn/button";
 import { Input } from "@/components/ui/shadcn/input";
 import { Textarea } from "@/components/ui/shadcn/textarea";
-import { Button } from "@/components/ui/shadcn/button";
+import { contactInfo } from "@/lib/data/contacts";
 
 interface ContactFormProps {
   className?: string;
@@ -77,7 +78,7 @@ const ContactForm: React.FC<ContactFormProps> = ({ className = "" }) => {
           </h2>
         </div>
         <p className="text-muted-foreground">
-          Tell me about your project and let's create something amazing
+          Tell me about your project and let&apos;s create something amazing
           together.
         </p>
       </div>

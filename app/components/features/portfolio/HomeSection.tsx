@@ -2,6 +2,7 @@
 
 import React from "react";
 import { motion } from "framer-motion";
+
 import {
   HOME_CONTENT,
   BACKGROUND_ANIMATIONS,

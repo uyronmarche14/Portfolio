@@ -5,7 +5,7 @@
  */
 
 // Main utils (cn function for className merging)
-export * from "../utils";
+export { cn } from "../utils";
 
 // Common utilities
 export * from "./common";

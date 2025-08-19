@@ -1,5 +1,5 @@
-import * as React from 'react';
-import { cn } from '@/lib/utils';
+import * as React from "react";
+import { cn } from "@/lib/utils";
 
 export interface GridProps {
   /**
@@ -19,7 +19,7 @@ export interface GridProps {
   /**
    * Gap between grid items
    */
-  gap?: 'none' | 'sm' | 'md' | 'lg' | 'xl';
+  gap?: "none" | "sm" | "md" | "lg" | "xl";
   /**
    * Additional CSS classes
    */
@@ -27,24 +27,24 @@ export interface GridProps {
   /**
    * HTML element type
    */
-  as?: 'div' | 'section' | 'ul' | 'ol';
+  as?: "div" | "section" | "ul" | "ol";
 }
 
 const gapClasses = {
-  none: 'gap-0',
-  sm: 'gap-2',
-  md: 'gap-4',
-  lg: 'gap-6',
-  xl: 'gap-8',
+  none: "gap-0",
+  sm: "gap-2",
+  md: "gap-4",
+  lg: "gap-6",
+  xl: "gap-8",
 };
 
 /**
  * Grid component for responsive grid layouts
- * 
+ *
  * @example
  * ```tsx
- * <Grid 
- *   cols={{ default: 1, md: 2, lg: 3 }} 
+ * <Grid
+ *   cols={{ default: 1, md: 2, lg: 3 }}
  *   gap="lg"
  * >
  *   <div>Item 1</div>
@@ -53,19 +53,22 @@ const gapClasses = {
  * </Grid>
  * ```
  */
-const Grid = React.forwardRef<HTMLDivElement, GridProps>(
-  ({ 
-    children, 
-    cols = { default: 1 },
-    gap = 'md',
-    className,
-    as: Component = 'div',
-    ...props 
-  }, ref) => {
+const Grid = React.forwardRef<HTMLElement, GridProps>(
+  (
+    {
+      children,
+      cols = { default: 1 },
+      gap = "md",
+      className,
+      as: Component = "div",
+      ...props
+    },
+    ref
+  ) => {
     // Generate responsive grid classes
     const gridClasses = React.useMemo(() => {
       const classes: string[] = [];
-      
+
       if (cols.default) {
         classes.push(`grid-cols-${cols.default}`);
       }
@@ -81,28 +84,23 @@ const Grid = React.forwardRef<HTMLDivElement, GridProps>(
       if (cols.xl) {
         classes.push(`xl:grid-cols-${cols.xl}`);
       }
-      
-      return classes.join(' ');
+
+      return classes.join(" ");
     }, [cols]);
 
-    return (
-      <Component
-        ref={ref}
-        className={cn(
-          'grid',
-          gridClasses,
-          gapClasses[gap],
-          className
-        )}
-        {...props}
-      >
-        {children}
-      </Component>
+    return React.createElement(
+      Component,
+      {
+        ref,
+        className: cn("grid", gridClasses, gapClasses[gap], className),
+        ...props,
+      },
+      children
     );
   }
 );
 
-Grid.displayName = 'Grid';
+Grid.displayName = "Grid";
 
 /**
  * GridItem component for individual grid items with span control
@@ -130,22 +128,18 @@ export interface GridItemProps {
     xl?: number;
   };
   className?: string;
-  as?: 'div' | 'li' | 'article' | 'section';
+  as?: "div" | "li" | "article" | "section";
 }
 
-const GridItem = React.forwardRef<HTMLDivElement, GridItemProps>(
-  ({ 
-    children, 
-    colSpan,
-    rowSpan,
-    className,
-    as: Component = 'div',
-    ...props 
-  }, ref) => {
+const GridItem = React.forwardRef<HTMLElement, GridItemProps>(
+  (
+    { children, colSpan, rowSpan, className, as: Component = "div", ...props },
+    ref
+  ) => {
     // Generate span classes
     const spanClasses = React.useMemo(() => {
       const classes: string[] = [];
-      
+
       // Column spans
       if (colSpan?.default) {
         classes.push(`col-span-${colSpan.default}`);
@@ -162,7 +156,7 @@ const GridItem = React.forwardRef<HTMLDivElement, GridItemProps>(
       if (colSpan?.xl) {
         classes.push(`xl:col-span-${colSpan.xl}`);
       }
-      
+
       // Row spans
       if (rowSpan?.default) {
         classes.push(`row-span-${rowSpan.default}`);
@@ -179,22 +173,22 @@ const GridItem = React.forwardRef<HTMLDivElement, GridItemProps>(
       if (rowSpan?.xl) {
         classes.push(`xl:row-span-${rowSpan.xl}`);
       }
-      
-      return classes.join(' ');
+
+      return classes.join(" ");
     }, [colSpan, rowSpan]);
 
-    return (
-      <Component
-        ref={ref}
-        className={cn(spanClasses, className)}
-        {...props}
-      >
-        {children}
-      </Component>
+    return React.createElement(
+      Component,
+      {
+        ref,
+        className: cn(spanClasses, className),
+        ...props,
+      },
+      children
     );
   }
 );
 
-GridItem.displayName = 'GridItem';
+GridItem.displayName = "GridItem";
 
 export { Grid, GridItem };

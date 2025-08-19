@@ -3,9 +3,10 @@
 import * as React from 'react';
 import { motion } from 'framer-motion';
 import { ArrowDown, Download, Mail, Github, Linkedin } from 'lucide-react';
-import { Button } from '@/components/ui/shadcn/button';
+
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/shadcn/avatar';
 import { Badge } from '@/components/ui/shadcn/badge';
+import { Button } from '@/components/ui/shadcn/button';
 import { cn } from '@/lib/utils';
 
 export interface HeroSectionProps {

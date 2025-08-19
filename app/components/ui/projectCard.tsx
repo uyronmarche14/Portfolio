@@ -3,11 +3,11 @@
 import React from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { getTechIcon } from "@/lib/utils/techIcons";
 import { FiGithub, FiImage, FiFilter } from "react-icons/fi";
+import { getTechIcon } from "@/lib/utils/techIcons";
+import { PROJECTS_CONTENT } from "@/lib/data";
 import { Avatar } from "@/components/ui/shadcn/avatar";
 import { Button } from "./shadcn/button";
-import { PROJECTS_CONTENT } from "@/lib/data";
 
 interface Project {
   id: string;
@@ -39,7 +39,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
         visible: { opacity: 1, y: 0 },
       }}
       whileHover={{ y: -2 }}
-      className="relative overflow-hidden rounded-xl border border-paragraph/10 bg-gradient-to-tl from-primary/10 via-background/50 to-background/50 transition-all duration-300 hover:border-primary/20 hover:from-primary/20 hover:shadow-xl hover:shadow-primary"
+      className="relative overflow-hidden rounded-lg sm:rounded-xl border border-paragraph/10 bg-gradient-to-tl from-primary/10 via-background/50 to-background/50 transition-all duration-300 hover:border-primary/20 hover:from-primary/20 hover:shadow-xl hover:shadow-primary h-full"
     >
       {/* Shining Bottom-Right Border */}
 
@@ -56,56 +56,61 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
        */}
 
       {/* Content */}
-      <div className="space-y-5 p-6">
+      <div className="space-y-4 md:space-y-6 p-4 md:p-6 h-full flex flex-col">
         {/* Title + Icons */}
-        <div className="space-y-2">
-          <div className="flex flex-row items-start justify-between gap-3">
-            <h3 className="text-xl font-semibold text-headline">
+        <div className="space-y-2 md:space-y-3">
+          <div className="flex flex-col md:flex-row md:items-start justify-between gap-2 md:gap-3">
+            <h3 className="text-lg md:text-xl lg:text-2xl font-semibold text-headline leading-tight">
               {project.title}
             </h3>
-            <div className="flex items-center -space-x-2">
-              {project.technologies.map((tech, index) => {
+            <div className="flex items-center -space-x-1 md:-space-x-2 flex-shrink-0">
+              {project.technologies.slice(0, 4).map((tech, index) => {
                 const techIcon = getTechIcon(tech);
                 return (
                   <Avatar
                     key={tech + index}
-                    className="flex h-8 w-8 items-center justify-center border border-paragraph/10 bg-accent/10 shadow-sm hover:bg-primary/20"
+                    className="flex h-7 w-7 md:h-8 md:w-8 lg:h-9 lg:w-9 items-center justify-center border border-paragraph/10 bg-accent/10 shadow-sm hover:bg-primary/20"
                   >
                     {techIcon && (
                       <techIcon.icon
-                        className="h-5 w-5"
+                        className="h-4 w-4 md:h-5 md:w-5 lg:h-6 lg:w-6"
                         color={techIcon.color}
                       />
                     )}
                   </Avatar>
                 );
               })}
+              {project.technologies.length > 4 && (
+                <div className="flex h-7 w-7 md:h-8 md:w-8 lg:h-9 lg:w-9 items-center justify-center rounded-full border border-paragraph/10 bg-accent/10 text-xs md:text-sm font-medium text-paragraph">
+                  +{project.technologies.length - 4}
+                </div>
+              )}
             </div>
           </div>
 
-          <p className="text-sm leading-relaxed text-paragraph">
+          <p className="text-sm md:text-base leading-relaxed text-paragraph">
             {project.description}
           </p>
         </div>
 
         {/* Features List */}
         {project.features && project.features.length > 0 && (
-          <div className="space-y-2">
-            <div className="flex items-center gap-2 text-sm font-medium text-foreground">
-              <FiFilter className="h-4 w-4 text-primary" />
+          <div className="space-y-2 md:space-y-3 flex-1">
+            <div className="flex items-center gap-2 text-sm md:text-base font-medium text-foreground">
+              <FiFilter className="h-4 w-4 md:h-5 md:w-5 text-primary" />
               Key Features
             </div>
-            <div className="space-y-1.5">
+            <div className="space-y-1.5 md:space-y-2">
               {project.features.slice(0, 3).map((feature, index) => (
-                <div key={index} className="flex items-start gap-2 text-sm">
-                  <div className="mt-2 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-primary" />
-                  <span className="text-xs leading-relaxed text-paragraph">
+                <div key={index} className="flex items-start gap-2 md:gap-3">
+                  <div className="mt-2 h-1.5 w-1.5 md:h-2 md:w-2 flex-shrink-0 rounded-full bg-primary" />
+                  <span className="text-sm md:text-base leading-relaxed text-paragraph break-words">
                     {feature}
                   </span>
                 </div>
               ))}
               {project.features.length > 3 && (
-                <div className="pl-4 text-xs text-paragraph/60">
+                <div className="pl-4 md:pl-5 text-sm md:text-base text-paragraph/60">
                   +{project.features.length - 3} more features
                 </div>
               )}
@@ -114,16 +119,16 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
         )}
 
         {/* Action Buttons (shadcn Button) */}
-        <div className="flex flex-wrap gap-4 pt-2">
+        <div className="flex flex-col md:flex-row gap-2 md:gap-3 pt-2 mt-auto">
           {project.screenshots?.length ? (
-            <Link href={`/projects/${project.id}`} passHref>
+            <Link href={`/projects/${project.id}`} passHref className="flex-1">
               <Button
                 variant="outline"
                 size="sm"
-                className="flex items-center gap-2 rounded-[8px] hover:bg-primary"
+                className="w-full flex items-center justify-center gap-2 rounded-lg text-sm md:text-base hover:bg-primary"
               >
-                <FiImage className="h-4 w-4" />
-                {PROJECTS_CONTENT.viewScreenshots}
+                <FiImage className="h-4 w-4 md:h-5 md:w-5" />
+                <span className="truncate">{PROJECTS_CONTENT.viewScreenshots}</span>
               </Button>
             </Link>
           ) : null}
@@ -133,15 +138,15 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
               variant="outline"
               size="sm"
               asChild
-              className="flex items-center gap-2 rounded-[8px] hover:bg-primary"
+              className="w-full md:flex-1 flex items-center justify-center gap-2 rounded-lg text-sm md:text-base hover:bg-primary"
             >
               <a
                 href={project.githubUrl}
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <FiGithub className="h-4 w-4" />
-                {PROJECTS_CONTENT.github}
+                <FiGithub className="h-4 w-4 md:h-5 md:w-5" />
+                <span className="truncate">{PROJECTS_CONTENT.github}</span>
               </a>
             </Button>
           )}

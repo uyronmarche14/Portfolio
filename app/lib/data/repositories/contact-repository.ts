@@ -2,14 +2,18 @@
  * Contact repository implementation
  */
 
-import {
+// 5:1 - Use `import type` for type-only imports
+import type {
   ContactInfo,
   CreateContactInput,
   UpdateContactInput,
   DataResult,
+  RepositoryError,
 } from "@/lib/types";
-import { FileBasedRepository } from "./base";
+// 12:1 - Move '@/lib/utils' import before './base'
 import { generateId } from "@/lib/utils";
+import { FileBasedRepository } from "./base";
+// 54:7 - Replace console.log with console.warn
 
 /**
  * Contact repository for managing contact information
@@ -25,7 +29,7 @@ export class ContactRepository extends FileBasedRepository<
     super({
       cacheEnabled: true,
       cacheTTL: 600, // 10 minutes
-      enableLogging: true,
+      enableAuditLog: true,
     });
     this.dataFilePath = dataFilePath;
   }
@@ -51,7 +55,7 @@ export class ContactRepository extends FileBasedRepository<
     try {
       // In a real implementation, this would write to a file
       // For now, just log the operation
-      console.log("Saving contact data:", data.length, "items");
+      console.warn("Saving contact data:", data.length, "items");
     } catch (error) {
       console.error("Failed to save contact data:", error);
       throw error;
@@ -97,7 +101,7 @@ export class ContactRepository extends FileBasedRepository<
 
       return this.createDataResult(primary);
     } catch (error) {
-      return this.createDataResult(undefined, {
+      return this.createDataResult(null, {
         type: "UNKNOWN_ERROR",
         message:
           error instanceof Error ? error.message : "Unknown error occurred",
@@ -132,7 +136,7 @@ export class ContactRepository extends FileBasedRepository<
 
       return this.createDataResult(updated);
     } catch (error) {
-      return this.createDataResult(undefined, {
+      return this.createDataResult({} as ContactInfo, {
         type: "UNKNOWN_ERROR",
         message:
           error instanceof Error ? error.message : "Unknown error occurred",
@@ -145,18 +149,23 @@ export class ContactRepository extends FileBasedRepository<
    * Validate contact data
    */
   protected async validateData(
-    data: any,
+    data: Partial<CreateContactInput & UpdateContactInput>,
     operation: "create" | "update"
-  ): Promise<string[]> {
-    const errors: string[] = [];
+  ): Promise<RepositoryError[]> {
+    const errors: RepositoryError[] = [];
 
     if (operation === "create") {
       if (
-        !data.email ||
-        typeof data.email !== "string" ||
-        !data.email.includes("@")
+        !data.emails ||
+        !Array.isArray(data.emails) ||
+        data.emails.length === 0 ||
+        !data.emails.some(email => email.address && email.address.includes("@"))
       ) {
-        errors.push("Valid email is required");
+        errors.push({
+          type: "VALIDATION_ERROR",
+          message: "At least one valid email is required",
+          field: "emails"
+        });
       }
 
       if (
@@ -164,23 +173,36 @@ export class ContactRepository extends FileBasedRepository<
         typeof data.name !== "string" ||
         data.name.trim().length === 0
       ) {
-        errors.push("Name is required and must be a non-empty string");
+        errors.push({
+          type: "VALIDATION_ERROR",
+          message: "Name is required and must be a non-empty string",
+          field: "name"
+        });
       }
     }
 
     // Additional validation for updates
     if (
-      data.email !== undefined &&
-      (typeof data.email !== "string" || !data.email.includes("@"))
+      data.emails !== undefined &&
+      (!Array.isArray(data.emails) ||
+       !data.emails.some(email => email.address && email.address.includes("@")))
     ) {
-      errors.push("Email must be a valid email address");
+      errors.push({
+        type: "VALIDATION_ERROR",
+        message: "At least one valid email is required",
+        field: "emails"
+      });
     }
 
     if (
       data.name !== undefined &&
       (typeof data.name !== "string" || data.name.trim().length === 0)
     ) {
-      errors.push("Name must be a non-empty string");
+      errors.push({
+        type: "VALIDATION_ERROR",
+        message: "Name must be a non-empty string",
+        field: "name"
+      });
     }
 
     return errors;

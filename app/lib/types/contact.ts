@@ -2,41 +2,50 @@
  * Contact-related type definitions
  */
 
-import { BaseEntity, Link, ImageMetadata } from './common';
+import type { BaseEntity, ImageMetadata, Link } from "./common";
 
 /**
  * Contact method types
  */
-export type ContactMethodType = 'email' | 'phone' | 'social' | 'messaging' | 'other';
+export type ContactMethodType =
+  | "email"
+  | "phone"
+  | "social"
+  | "messaging"
+  | "other";
 
 /**
  * Social platform enumeration
  */
-export type SocialPlatform = 
-  | 'linkedin'
-  | 'github'
-  | 'twitter'
-  | 'instagram'
-  | 'facebook'
-  | 'youtube'
-  | 'tiktok'
-  | 'discord'
-  | 'medium'
-  | 'dev'
-  | 'stackoverflow'
-  | 'behance'
-  | 'dribbble'
-  | 'other';
+export type SocialPlatform =
+  | "linkedin"
+  | "github"
+  | "twitter"
+  | "instagram"
+  | "facebook"
+  | "youtube"
+  | "tiktok"
+  | "discord"
+  | "medium"
+  | "dev"
+  | "stackoverflow"
+  | "behance"
+  | "dribbble"
+  | "other";
 
 /**
  * Contact availability status
  */
-export type AvailabilityStatus = 'available' | 'busy' | 'away' | 'unavailable';
+export type AvailabilityStatus = "available" | "busy" | "away" | "unavailable";
 
 /**
  * Contact preference for different types of communication
  */
-export type ContactPreference = 'preferred' | 'acceptable' | 'emergency-only' | 'not-preferred';
+export type ContactPreference =
+  | "preferred"
+  | "acceptable"
+  | "emergency-only"
+  | "not-preferred";
 
 /**
  * Email contact information
@@ -44,7 +53,7 @@ export type ContactPreference = 'preferred' | 'acceptable' | 'emergency-only' | 
 export interface EmailContact {
   address: string;
   label: string;
-  type: 'primary' | 'secondary' | 'work' | 'personal';
+  type: "primary" | "secondary" | "work" | "personal";
   preference: ContactPreference;
   verified?: boolean;
 }
@@ -55,7 +64,7 @@ export interface EmailContact {
 export interface PhoneContact {
   number: string;
   label: string;
-  type: 'mobile' | 'home' | 'work' | 'fax';
+  type: "mobile" | "home" | "work" | "fax";
   countryCode?: string;
   preference: ContactPreference;
   verified?: boolean;
@@ -103,9 +112,16 @@ export interface LocationInfo {
 export interface AvailabilitySchedule {
   timezone: string;
   workingHours: {
-    [key in 'monday' | 'tuesday' | 'wednesday' | 'thursday' | 'friday' | 'saturday' | 'sunday']?: {
+    [key in
+      | "monday"
+      | "tuesday"
+      | "wednesday"
+      | "thursday"
+      | "friday"
+      | "saturday"
+      | "sunday"]?: {
       start: string; // HH:MM format
-      end: string;   // HH:MM format
+      end: string; // HH:MM format
       available: boolean;
     };
   };
@@ -122,7 +138,7 @@ export interface AvailabilitySchedule {
 export interface ContactFormField {
   name: string;
   label: string;
-  type: 'text' | 'email' | 'tel' | 'textarea' | 'select' | 'checkbox' | 'radio';
+  type: "text" | "email" | "tel" | "textarea" | "select" | "checkbox" | "radio";
   required: boolean;
   placeholder?: string;
   validation?: {
@@ -150,8 +166,8 @@ export interface ContactFormSubmission extends BaseEntity {
   budget?: string;
   timeline?: string;
   source?: string; // How they found you
-  status: 'new' | 'read' | 'replied' | 'archived';
-  priority: 'low' | 'medium' | 'high';
+  status: "new" | "read" | "replied" | "archived";
+  priority: "low" | "medium" | "high";
   tags?: string[];
   notes?: string;
   ipAddress?: string;
@@ -168,15 +184,15 @@ export interface ContactInfo extends BaseEntity {
   title: string;
   bio?: string;
   avatar?: ImageMetadata;
-  
+
   // Contact Methods
   emails: EmailContact[];
   phones: PhoneContact[];
   socialLinks: SocialLink[];
-  
+
   // Location
   location: LocationInfo;
-  
+
   // Availability
   availability: {
     status: AvailabilityStatus;
@@ -185,7 +201,7 @@ export interface ContactInfo extends BaseEntity {
     forHire: boolean;
     openToOpportunities: boolean;
   };
-  
+
   // Contact Form Configuration
   contactForm: {
     enabled: boolean;
@@ -197,14 +213,14 @@ export interface ContactInfo extends BaseEntity {
       message: string;
     };
   };
-  
+
   // Preferences
   preferences: {
     preferredContactMethod: ContactMethodType;
     languages: string[];
     communicationStyle?: string;
   };
-  
+
   // Professional Information
   resume?: {
     url: string;
@@ -215,13 +231,13 @@ export interface ContactInfo extends BaseEntity {
       description?: string;
     }[];
   };
-  
+
   // Additional Information
   calendlyUrl?: string;
   meetingScheduler?: string;
   portfolio?: string;
   website?: string;
-  
+
   // Display Properties
   visible: boolean;
   order?: number;
@@ -256,19 +272,29 @@ export interface ContactFormValidation {
 /**
  * Contact creation input
  */
-export type CreateContactInput = Omit<ContactInfo, 'id' | 'createdAt' | 'updatedAt'>;
+export type CreateContactInput = Omit<
+  ContactInfo,
+  "id" | "createdAt" | "updatedAt"
+>;
 
 /**
  * Contact update input
  */
-export type UpdateContactInput = Partial<Omit<ContactInfo, 'id' | 'createdAt' | 'updatedAt'>>;
+export type UpdateContactInput = Partial<
+  Omit<ContactInfo, "id" | "createdAt" | "updatedAt">
+>;
 
 /**
  * Contact form submission input
  */
-export type CreateContactSubmissionInput = Omit<ContactFormSubmission, 'id' | 'createdAt' | 'updatedAt' | 'status'>;
+export type CreateContactSubmissionInput = Omit<
+  ContactFormSubmission,
+  "id" | "createdAt" | "updatedAt" | "status"
+>;
 
 /**
  * Contact form submission update input
  */
-export type UpdateContactSubmissionInput = Partial<Omit<ContactFormSubmission, 'id' | 'createdAt' | 'updatedAt'>>;
+export type UpdateContactSubmissionInput = Partial<
+  Omit<ContactFormSubmission, "id" | "createdAt" | "updatedAt">
+>;

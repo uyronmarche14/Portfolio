@@ -17,7 +17,7 @@ const Footer = () => {
         <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-secondary/10 rounded-full blur-2xl" />
       </div>
 
-      <div className="relative max-w-7xl mx-auto px-4">
+      <div className="relative max-w-full mx-auto px-4">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8">
           {/* Brand & Social */}
           <div className="col-span-2 md:col-span-1">

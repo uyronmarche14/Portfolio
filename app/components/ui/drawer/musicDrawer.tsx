@@ -17,6 +17,7 @@ import {
   MoreHorizontal,
   ListMusic,
 } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   Drawer,
   DrawerTrigger,
@@ -28,9 +29,7 @@ import {
 } from "@/components/ui/shadcn/drawer";
 import { Button } from "@/components/ui/shadcn/button";
 import { Slider } from "@/components/ui/shadcn/slider";
-import { Card } from "@/components/ui/shadcn/card";
 import { Badge } from "@/components/ui/shadcn/badge";
-import { motion, AnimatePresence } from "framer-motion";
 
 interface Track {
   id: number;
@@ -87,32 +86,6 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ trigger }) => {
   const audioRef = useRef<HTMLAudioElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Effects
-  useEffect(() => {
-    const audio = audioRef.current;
-    if (!audio) return;
-
-    const updateTime = () => setCurrentTime(audio.currentTime);
-    const updateDuration = () => setDuration(audio.duration);
-    const handleEnded = () => handleNext();
-
-    audio.addEventListener("timeupdate", updateTime);
-    audio.addEventListener("loadedmetadata", updateDuration);
-    audio.addEventListener("ended", handleEnded);
-
-    return () => {
-      audio.removeEventListener("timeupdate", updateTime);
-      audio.removeEventListener("loadedmetadata", updateDuration);
-      audio.removeEventListener("ended", handleEnded);
-    };
-  }, [currentTrack]);
-
-  useEffect(() => {
-    if (audioRef.current) {
-      audioRef.current.volume = isMuted ? 0 : volume;
-    }
-  }, [volume, isMuted]);
-
   // Helper functions
   const formatTime = (time: number): string => {
     const minutes = Math.floor(time / 60);
@@ -120,26 +93,10 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ trigger }) => {
     return `${minutes}:${seconds.toString().padStart(2, "0")}`;
   };
 
-  const allTracks = [...tracks, ...customTracks];
+  const allTracks = React.useMemo(() => [...tracks, ...customTracks], [tracks, customTracks]);
 
   // Player controls
-  const handlePlay = (track?: Track) => {
-    if (track && track !== currentTrack) {
-      setCurrentTrack(track);
-      setCurrentTime(0);
-    }
-
-    if (audioRef.current) {
-      if (isPlaying) {
-        audioRef.current.pause();
-      } else {
-        audioRef.current.play().catch(console.error);
-      }
-      setIsPlaying(!isPlaying);
-    }
-  };
-
-  const handleNext = () => {
+  const handleNext = React.useCallback(() => {
     if (!currentTrack) return;
 
     const currentIndex = allTracks.findIndex((t) => t.id === currentTrack.id);
@@ -160,7 +117,49 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ trigger }) => {
         audioRef.current?.play().catch(console.error);
       }, 100);
     }
+  }, [currentTrack, allTracks, isShuffled, isPlaying]);
+
+  const handlePlay = (track?: Track) => {
+    if (track && track !== currentTrack) {
+      setCurrentTrack(track);
+      setCurrentTime(0);
+    }
+
+    if (audioRef.current) {
+      if (isPlaying) {
+        audioRef.current.pause();
+      } else {
+        audioRef.current.play().catch(console.error);
+      }
+      setIsPlaying(!isPlaying);
+    }
   };
+
+  // Effects
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    const updateTime = () => setCurrentTime(audio.currentTime);
+    const updateDuration = () => setDuration(audio.duration);
+    const handleEnded = () => handleNext();
+
+    audio.addEventListener("timeupdate", updateTime);
+    audio.addEventListener("loadedmetadata", updateDuration);
+    audio.addEventListener("ended", handleEnded);
+
+    return () => {
+      audio.removeEventListener("timeupdate", updateTime);
+      audio.removeEventListener("loadedmetadata", updateDuration);
+      audio.removeEventListener("ended", handleEnded);
+    };
+  }, [currentTrack, handleNext]);
+
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.volume = isMuted ? 0 : volume;
+    }
+  }, [volume, isMuted]);
 
   const handlePrevious = () => {
     if (!currentTrack) return;
@@ -225,7 +224,7 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ trigger }) => {
           title: file.name.replace(/\.[^/.]+$/, ""),
           artist: "Unknown Artist",
           duration: 0,
-          url: url,
+          url,
         };
         setCustomTracks((prev) => [...prev, newTrack]);
       }

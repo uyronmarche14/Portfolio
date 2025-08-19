@@ -38,8 +38,8 @@ export const PerformantLayout: React.FC<PerformantLayoutProps> = ({
 }) => {
   const { startMeasure, endMeasure } =
     usePerformanceMonitor("PerformantLayout");
-  const [isNavigationLoaded, setIsNavigationLoaded] = React.useState(false);
-  const [isFooterLoaded, setIsFooterLoaded] = React.useState(false);
+  const [_isNavigationLoaded, setIsNavigationLoaded] = React.useState(false);
+  const [_isFooterLoaded, setIsFooterLoaded] = React.useState(false);
 
   // Measure render performance
   React.useLayoutEffect(() => {
@@ -67,8 +67,8 @@ export const PerformantLayout: React.FC<PerformantLayoutProps> = ({
     if (!showFooter || !footerRef.current) return;
 
     const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
+      ([_entry]) => {
+        if (_entry.isIntersecting) {
           setShouldLoadFooter(true);
           observer.disconnect();
         }
@@ -241,8 +241,8 @@ export const LazySection: React.FC<{
     if (!sectionRef.current) return;
 
     const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
+      ([_entry]) => {
+        if (_entry.isIntersecting) {
           setIsInView(true);
           observer.disconnect();
         }

@@ -2,32 +2,37 @@
  * Technology repository implementation
  */
 
-import { 
-  Technology, 
-  CreateTechnologyInput, 
+import type {
+  Technology,
+  TechnologyCategory,
+  TechnologyProficiency,
+  TechnologyLearningStatus,
+  CreateTechnologyInput,
   UpdateTechnologyInput,
-  TechnologyFilters,
   TechnologySearchParams,
   TechnologyStatistics,
   TechnologySkillGroup,
   TechnologySummary,
   DataResult,
-  PaginationParams
-} from '@/lib/types';
-import { FileBasedRepository } from './base';
-import { generateId } from '@/lib/utils';
+  RepositoryError,
+} from "@/lib/types";
+import { generateId } from "@/lib/utils";
+import { FileBasedRepository } from "./base";
 
 /**
  * Technology repository for managing technology data
- */expor
-t class TechnologyRepository extends FileBasedRepository<Technology, CreateTechnologyInput, UpdateTechnologyInput> {
+ */
+export class TechnologyRepository extends FileBasedRepository<
+  Technology,
+  CreateTechnologyInput,
+  UpdateTechnologyInput
+> {
   private dataFilePath: string;
 
-  constructor(dataFilePath = '/content/data/technologies.json') {
+  constructor(dataFilePath = "/content/data/technologies.json") {
     super({
       cacheEnabled: true,
       cacheTTL: 300, // 5 minutes
-      enableLogging: true,
     });
     this.dataFilePath = dataFilePath;
   }
@@ -41,7 +46,7 @@ t class TechnologyRepository extends FileBasedRepository<Technology, CreateTechn
       // For now, return empty array - data will be loaded from actual file
       return [];
     } catch (error) {
-      console.error('Failed to load technology data:', error);
+      console.error("Failed to load technology data:", error);
       return [];
     }
   }
@@ -53,9 +58,9 @@ t class TechnologyRepository extends FileBasedRepository<Technology, CreateTechn
     try {
       // In a real implementation, this would write to a file
       // For now, just log the operation
-      console.log('Saving technology data:', data.length, 'items');
+      console.warn("Saving technology data:", data.length, "items");
     } catch (error) {
-      console.error('Failed to save technology data:', error);
+      console.error("Failed to save technology data:", error);
       throw error;
     }
   }
@@ -76,7 +81,10 @@ t class TechnologyRepository extends FileBasedRepository<Technology, CreateTechn
   /**
    * Update an existing technology entity with new timestamp
    */
-  protected updateEntity(existing: Technology, updates: UpdateTechnologyInput): Technology {
+  protected updateEntity(
+    existing: Technology,
+    updates: UpdateTechnologyInput
+  ): Technology {
     return {
       ...existing,
       ...updates,
@@ -90,14 +98,17 @@ t class TechnologyRepository extends FileBasedRepository<Technology, CreateTechn
   async getByCategory(category: string): Promise<DataResult<Technology[]>> {
     try {
       await this.ensureDataLoaded();
-      
-      const technologies = this.data.filter(tech => tech.category === category);
-      
+
+      const technologies = this.data.filter(
+        (tech) => tech.category === category
+      );
+
       return this.createDataResult(technologies);
     } catch (error) {
-      return this.createDataResult(undefined, {
-        type: 'UNKNOWN_ERROR',
-        message: error instanceof Error ? error.message : 'Unknown error occurred',
+      return this.createDataResult([] as Technology[], {
+        type: "UNKNOWN_ERROR",
+        message:
+          error instanceof Error ? error.message : "Unknown error occurred",
         details: error,
       });
     }
@@ -109,16 +120,17 @@ t class TechnologyRepository extends FileBasedRepository<Technology, CreateTechn
   async getFeatured(): Promise<DataResult<Technology[]>> {
     try {
       await this.ensureDataLoaded();
-      
+
       const featured = this.data
-        .filter(tech => tech.featured && tech.visible)
+        .filter((tech) => tech.featured && tech.visible)
         .sort((a, b) => (a.order || 0) - (b.order || 0));
-      
+
       return this.createDataResult(featured);
     } catch (error) {
-      return this.createDataResult(undefined, {
-        type: 'UNKNOWN_ERROR',
-        message: error instanceof Error ? error.message : 'Unknown error occurred',
+      return this.createDataResult([] as Technology[], {
+        type: "UNKNOWN_ERROR",
+        message:
+          error instanceof Error ? error.message : "Unknown error occurred",
         details: error,
       });
     }
@@ -127,17 +139,22 @@ t class TechnologyRepository extends FileBasedRepository<Technology, CreateTechn
   /**
    * Get technologies by proficiency level
    */
-  async getByProficiency(proficiency: string): Promise<DataResult<Technology[]>> {
+  async getByProficiency(
+    proficiency: string
+  ): Promise<DataResult<Technology[]>> {
     try {
       await this.ensureDataLoaded();
-      
-      const technologies = this.data.filter(tech => tech.proficiency === proficiency);
-      
+
+      const technologies = this.data.filter(
+        (tech) => tech.proficiency === proficiency
+      );
+
       return this.createDataResult(technologies);
     } catch (error) {
-      return this.createDataResult(undefined, {
-        type: 'UNKNOWN_ERROR',
-        message: error instanceof Error ? error.message : 'Unknown error occurred',
+      return this.createDataResult([] as Technology[], {
+        type: "UNKNOWN_ERROR",
+        message:
+          error instanceof Error ? error.message : "Unknown error occurred",
         details: error,
       });
     }
@@ -146,76 +163,89 @@ t class TechnologyRepository extends FileBasedRepository<Technology, CreateTechn
   /**
    * Search technologies with advanced filtering
    */
-  async searchTechnologies(params: TechnologySearchParams): Promise<DataResult<Technology[]>> {
+  async searchTechnologies(
+    params: TechnologySearchParams
+  ): Promise<DataResult<Technology[]>> {
     try {
       await this.ensureDataLoaded();
-      
+
       let results = [...this.data];
-      
+
       // Apply text search
       if (params.query) {
         const query = params.query.toLowerCase();
-        results = results.filter(tech => 
-          tech.name.toLowerCase().includes(query) ||
-          tech.displayName?.toLowerCase().includes(query) ||
-          tech.description?.toLowerCase().includes(query) ||
-          tech.tags.some(tag => tag.toLowerCase().includes(query))
+        results = results.filter(
+          (tech) =>
+            tech.name.toLowerCase().includes(query) ||
+            tech.displayName?.toLowerCase().includes(query) ||
+            tech.description?.toLowerCase().includes(query) ||
+            tech.tags.some((tag) => tag.toLowerCase().includes(query))
         );
       }
-      
+
       // Apply filters
       if (params.filters) {
-        const { category, proficiency, learningStatus, featured, tags } = params.filters;
-        
+        const { category, proficiency, learningStatus, featured, tags } =
+          params.filters;
+
         if (category && category.length > 0) {
-          results = results.filter(tech => category.includes(tech.category));
+          results = results.filter((tech) => category.includes(tech.category));
         }
-        
+
         if (proficiency && proficiency.length > 0) {
-          results = results.filter(tech => proficiency.includes(tech.proficiency));
+          results = results.filter((tech) =>
+            proficiency.includes(tech.proficiency)
+          );
         }
-        
+
         if (learningStatus && learningStatus.length > 0) {
-          results = results.filter(tech => learningStatus.includes(tech.learningStatus));
+          results = results.filter((tech) =>
+            learningStatus.includes(tech.learningStatus)
+          );
         }
-        
+
         if (featured !== undefined) {
-          results = results.filter(tech => tech.featured === featured);
+          results = results.filter((tech) => tech.featured === featured);
         }
-        
+
         if (tags && tags.length > 0) {
-          results = results.filter(tech => 
-            tags.some(tag => tech.tags.includes(tag))
+          results = results.filter((tech) =>
+            tags.some((tag) => tech.tags.includes(tag))
           );
         }
       }
-      
+
       // Apply sorting
       if (params.sortBy) {
         results.sort((a, b) => {
-          let aValue: any;
-          let bValue: any;
-          
+          let aValue: string | number | Date;
+          let bValue: string | number | Date;
+
           switch (params.sortBy) {
-            case 'name':
+            case "name":
               aValue = a.name.toLowerCase();
               bValue = b.name.toLowerCase();
               break;
-            case 'category':
+            case "category":
               aValue = a.category;
               bValue = b.category;
               break;
-            case 'proficiency':
+            case "proficiency":
               // Sort by proficiency level (beginner < intermediate < advanced < expert)
-              const proficiencyOrder = { beginner: 0, intermediate: 1, advanced: 2, expert: 3 };
+              const proficiencyOrder = {
+                beginner: 0,
+                intermediate: 1,
+                advanced: 2,
+                expert: 3,
+              };
               aValue = proficiencyOrder[a.proficiency];
               bValue = proficiencyOrder[b.proficiency];
               break;
-            case 'createdAt':
-              aValue = a.createdAt.getTime();
-              bValue = b.createdAt.getTime();
+            case "createdAt":
+              aValue = (a as Technology).createdAt?.getTime() || 0;
+              bValue = (b as Technology).createdAt?.getTime() || 0;
               break;
-            case 'order':
+            case "order":
               aValue = a.order || 0;
               bValue = b.order || 0;
               break;
@@ -223,18 +253,19 @@ t class TechnologyRepository extends FileBasedRepository<Technology, CreateTechn
               aValue = a.name.toLowerCase();
               bValue = b.name.toLowerCase();
           }
-          
-          if (aValue < bValue) return params.sortOrder === 'desc' ? 1 : -1;
-          if (aValue > bValue) return params.sortOrder === 'desc' ? -1 : 1;
+
+          if (aValue < bValue) return params.sortOrder === "desc" ? 1 : -1;
+          if (aValue > bValue) return params.sortOrder === "desc" ? -1 : 1;
           return 0;
         });
       }
-      
+
       return this.createDataResult(results);
     } catch (error) {
-      return this.createDataResult(undefined, {
-        type: 'UNKNOWN_ERROR',
-        message: error instanceof Error ? error.message : 'Unknown error occurred',
+      return this.createDataResult([] as Technology[], {
+        type: "UNKNOWN_ERROR",
+        message:
+          error instanceof Error ? error.message : "Unknown error occurred",
         details: error,
       });
     }
@@ -246,23 +277,25 @@ t class TechnologyRepository extends FileBasedRepository<Technology, CreateTechn
   async getSummaries(): Promise<DataResult<TechnologySummary[]>> {
     try {
       await this.ensureDataLoaded();
-      
-      const summaries: TechnologySummary[] = this.data.map(tech => ({
-        id: tech.id,
+
+      const summaries: TechnologySummary[] = this.data.map((tech) => ({
+        id: (tech as any).id || generateId(),
         name: tech.name,
-        displayName: tech.displayName,
+        displayName: tech.displayName || tech.name,
         category: tech.category,
         icon: tech.icon,
         color: tech.color,
         proficiency: tech.proficiency,
         featured: tech.featured,
+        projectCount: 0, // Default value as we don't have project data here
       }));
-      
+
       return this.createDataResult(summaries);
     } catch (error) {
-      return this.createDataResult(undefined, {
-        type: 'UNKNOWN_ERROR',
-        message: error instanceof Error ? error.message : 'Unknown error occurred',
+      return this.createDataResult([] as TechnologySummary[], {
+        type: "UNKNOWN_ERROR",
+        message:
+          error instanceof Error ? error.message : "Unknown error occurred",
         details: error,
       });
     }
@@ -274,30 +307,44 @@ t class TechnologyRepository extends FileBasedRepository<Technology, CreateTechn
   async getStatistics(): Promise<DataResult<TechnologyStatistics>> {
     try {
       await this.ensureDataLoaded();
-      
+
       const stats: TechnologyStatistics = {
         total: this.data.length,
         byCategory: {} as Record<string, number>,
         byProficiency: {} as Record<string, number>,
         byLearningStatus: {} as Record<string, number>,
-        featured: this.data.filter(tech => tech.featured).length,
+        featured: this.data.filter((tech) => tech.featured).length,
         mostUsedInProjects: [], // This would be calculated based on project data
       };
-      
+
       // Calculate category statistics
-      this.data.forEach(tech => {
-        stats.byCategory[tech.category] = (stats.byCategory[tech.category] || 0) + 1;
-        stats.byProficiency[tech.proficiency] = (stats.byProficiency[tech.proficiency] || 0) + 1;
-        stats.byLearningStatus[tech.learningStatus] = (stats.byLearningStatus[tech.learningStatus] || 0) + 1;
+      this.data.forEach((tech) => {
+        stats.byCategory[tech.category] =
+          (stats.byCategory[tech.category] || 0) + 1;
+        stats.byProficiency[tech.proficiency] =
+          (stats.byProficiency[tech.proficiency] || 0) + 1;
+        stats.byLearningStatus[tech.learningStatus] =
+          (stats.byLearningStatus[tech.learningStatus] || 0) + 1;
       });
-      
+
       return this.createDataResult(stats);
     } catch (error) {
-      return this.createDataResult(undefined, {
-        type: 'UNKNOWN_ERROR',
-        message: error instanceof Error ? error.message : 'Unknown error occurred',
-        details: error,
-      });
+      return this.createDataResult(
+        {
+          total: 0,
+          byCategory: {} as Record<TechnologyCategory, number>,
+          byProficiency: {} as Record<TechnologyProficiency, number>,
+          byLearningStatus: {} as Record<TechnologyLearningStatus, number>,
+          featured: 0,
+          mostUsedInProjects: [],
+        } as TechnologyStatistics,
+        {
+          type: "UNKNOWN_ERROR",
+          message:
+            error instanceof Error ? error.message : "Unknown error occurred",
+          details: error,
+        }
+      );
     }
   }
 
@@ -307,34 +354,37 @@ t class TechnologyRepository extends FileBasedRepository<Technology, CreateTechn
   async getSkillGroups(): Promise<DataResult<TechnologySkillGroup[]>> {
     try {
       await this.ensureDataLoaded();
-      
+
       const groups = new Map<string, Technology[]>();
-      
+
       // Group technologies by category
-      this.data.forEach(tech => {
+      this.data.forEach((tech) => {
         if (!groups.has(tech.category)) {
           groups.set(tech.category, []);
         }
         groups.get(tech.category)!.push(tech);
       });
-      
+
       // Convert to skill groups
-      const skillGroups: TechnologySkillGroup[] = Array.from(groups.entries()).map(([category, technologies]) => ({
+      const skillGroups: TechnologySkillGroup[] = Array.from(
+        groups.entries()
+      ).map(([category, technologies]) => ({
         id: generateId(),
         name: category.charAt(0).toUpperCase() + category.slice(1),
-        category: category as any,
+        category: category as TechnologyCategory,
         technologies: technologies.sort((a, b) => a.name.localeCompare(b.name)),
         order: this.getCategoryOrder(category),
       }));
-      
+
       // Sort groups by order
       skillGroups.sort((a, b) => (a.order || 0) - (b.order || 0));
-      
+
       return this.createDataResult(skillGroups);
     } catch (error) {
-      return this.createDataResult(undefined, {
-        type: 'UNKNOWN_ERROR',
-        message: error instanceof Error ? error.message : 'Unknown error occurred',
+      return this.createDataResult([] as TechnologySkillGroup[], {
+        type: "UNKNOWN_ERROR",
+        message:
+          error instanceof Error ? error.message : "Unknown error occurred",
         details: error,
       });
     }
@@ -360,55 +410,101 @@ t class TechnologyRepository extends FileBasedRepository<Technology, CreateTechn
       tool: 13,
       other: 14,
     };
-    
+
     return order[category] || 99;
   }
 
   /**
    * Validate technology data
    */
-  protected async validateData(data: any, operation: 'create' | 'update'): Promise<string[]> {
-    const errors: string[] = [];
-    
-    if (operation === 'create') {
-      if (!data.name || typeof data.name !== 'string' || data.name.trim().length === 0) {
-        errors.push('Name is required and must be a non-empty string');
+  protected async validateData(
+    data: any,
+    operation: "create" | "update"
+  ): Promise<RepositoryError[]> {
+    const errors: RepositoryError[] = [];
+
+    if (operation === "create") {
+      if (
+        !data.name ||
+        typeof data.name !== "string" ||
+        data.name.trim().length === 0
+      ) {
+        errors.push({
+          type: "VALIDATION_ERROR",
+          message: "Name is required and must be a non-empty string",
+          field: "name",
+        });
       }
-      
-      if (!data.category || typeof data.category !== 'string') {
-        errors.push('Category is required and must be a string');
+
+      if (!data.category || typeof data.category !== "string") {
+        errors.push({
+          type: "VALIDATION_ERROR",
+          message: "Category is required and must be a string",
+          field: "category",
+        });
       }
-      
-      if (!data.proficiency || typeof data.proficiency !== 'string') {
-        errors.push('Proficiency is required and must be a string');
+
+      if (!data.proficiency || typeof data.proficiency !== "string") {
+        errors.push({
+          type: "VALIDATION_ERROR",
+          message: "Proficiency is required and must be a string",
+          field: "proficiency",
+        });
       }
-      
-      if (!data.learningStatus || typeof data.learningStatus !== 'string') {
-        errors.push('Learning status is required and must be a string');
+
+      if (!data.learningStatus || typeof data.learningStatus !== "string") {
+        errors.push({
+          type: "VALIDATION_ERROR",
+          message: "Learning status is required and must be a string",
+          field: "learningStatus",
+        });
       }
-      
-      if (!data.icon || typeof data.icon !== 'object') {
-        errors.push('Icon configuration is required');
+
+      if (!data.icon || typeof data.icon !== "object") {
+        errors.push({
+          type: "VALIDATION_ERROR",
+          message: "Icon configuration is required",
+          field: "icon",
+        });
       }
-      
-      if (typeof data.featured !== 'boolean') {
-        errors.push('Featured must be a boolean');
+
+      if (typeof data.featured !== "boolean") {
+        errors.push({
+          type: "VALIDATION_ERROR",
+          message: "Featured must be a boolean",
+          field: "featured",
+        });
       }
-      
-      if (typeof data.visible !== 'boolean') {
-        errors.push('Visible must be a boolean');
+
+      if (typeof data.visible !== "boolean") {
+        errors.push({
+          type: "VALIDATION_ERROR",
+          message: "Visible must be a boolean",
+          field: "visible",
+        });
       }
-      
+
       if (!Array.isArray(data.tags)) {
-        errors.push('Tags must be an array');
+        errors.push({
+          type: "VALIDATION_ERROR",
+          message: "Tags must be an array",
+          field: "tags",
+        });
       }
     }
-    
+
     // Additional validation for updates
-    if (data.name !== undefined && (typeof data.name !== 'string' || data.name.trim().length === 0)) {
-      errors.push('Name must be a non-empty string');
+    if (
+      data.name !== undefined &&
+      (typeof data.name !== "string" || data.name.trim().length === 0)
+    ) {
+      errors.push({
+        type: "VALIDATION_ERROR",
+        message: "Name must be a non-empty string",
+        field: "name",
+      });
     }
-    
+
     return errors;
   }
 }

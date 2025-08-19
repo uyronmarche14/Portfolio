@@ -2,16 +2,13 @@
  * Base repository implementation with common functionality
  */
 
-import {
-  AbstractRepository,
-  RepositoryConfig,
-  RepositoryCache,
-  RepositoryValidator,
+import { AbstractRepository, type RepositoryConfig, type RepositoryCache } from "@/lib/types/repository";
+import type {
   DataResult,
   PaginatedResponse,
   PaginationParams,
   FilterParams,
-} from "@/lib/types";
+} from "@/lib/types/common";
 
 /**
  * In-memory cache implementation for development/testing
@@ -63,9 +60,9 @@ export class InMemoryCache<T> implements RepositoryCache<T> {
  * File-based repository implementation for static data
  */
 export abstract class FileBasedRepository<
-  T,
-  TCreate = Omit<T, "id" | "createdAt" | "updatedAt">,
-  TUpdate = Partial<TCreate>,
+  T extends { id: string },
+  TCreate extends Omit<T, "id" | "createdAt" | "updatedAt"> = Omit<T, "id" | "createdAt" | "updatedAt">,
+  TUpdate extends Partial<TCreate> = Partial<TCreate>,
 > extends AbstractRepository<T, TCreate, TUpdate> {
   protected data: T[] = [];
   protected dataLoaded = false;
@@ -114,12 +111,15 @@ export abstract class FileBasedRepository<
       await this.ensureDataLoaded();
 
       let result = [...this.data];
-
       // Apply sorting if specified
       if (params?.sortBy) {
         result.sort((a, b) => {
-          const aValue = (a as any)[params.sortBy!];
-          const bValue = (b as any)[params.sortBy!];
+          const aValue = (a as Record<string, unknown>)[params.sortBy!] as
+            | string
+            | number;
+          const bValue = (b as Record<string, unknown>)[params.sortBy!] as
+            | string
+            | number;
 
           if (aValue < bValue) return params.sortOrder === "desc" ? 1 : -1;
           if (aValue > bValue) return params.sortOrder === "desc" ? -1 : 1;
@@ -135,15 +135,18 @@ export abstract class FileBasedRepository<
 
       return this.createDataResult(result);
     } catch (error) {
-      return this.createDataResult(undefined, {
+      return this.createDataResult([], {
         type: "UNKNOWN_ERROR",
         message:
           error instanceof Error ? error.message : "Unknown error occurred",
-        details: error,
+        details: error as unknown,
       });
     }
   }
 
+  /**
+   * Get paginated entities
+   */
   /**
    * Get paginated entities
    */
@@ -153,13 +156,17 @@ export abstract class FileBasedRepository<
     try {
       await this.ensureDataLoaded();
 
-      let result = [...this.data];
+      const result = [...this.data];
 
       // Apply sorting if specified
-      if (params.sortBy) {
+      if (params?.sortBy) {
         result.sort((a, b) => {
-          const aValue = (a as any)[params.sortBy!];
-          const bValue = (b as any)[params.sortBy!];
+          const aValue = (a as Record<string, unknown>)[params.sortBy!] as
+            | string
+            | number;
+          const bValue = (b as Record<string, unknown>)[params.sortBy!] as
+            | string
+            | number;
 
           if (aValue < bValue) return params.sortOrder === "desc" ? 1 : -1;
           if (aValue > bValue) return params.sortOrder === "desc" ? -1 : 1;
@@ -186,7 +193,20 @@ export abstract class FileBasedRepository<
 
       return this.createDataResult(response);
     } catch (error) {
-      return this.createDataResult(undefined, {
+      // Create an empty pagination response for error cases
+      const emptyResponse: PaginatedResponse<T> = {
+        data: [],
+        pagination: {
+          page: params.page,
+          limit: params.limit,
+          total: 0,
+          totalPages: 0,
+          hasNext: false,
+          hasPrev: false,
+        },
+      };
+
+      return this.createDataResult(emptyResponse, {
         type: "UNKNOWN_ERROR",
         message:
           error instanceof Error ? error.message : "Unknown error occurred",
@@ -195,6 +215,9 @@ export abstract class FileBasedRepository<
     }
   }
 
+  /**
+   * Get entity by ID
+   */
   /**
    * Get entity by ID
    */
@@ -210,7 +233,7 @@ export abstract class FileBasedRepository<
 
       await this.ensureDataLoaded();
 
-      const entity = this.data.find((item) => (item as any).id === id) || null;
+      const entity = this.data.find((item) => item.id === id) || null;
 
       // Cache the result
       if (entity && this.config.cacheEnabled) {
@@ -221,11 +244,11 @@ export abstract class FileBasedRepository<
 
       return this.createDataResult(entity);
     } catch (error) {
-      return this.createDataResult(undefined, {
+      return this.createDataResult(null, {
         type: "UNKNOWN_ERROR",
         message:
           error instanceof Error ? error.message : "Unknown error occurred",
-        details: error,
+        details: error as unknown,
       });
     }
   }
@@ -233,17 +256,18 @@ export abstract class FileBasedRepository<
   /**
    * Get entities by IDs
    */
+  /**
+   * Get entities by IDs
+   */
   async getByIds(ids: string[]): Promise<DataResult<T[]>> {
     try {
       await this.ensureDataLoaded();
 
-      const entities = this.data.filter((item) =>
-        ids.includes((item as any).id)
-      );
+      const entities = this.data.filter((item) => ids.includes(item.id));
 
       return this.createDataResult(entities);
     } catch (error) {
-      return this.createDataResult(undefined, {
+      return this.createDataResult([], {
         type: "UNKNOWN_ERROR",
         message:
           error instanceof Error ? error.message : "Unknown error occurred",
@@ -255,12 +279,15 @@ export abstract class FileBasedRepository<
   /**
    * Create new entity
    */
+  /**
+   * Create new entity
+   */
   async create(item: TCreate): Promise<DataResult<T>> {
     try {
       // Validate input
       const validationErrors = await this.validateData(item, "create");
       if (validationErrors.length > 0) {
-        return this.createDataResult(undefined, {
+        return this.createDataResult(null as any, {
           type: "VALIDATION_ERROR",
           message: "Validation failed",
           details: validationErrors,
@@ -277,14 +304,14 @@ export abstract class FileBasedRepository<
 
       // Cache the new entity
       if (this.config.cacheEnabled) {
-        await this.setCached(`entity:${(entity as any).id}`, entity);
+        await this.setCached(`entity:${entity.id}`, entity);
       }
 
-      this.logEvent("Entity", (entity as any).id, "create", undefined, entity);
+      this.logEvent("Entity", entity.id, "create", undefined, entity);
 
       return this.createDataResult(entity);
     } catch (error) {
-      return this.createDataResult(undefined, {
+      return this.createDataResult(null as any, {
         type: "UNKNOWN_ERROR",
         message:
           error instanceof Error ? error.message : "Unknown error occurred",
@@ -303,7 +330,11 @@ export abstract class FileBasedRepository<
       for (const item of items) {
         const result = await this.create(item);
         if (result.error) {
-          return this.createDataResult(undefined, result.error);
+          return this.createDataResult([], {
+            type: "VALIDATION_ERROR",
+            message: result.error?.message || "Validation failed",
+            details: result.error?.details,
+          });
         }
         if (result.data) {
           results.push(result.data);
@@ -312,7 +343,7 @@ export abstract class FileBasedRepository<
 
       return this.createDataResult(results);
     } catch (error) {
-      return this.createDataResult(undefined, {
+      return this.createDataResult([], {
         type: "UNKNOWN_ERROR",
         message:
           error instanceof Error ? error.message : "Unknown error occurred",
@@ -324,12 +355,15 @@ export abstract class FileBasedRepository<
   /**
    * Update entity
    */
+  /**
+   * Update entity
+   */
   async update(id: string, updates: TUpdate): Promise<DataResult<T>> {
     try {
       // Validate input
       const validationErrors = await this.validateData(updates, "update");
       if (validationErrors.length > 0) {
-        return this.createDataResult(undefined, {
+        return this.createDataResult(null as any, {
           type: "VALIDATION_ERROR",
           message: "Validation failed",
           details: validationErrors,
@@ -338,9 +372,9 @@ export abstract class FileBasedRepository<
 
       await this.ensureDataLoaded();
 
-      const index = this.data.findIndex((item) => (item as any).id === id);
+      const index = this.data.findIndex((item) => item.id === id);
       if (index === -1) {
-        return this.createDataResult(undefined, {
+        return this.createDataResult(null as any, {
           type: "NOT_FOUND",
           message: `Entity with ID ${id} not found`,
         });
@@ -362,7 +396,7 @@ export abstract class FileBasedRepository<
 
       return this.createDataResult(updated);
     } catch (error) {
-      return this.createDataResult(undefined, {
+      return this.createDataResult(null as any, {
         type: "UNKNOWN_ERROR",
         message:
           error instanceof Error ? error.message : "Unknown error occurred",
@@ -371,6 +405,9 @@ export abstract class FileBasedRepository<
     }
   }
 
+  /**
+   * Update multiple entities
+   */
   /**
    * Update multiple entities
    */
@@ -383,7 +420,11 @@ export abstract class FileBasedRepository<
       for (const update of updates) {
         const result = await this.update(update.id, update.data);
         if (result.error) {
-          return this.createDataResult(undefined, result.error);
+          return this.createDataResult([], {
+            type: "VALIDATION_ERROR",
+            message: result.error?.message || "Validation failed",
+            details: result.error?.details,
+          });
         }
         if (result.data) {
           results.push(result.data);
@@ -392,7 +433,7 @@ export abstract class FileBasedRepository<
 
       return this.createDataResult(results);
     } catch (error) {
-      return this.createDataResult(undefined, {
+      return this.createDataResult([], {
         type: "UNKNOWN_ERROR",
         message:
           error instanceof Error ? error.message : "Unknown error occurred",
@@ -408,9 +449,9 @@ export abstract class FileBasedRepository<
     try {
       await this.ensureDataLoaded();
 
-      const index = this.data.findIndex((item) => (item as any).id === id);
+      const index = this.data.findIndex((item) => item.id === id);
       if (index === -1) {
-        return this.createDataResult(undefined, {
+        return this.createDataResult(false, {
           type: "NOT_FOUND",
           message: `Entity with ID ${id} not found`,
         });
@@ -430,11 +471,11 @@ export abstract class FileBasedRepository<
 
       return this.createDataResult(true);
     } catch (error) {
-      return this.createDataResult(undefined, {
+      return this.createDataResult(false, {
         type: "UNKNOWN_ERROR",
         message:
           error instanceof Error ? error.message : "Unknown error occurred",
-        details: error,
+        details: error as unknown,
       });
     }
   }
@@ -447,13 +488,17 @@ export abstract class FileBasedRepository<
       for (const id of ids) {
         const result = await this.delete(id);
         if (result.error) {
-          return this.createDataResult(undefined, result.error);
+          return this.createDataResult(false, {
+            type: "VALIDATION_ERROR",
+            message: result.error.message || "Validation failed",
+            details: result.error.details,
+          });
         }
       }
 
       return this.createDataResult(true);
     } catch (error) {
-      return this.createDataResult(undefined, {
+      return this.createDataResult(false, {
         type: "UNKNOWN_ERROR",
         message:
           error instanceof Error ? error.message : "Unknown error occurred",
@@ -477,7 +522,7 @@ export abstract class FileBasedRepository<
         // Search in common string fields
         const searchableFields = ["title", "name", "description", "content"];
         return searchableFields.some((field) => {
-          const value = (item as any)[field];
+          const value = (item as Record<string, unknown>)[field];
           return (
             typeof value === "string" &&
             value.toLowerCase().includes(searchTerm)
@@ -494,7 +539,7 @@ export abstract class FileBasedRepository<
 
       return this.createDataResult(result);
     } catch (error) {
-      return this.createDataResult(undefined, {
+      return this.createDataResult([], {
         type: "UNKNOWN_ERROR",
         message:
           error instanceof Error ? error.message : "Unknown error occurred",
@@ -517,12 +562,18 @@ export abstract class FileBasedRepository<
         return Object.entries(filters).every(([key, value]) => {
           if (value === undefined || value === null) return true;
 
-          const itemValue = (item as any)[key];
+          const itemValue = (item as Record<string, unknown>)[key];
 
           if (Array.isArray(value)) {
             return Array.isArray(itemValue)
-              ? value.some((v) => itemValue.includes(v))
-              : value.includes(itemValue);
+              ? value.some((v) => (itemValue as unknown[]).includes(v))
+              : String(itemValue)
+                  .toLowerCase()
+                  .includes(String(value).toLowerCase());
+          }
+
+          if (typeof itemValue === "string" && typeof value === "string") {
+            return itemValue.toLowerCase().includes(value.toLowerCase());
           }
 
           return itemValue === value;
@@ -532,8 +583,12 @@ export abstract class FileBasedRepository<
       // Apply sorting if specified
       if (params?.sortBy) {
         filtered.sort((a, b) => {
-          const aValue = (a as any)[params.sortBy!];
-          const bValue = (b as any)[params.sortBy!];
+          const aValue = (a as Record<string, unknown>)[params.sortBy!] as
+            | string
+            | number;
+          const bValue = (b as Record<string, unknown>)[params.sortBy!] as
+            | string
+            | number;
 
           if (aValue < bValue) return params.sortOrder === "desc" ? 1 : -1;
           if (aValue > bValue) return params.sortOrder === "desc" ? -1 : 1;
@@ -549,7 +604,7 @@ export abstract class FileBasedRepository<
 
       return this.createDataResult(filtered);
     } catch (error) {
-      return this.createDataResult(undefined, {
+      return this.createDataResult([], {
         type: "UNKNOWN_ERROR",
         message:
           error instanceof Error ? error.message : "Unknown error occurred",
@@ -565,11 +620,11 @@ export abstract class FileBasedRepository<
     try {
       await this.ensureDataLoaded();
 
-      const exists = this.data.some((item) => (item as any).id === id);
+      const exists = this.data.some((item) => item.id === id);
 
       return this.createDataResult(exists);
     } catch (error) {
-      return this.createDataResult(undefined, {
+      return this.createDataResult(false, {
         type: "UNKNOWN_ERROR",
         message:
           error instanceof Error ? error.message : "Unknown error occurred",
@@ -592,11 +647,11 @@ export abstract class FileBasedRepository<
 
       return this.createDataResult(this.data.length);
     } catch (error) {
-      return this.createDataResult(undefined, {
+      return this.createDataResult(0, {
         type: "UNKNOWN_ERROR",
         message:
           error instanceof Error ? error.message : "Unknown error occurred",
-        details: error,
+        details: error as unknown,
       });
     }
   }

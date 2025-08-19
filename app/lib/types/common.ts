@@ -28,7 +28,7 @@ export interface PaginationParams {
   page: number;
   limit: number;
   sortBy?: string;
-  sortOrder?: 'asc' | 'desc';
+  sortOrder?: "asc" | "desc";
 }
 
 /**
@@ -63,14 +63,22 @@ export interface BaseEntity {
 }
 
 /**
+ * Helper type to add timestamp fields to any interface
+ */
+export type WithTimestamps<T> = T & {
+  createdAt: Date;
+  updatedAt: Date;
+};
+
+/**
  * Status types for various entities
  */
-export type EntityStatus = 'active' | 'inactive' | 'draft' | 'archived';
+export type EntityStatus = "active" | "inactive" | "draft" | "archived";
 
 /**
  * Priority levels
  */
-export type Priority = 'low' | 'medium' | 'high' | 'critical';
+export type Priority = "low" | "medium" | "high" | "critical";
 
 /**
  * Generic key-value pair
@@ -141,7 +149,7 @@ export interface DataError {
  * Theme configuration
  */
 export interface ThemeConfig {
-  mode: 'light' | 'dark' | 'system';
+  mode: "light" | "dark" | "system";
   primaryColor: string;
   secondaryColor: string;
   accentColor: string;

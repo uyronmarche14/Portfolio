@@ -68,12 +68,12 @@ class Logger {
     }
   }
 
-  private reportError(entry: LogEntry) {
+  private reportError(_entry: LogEntry) {
     // This would integrate with error reporting services like Sentry
     // For now, we'll just ensure the error is logged
     try {
       // Example: Send to error reporting service
-      // errorReportingService.captureException(entry);
+      // errorReportingService.captureException(_entry);
     } catch (reportingError) {
       // Fallback to console if error reporting fails
       console.error("Failed to report error:", reportingError);

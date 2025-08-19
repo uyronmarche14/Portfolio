@@ -1,5 +1,5 @@
-import { LucideIcon } from "lucide-react";
 import {
+  type LucideIcon,
   Code,
   Crown,
   BookOpen,
@@ -18,12 +18,12 @@ import {
   SiTailwindcss,
   SiExpo,
   SiAndroid,
-  SiCanva
-} from "react-icons/si";
+} from "react-icons/si"; // Removed unused SiCanva'
+
 import { FaReact, FaAndroid } from "react-icons/fa";
 import { MdSmartphone } from "react-icons/md";
 
-import { IconType } from "react-icons";
+import type { IconType } from "react-icons";
 
 export interface ServiceCard {
   title: string;
@@ -95,6 +95,6 @@ export const serviceCards: ServiceCard[] = [
     experience: "1 year",
     highlight: "Specialized in modern web applications",
     icon: Globe,
-    additionalIcons: [ LayoutGrid, SiReact, SiNextdotjs, SiTailwindcss],
+    additionalIcons: [LayoutGrid, SiReact, SiNextdotjs, SiTailwindcss],
   },
 ];
