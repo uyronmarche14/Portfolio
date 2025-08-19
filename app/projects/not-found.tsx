@@ -1,9 +1,10 @@
 "use client";
 
 import Link from "next/link";
+import { motion } from "framer-motion";
+
 import { Button } from "@/components/ui/shadcn/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/shadcn/card";
-import { motion } from "framer-motion";
 
 export default function ProjectNotFound() {
   return (
@@ -17,7 +18,7 @@ export default function ProjectNotFound() {
           <CardHeader>
             <CardTitle className="text-2xl">Project Not Found</CardTitle>
             <CardDescription>
-              The project you're looking for doesn't exist or has been moved.
+              The project you&apos;re looking for doesn&apos;t exist or has been moved.
             </CardDescription>
           </CardHeader>
           <CardContent>

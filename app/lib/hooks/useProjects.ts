@@ -4,15 +4,23 @@
  */
 
 import { useState, useEffect, useCallback, useMemo } from "react";
-import {
+
+import type {
   Project,
   ProjectFilters,
-  ProjectSearchParams,
   ProjectStatistics,
-  DataResult,
-  PaginationParams,
+  ProjectCategory,
+  ProjectStatus,
 } from "@/lib/types";
 import { RepositoryRegistry } from "@/lib/data/repositories";
+
+interface ProjectSearchParams {
+  query?: string;
+  page?: number;
+  limit?: number;
+  sortBy?: string;
+  sortOrder?: "asc" | "desc";
+}
 
 export interface UseProjectsOptions {
   initialFilters?: ProjectFilters;
@@ -72,7 +80,7 @@ export function useProjects(
   const {
     initialFilters = {},
     initialSearchParams = {},
-    enableCaching = true,
+    enableCaching: _enableCaching = true,
     autoRefresh = false,
     refreshInterval = 300000, // 5 minutes
     onError,
@@ -117,25 +125,91 @@ export function useProjects(
 
         const repository = getRepository();
 
-        // Fetch projects and statistics in parallel
-        const [projectsResult, statsResult] = await Promise.all([
-          repository.getAll(),
-          repository.getStatistics(),
+        // Fetch projects with timeout
+        const timeoutPromise = new Promise<never>((_, reject) => {
+          setTimeout(() => reject(new Error('Request timeout')), 30000);
+        });
+
+        const fetchPromise = repository.getAll();
+
+        const projectsResult = await Promise.race([
+          fetchPromise,
+          timeoutPromise
         ]);
 
         if (projectsResult.error) {
           throw new Error(projectsResult.error.message);
         }
 
-        if (statsResult.error) {
-          console.warn(
-            "Failed to fetch project statistics:",
-            statsResult.error.message
-          );
-        }
+        // Calculate statistics from projects data
+        const projectData = Array.isArray(projectsResult.data) ? projectsResult.data : [];
+        
+        // Initialize category counts
+        const byCategory: Record<string, number> = {
+          web: 0,
+          mobile: 0,
+          desktop: 0,
+          api: 0,
+          library: 0,
+          other: 0,
+        };
 
-        const projectData = projectsResult.data || [];
-        const statsData = statsResult.data || null;
+        // Initialize status counts
+        const byStatus: Record<string, number> = {
+          planning: 0,
+          active: 0,
+          completed: 0,
+          'on-hold': 0,
+          archived: 0,
+        };
+
+        // Count projects by category and status
+        projectData.forEach(project => {
+          if (project.category && byCategory.hasOwnProperty(project.category)) {
+            byCategory[project.category]++;
+          }
+          if (project.status && byStatus.hasOwnProperty(project.status)) {
+            byStatus[project.status]++;
+          }
+        });
+
+        // Count featured projects
+        const featuredCount = projectData.filter(p => p.featured).length;
+
+        // Count recently updated projects (last 30 days)
+        const thirtyDaysAgo = new Date();
+        thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+        const recentlyUpdatedCount = projectData.filter(p => 
+          p.updatedAt && new Date(p.updatedAt) > thirtyDaysAgo
+        ).length;
+
+        // Calculate most used technologies
+        const technologyCounts = new Map<string, { technology: any; count: number }>();
+        projectData.forEach(project => {
+          project.technologies?.forEach(tech => {
+            if (tech.name) {
+              const existing = technologyCounts.get(tech.name);
+              if (existing) {
+                existing.count++;
+              } else {
+                technologyCounts.set(tech.name, { technology: tech, count: 1 });
+              }
+            }
+          });
+        });
+
+        const mostUsedTechnologies = Array.from(technologyCounts.values())
+          .sort((a, b) => b.count - a.count)
+          .slice(0, 10);
+
+        const statsData: ProjectStatistics = {
+          total: projectData.length,
+          byCategory: byCategory as Record<ProjectCategory, number>,
+          byStatus: byStatus as Record<ProjectStatus, number>,
+          featured: featuredCount,
+          recentlyUpdated: recentlyUpdatedCount,
+          mostUsedTechnologies,
+        };
 
         setProjects(projectData);
         setStatistics(statsData);
@@ -170,7 +244,16 @@ export function useProjects(
           query: query || searchQuery,
         };
 
-        const result = await repository.searchProjects(searchParameters);
+        // Validate search parameters
+        if (searchParameters.query && searchParameters.query.trim().length === 0) {
+          setIsSearching(false);
+          return;
+        }
+
+        const result = await repository.search(searchParameters.query || '', {
+          page: searchParameters.page || 1,
+          limit: searchParameters.limit || 50,
+        });
 
         if (result.error) {
           throw new Error(result.error.message);
@@ -213,8 +296,8 @@ export function useProjects(
       // Technology filter
       if (filters.technologies?.length) {
         const hasMatchingTech = filters.technologies.some((tech) =>
-          project.technologies.some((projectTech) =>
-            projectTech.name.toLowerCase().includes(tech.toLowerCase())
+          project.technologies?.some((projectTech) =>
+            projectTech?.name?.toLowerCase().includes(tech.toLowerCase())
           )
         );
         if (!hasMatchingTech) return false;
@@ -231,8 +314,8 @@ export function useProjects(
       // Tags filter
       if (filters.tags?.length) {
         const hasMatchingTag = filters.tags.some((tag) =>
-          project.tags.some((projectTag) =>
-            projectTag.toLowerCase().includes(tag.toLowerCase())
+          project.tags?.some((projectTag) =>
+            projectTag?.toLowerCase().includes(tag.toLowerCase())
           )
         );
         if (!hasMatchingTag) return false;
@@ -240,13 +323,14 @@ export function useProjects(
 
       // Date range filter
       if (filters.dateRange) {
-        const projectDate = project.createdAt;
-        const start = filters.dateRange.start;
-        const end = filters.dateRange.end;
-
-        if (projectDate < start || (end && projectDate > end)) {
-          return false;
-        }
+        const projectDate = project.createdAt ? new Date(project.createdAt) : null;
+        if (!projectDate || isNaN(projectDate.getTime())) return false;
+        
+        const start = filters.dateRange.start ? new Date(filters.dateRange.start) : null;
+        const end = filters.dateRange.end ? new Date(filters.dateRange.end) : null;
+        
+        if (start && (isNaN(start.getTime()) || projectDate < start)) return false;
+        if (end && (isNaN(end.getTime()) || projectDate > end)) return false;
       }
 
       return true;
@@ -257,7 +341,7 @@ export function useProjects(
    * Get featured projects
    */
   const featuredProjects = useMemo(() => {
-    return projects.filter((project) => project.featured);
+    return projects.filter((project) => project && project.featured === true);
   }, [projects]);
 
   /**
@@ -296,9 +380,10 @@ export function useProjects(
    */
   const getProjectsByTechnology = useCallback(
     (technology: string): Project[] => {
+      if (!technology || typeof technology !== 'string') return [];
       return projects.filter((project) =>
-        project.technologies.some((tech) =>
-          tech.name.toLowerCase().includes(technology.toLowerCase())
+        project.technologies?.some((tech) =>
+          tech?.name?.toLowerCase().includes(technology.toLowerCase())
         )
       );
     },
@@ -310,6 +395,7 @@ export function useProjects(
    */
   const getProjectsByCategory = useCallback(
     (category: Project["category"]): Project[] => {
+      if (!category) return [];
       return projects.filter((project) => project.category === category);
     },
     [projects]
@@ -335,29 +421,43 @@ export function useProjects(
    * Clear cache and refetch
    */
   const clearCache = useCallback(() => {
-    if (enableCaching) {
-      const repository = getRepository();
-      // Note: This would need to be implemented in the repository
-      // repository.clearCache?.();
-    }
+    // Repository cache clearing is handled internally by the repository
+    // Force refresh by fetching fresh data
     fetchProjects(false);
-  }, [enableCaching, fetchProjects, getRepository]);
+  }, [fetchProjects]);
 
   /**
    * Export projects data
    */
   const exportProjects = useCallback(() => {
-    const dataStr = JSON.stringify(filteredProjects, null, 2);
-    const dataUri =
-      "data:application/json;charset=utf-8," + encodeURIComponent(dataStr);
+    if (!projects || projects.length === 0) return;
+    
+    try {
+      const dataStr = JSON.stringify(projects, null, 2);
+      const dataUri = `data:application/json;charset=utf-8,${encodeURIComponent(
+        dataStr
+      )}`;
+      const exportFileDefaultName = `projects-${
+        new Date().toISOString().split("T")[0]
+      }.json`;
 
-    const exportFileDefaultName = `projects-${new Date().toISOString().split("T")[0]}.json`;
-
-    const linkElement = document.createElement("a");
-    linkElement.setAttribute("href", dataUri);
-    linkElement.setAttribute("download", exportFileDefaultName);
-    linkElement.click();
-  }, [filteredProjects]);
+      // Check if we're in a browser environment
+      if (typeof window !== 'undefined' && typeof document !== 'undefined') {
+        const linkElement = document.createElement("a");
+        linkElement.setAttribute("href", dataUri);
+        linkElement.setAttribute("download", exportFileDefaultName);
+        linkElement.style.display = 'none';
+        document.body.appendChild(linkElement);
+        linkElement.click();
+        document.body.removeChild(linkElement);
+      } else {
+        console.warn('Export functionality is only available in browser environments');
+      }
+    } catch (error) {
+      console.error('Failed to export projects:', error);
+      onError?.('Failed to export projects');
+    }
+  }, [projects, onError]);
 
   // Initial data fetch
   useEffect(() => {
@@ -374,6 +474,14 @@ export function useProjects(
 
     return () => clearInterval(interval);
   }, [autoRefresh, refreshInterval, refresh]);
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      setProjects([]);
+      setStatistics(null);
+    };
+  }, []);
 
   // Update search params when query changes
   useEffect(() => {

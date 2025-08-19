@@ -2,7 +2,8 @@
  * Caching utilities for performance optimization
  */
 
-import { AppError } from "@/lib/types/error";
+import React from "react";
+import type { AppError } from "@/lib/types/error";
 import { createAppError, logError } from "./errorHandling";
 
 /**
@@ -143,12 +144,12 @@ export class MemoryCache<T = any> {
     return {
       size: this.cache.size,
       maxSize: this.config.maxSize,
-      totalHits: entries.reduce((sum, entry) => sum + entry.hits, 0),
-      expired: entries.filter((entry) => now - entry.timestamp > entry.ttl)
+      totalHits: entries.reduce((sum, _entry) => sum + _entry.hits, 0),
+      expired: entries.filter((_entry) => now - _entry.timestamp > _entry.ttl)
         .length,
       averageAge:
         entries.length > 0
-          ? entries.reduce((sum, entry) => sum + (now - entry.timestamp), 0) /
+          ? entries.reduce((sum, _entry) => sum + (now - _entry.timestamp), 0) /
             entries.length
           : 0,
     };
@@ -161,7 +162,9 @@ export class MemoryCache<T = any> {
     let oldestKey: string | null = null;
     let oldestTime = Date.now();
 
-    for (const [key, entry] of this.cache.entries()) {
+    const entries = Array.from(this.cache.entries());
+    for (let i = 0; i < entries.length; i++) {
+      const [key, entry] = entries[i];
       if (entry.lastAccessed < oldestTime) {
         oldestTime = entry.lastAccessed;
         oldestKey = key;
@@ -180,7 +183,9 @@ export class MemoryCache<T = any> {
     const now = Date.now();
     const expiredKeys: string[] = [];
 
-    for (const [key, entry] of this.cache.entries()) {
+    const entries = Array.from(this.cache.entries());
+    for (let i = 0; i < entries.length; i++) {
+      const [key, entry] = entries[i];
       if (now - entry.timestamp > entry.ttl) {
         expiredKeys.push(key);
       }
@@ -433,9 +438,9 @@ export const cacheInvalidation = {
   /**
    * Invalidate cache entries by pattern
    */
-  invalidateByPattern(pattern: RegExp, cache: MemoryCache = dataCache): number {
-    let count = 0;
-    const keysToDelete: string[] = [];
+  invalidateByPattern(pattern: RegExp, _cache: MemoryCache = dataCache): number {
+    const count = 0;
+    const _keysToDelete: string[] = [];
 
     // We can't iterate over Map keys directly with patterns, so we need to collect them first
     // This is a limitation of the current implementation
@@ -449,9 +454,9 @@ export const cacheInvalidation = {
   /**
    * Invalidate cache entries by prefix
    */
-  invalidateByPrefix(prefix: string, cache: MemoryCache = dataCache): number {
-    let count = 0;
-    const keysToDelete: string[] = [];
+  invalidateByPrefix(prefix: string, _cache: MemoryCache = dataCache): number {
+    const count = 0;
+    const _keysToDelete: string[] = [];
 
     // Similar limitation as above
     console.warn(
@@ -580,6 +585,3 @@ export function useCachedData<T>(
     refresh: () => fetchData(false),
   };
 }
-
-// Make React available for the hook
-import * as React from "react";

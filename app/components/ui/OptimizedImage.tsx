@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import Image, { ImageProps } from "next/image";
+import Image, { type ImageProps } from "next/image";
 import { cn } from "@/lib/utils";
 import { Skeleton } from "./Skeleton";
 
@@ -51,7 +51,7 @@ interface OptimizedImageProps extends Omit<ImageProps, "onLoad" | "onError"> {
 /**
  * Generate a simple blur placeholder
  */
-const generateBlurPlaceholder = (width: number, height: number): string => {
+const _generateBlurPlaceholder = (width: number, height: number): string => {
   const canvas = document.createElement("canvas");
   canvas.width = width;
   canvas.height = height;
@@ -74,7 +74,7 @@ const generateBlurPlaceholder = (width: number, height: number): string => {
  */
 export const OptimizedImage: React.FC<OptimizedImageProps> = ({
   src,
-  alt,
+  alt = "", // Provide a default empty string for alt
   fallbackSrc,
   showSkeleton = true,
   skeleton,
@@ -94,7 +94,6 @@ export const OptimizedImage: React.FC<OptimizedImageProps> = ({
   const [retryCount, setRetryCount] = React.useState(0);
 
   const maxRetries = 2;
-  const imgRef = React.useRef<HTMLImageElement>(null);
 
   // Reset state when src changes
   React.useEffect(() => {
@@ -157,8 +156,8 @@ export const OptimizedImage: React.FC<OptimizedImageProps> = ({
     if (loadingStrategy === "eager" || !observerRef.current) return;
 
     const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
+      ([_entry]) => {
+        if (_entry.isIntersecting) {
           setIsInView(true);
           observer.disconnect();
         }
@@ -187,7 +186,9 @@ export const OptimizedImage: React.FC<OptimizedImageProps> = ({
         <div className="p-4 text-center">
           <div className="text-sm">Failed to load image</div>
           {process.env.NODE_ENV === "development" && (
-            <div className="mt-1 text-xs opacity-70">{src}</div>
+            <div className="mt-1 text-xs opacity-70">
+              {typeof src === "string" ? src : "Image source"}
+            </div>
           )}
         </div>
       </div>
@@ -229,7 +230,7 @@ export const OptimizedImage: React.FC<OptimizedImageProps> = ({
     blurDataURL: blurPlaceholder,
   };
 
-  return <Image ref={imgRef} {...imageProps} />;
+  return <Image {...imageProps} alt={imageProps.alt ?? ""} />;
 };
 
 /**
@@ -293,7 +294,7 @@ export const OptimizedProjectImage: React.FC<
   return (
     <OptimizedImage
       {...props}
-      alt={optimizedAlt}
+      alt={optimizedAlt || "Image"}
       quality={85} // Higher quality for project images
       useBlurPlaceholder={true}
       showSkeleton={true}
@@ -314,7 +315,7 @@ export const useImagePreloader = () => {
     }
 
     return new Promise((resolve, reject) => {
-      const img = new Image();
+      const img = new window.Image();
       img.onload = () => {
         preloadedImages.current.add(src);
         resolve();

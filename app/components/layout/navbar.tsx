@@ -2,8 +2,6 @@
 import { motion } from "framer-motion";
 import { useState, useEffect, useMemo } from "react";
 import { Menu, X, Music, FileText } from "lucide-react";
-import { NAV_ITEMS, NAVBAR_LABELS } from "@/lib/data/navbar";
-import { Navigation, type NavigationItem } from "./Navigation";
 import { Button } from "@/components/ui/shadcn/button";
 import ResumeDrawer from "@/components/ui/drawer/resumeDrawer";
 import MusicDrawer from "@/components/ui/drawer/musicDrawer";
@@ -12,6 +10,8 @@ import {
   AvatarImage,
   AvatarFallback,
 } from "@/components/ui/shadcn/avatar";
+import { NAV_ITEMS, NAVBAR_LABELS } from "@/lib/data/navbar";
+import { type NavigationItem } from "./Navigation";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);

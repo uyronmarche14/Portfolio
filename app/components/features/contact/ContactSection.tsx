@@ -2,9 +2,11 @@
 
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { Mail, Phone, MapPin, Clock, Sparkles } from "lucide-react";
-import { contactInfo, socialLinks } from "@/lib/data/contacts";
+import { Clock, Mail, MapPin, Phone, Sparkles } from "lucide-react";
+
 import { Badge } from "@/components/ui/shadcn/badge";
+import { contactInfo, socialLinks } from "@/lib/data/contacts";
+
 import ContactForm from "./ContactForm";
 
 const ContactSection = () => {
@@ -67,7 +69,7 @@ const ContactSection = () => {
           >
             <Sparkles className="h-4 w-4 text-primary" />
             <span className="text-sm font-medium text-primary">
-              Let's Connect
+              Let&apos;s Connect
             </span>
           </motion.div>
 
@@ -79,7 +81,7 @@ const ContactSection = () => {
           </h1>
 
           <p className="text-muted-foreground mx-auto max-w-2xl text-xl leading-relaxed">
-            Ready to bring your ideas to life? Let's start a conversation about
+            Ready to bring your ideas to life? Let&apos;s start a conversation about
             your next project.
           </p>
         </motion.div>
@@ -198,7 +200,7 @@ const ContactSection = () => {
                           style={{
                             backgroundColor:
                               hoveredSocial === index
-                                ? social.color + "20"
+                                ? `${social.color}20`
                                 : "transparent",
                           }}
                         >

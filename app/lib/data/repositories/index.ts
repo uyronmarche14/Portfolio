@@ -17,4 +17,4 @@ export * from "./factory";
 export * from "./registry";
 
 // Export the main RepositoryRegistry class for convenience
-export { RepositoryRegistry } from "./registry";
+export { EnhancedRepositoryRegistry as RepositoryRegistry } from "./registry";

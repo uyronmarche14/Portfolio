@@ -1,13 +1,13 @@
 "use client";
 
 import React from "react";
-import { PageLayout } from "./PageLayout";
-import { SectionLayout } from "./SectionLayout";
 import { HomeSection } from "@/components/features/portfolio";
 import { AboutSection } from "@/components/features/about";
 import { ProjectsSection } from "@/components/features/projects";
 import { ContactSection } from "@/components/features/contact";
 import { Footer } from "@/components/layout";
+import { PageLayout } from "./PageLayout";
+import { SectionLayout } from "./SectionLayout";
 
 /**
  * SinglePageLayout component using the new architecture

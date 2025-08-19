@@ -3,6 +3,7 @@
  */
 
 import { z } from 'zod';
+
 import { 
   BaseEntitySchema, 
   ImageMetadataSchema, 
@@ -226,20 +227,128 @@ export const ProjectSearchParamsSchema = z.object({
 /**
  * Project creation input schema
  */
-export const CreateProjectInputSchema = ProjectSchema.omit({
+export const CreateProjectInputSchema = BaseEntitySchema.omit({
   id: true,
   createdAt: true,
   updatedAt: true,
+}).extend({
+  // Basic Information
+  title: NonEmptyStringSchema.max(100, 'Title must be under 100 characters'),
+  description: NonEmptyStringSchema.max(500, 'Description must be under 500 characters'),
+  shortDescription: z.string().max(200, 'Short description must be under 200 characters').optional(),
+  category: ProjectCategorySchema,
+  status: ProjectStatusSchema,
+  
+  // Content
+  content: NonEmptyStringSchema,
+  features: z.array(ProjectFeatureSchema),
+  
+  // Media
+  images: z.array(ProjectImageSchema),
+  videos: z.array(UrlSchema).optional(),
+  
+  // Technical Details
+  technologies: z.array(TechnologySchema),
+  techStack: TechStackSchema.optional(),
+  
+  // Links and URLs
+  links: z.array(ProjectLinkSchema),
+  repositoryUrl: UrlSchema.optional(),
+  demoUrl: UrlSchema.optional(),
+  documentationUrl: UrlSchema.optional(),
+  
+  // Timeline and Progress
+  timeline: z.array(ProjectTimelineEventSchema).optional(),
+  startDate: z.date().optional(),
+  endDate: z.date().optional(),
+  duration: DateRangeSchema.optional(),
+  
+  // Metadata
+  featured: z.boolean(),
+  priority: z.number().int().nonnegative().optional(),
+  tags: z.array(NonEmptyStringSchema),
+  
+  // Metrics and Analytics
+  metrics: ProjectMetricsSchema.optional(),
+  
+  // Collaboration
+  collaboration: ProjectCollaborationSchema.optional(),
+  
+  // SEO
+  seo: SEOMetadataSchema.optional(),
+  
+  // Additional Properties
+  challenges: z.array(NonEmptyStringSchema).optional(),
+  learnings: z.array(NonEmptyStringSchema).optional(),
+  futureEnhancements: z.array(NonEmptyStringSchema).optional(),
+  
+  // Display Properties
+  order: z.number().int().nonnegative().optional(),
+  visible: z.boolean(),
 });
 
 /**
  * Project update input schema
  */
-export const UpdateProjectInputSchema = ProjectSchema.omit({
+export const UpdateProjectInputSchema = BaseEntitySchema.omit({
   id: true,
   createdAt: true,
   updatedAt: true,
-}).partial();
+}).extend({
+  // Basic Information
+  title: NonEmptyStringSchema.max(100, 'Title must be under 100 characters').optional(),
+  description: NonEmptyStringSchema.max(500, 'Description must be under 500 characters').optional(),
+  shortDescription: z.string().max(200, 'Short description must be under 200 characters').optional(),
+  category: ProjectCategorySchema.optional(),
+  status: ProjectStatusSchema.optional(),
+  
+  // Content
+  content: NonEmptyStringSchema.optional(),
+  features: z.array(ProjectFeatureSchema).optional(),
+  
+  // Media
+  images: z.array(ProjectImageSchema).optional(),
+  videos: z.array(UrlSchema).optional(),
+  
+  // Technical Details
+  technologies: z.array(TechnologySchema).optional(),
+  techStack: TechStackSchema.optional(),
+  
+  // Links and URLs
+  links: z.array(ProjectLinkSchema).optional(),
+  repositoryUrl: UrlSchema.optional(),
+  demoUrl: UrlSchema.optional(),
+  documentationUrl: UrlSchema.optional(),
+  
+  // Timeline and Progress
+  timeline: z.array(ProjectTimelineEventSchema).optional(),
+  startDate: z.date().optional(),
+  endDate: z.date().optional(),
+  duration: DateRangeSchema.optional(),
+  
+  // Metadata
+  featured: z.boolean().optional(),
+  priority: z.number().int().nonnegative().optional(),
+  tags: z.array(NonEmptyStringSchema).optional(),
+  
+  // Metrics and Analytics
+  metrics: ProjectMetricsSchema.optional(),
+  
+  // Collaboration
+  collaboration: ProjectCollaborationSchema.optional(),
+  
+  // SEO
+  seo: SEOMetadataSchema.optional(),
+  
+  // Additional Properties
+  challenges: z.array(NonEmptyStringSchema).optional(),
+  learnings: z.array(NonEmptyStringSchema).optional(),
+  futureEnhancements: z.array(NonEmptyStringSchema).optional(),
+  
+  // Display Properties
+  order: z.number().int().nonnegative().optional(),
+  visible: z.boolean().optional(),
+});
 
 /**
  * Project statistics schema

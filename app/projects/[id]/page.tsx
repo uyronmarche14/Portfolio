@@ -1,18 +1,16 @@
 "use client";
 
-import { notFound } from "next/navigation";
-import Image from "next/image";
 import Link from "next/link";
+import { notFound, useParams } from "next/navigation";
 import { motion } from "framer-motion";
 import { ArrowLeft, ExternalLink, Github } from "lucide-react";
-import { projects } from "@/lib/data/projects";
+
+import Footer from "@/components/layout/footer";
+import AnimatedBackground from "@/components/ui/AnimatedBackground";
 import ScreenshotCarousel from "@/components/ui/ScreenshotCarousel";
 import TechBadge from "@/components/ui/TechBadge";
 import Timeline from "@/components/ui/Timeline";
-import AnimatedBackground from "@/components/ui/AnimatedBackground";
-import Footer from "@/components/layout/footer"
-
-import { useParams } from "next/navigation";
+import { projects } from "@/lib/data/projects";
 
 const ProjectPage = () => {
   const params = useParams();

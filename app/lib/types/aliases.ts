@@ -15,17 +15,19 @@ export type Timestamp = Date;
 /**
  * Optional ID type for entities that may not have an ID yet
  */
-export type OptionalId<T> = Omit<T, 'id'> & { id?: ID };
+export type OptionalId<T> = Omit<T, "id"> & { id?: ID };
 
 /**
  * Generic create input type that omits auto-generated fields
  */
-export type CreateInput<T> = Omit<T, 'id' | 'createdAt' | 'updatedAt'>;
+export type CreateInput<T> = Omit<T, "id" | "createdAt" | "updatedAt">;
 
 /**
  * Generic update input type that makes all fields optional except ID
  */
-export type UpdateInput<T> = Partial<Omit<T, 'id' | 'createdAt' | 'updatedAt'>> & { id: ID };
+export type UpdateInput<T> = Partial<
+  Omit<T, "id" | "createdAt" | "updatedAt">
+> & { id: ID };
 
 /**
  * Generic entity with timestamps
@@ -39,7 +41,7 @@ export type EntityWithTimestamps<T> = T & {
 /**
  * Generic entity without timestamps (for input types)
  */
-export type EntityWithoutTimestamps<T> = Omit<T, 'createdAt' | 'updatedAt'>;
+export type EntityWithoutTimestamps<T> = Omit<T, "createdAt" | "updatedAt">;
 
 /**
  * Nullable type helper
@@ -78,12 +80,17 @@ export type DeepRequired<T> = {
 /**
  * Exact type helper to prevent excess properties
  */
-export type Exact<T, U extends T> = T & Record<Exclude<keyof U, keyof T>, never>;
+export type Exact<T, U extends T> = T &
+  Record<Exclude<keyof U, keyof T>, never>;
 
 /**
  * Union to intersection type helper
  */
-export type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends (k: infer I) => void ? I : never;
+export type UnionToIntersection<U> = (
+  U extends any ? (k: U) => void : never
+) extends (k: infer I) => void
+  ? I
+  : never;
 
 /**
  * Flatten type helper to resolve complex types
@@ -107,17 +114,28 @@ export type Immutable<T> = {
 /**
  * Key-value pair type
  */
-export type KeyValue<K extends string | number | symbol = string, V = any> = Record<K, V>;
+export type KeyValue<
+  K extends string | number | symbol = string,
+  V = any,
+> = Record<K, V>;
 
 /**
  * String literal union helper
  */
-export type StringLiteral<T> = T extends string ? (string extends T ? never : T) : never;
+export type StringLiteral<T> = T extends string
+  ? string extends T
+    ? never
+    : T
+  : never;
 
 /**
  * Number literal union helper
  */
-export type NumberLiteral<T> = T extends number ? (number extends T ? never : T) : never;
+export type NumberLiteral<T> = T extends number
+  ? number extends T
+    ? never
+    : T
+  : never;
 
 /**
  * Primitive types union
@@ -127,11 +145,11 @@ export type Primitive = string | number | boolean | null | undefined;
 /**
  * Serializable types (JSON-compatible)
  */
-export type Serializable = 
-  | string 
-  | number 
-  | boolean 
-  | null 
+export type Serializable =
+  | string
+  | number
+  | boolean
+  | null
   | undefined
   | Serializable[]
   | { [key: string]: Serializable };
@@ -141,7 +159,7 @@ export type Serializable =
  */
 export type AnyFunction = (...args: any[]) => any;
 export type VoidFunction = () => void;
-export type AsyncFunction<T = any> = (...args: any[]) => Promise<T>;
+export type AsyncFunction<T = unknown> = () => Promise<T>;
 
 /**
  * Event handler type
@@ -152,7 +170,9 @@ export type EventHandler<T = any> = (event: T) => void;
  * Callback type
  */
 export type Callback<T = void> = () => T;
-export type CallbackWithArgs<TArgs extends any[] = any[], TReturn = void> = (...args: TArgs) => TReturn;
+export type CallbackWithArgs<TArgs extends any[] = any[], TReturn = void> = (
+  ...args: TArgs
+) => TReturn;
 
 /**
  * Promise resolver type
@@ -179,3 +199,72 @@ export type Class<T = {}> = Constructor<T>;
  * Mixin type
  */
 export type Mixin<T extends Constructor> = T & Constructor;
+
+/**
+ * Error callback type
+ */
+export type ErrorCallback = (err?: unknown) => void;
+
+/**
+ * Data callback type
+ */
+export type DataCallback<T> = (data: T) => void;
+
+/**
+ * Error handler type
+ */
+export type ErrorHandler = (error: Error) => void;
+
+/**
+ * Base object interface
+ */
+export interface BaseObject {
+  [key: string]: unknown;
+}
+
+/**
+ * Async operation type
+ */
+export type AsyncOperation<T = unknown> = () => Promise<T>;
+
+/**
+ * Validation result type
+ */
+export type ValidationResult = {
+  isValid: boolean;
+  errors?: string[];
+};
+/**
+ * Transform function type
+ */
+export type TransformFunction<T = unknown, R = unknown> = (data: T) => R;
+
+/**
+ * Filter predicate type
+ */
+export type FilterPredicate<T = unknown> = (item: T) => boolean;
+
+/**
+ * Data mapper type
+ */
+export type DataMapper<T = unknown, R = unknown> = (data: T) => R;
+
+/**
+ * Error transformer type
+ */
+export type ErrorTransformer = (error: Error) => Error;
+
+/**
+ * Use `object` for "any non-primitive object" intent, `unknown` for any value
+ */
+type _AnyRecord = Record<string, unknown>;
+
+/**
+ * Prefer `unknown` instead of `any` where concrete type is not known
+ */
+type _AnyValue = unknown;
+
+/**
+ * Replace bare `any` in common aliases with unknown or generic forms
+ */
+export type Result<T, E = unknown> = { data?: T; error?: E };

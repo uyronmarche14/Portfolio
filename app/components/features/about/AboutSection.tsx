@@ -1,12 +1,12 @@
 "use client";
-
 import React from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { serviceCards } from "@/lib/data/services";
+import { CldImage } from "next-cloudinary";
+
+import { AboutDoGrid } from "@/components/ui/aboutDo";
 import AboutTimeline from "@/components/ui/aboutTimeline";
 import AnimatedBackground from "@/components/ui/AnimatedBackground";
-import { AboutDoGrid } from "@/components/ui/aboutDo";
-import { CldImage } from "next-cloudinary";
+import { serviceCards } from "@/lib/data/services";
 
 const AboutSection = () => {
   const { scrollYProgress } = useScroll();

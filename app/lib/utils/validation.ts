@@ -3,7 +3,7 @@
  * Functions for validating data, forms, and user input
  */
 
-import { ValidationResult, ValidationError } from '@/lib/types';
+import type { ValidationResult, ValidationError } from '@/lib/types';
 
 /**
  * Email validation regex
@@ -364,9 +364,9 @@ export function validateArray<T>(
 /**
  * Validate object against schema
  */
-export function validateObject<T extends Record<string, any>>(
+export function validateObject<T extends Record<string, unknown>>(
   value: T,
-  schema: Record<keyof T, (value: any, field: string) => ValidationResult>
+  schema: Record<keyof T, (value: unknown, field: string) => ValidationResult>
 ): ValidationResult {
   const errors: ValidationError[] = [];
   
@@ -535,12 +535,12 @@ export function sanitizeInput(input: string, options: {
 /**
  * Check if value is safe for database storage
  */
-export function isSafeForStorage(value: any): boolean {
+export function isSafeForStorage(value: unknown): boolean {
   if (typeof value === 'string') {
     // Check for potential SQL injection patterns
     const dangerousPatterns = [
-      /('|(\\')|(;)|(\\;)|(\|)|(\*)|(%)|(<)|(>)|(\{)|(\})|(\[)|(\])/i,
-      /(script|javascript|vbscript|onload|onerror|onclick)/i,
+      /('|\'|;|%|<|>|{|}|\[|\]|\(|\)|\*|\||--|\/\*|\*\/)/i,
+      /(script|javascript|vbscript|onload|onerror|onclick|eval|expression)/i,
     ];
     
     return !dangerousPatterns.some(pattern => pattern.test(value));

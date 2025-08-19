@@ -2,8 +2,9 @@
  * Validation utility functions and error handling
  */
 
-import { z } from "zod";
-import { ValidationError, ValidationResult } from "@/lib/types";
+import type { z } from "zod";
+
+import type { ValidationError, ValidationResult } from "../types";
 
 /**
  * Generic validation function that returns a standardized result
@@ -101,7 +102,7 @@ export function parseAndValidate<T>(
  */
 export function validateMultiple(
   validations: Array<{
-    schema: z.ZodSchema<any>;
+    schema: z.ZodSchema<unknown>;
     data: unknown;
     name: string;
   }>
@@ -113,7 +114,7 @@ export function validateMultiple(
 
     if (!result.isValid) {
       // Prefix field names with the validation name
-      const prefixedErrors = result.errors.map((error) => ({
+      const prefixedErrors = result.errors.map((error: ValidationError) => ({
         ...error,
         field: `${validation.name}.${error.field}`,
       }));
@@ -249,7 +250,7 @@ export function isValidPhoneNumber(phone: string): boolean {
 /**
  * Custom Zod refinement for unique array values
  */
-export function uniqueArray<T>(message = "Array must contain unique values") {
+export function uniqueArray<T>(_message = "Array must contain unique values") {
   return (arr: T[]) => {
     const seen = new Set();
     for (const item of arr) {
@@ -269,15 +270,15 @@ export function uniqueArray<T>(message = "Array must contain unique values") {
 export function validDateRange(
   startField: string,
   endField: string,
-  message = "End date must be after start date"
+  _message = "End date must be after start date"
 ) {
-  return (obj: Record<string, any>) => {
+  return (obj: Record<string, unknown>) => {
     const start = obj[startField];
     const end = obj[endField];
 
     if (!start || !end) return true; // Skip validation if either date is missing
 
-    return new Date(start) <= new Date(end);
+    return new Date(start as string) <= new Date(end as string);
   };
 }
 
@@ -286,11 +287,11 @@ export function validDateRange(
  */
 export function conditionalRequired(
   conditionField: string,
-  conditionValue: any,
+  conditionValue: unknown,
   requiredField: string,
-  message = "This field is required"
+  _message = "This field is required"
 ) {
-  return (obj: Record<string, any>) => {
+  return (obj: Record<string, unknown>) => {
     if (obj[conditionField] === conditionValue) {
       return (
         obj[requiredField] !== undefined &&
@@ -309,10 +310,10 @@ export function createDebouncedValidator<T>(
   schema: z.ZodSchema<T>,
   delay = 300
 ) {
-  let timeoutId: NodeJS.Timeout;
+  let timeoutId: NodeJS.Timeout | undefined;
 
   return (data: unknown, callback: (result: ValidationResult) => void) => {
-    clearTimeout(timeoutId);
+    if (timeoutId) clearTimeout(timeoutId);
 
     timeoutId = setTimeout(() => {
       const result = validateData(schema, data);
@@ -325,7 +326,7 @@ export function createDebouncedValidator<T>(
  * Validation middleware for API routes
  */
 export function createValidationMiddleware<T>(schema: z.ZodSchema<T>) {
-  return (data: unknown) => {
+  return (data: unknown): T => {
     const result = schema.safeParse(data);
 
     if (!result.success) {

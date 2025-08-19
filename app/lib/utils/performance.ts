@@ -30,12 +30,12 @@ export function usePerformanceMonitor(componentName: string) {
         
         try {
           performance.measure(markName, `${markName}-start`, `${markName}-end`);
-        } catch (error) {
+        } catch {
           // Ignore if marks don't exist
         }
 
         if (process.env.NODE_ENV === 'development') {
-          console.log(`${componentName} ${measureName}: ${duration.toFixed(2)}ms`);
+          console.warn(`${componentName} ${measureName}: ${duration.toFixed(2)}ms`);
         }
 
         delete metricsRef.current[measureName];
@@ -63,7 +63,7 @@ export function measureRender(componentName: string) {
     const duration = endTime - startTime;
     
     if (process.env.NODE_ENV === 'development') {
-      console.log(`${componentName} render: ${duration.toFixed(2)}ms`);
+      console.warn(`${componentName} render: ${duration.toFixed(2)}ms`);
     }
     
     return duration;
@@ -80,38 +80,40 @@ export function observeWebVitals() {
 
   try {
     // Observe Largest Contentful Paint
-    const lcpObserver = new PerformanceObserver((list) => {
-      const entries = list.getEntries();
-      const lastEntry = entries[entries.length - 1];
-      if (process.env.NODE_ENV === 'development') {
-        console.log('LCP:', lastEntry.startTime);
-      }
-    });
+    const lcpObserver = new PerformanceObserver((_list) => {
+        const entries = _list.getEntries();
+        const lastEntry = entries[entries.length - 1];
+        if (process.env.NODE_ENV === 'development' && lastEntry) {
+          console.warn('LCP:', lastEntry.startTime);
+        }
+      });
     lcpObserver.observe({ entryTypes: ['largest-contentful-paint'] });
 
     // Observe First Input Delay
-    const fidObserver = new PerformanceObserver((list) => {
-      const entries = list.getEntries();
-      entries.forEach((entry) => {
-        if (process.env.NODE_ENV === 'development') {
-          console.log('FID:', entry.processingStart - entry.startTime);
+    const fidObserver = new PerformanceObserver((_list) => {
+      const entries = _list.getEntries();
+      entries.forEach((_entry) => {
+        const timingEntry = _entry as PerformanceEventTiming;
+        if (process.env.NODE_ENV === 'development' && timingEntry.processingStart) {
+          console.warn('FID:', timingEntry.processingStart - timingEntry.startTime);
         }
       });
     });
     fidObserver.observe({ entryTypes: ['first-input'] });
 
     // Observe Cumulative Layout Shift
-    const clsObserver = new PerformanceObserver((list) => {
-      const entries = list.getEntries();
-      entries.forEach((entry) => {
+    const clsObserver = new PerformanceObserver((_list) => {
+      const entries = _list.getEntries();
+      entries.forEach((_entry) => {
         if (process.env.NODE_ENV === 'development') {
-          console.log('CLS:', (entry as any).value);
+          const layoutShiftEntry = _entry as PerformanceEntry & { value: number };
+          console.warn('CLS:', layoutShiftEntry.value);
         }
       });
     });
     clsObserver.observe({ entryTypes: ['layout-shift'] });
 
-  } catch (error) {
-    console.warn('Performance observation not supported:', error);
+  } catch (_error) {
+    console.error('Performance observation not supported:', _error);
   }
 }

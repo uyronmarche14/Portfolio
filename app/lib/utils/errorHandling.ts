@@ -3,7 +3,8 @@
  * Functions for creating, managing, and handling errors consistently
  */
 
-import { AppError, ErrorCategory, ErrorSeverity, ErrorContext, DataError } from '@/lib/types';
+import type { AppError, ErrorCategory, ErrorSeverity, ErrorContext, DataError } from '@/lib/types';
+import type { RepositoryError } from '@/lib/types/repository';
 
 /**
  * Create a standardized application error
@@ -113,6 +114,26 @@ export function createDataError(
     details,
     timestamp: new Date(),
   };
+}
+
+/**
+ * Create an AppError from a RepositoryError or DataError
+ */
+export function createRepositoryError(repositoryError: RepositoryError | DataError): AppError {
+  const details = 'details' in repositoryError ? repositoryError.details : undefined;
+  const field = 'field' in repositoryError ? repositoryError.field : undefined;
+  
+  return createAppError(
+    'type' in repositoryError ? repositoryError.type || 'REPOSITORY_ERROR' : 'DATA_ERROR',
+    repositoryError.message,
+    'database',
+    'medium',
+    {
+      details,
+      field,
+      retryable: true,
+    }
+  );
 }
 
 /**
@@ -246,7 +267,7 @@ export function isRetryableError(error: AppError | Error): boolean {
       'SERVICE_UNAVAILABLE',
       'RATE_LIMITED',
     ];
-    return retryableCodes.includes(error.stack);
+    return retryableCodes.includes(error.code as string);
   }
 
   return false;
