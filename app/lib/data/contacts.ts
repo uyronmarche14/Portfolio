@@ -8,13 +8,7 @@ import {
   FaDiscord,
   FaMedium,
 } from "react-icons/fa";
-import { IconType } from "react-icons";
-import {
-  EmailContact,
-  PhoneContact,
-  LocationInfo,
-  SocialLink,
-} from "@/lib/types";
+import type { IconType } from "react-icons";
 
 // Legacy contact info structure for backward compatibility
 // This will be transformed by the ContactRepository to match the new ContactInfo interface

@@ -59,15 +59,12 @@ export {
   SkeletonCard,
 } from "./Skeleton";
 export {
-  ProjectCardSkeleton,
-  ProjectGridSkeleton,
-  AboutSectionSkeleton,
-  ContactSectionSkeleton,
+  ProjectsSkeleton,
+  AboutSkeleton,
+  FooterSkeleton,
+  HeroSkeleton,
   NavigationSkeleton,
-  HeroSectionSkeleton,
-  TechnologyGridSkeleton,
-  ProjectDetailSkeleton,
-  PageSkeleton,
+  CardSkeleton,
 } from "./LoadingSkeletons";
 export {
   OptimizedImage,

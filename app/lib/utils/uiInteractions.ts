@@ -420,9 +420,9 @@ export function lazyLoadImages(
   
   const observer = createIntersectionObserver(
     (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          const img = entry.target as HTMLImageElement;
+      entries.forEach((_entry) => {
+        if (_entry.isIntersecting) {
+          const img = _entry.target as HTMLImageElement;
           const src = img.dataset.src;
           
           if (src) {

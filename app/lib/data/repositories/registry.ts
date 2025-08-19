@@ -2,13 +2,17 @@
  * Repository registry for managing multiple repositories
  */
 
-import { BaseRepository, RepositoryRegistry } from "@/lib/types";
+import type { BaseRepository, RepositoryRegistry } from "@/lib/types";
+import { ProjectRepository } from "./project-repository";
+import { TechnologyRepository } from "./technology-repository";
+import { ContactRepository } from "./contact-repository";
+import { AboutRepository } from "./about-repository";
 
 /**
  * Default repository registry implementation
  */
 export class DefaultRepositoryRegistry implements RepositoryRegistry {
-  private repositories = new Map<string, BaseRepository<any>>();
+  private repositories = new Map<string, BaseRepository<unknown>>();
 
   /**
    * Register a repository with a given name
@@ -21,7 +25,7 @@ export class DefaultRepositoryRegistry implements RepositoryRegistry {
    * Get a repository by name
    */
   get<T>(name: string): BaseRepository<T> | undefined {
-    return this.repositories.get(name);
+    return this.repositories.get(name) as BaseRepository<T> | undefined;
   }
 
   /**
@@ -62,15 +66,12 @@ export class DefaultRepositoryRegistry implements RepositoryRegistry {
   /**
    * Get all repositories as an array of [name, repository] pairs
    */
-  entries(): [string, BaseRepository<any>][] {
+  entries(): Array<[string, BaseRepository<unknown>]> {
     return Array.from(this.repositories.entries());
   }
 
-  /**
-   * Execute a function for each registered repository
-   */
   forEach(
-    callback: (repository: BaseRepository<any>, name: string) => void
+    callback: (repository: BaseRepository<unknown>, name: string) => void
   ): void {
     this.repositories.forEach(callback);
   }
@@ -79,8 +80,8 @@ export class DefaultRepositoryRegistry implements RepositoryRegistry {
 /**
  * Enhanced repository registry with convenience methods
  */
-export class RepositoryRegistry extends DefaultRepositoryRegistry {
-  private static instance: RepositoryRegistry;
+export class EnhancedRepositoryRegistry extends DefaultRepositoryRegistry {
+  private static instance: EnhancedRepositoryRegistry;
 
   private constructor() {
     super();
@@ -90,11 +91,11 @@ export class RepositoryRegistry extends DefaultRepositoryRegistry {
   /**
    * Get singleton instance
    */
-  public static getInstance(): RepositoryRegistry {
-    if (!RepositoryRegistry.instance) {
-      RepositoryRegistry.instance = new RepositoryRegistry();
+  public static getInstance(): EnhancedRepositoryRegistry {
+    if (!EnhancedRepositoryRegistry.instance) {
+      EnhancedRepositoryRegistry.instance = new EnhancedRepositoryRegistry();
     }
-    return RepositoryRegistry.instance;
+    return EnhancedRepositoryRegistry.instance;
   }
 
   /**
@@ -107,56 +108,52 @@ export class RepositoryRegistry extends DefaultRepositoryRegistry {
   /**
    * Get project repository
    */
-  public static getProjectRepository(): any {
-    const instance = RepositoryRegistry.getInstance();
+  public static getProjectRepository(): ProjectRepository {
+    const instance = EnhancedRepositoryRegistry.getInstance();
     if (!instance.has("project")) {
-      const { ProjectRepository } = require("./project-repository");
       instance.register("project", new ProjectRepository());
     }
-    return instance.get("project");
+    return instance.get("project") as ProjectRepository;
   }
 
   /**
    * Get technology repository
    */
-  public static getTechnologyRepository(): any {
-    const instance = RepositoryRegistry.getInstance();
+  public static getTechnologyRepository(): TechnologyRepository {
+    const instance = EnhancedRepositoryRegistry.getInstance();
     if (!instance.has("technology")) {
-      const { TechnologyRepository } = require("./technology-repository");
       instance.register("technology", new TechnologyRepository());
     }
-    return instance.get("technology");
+    return instance.get("technology") as TechnologyRepository;
   }
 
   /**
    * Get contact repository
    */
-  public static getContactRepository(): any {
-    const instance = RepositoryRegistry.getInstance();
+  public static getContactRepository(): ContactRepository {
+    const instance = EnhancedRepositoryRegistry.getInstance();
     if (!instance.has("contact")) {
-      const { ContactRepository } = require("./contact-repository");
       instance.register("contact", new ContactRepository());
     }
-    return instance.get("contact");
+    return instance.get("contact") as ContactRepository;
   }
 
   /**
    * Get about repository
    */
-  public static getAboutRepository(): any {
-    const instance = RepositoryRegistry.getInstance();
+  public static getAboutRepository(): AboutRepository {
+    const instance = EnhancedRepositoryRegistry.getInstance();
     if (!instance.has("about")) {
-      const { AboutRepository } = require("./about-repository");
       instance.register("about", new AboutRepository());
     }
-    return instance.get("about");
+    return instance.get("about") as AboutRepository;
   }
 }
 
 /**
  * Singleton instance of the repository registry
  */
-export const repositoryRegistry = RepositoryRegistry.getInstance();
+export const repositoryRegistry = EnhancedRepositoryRegistry.getInstance();
 
 /**
  * Helper function to register a repository

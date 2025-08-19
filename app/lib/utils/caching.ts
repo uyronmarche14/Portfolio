@@ -143,12 +143,12 @@ export class MemoryCache<T = any> {
     return {
       size: this.cache.size,
       maxSize: this.config.maxSize,
-      totalHits: entries.reduce((sum, entry) => sum + entry.hits, 0),
-      expired: entries.filter((entry) => now - entry.timestamp > entry.ttl)
+      totalHits: entries.reduce((sum, _entry) => sum + _entry.hits, 0),
+      expired: entries.filter((_entry) => now - _entry.timestamp > _entry.ttl)
         .length,
       averageAge:
         entries.length > 0
-          ? entries.reduce((sum, entry) => sum + (now - entry.timestamp), 0) /
+          ? entries.reduce((sum, _entry) => sum + (now - _entry.timestamp), 0) /
             entries.length
           : 0,
     };
@@ -161,7 +161,9 @@ export class MemoryCache<T = any> {
     let oldestKey: string | null = null;
     let oldestTime = Date.now();
 
-    for (const [key, entry] of this.cache.entries()) {
+    const entries = Array.from(this.cache.entries());
+    for (let i = 0; i < entries.length; i++) {
+      const [key, entry] = entries[i];
       if (entry.lastAccessed < oldestTime) {
         oldestTime = entry.lastAccessed;
         oldestKey = key;
@@ -180,7 +182,9 @@ export class MemoryCache<T = any> {
     const now = Date.now();
     const expiredKeys: string[] = [];
 
-    for (const [key, entry] of this.cache.entries()) {
+    const entries = Array.from(this.cache.entries());
+    for (let i = 0; i < entries.length; i++) {
+      const [key, entry] = entries[i];
       if (now - entry.timestamp > entry.ttl) {
         expiredKeys.push(key);
       }

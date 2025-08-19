@@ -3,11 +3,11 @@
 import React from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { getTechIcon } from "@/lib/utils/techIcons";
 import { FiGithub, FiImage, FiFilter } from "react-icons/fi";
+import { getTechIcon } from "@/lib/utils/techIcons";
+import { PROJECTS_CONTENT } from "@/lib/data";
 import { Avatar } from "@/components/ui/shadcn/avatar";
 import { Button } from "./shadcn/button";
-import { PROJECTS_CONTENT } from "@/lib/data";
 
 interface Project {
   id: string;

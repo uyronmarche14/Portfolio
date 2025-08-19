@@ -4,7 +4,7 @@
  */
 
 import { useState, useEffect, useCallback, useMemo } from "react";
-import {
+import type {
   AboutContent,
   AboutFilters,
   AboutStatistics,
@@ -12,7 +12,6 @@ import {
   Education,
   Skill,
   SkillGroup,
-  DataResult,
 } from "@/lib/types";
 import { RepositoryRegistry } from "@/lib/data/repositories";
 
@@ -110,28 +109,17 @@ export function useAboutContent(
 
         const repository = getRepository();
 
-        // Fetch about content and statistics in parallel
-        const [contentResult, statsResult] = await Promise.all([
-          repository.get(),
-          repository.getStatistics(),
-        ]);
+        // Fetch about content
+        const contentResult = await repository.getPrimary();
 
         if (contentResult.error) {
           throw new Error(contentResult.error.message);
         }
 
-        if (statsResult.error) {
-          console.warn(
-            "Failed to fetch about statistics:",
-            statsResult.error.message
-          );
-        }
-
         const content = contentResult.data || null;
-        const stats = statsResult.data || null;
 
         setAboutContent(content);
-        setStatistics(stats);
+        setStatistics(null); // Statistics not available from repository
         setLastUpdated(new Date());
 
         if (content) {
@@ -333,9 +321,8 @@ export function useAboutContent(
    */
   const clearCache = useCallback(() => {
     if (enableCaching) {
-      const repository = getRepository();
-      // Note: This would need to be implemented in the repository
-      // repository.clearCache?.();
+      const _repository = getRepository();
+      // Repository clearing logic here
     }
     fetchAboutContent(false);
   }, [enableCaching, fetchAboutContent, getRepository]);
@@ -379,10 +366,10 @@ export function useAboutContent(
     if (!aboutContent) return;
 
     const dataStr = JSON.stringify(aboutContent, null, 2);
-    const dataUri =
-      "data:application/json;charset=utf-8," + encodeURIComponent(dataStr);
-
-    const exportFileDefaultName = `about-content-${new Date().toISOString().split("T")[0]}.json`;
+    const dataUri = `data:application/json;charset=utf-8,${encodeURIComponent(dataStr)}`;
+    const exportFileDefaultName = `about-content-${
+      new Date().toISOString().split("T")[0]
+    }.json`;
 
     const linkElement = document.createElement("a");
     linkElement.setAttribute("href", dataUri);

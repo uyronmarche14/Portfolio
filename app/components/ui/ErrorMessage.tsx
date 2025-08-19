@@ -9,6 +9,12 @@ import {
   AlertCircle,
   XCircle,
 } from "lucide-react";
+import { cn } from "@/lib/utils";
+import type { AppError, ErrorSeverity } from "@/lib/types/error";
+import {
+  getUserErrorMessage,
+  getUserErrorAction,
+} from "@/lib/utils/errorHandling";
 import { Button } from "./shadcn/button";
 import {
   Card,
@@ -18,12 +24,6 @@ import {
   CardTitle,
 } from "./shadcn/card";
 import { Alert, AlertDescription, AlertTitle } from "./shadcn/alert";
-import { cn } from "@/lib/utils";
-import { AppError, ErrorSeverity } from "@/lib/types/error";
-import {
-  getUserErrorMessage,
-  getUserErrorAction,
-} from "@/lib/utils/errorHandling";
 
 interface ErrorMessageProps {
   error: AppError | Error | string;
@@ -35,6 +35,7 @@ interface ErrorMessageProps {
   className?: string;
   variant?: "card" | "alert" | "inline";
   size?: "sm" | "default" | "lg";
+  children?: React.ReactNode;
 }
 
 /**
@@ -86,24 +87,33 @@ export const ErrorMessage: React.FC<ErrorMessageProps> = ({
   className,
   variant = "card",
   size = "default",
+  children,
 }) => {
-  const appError = React.useMemo(() => {
+  const appError = React.useMemo((): AppError => {
     if (typeof error === "string") {
       return {
+        code: 'GENERIC_ERROR',
         message: error,
+        category: 'unknown',
         severity: "medium" as ErrorSeverity,
         retryable: false,
+        timestamp: new Date(),
+        logged: false,
       };
     }
 
-    if ("severity" in error) {
+    if ("code" in error && "category" in error && "severity" in error) {
       return error as AppError;
     }
 
     return {
+      code: 'GENERIC_ERROR',
       message: error.message,
+      category: 'unknown',
       severity: "medium" as ErrorSeverity,
       retryable: false,
+      timestamp: new Date(),
+      logged: false,
     };
   }, [error]);
 
@@ -134,6 +144,7 @@ export const ErrorMessage: React.FC<ErrorMessageProps> = ({
             {userAction && (
               <p className="text-muted-foreground text-sm">{userAction}</p>
             )}
+            {children}
             {(showRetry || showHome) && (
               <div className="mt-3 flex gap-2">
                 {showRetry && onRetry && (
@@ -171,6 +182,7 @@ export const ErrorMessage: React.FC<ErrorMessageProps> = ({
           {userAction && (
             <p className="text-muted-foreground mt-1 text-xs">{userAction}</p>
           )}
+          {children}
           {(showRetry || showHome) && (
             <div className="mt-2 flex gap-2">
               {showRetry && onRetry && (
@@ -224,6 +236,8 @@ export const ErrorMessage: React.FC<ErrorMessageProps> = ({
             {userAction}
           </p>
         )}
+        
+        {children}
 
         {(showRetry || showHome) && (
           <div className="flex flex-col gap-2 sm:flex-row">

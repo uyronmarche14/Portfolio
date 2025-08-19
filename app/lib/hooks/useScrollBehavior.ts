@@ -79,8 +79,8 @@ export function useScrollBehavior(options: UseScrollBehaviorOptions = {}): UseSc
 
   const lastScrollTime = useRef<number>(0);
   const lastScrollPosition = useRef<ScrollPosition>({ x: 0, y: 0 });
-  const scrollTimeout = useRef<NodeJS.Timeout>();
-  const throttleTimeout = useRef<NodeJS.Timeout>();
+  const scrollTimeout = useRef<NodeJS.Timeout | null>(null);
+  const throttleTimeout = useRef<NodeJS.Timeout | null>(null);
   const velocityHistory = useRef<Array<{ time: number; position: ScrollPosition }>>([]);
 
   /**
@@ -96,7 +96,7 @@ export function useScrollBehavior(options: UseScrollBehaviorOptions = {}): UseSc
     
     // Keep only recent history (last 100ms)
     const cutoffTime = currentTime - 100;
-    velocityHistory.current = history.filter(entry => entry.time > cutoffTime);
+    velocityHistory.current = history.filter(_entry => _entry.time > cutoffTime);
     
     if (history.length < 2) return 0;
     
@@ -221,7 +221,7 @@ export function useScrollBehavior(options: UseScrollBehaviorOptions = {}): UseSc
 
     throttleTimeout.current = setTimeout(() => {
       updateScrollMetrics();
-      throttleTimeout.current = undefined;
+      throttleTimeout.current = null;
     }, throttleMs);
   }, [throttleMs, updateScrollMetrics, onScrollStart, scrollMetrics.isScrolling]);
 
@@ -404,8 +404,8 @@ export function useScrollAnimation(options: {
     if (!elementRef.current || typeof window === 'undefined') return;
 
     const observer = new IntersectionObserver(
-      ([entry]) => {
-        const inView = entry.isIntersecting;
+      ([_entry]) => {
+        const inView = _entry.isIntersecting;
         
         if (inView !== isInView) {
           setIsInView(inView);

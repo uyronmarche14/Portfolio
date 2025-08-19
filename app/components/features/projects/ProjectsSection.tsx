@@ -1,16 +1,16 @@
 import React, { useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronDown, Filter, Check } from "lucide-react";
+import { ChevronDown, Filter, Check, Sparkles } from "lucide-react";
+
+import ProjectCard from "@/components/ui/projectCard";
+import AnimatedBackground from "@/components/ui/AnimatedBackground";
+import { getTechIcon } from "@/lib/utils/techIcons";
+
 import { projects } from "@/lib/data/projects";
 import {
   PROJECTS_CONTENT,
   ANIMATION_VARIANTS,
 } from "@/lib/data/projectsContent";
-import { Sparkles } from "lucide-react";
-
-import ProjectCard from "@/components/ui/projectCard";
-import { getTechIcon } from "@/lib/utils/techIcons";
-import AnimatedBackground from "@/components/ui/AnimatedBackground";
 
 interface FilterDropdownProps {
   filter: string;
@@ -156,36 +156,36 @@ const FilterDropdown: React.FC<FilterDropdownProps> = ({
 const ProjectsSection = () => {
   const [filter, setFilter] = useState<string>("all");
 
-  // Technology mapping to group similar techs and filter out hosting/deployment details
-  const techMapping: Record<string, string> = {
-    React: "React",
-    "React Native": "React Native",
-    "Next.js": "Next.js",
-    TypeScript: "TypeScript",
-    JavaScript: "JavaScript",
-    "Node.js": "Node.js",
-    "Node Js": "Node.js",
-    "Express.js": "Express.js",
-    "Express Js": "Express.js",
-    "C#": "C#",
-    Java: "Java",
-    HTML: "HTML",
-    CSS: "CSS",
-    "Tailwind CSS": "Tailwind CSS",
-    TailwindCSS: "Tailwind CSS",
-    Firebase: "Firebase",
-    Supabase: "Supabase",
-    MySQL: "MySQL",
-    "Android Studio": "Android",
-    "QR Code Scanner": "QR Code Scanner",
-    ESP32: "ESP32",
-    "C++": "C++",
-    WinForms: "WinForms",
-  };
-
   // Get normalized tech name or return null if it should be filtered out
   const getNormalizedTech = useCallback(
     (tech: string): string | null => {
+      // Technology mapping to group similar techs and filter out hosting/deployment details
+      const techMapping: Record<string, string> = {
+        React: "React",
+        "React Native": "React Native",
+        "Next.js": "Next.js",
+        TypeScript: "TypeScript",
+        JavaScript: "JavaScript",
+        "Node.js": "Node.js",
+        "Node Js": "Node.js",
+        "Express.js": "Express.js",
+        "Express Js": "Express.js",
+        "C#": "C#",
+        Java: "Java",
+        HTML: "HTML",
+        CSS: "CSS",
+        "Tailwind CSS": "Tailwind CSS",
+        TailwindCSS: "Tailwind CSS",
+        Firebase: "Firebase",
+        Supabase: "Supabase",
+        MySQL: "MySQL",
+        "Android Studio": "Android",
+        "QR Code Scanner": "QR Code Scanner",
+        ESP32: "ESP32",
+        "C++": "C++",
+        WinForms: "WinForms",
+      };
+
       // Filter out hosting/deployment specific details
       if (
         tech.includes("hosting") ||
@@ -197,7 +197,7 @@ const ProjectsSection = () => {
 
       return techMapping[tech] || tech;
     },
-    [techMapping]
+    []
   );
 
   const technologies = React.useMemo(() => {
@@ -221,7 +221,7 @@ const ProjectsSection = () => {
       .sort((a, b) => b.count - a.count || a.name.localeCompare(b.name))
       .slice(0, 12) // Limit to top 12 technologies
       .map((tech) => tech.name);
-  }, []);
+  }, [getNormalizedTech]);
 
   const filteredProjects = React.useMemo(
     () =>
@@ -232,7 +232,7 @@ const ProjectsSection = () => {
               (tech) => getNormalizedTech(tech) === filter
             )
           ),
-    [filter]
+    [filter, getNormalizedTech]
   );
 
   return (

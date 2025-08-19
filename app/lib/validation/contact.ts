@@ -3,6 +3,7 @@
  */
 
 import { z } from 'zod';
+
 import { 
   BaseEntitySchema, 
   ImageMetadataSchema, 
@@ -12,8 +13,7 @@ import {
   PhoneSchema,
   UrlSchema,
   PositiveNumberSchema,
-  NonNegativeNumberSchema,
-  ValidationPatterns
+  NonNegativeNumberSchema
 } from './common';
 
 /**

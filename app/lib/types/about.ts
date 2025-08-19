@@ -2,57 +2,67 @@
  * About section related type definitions
  */
 
-import { BaseEntity, ImageMetadata, Link, DateRange } from './common';
-import { Technology } from './technology';
+import { BaseEntity, ImageMetadata, Link, DateRange } from "./common";
+import type { Technology } from "./technology";
 
 /**
  * Skill proficiency levels
  */
-export type SkillProficiency = 'beginner' | 'intermediate' | 'advanced' | 'expert';
+export type SkillProficiency =
+  | "beginner"
+  | "intermediate"
+  | "advanced"
+  | "expert";
 
 /**
  * Skill category enumeration
  */
-export type SkillCategory = 
-  | 'technical'
-  | 'soft'
-  | 'language'
-  | 'design'
-  | 'management'
-  | 'communication'
-  | 'other';
+export type SkillCategory =
+  | "technical"
+  | "soft"
+  | "language"
+  | "design"
+  | "management"
+  | "communication"
+  | "other";
 
 /**
  * Experience type enumeration
  */
-export type ExperienceType = 'work' | 'freelance' | 'internship' | 'volunteer' | 'project' | 'education';
+export type ExperienceType =
+  | "work"
+  | "freelance"
+  | "internship"
+  | "volunteer"
+  | "project"
+  | "education";
 
 /**
  * Education level enumeration
  */
-export type EducationLevel = 
-  | 'high-school'
-  | 'associate'
-  | 'bachelor'
-  | 'master'
-  | 'doctorate'
-  | 'certificate'
-  | 'bootcamp'
-  | 'online-course'
-  | 'other';
+export type EducationLevel =
+  | "high-school"
+  | "associate"
+  | "bachelor"
+  | "master"
+  | "doctorate"
+  | "certificate"
+  | "bootcamp"
+  | "online-course"
+  | "other";
 
 /**
  * Achievement category enumeration
  */
-export type AchievementCategory = 
-  | 'award'
-  | 'certification'
-  | 'publication'
-  | 'speaking'
-  | 'competition'
-  | 'recognition'
-  | 'milestone'
-  | 'other';
+export type AchievementCategory =
+  | "award"
+  | "certification"
+  | "publication"
+  | "speaking"
+  | "competition"
+  | "recognition"
+  | "milestone"
+  | "other";
 
 /**
  * Individual skill interface
@@ -95,33 +105,33 @@ export interface Experience extends BaseEntity {
   company: string;
   location: string;
   type: ExperienceType;
-  
+
   // Duration
   startDate: Date;
   endDate?: Date;
   current: boolean;
   duration?: string; // Calculated field like "2 years 3 months"
-  
+
   // Content
   description: string;
   responsibilities: string[];
   achievements: string[];
-  
+
   // Technical Details
   technologies: Technology[];
   skills: Skill[];
-  
+
   // Media and Links
   logo?: ImageMetadata;
   website?: string;
   portfolio?: Link[];
-  
+
   // Additional Information
   teamSize?: number;
   reportingTo?: string;
   managedTeam?: boolean;
   remoteWork?: boolean;
-  
+
   // Display Properties
   featured: boolean;
   order?: number;
@@ -137,32 +147,32 @@ export interface Education extends BaseEntity {
   degree: string;
   field: string;
   level: EducationLevel;
-  
+
   // Duration
   startDate: Date;
   endDate?: Date;
   current: boolean;
-  
+
   // Academic Details
   gpa?: number;
   maxGpa?: number;
   honors?: string[];
   relevantCoursework?: string[];
-  
+
   // Content
   description?: string;
   achievements?: string[];
   activities?: string[];
-  
+
   // Media and Links
   logo?: ImageMetadata;
   website?: string;
   transcript?: string;
   certificate?: string;
-  
+
   // Location
   location: string;
-  
+
   // Display Properties
   featured: boolean;
   order?: number;
@@ -177,25 +187,25 @@ export interface Certification extends BaseEntity {
   name: string;
   issuer: string;
   description?: string;
-  
+
   // Dates
   issueDate: Date;
   expirationDate?: Date;
   neverExpires: boolean;
-  
+
   // Verification
   credentialId?: string;
   credentialUrl?: string;
   verified: boolean;
-  
+
   // Media and Links
   badge?: ImageMetadata;
   certificate?: string;
-  
+
   // Related Information
   technologies?: Technology[];
   skills?: Skill[];
-  
+
   // Display Properties
   featured: boolean;
   order?: number;
@@ -210,22 +220,22 @@ export interface Achievement extends BaseEntity {
   title: string;
   category: AchievementCategory;
   description: string;
-  
+
   // Date and Context
   date: Date;
   organization?: string;
   event?: string;
   location?: string;
-  
+
   // Media and Links
   image?: ImageMetadata;
   certificate?: string;
   url?: string;
-  
+
   // Additional Information
   impact?: string;
   recognition?: string;
-  
+
   // Display Properties
   featured: boolean;
   order?: number;
@@ -240,7 +250,13 @@ export interface TimelineEvent {
   date: Date;
   title: string;
   description: string;
-  type: 'work' | 'education' | 'project' | 'achievement' | 'milestone' | 'other';
+  type:
+    | "work"
+    | "education"
+    | "project"
+    | "achievement"
+    | "milestone"
+    | "other";
   icon?: string;
   color?: string;
   relatedId?: string; // ID of related experience, education, etc.
@@ -257,34 +273,34 @@ export interface PersonalInfo {
   displayName: string;
   title: string;
   tagline?: string;
-  
+
   // Bio and Description
   bio: string;
   shortBio?: string;
   elevator_pitch?: string;
-  
+
   // Media
   avatar: ImageMetadata;
   coverImage?: ImageMetadata;
   gallery?: ImageMetadata[];
-  
+
   // Personal Details
   birthDate?: Date;
   nationality?: string;
   languages: {
     language: string;
-    proficiency: 'native' | 'fluent' | 'conversational' | 'basic';
+    proficiency: "native" | "fluent" | "conversational" | "basic";
   }[];
-  
+
   // Interests and Hobbies
   interests: string[];
   hobbies: string[];
-  
+
   // Values and Personality
   values?: string[];
   personalityType?: string; // e.g., MBTI type
   workingStyle?: string;
-  
+
   // Fun Facts
   funFacts?: string[];
   quotes?: {
@@ -299,22 +315,22 @@ export interface PersonalInfo {
 export interface AboutContent extends BaseEntity {
   // Personal Information
   personal: PersonalInfo;
-  
+
   // Professional Information
   skills: SkillGroup[];
   experience: Experience[];
   education: Education[];
   certifications: Certification[];
   achievements: Achievement[];
-  
+
   // Timeline
   timeline: TimelineEvent[];
-  
+
   // Career Information
   careerObjective?: string;
   currentFocus?: string[];
   lookingFor?: string[];
-  
+
   // Statistics
   stats?: {
     yearsOfExperience: number;
@@ -324,7 +340,7 @@ export interface AboutContent extends BaseEntity {
     linesOfCode?: number;
     coffeeConsumed?: number; // Fun stat
   };
-  
+
   // Display Properties
   visible: boolean;
   lastUpdated: Date;
@@ -344,12 +360,17 @@ export interface AboutFilters {
 /**
  * About content creation input
  */
-export type CreateAboutContentInput = Omit<AboutContent, 'id' | 'createdAt' | 'updatedAt'>;
+export type CreateAboutContentInput = Omit<
+  AboutContent,
+  "id" | "createdAt" | "updatedAt"
+>;
 
 /**
  * About content update input
  */
-export type UpdateAboutContentInput = Partial<Omit<AboutContent, 'id' | 'createdAt' | 'updatedAt'>>;
+export type UpdateAboutContentInput = Partial<
+  Omit<AboutContent, "id" | "createdAt" | "updatedAt">
+>;
 
 /**
  * About content statistics

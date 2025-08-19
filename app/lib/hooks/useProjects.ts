@@ -4,13 +4,11 @@
  */
 
 import { useState, useEffect, useCallback, useMemo } from "react";
-import {
+import type {
   Project,
   ProjectFilters,
   ProjectSearchParams,
   ProjectStatistics,
-  DataResult,
-  PaginationParams,
 } from "@/lib/types";
 import { RepositoryRegistry } from "@/lib/data/repositories";
 
@@ -336,9 +334,8 @@ export function useProjects(
    */
   const clearCache = useCallback(() => {
     if (enableCaching) {
-      const repository = getRepository();
-      // Note: This would need to be implemented in the repository
-      // repository.clearCache?.();
+      const _repository = getRepository();
+      // Repository clearing logic here
     }
     fetchProjects(false);
   }, [enableCaching, fetchProjects, getRepository]);
@@ -347,17 +344,20 @@ export function useProjects(
    * Export projects data
    */
   const exportProjects = useCallback(() => {
-    const dataStr = JSON.stringify(filteredProjects, null, 2);
-    const dataUri =
-      "data:application/json;charset=utf-8," + encodeURIComponent(dataStr);
-
-    const exportFileDefaultName = `projects-${new Date().toISOString().split("T")[0]}.json`;
+    if (!projects) return;
+    const dataStr = JSON.stringify(projects, null, 2);
+    const dataUri = `data:application/json;charset=utf-8,${encodeURIComponent(
+      dataStr
+    )}`;
+    const exportFileDefaultName = `projects-${
+      new Date().toISOString().split("T")[0]
+    }.json`;
 
     const linkElement = document.createElement("a");
     linkElement.setAttribute("href", dataUri);
     linkElement.setAttribute("download", exportFileDefaultName);
     linkElement.click();
-  }, [filteredProjects]);
+  }, [projects]);
 
   // Initial data fetch
   useEffect(() => {

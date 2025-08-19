@@ -2,7 +2,8 @@
  * Repository factory for creating repository instances
  */
 
-import {
+// 5:1 - Use `import type` for type-only imports
+import type {
   BaseRepository,
   RepositoryConfig,
   RepositoryFactory,
@@ -16,19 +17,16 @@ import { AboutRepository } from "./about-repository";
  * Default repository factory implementation
  */
 export class DefaultRepositoryFactory implements RepositoryFactory {
-  private repositories = new Map<string, BaseRepository<any>>();
+  private repositories = new Map<string, BaseRepository<unknown>>();
 
-  /**
-   * Create a repository instance for the specified entity type
-   */
   create<T>(entityType: string, config?: RepositoryConfig): BaseRepository<T> {
     const key = `${entityType}-${JSON.stringify(config || {})}`;
 
     if (this.repositories.has(key)) {
-      return this.repositories.get(key)!;
+      return this.repositories.get(key)! as BaseRepository<T>;
     }
 
-    let repository: BaseRepository<any>;
+    let repository: BaseRepository<unknown>;
 
     switch (entityType.toLowerCase()) {
       case "project":
@@ -48,26 +46,17 @@ export class DefaultRepositoryFactory implements RepositoryFactory {
     }
 
     this.repositories.set(key, repository);
-    return repository;
+    return repository as BaseRepository<T>;
   }
 
-  /**
-   * Clear all cached repository instances
-   */
   clear(): void {
     this.repositories.clear();
   }
 
-  /**
-   * Get all registered entity types
-   */
   getEntityTypes(): string[] {
     return ["project", "technology", "contact", "about"];
   }
 
-  /**
-   * Check if an entity type is supported
-   */
   supports(entityType: string): boolean {
     return this.getEntityTypes().includes(entityType.toLowerCase());
   }
@@ -94,13 +83,16 @@ export function createRepository<T>(
 export function createProjectRepository(
   config?: RepositoryConfig
 ): ProjectRepository {
-  return repositoryFactory.create<any>("project", config) as ProjectRepository;
+  return repositoryFactory.create<unknown>(
+    "project",
+    config
+  ) as ProjectRepository;
 }
 
 export function createTechnologyRepository(
   config?: RepositoryConfig
 ): TechnologyRepository {
-  return repositoryFactory.create<any>(
+  return repositoryFactory.create<unknown>(
     "technology",
     config
   ) as TechnologyRepository;
@@ -109,11 +101,14 @@ export function createTechnologyRepository(
 export function createContactRepository(
   config?: RepositoryConfig
 ): ContactRepository {
-  return repositoryFactory.create<any>("contact", config) as ContactRepository;
+  return repositoryFactory.create<unknown>(
+    "contact",
+    config
+  ) as ContactRepository;
 }
 
 export function createAboutRepository(
   config?: RepositoryConfig
 ): AboutRepository {
-  return repositoryFactory.create<any>("about", config) as AboutRepository;
+  return repositoryFactory.create<unknown>("about", config) as AboutRepository;
 }

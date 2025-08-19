@@ -2,14 +2,17 @@
  * About repository implementation
  */
 
-import {
+// Move import of '@/lib/utils' before './base'
+import type {
   AboutContent,
   CreateAboutContentInput,
   UpdateAboutContentInput,
   DataResult,
+  RepositoryError,
 } from "@/lib/types";
-import { FileBasedRepository } from "./base";
 import { generateId } from "@/lib/utils";
+import { FileBasedRepository } from "./base";
+// ...existing code...
 
 /**
  * About repository for managing about content
@@ -25,7 +28,6 @@ export class AboutRepository extends FileBasedRepository<
     super({
       cacheEnabled: true,
       cacheTTL: 600, // 10 minutes
-      enableLogging: true,
     });
     this.dataFilePath = dataFilePath;
   }
@@ -51,7 +53,7 @@ export class AboutRepository extends FileBasedRepository<
     try {
       // In a real implementation, this would write to a file
       // For now, just log the operation
-      console.log("Saving about data:", data.length, "items");
+      console.warn("Saving about data:", data.length, "items");
     } catch (error) {
       console.error("Failed to save about data:", error);
       throw error;
@@ -97,7 +99,7 @@ export class AboutRepository extends FileBasedRepository<
 
       return this.createDataResult(primary);
     } catch (error) {
-      return this.createDataResult(undefined, {
+      return this.createDataResult(null, {
         type: "UNKNOWN_ERROR",
         message:
           error instanceof Error ? error.message : "Unknown error occurred",
@@ -134,7 +136,7 @@ export class AboutRepository extends FileBasedRepository<
 
       return this.createDataResult(updated);
     } catch (error) {
-      return this.createDataResult(undefined, {
+      return this.createDataResult({} as AboutContent, {
         type: "UNKNOWN_ERROR",
         message:
           error instanceof Error ? error.message : "Unknown error occurred",
@@ -146,7 +148,9 @@ export class AboutRepository extends FileBasedRepository<
   /**
    * Get skills grouped by category
    */
-  async getSkillsByCategory(): Promise<DataResult<Record<string, any[]>>> {
+  async getSkillsByCategory(): Promise<
+    DataResult<Record<string, AboutContent["skills"]>>
+  > {
     try {
       await this.ensureDataLoaded();
 
@@ -155,7 +159,7 @@ export class AboutRepository extends FileBasedRepository<
       }
 
       const aboutContent = this.data[0];
-      const skillsByCategory: Record<string, any[]> = {};
+      const skillsByCategory: Record<string, AboutContent["skills"]> = {};
 
       if (aboutContent.skills) {
         aboutContent.skills.forEach((skill) => {
@@ -169,7 +173,7 @@ export class AboutRepository extends FileBasedRepository<
 
       return this.createDataResult(skillsByCategory);
     } catch (error) {
-      return this.createDataResult(undefined, {
+      return this.createDataResult({} as Record<string, AboutContent["skills"]>, {
         type: "UNKNOWN_ERROR",
         message:
           error instanceof Error ? error.message : "Unknown error occurred",
@@ -181,7 +185,9 @@ export class AboutRepository extends FileBasedRepository<
   /**
    * Get experience timeline
    */
-  async getExperienceTimeline(): Promise<DataResult<any[]>> {
+  async getExperienceTimeline(): Promise<
+    DataResult<AboutContent["experience"]>
+  > {
     try {
       await this.ensureDataLoaded();
 
@@ -201,7 +207,7 @@ export class AboutRepository extends FileBasedRepository<
 
       return this.createDataResult(timeline);
     } catch (error) {
-      return this.createDataResult(undefined, {
+      return this.createDataResult([] as AboutContent["experience"], {
         type: "UNKNOWN_ERROR",
         message:
           error instanceof Error ? error.message : "Unknown error occurred",
@@ -213,7 +219,7 @@ export class AboutRepository extends FileBasedRepository<
   /**
    * Get education history
    */
-  async getEducation(): Promise<DataResult<any[]>> {
+  async getEducation(): Promise<DataResult<AboutContent["education"]>> {
     try {
       await this.ensureDataLoaded();
 
@@ -224,16 +230,16 @@ export class AboutRepository extends FileBasedRepository<
       const aboutContent = this.data[0];
       const education = aboutContent.education || [];
 
-      // Sort by graduation date (most recent first)
+      // Sort by end date (most recent first)
       education.sort((a, b) => {
-        const aDate = new Date(a.graduationDate || a.endDate || 0);
-        const bDate = new Date(b.graduationDate || b.endDate || 0);
+        const aDate = new Date(a.endDate || 0);
+        const bDate = new Date(b.endDate || 0);
         return bDate.getTime() - aDate.getTime();
       });
 
       return this.createDataResult(education);
     } catch (error) {
-      return this.createDataResult(undefined, {
+      return this.createDataResult([] as AboutContent["education"], {
         type: "UNKNOWN_ERROR",
         message:
           error instanceof Error ? error.message : "Unknown error occurred",
@@ -246,39 +252,59 @@ export class AboutRepository extends FileBasedRepository<
    * Validate about data
    */
   protected async validateData(
-    data: any,
+    data: Partial<AboutContent>,
     operation: "create" | "update"
-  ): Promise<string[]> {
-    const errors: string[] = [];
+  ): Promise<RepositoryError[]> {
+    const errors: RepositoryError[] = [];
 
     if (operation === "create") {
       if (
-        !data.bio ||
-        typeof data.bio !== "string" ||
-        data.bio.trim().length === 0
+        !data.personal?.bio ||
+        typeof data.personal.bio !== "string" ||
+        data.personal.bio.trim().length === 0
       ) {
-        errors.push("Bio is required and must be a non-empty string");
+        errors.push({
+          type: "VALIDATION_ERROR",
+          message: "Bio is required and must be a non-empty string",
+          field: "personal.bio"
+        });
       }
     }
 
     // Additional validation for updates
     if (
-      data.bio !== undefined &&
-      (typeof data.bio !== "string" || data.bio.trim().length === 0)
+      data.personal?.bio !== undefined &&
+      (typeof data.personal.bio !== "string" || data.personal.bio.trim().length === 0)
     ) {
-      errors.push("Bio must be a non-empty string");
+      errors.push({
+          type: "VALIDATION_ERROR",
+          message: "Bio must be a non-empty string",
+          field: "personal.bio"
+        });
     }
 
     if (data.skills !== undefined && !Array.isArray(data.skills)) {
-      errors.push("Skills must be an array");
+      errors.push({
+        type: "VALIDATION_ERROR",
+        message: "Skills must be an array",
+        field: "skills"
+      });
     }
 
     if (data.experience !== undefined && !Array.isArray(data.experience)) {
-      errors.push("Experience must be an array");
+      errors.push({
+        type: "VALIDATION_ERROR",
+        message: "Experience must be an array",
+        field: "experience"
+      });
     }
 
     if (data.education !== undefined && !Array.isArray(data.education)) {
-      errors.push("Education must be an array");
+      errors.push({
+        type: "VALIDATION_ERROR",
+        message: "Education must be an array",
+        field: "education"
+      });
     }
 
     return errors;

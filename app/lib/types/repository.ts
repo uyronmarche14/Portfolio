@@ -2,34 +2,51 @@
  * Repository pattern interfaces and base classes for data access layer
  */
 
-import { DataResult, PaginatedResponse, PaginationParams, FilterParams } from './common';
+import {
+  DataResult,
+  PaginatedResponse,
+  PaginationParams,
+  FilterParams,
+} from "./common";
+import type { WithTimestamps } from "./common";
 
 /**
  * Base repository interface defining common CRUD operations
  */
-export interface BaseRepository<T, TCreate = Omit<T, 'id' | 'createdAt' | 'updatedAt'>, TUpdate = Partial<TCreate>> {
+export interface BaseRepository<
+  T,
+  TCreate = Omit<T, "id" | "createdAt" | "updatedAt">,
+  TUpdate = Partial<TCreate>,
+> {
   // Read operations
   getAll(params?: PaginationParams): Promise<DataResult<T[]>>;
-  getPaginated(params: PaginationParams): Promise<DataResult<PaginatedResponse<T>>>;
+  getPaginated(
+    params: PaginationParams
+  ): Promise<DataResult<PaginatedResponse<T>>>;
   getById(id: string): Promise<DataResult<T | null>>;
   getByIds(ids: string[]): Promise<DataResult<T[]>>;
-  
+
   // Create operations
   create(item: TCreate): Promise<DataResult<T>>;
   createMany(items: TCreate[]): Promise<DataResult<T[]>>;
-  
+
   // Update operations
   update(id: string, updates: TUpdate): Promise<DataResult<T>>;
-  updateMany(updates: { id: string; data: TUpdate }[]): Promise<DataResult<T[]>>;
-  
+  updateMany(
+    updates: { id: string; data: TUpdate }[]
+  ): Promise<DataResult<T[]>>;
+
   // Delete operations
   delete(id: string): Promise<DataResult<boolean>>;
   deleteMany(ids: string[]): Promise<DataResult<boolean>>;
-  
+
   // Search and filter operations
   search(query: string, params?: PaginationParams): Promise<DataResult<T[]>>;
-  filter(filters: FilterParams, params?: PaginationParams): Promise<DataResult<T[]>>;
-  
+  filter(
+    filters: FilterParams,
+    params?: PaginationParams
+  ): Promise<DataResult<T[]>>;
+
   // Utility operations
   exists(id: string): Promise<DataResult<boolean>>;
   count(filters?: FilterParams): Promise<DataResult<number>>;
@@ -50,13 +67,13 @@ export interface RepositoryConfig {
 /**
  * Repository error types
  */
-export type RepositoryErrorType = 
-  | 'NOT_FOUND'
-  | 'VALIDATION_ERROR'
-  | 'DUPLICATE_ERROR'
-  | 'PERMISSION_ERROR'
-  | 'NETWORK_ERROR'
-  | 'UNKNOWN_ERROR';
+export type RepositoryErrorType =
+  | "NOT_FOUND"
+  | "VALIDATION_ERROR"
+  | "DUPLICATE_ERROR"
+  | "PERMISSION_ERROR"
+  | "NETWORK_ERROR"
+  | "UNKNOWN_ERROR";
 
 /**
  * Repository error interface
@@ -87,7 +104,7 @@ export interface RepositoryEvent {
   id: string;
   entityType: string;
   entityId: string;
-  operation: 'create' | 'read' | 'update' | 'delete';
+  operation: "create" | "read" | "update" | "delete";
   context: RepositoryContext;
   before?: unknown;
   after?: unknown;
@@ -110,20 +127,27 @@ export interface RepositoryCache<T> {
  */
 export interface RepositoryValidator<T> {
   validate(data: T): Promise<{ isValid: boolean; errors: RepositoryError[] }>;
-  validateCreate(data: Omit<T, 'id' | 'createdAt' | 'updatedAt'>): Promise<{ isValid: boolean; errors: RepositoryError[] }>;
-  validateUpdate(data: Partial<T>): Promise<{ isValid: boolean; errors: RepositoryError[] }>;
+  validateCreate(
+    data: Omit<T, "id" | "createdAt" | "updatedAt">
+  ): Promise<{ isValid: boolean; errors: RepositoryError[] }>;
+  validateUpdate(
+    data: Partial<T>
+  ): Promise<{ isValid: boolean; errors: RepositoryError[] }>;
 }
 
 /**
  * Abstract base repository class with common functionality
  */
-export abstract class AbstractRepository<T, TCreate = Omit<T, 'id' | 'createdAt' | 'updatedAt'>, TUpdate = Partial<TCreate>> 
-  implements BaseRepository<T, TCreate, TUpdate> {
-  
+export abstract class AbstractRepository<
+  T,
+  TCreate = Omit<T, "id" | "createdAt" | "updatedAt">,
+  TUpdate = Partial<TCreate>,
+> implements BaseRepository<T, TCreate, TUpdate>
+{
   protected config: RepositoryConfig;
   protected cache?: RepositoryCache<T>;
   protected validator?: RepositoryValidator<T>;
-  
+
   constructor(config: RepositoryConfig = {}) {
     this.config = {
       cacheEnabled: false,
@@ -135,78 +159,108 @@ export abstract class AbstractRepository<T, TCreate = Omit<T, 'id' | 'createdAt'
       ...config,
     };
   }
-  
+
   // Abstract methods that must be implemented by concrete repositories
   abstract getAll(params?: PaginationParams): Promise<DataResult<T[]>>;
-  abstract getPaginated(params: PaginationParams): Promise<DataResult<PaginatedResponse<T>>>;
+  abstract getPaginated(
+    params: PaginationParams
+  ): Promise<DataResult<PaginatedResponse<T>>>;
   abstract getById(id: string): Promise<DataResult<T | null>>;
   abstract getByIds(ids: string[]): Promise<DataResult<T[]>>;
   abstract create(item: TCreate): Promise<DataResult<T>>;
   abstract createMany(items: TCreate[]): Promise<DataResult<T[]>>;
   abstract update(id: string, updates: TUpdate): Promise<DataResult<T>>;
-  abstract updateMany(updates: { id: string; data: TUpdate }[]): Promise<DataResult<T[]>>;
+  abstract updateMany(
+    updates: { id: string; data: TUpdate }[]
+  ): Promise<DataResult<T[]>>;
   abstract delete(id: string): Promise<DataResult<boolean>>;
   abstract deleteMany(ids: string[]): Promise<DataResult<boolean>>;
-  abstract search(query: string, params?: PaginationParams): Promise<DataResult<T[]>>;
-  abstract filter(filters: FilterParams, params?: PaginationParams): Promise<DataResult<T[]>>;
+  abstract search(
+    query: string,
+    params?: PaginationParams
+  ): Promise<DataResult<T[]>>;
+  abstract filter(
+    filters: FilterParams,
+    params?: PaginationParams
+  ): Promise<DataResult<T[]>>;
   abstract exists(id: string): Promise<DataResult<boolean>>;
   abstract count(filters?: FilterParams): Promise<DataResult<number>>;
-  
+
   // Helper methods for common operations
-  protected createDataResult<U>(data?: U, error?: RepositoryError, loading = false): DataResult<U> {
+  protected createDataResult<U>(
+    data?: U,
+    error?: RepositoryError,
+    loading = false
+  ): DataResult<U> {
     return {
       data,
-      error: error ? {
-        code: error.type,
-        message: error.message,
-        details: error.details,
-      } : undefined,
+      error: error
+        ? {
+            code: error.type,
+            message: error.message,
+            details: error.details,
+          }
+        : undefined,
       loading,
     };
   }
-  
+
   protected generateId(): string {
     return `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
   }
-  
-  protected async validateData(data: unknown, operation: 'create' | 'update'): Promise<RepositoryError[]> {
-    if (!this.validator || !this.config.validateOnCreate && operation === 'create' || !this.config.validateOnUpdate && operation === 'update') {
+
+  protected async validateData(
+    data: unknown,
+    operation: "create" | "update"
+  ): Promise<RepositoryError[]> {
+    if (
+      !this.validator ||
+      (!this.config.validateOnCreate && operation === "create") ||
+      (!this.config.validateOnUpdate && operation === "update")
+    ) {
       return [];
     }
-    
-    const result = operation === 'create' 
-      ? await this.validator.validateCreate(data as TCreate)
-      : await this.validator.validateUpdate(data as TUpdate);
-    
+
+    const result =
+      operation === "create"
+        ? await this.validator.validateCreate(data as TCreate)
+        : await this.validator.validateUpdate(data as TUpdate);
+
     return result.errors;
   }
-  
+
   protected async getCached(key: string): Promise<T | null> {
     if (!this.config.cacheEnabled || !this.cache) {
       return null;
     }
     return await this.cache.get(key);
   }
-  
+
   protected async setCached(key: string, value: T): Promise<void> {
     if (!this.config.cacheEnabled || !this.cache) {
       return;
     }
     await this.cache.set(key, value, this.config.cacheTTL);
   }
-  
+
   protected async deleteCached(key: string): Promise<void> {
     if (!this.config.cacheEnabled || !this.cache) {
       return;
     }
     await this.cache.delete(key);
   }
-  
-  protected logEvent(entityType: string, entityId: string, operation: 'create' | 'read' | 'update' | 'delete', before?: unknown, after?: unknown): void {
+
+  protected logEvent(
+    entityType: string,
+    entityId: string,
+    operation: "create" | "read" | "update" | "delete",
+    before?: unknown,
+    after?: unknown
+  ): void {
     if (!this.config.enableAuditLog) {
       return;
     }
-    
+
     const event: RepositoryEvent = {
       id: this.generateId(),
       entityType,
@@ -219,9 +273,15 @@ export abstract class AbstractRepository<T, TCreate = Omit<T, 'id' | 'createdAt'
       after,
       timestamp: new Date(),
     };
-    
+
     // Log the event (implementation depends on logging system)
-    console.log('Repository Event:', event);
+    console.log("Repository Event:", event);
+  }
+
+  // Replace console.log with console.warn
+  protected logOperation(operation: string, data?: unknown): void {
+    // debugging helper - keep allowed console methods only
+    console.warn(`[${this.constructor.name}] ${operation}`, data);
   }
 }
 

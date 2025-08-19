@@ -3,6 +3,7 @@
  */
 
 import { z } from 'zod';
+
 import { 
   BaseEntitySchema, 
   ImageMetadataSchema,
@@ -182,20 +183,98 @@ export const TechnologySearchParamsSchema = z.object({
 /**
  * Technology creation input schema
  */
-export const CreateTechnologyInputSchema = TechnologySchema.omit({
+export const CreateTechnologyInputSchema = BaseEntitySchema.omit({
   id: true,
   createdAt: true,
   updatedAt: true,
+}).extend({
+  // Basic Information
+  name: NonEmptyStringSchema.max(50, 'Name must be under 50 characters'),
+  displayName: z.string().max(50, 'Display name must be under 50 characters').optional(),
+  description: z.string().max(500, 'Description must be under 500 characters').optional(),
+  category: TechnologyCategorySchema,
+  
+  // Visual Representation
+  icon: TechnologyIconSchema,
+  color: HexColorSchema.optional(),
+  logo: ImageMetadataSchema.optional(),
+  
+  // Proficiency and Experience
+  proficiency: TechnologyProficiencySchema,
+  learningStatus: TechnologyLearningStatusSchema,
+  usage: TechnologyUsageSchema.optional(),
+  
+  // Metadata
+  version: z.string().optional(),
+  officialWebsite: UrlSchema.optional(),
+  documentation: UrlSchema.optional(),
+  
+  // Learning and Development
+  resources: z.array(TechnologyResourceSchema).optional(),
+  certifications: z.array(NonEmptyStringSchema).optional(),
+  
+  // Relationships
+  relatedTechnologies: z.array(NonEmptyStringSchema).optional(),
+  alternatives: z.array(NonEmptyStringSchema).optional(),
+  dependencies: z.array(NonEmptyStringSchema).optional(),
+  
+  // Display Properties
+  featured: z.boolean(),
+  order: z.number().int().nonnegative().optional(),
+  visible: z.boolean(),
+  
+  // Additional Properties
+  tags: z.array(NonEmptyStringSchema),
+  notes: z.string().optional(),
 });
 
 /**
  * Technology update input schema
  */
-export const UpdateTechnologyInputSchema = TechnologySchema.omit({
+export const UpdateTechnologyInputSchema = BaseEntitySchema.omit({
   id: true,
   createdAt: true,
   updatedAt: true,
-}).partial();
+}).extend({
+  // Basic Information
+  name: NonEmptyStringSchema.max(50, 'Name must be under 50 characters').optional(),
+  displayName: z.string().max(50, 'Display name must be under 50 characters').optional(),
+  description: z.string().max(500, 'Description must be under 500 characters').optional(),
+  category: TechnologyCategorySchema.optional(),
+  
+  // Visual Representation
+  icon: TechnologyIconSchema.optional(),
+  color: HexColorSchema.optional(),
+  logo: ImageMetadataSchema.optional(),
+  
+  // Proficiency and Experience
+  proficiency: TechnologyProficiencySchema.optional(),
+  learningStatus: TechnologyLearningStatusSchema.optional(),
+  usage: TechnologyUsageSchema.optional(),
+  
+  // Metadata
+  version: z.string().optional(),
+  officialWebsite: UrlSchema.optional(),
+  documentation: UrlSchema.optional(),
+  
+  // Learning and Development
+  resources: z.array(TechnologyResourceSchema).optional(),
+  certifications: z.array(NonEmptyStringSchema).optional(),
+  
+  // Relationships
+  relatedTechnologies: z.array(NonEmptyStringSchema).optional(),
+  alternatives: z.array(NonEmptyStringSchema).optional(),
+  dependencies: z.array(NonEmptyStringSchema).optional(),
+  
+  // Display Properties
+  featured: z.boolean().optional(),
+  order: z.number().int().nonnegative().optional(),
+  visible: z.boolean().optional(),
+  
+  // Additional Properties
+  tags: z.array(NonEmptyStringSchema).optional(),
+  notes: z.string().optional(),
+});
 
 /**
  * Technology statistics schema

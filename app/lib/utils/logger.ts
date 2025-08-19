@@ -154,9 +154,9 @@ export const timeFunction = <T extends (...args: any[]) => any>(
 
       endTimer();
       return result;
-    } catch (error) {
+    } catch (_error) {
       endTimer();
-      throw error;
+      throw _error;
     }
   }) as T;
 };

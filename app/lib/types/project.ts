@@ -2,23 +2,46 @@
  * Project-related type definitions
  */
 
-import { BaseEntity, ImageMetadata, Link, DateRange, SEOMetadata } from './common';
-import { Technology } from './technology';
+import type {
+  BaseEntity,
+  ImageMetadata,
+  Link,
+  DateRange,
+  SEOMetadata,
+} from "./common";
+import type { Technology } from "./technology";
 
 /**
  * Project status enumeration
  */
-export type ProjectStatus = 'planning' | 'active' | 'completed' | 'on-hold' | 'archived';
+export type ProjectStatus =
+  | "planning"
+  | "active"
+  | "completed"
+  | "on-hold"
+  | "archived";
 
 /**
  * Project category enumeration
  */
-export type ProjectCategory = 'web' | 'mobile' | 'desktop' | 'api' | 'library' | 'other';
+export type ProjectCategory =
+  | "web"
+  | "mobile"
+  | "desktop"
+  | "api"
+  | "library"
+  | "other";
 
 /**
  * Project link types
  */
-export type ProjectLinkType = 'github' | 'demo' | 'docs' | 'website' | 'download' | 'video';
+export type ProjectLinkType =
+  | "github"
+  | "demo"
+  | "docs"
+  | "website"
+  | "download"
+  | "video";
 
 /**
  * Project link interface
@@ -32,7 +55,7 @@ export interface ProjectLink extends Link {
  * Project image interface extending base image metadata
  */
 export interface ProjectImage extends ImageMetadata {
-  type: 'preview' | 'screenshot' | 'diagram' | 'logo';
+  type: "preview" | "screenshot" | "diagram" | "logo";
   featured?: boolean;
   order?: number;
 }
@@ -56,7 +79,7 @@ export interface ProjectFeature {
   title: string;
   description: string;
   implemented: boolean;
-  priority?: 'low' | 'medium' | 'high';
+  priority?: "low" | "medium" | "high";
 }
 
 /**
@@ -96,15 +119,15 @@ export interface Project extends BaseEntity {
   shortDescription?: string;
   category: ProjectCategory;
   status: ProjectStatus;
-  
+
   // Content
   content: string; // Detailed project description/paragraph
   features: ProjectFeature[];
-  
+
   // Media
   images: ProjectImage[];
   videos?: string[];
-  
+
   // Technical Details
   technologies: Technology[];
   techStack?: {
@@ -113,38 +136,38 @@ export interface Project extends BaseEntity {
     database?: Technology[];
     tools?: Technology[];
   };
-  
+
   // Links and URLs
   links: ProjectLink[];
   repositoryUrl?: string;
   demoUrl?: string;
   documentationUrl?: string;
-  
+
   // Timeline and Progress
   timeline?: ProjectTimelineEvent[];
   startDate?: Date;
   endDate?: Date;
   duration?: DateRange;
-  
+
   // Metadata
   featured: boolean;
   priority?: number;
   tags: string[];
-  
+
   // Metrics and Analytics
   metrics?: ProjectMetrics;
-  
+
   // Collaboration
   collaboration?: ProjectCollaboration;
-  
+
   // SEO
   seo?: SEOMetadata;
-  
+
   // Additional Properties
   challenges?: string[];
   learnings?: string[];
   futureEnhancements?: string[];
-  
+
   // Display Properties
   order?: number;
   visible: boolean;
@@ -185,19 +208,24 @@ export interface ProjectFilters {
 export interface ProjectSearchParams {
   query?: string;
   filters?: ProjectFilters;
-  sortBy?: 'title' | 'createdAt' | 'updatedAt' | 'priority' | 'status';
-  sortOrder?: 'asc' | 'desc';
+  sortBy?: "title" | "createdAt" | "updatedAt" | "priority" | "status";
+  sortOrder?: "asc" | "desc";
 }
 
 /**
  * Project creation input
  */
-export type CreateProjectInput = Omit<Project, 'id' | 'createdAt' | 'updatedAt'>;
+export type CreateProjectInput = Omit<
+  Project,
+  "id" | "createdAt" | "updatedAt"
+>;
 
 /**
  * Project update input
  */
-export type UpdateProjectInput = Partial<Omit<Project, 'id' | 'createdAt' | 'updatedAt'>>;
+export type UpdateProjectInput = Partial<
+  Omit<Project, "id" | "createdAt" | "updatedAt">
+>;
 
 /**
  * Project statistics interface
