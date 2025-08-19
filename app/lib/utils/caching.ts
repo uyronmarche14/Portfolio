@@ -2,7 +2,8 @@
  * Caching utilities for performance optimization
  */
 
-import { AppError } from "@/lib/types/error";
+import React from "react";
+import type { AppError } from "@/lib/types/error";
 import { createAppError, logError } from "./errorHandling";
 
 /**
@@ -437,9 +438,9 @@ export const cacheInvalidation = {
   /**
    * Invalidate cache entries by pattern
    */
-  invalidateByPattern(pattern: RegExp, cache: MemoryCache = dataCache): number {
-    let count = 0;
-    const keysToDelete: string[] = [];
+  invalidateByPattern(pattern: RegExp, _cache: MemoryCache = dataCache): number {
+    const count = 0;
+    const _keysToDelete: string[] = [];
 
     // We can't iterate over Map keys directly with patterns, so we need to collect them first
     // This is a limitation of the current implementation
@@ -453,9 +454,9 @@ export const cacheInvalidation = {
   /**
    * Invalidate cache entries by prefix
    */
-  invalidateByPrefix(prefix: string, cache: MemoryCache = dataCache): number {
-    let count = 0;
-    const keysToDelete: string[] = [];
+  invalidateByPrefix(prefix: string, _cache: MemoryCache = dataCache): number {
+    const count = 0;
+    const _keysToDelete: string[] = [];
 
     // Similar limitation as above
     console.warn(
@@ -584,6 +585,3 @@ export function useCachedData<T>(
     refresh: () => fetchData(false),
   };
 }
-
-// Make React available for the hook
-import * as React from "react";

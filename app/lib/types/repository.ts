@@ -2,21 +2,20 @@
  * Repository pattern interfaces and base classes for data access layer
  */
 
-import {
+import type {
   DataResult,
   PaginatedResponse,
   PaginationParams,
   FilterParams,
 } from "./common";
-import type { WithTimestamps } from "./common";
 
 /**
  * Base repository interface defining common CRUD operations
  */
 export interface BaseRepository<
   T,
-  TCreate = Omit<T, "id" | "createdAt" | "updatedAt">,
-  TUpdate = Partial<TCreate>,
+  TCreate extends Omit<T, "id" | "createdAt" | "updatedAt"> = Omit<T, "id" | "createdAt" | "updatedAt">,
+  TUpdate extends Partial<TCreate> = Partial<TCreate>,
 > {
   // Read operations
   getAll(params?: PaginationParams): Promise<DataResult<T[]>>;
@@ -140,10 +139,9 @@ export interface RepositoryValidator<T> {
  */
 export abstract class AbstractRepository<
   T,
-  TCreate = Omit<T, "id" | "createdAt" | "updatedAt">,
-  TUpdate = Partial<TCreate>,
-> implements BaseRepository<T, TCreate, TUpdate>
-{
+  TCreate extends Omit<T, "id" | "createdAt" | "updatedAt"> = Omit<T, "id" | "createdAt" | "updatedAt">,
+  TUpdate extends Partial<TCreate> = Partial<TCreate>,
+> implements BaseRepository<T, TCreate, TUpdate> {
   protected config: RepositoryConfig;
   protected cache?: RepositoryCache<T>;
   protected validator?: RepositoryValidator<T>;
@@ -188,7 +186,7 @@ export abstract class AbstractRepository<
 
   // Helper methods for common operations
   protected createDataResult<U>(
-    data?: U,
+    data: U,
     error?: RepositoryError,
     loading = false
   ): DataResult<U> {
@@ -224,7 +222,7 @@ export abstract class AbstractRepository<
     const result =
       operation === "create"
         ? await this.validator.validateCreate(data as TCreate)
-        : await this.validator.validateUpdate(data as TUpdate);
+        : await this.validator.validateUpdate(data as Partial<T>);
 
     return result.errors;
   }

@@ -3,7 +3,7 @@
  * Functions for transforming, formatting, and manipulating data structures
  */
 
-import { Project, AboutContent, Experience, Education, Skill, Technology } from '@/lib/types';
+import type { Project, Technology } from '@/lib/types';
 
 /**
  * Transform raw project data to Project interface

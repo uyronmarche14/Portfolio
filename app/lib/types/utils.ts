@@ -184,12 +184,12 @@ export type ValidationFunction<T = unknown> = (
   data: T
 ) => boolean | Promise<boolean>;
 
-type Handler<T = unknown, R = unknown> = (input: T) => R;
+type _Handler<T = unknown, R = unknown> = (input: T) => R;
 
 export function safeCall(fn: (...args: unknown[]) => unknown) {
   try {
     return fn();
-  } catch (_e) {
+  } catch {
     return undefined;
   }
 }

@@ -3,8 +3,8 @@
  * Functions for creating, managing, and handling errors consistently
  */
 
-import { AppError, ErrorCategory, ErrorSeverity, ErrorContext, DataError } from '@/lib/types';
-import { RepositoryError } from '@/lib/types/repository';
+import type { AppError, ErrorCategory, ErrorSeverity, ErrorContext, DataError } from '@/lib/types';
+import type { RepositoryError } from '@/lib/types/repository';
 
 /**
  * Create a standardized application error

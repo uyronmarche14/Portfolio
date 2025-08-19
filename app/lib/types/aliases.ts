@@ -230,8 +230,10 @@ export type AsyncOperation<T = unknown> = () => Promise<T>;
 /**
  * Validation result type
  */
-export type ValidationResult<T = unknown> = { isValid: boolean; errors?: E[] };
-
+export type ValidationResult = {
+  isValid: boolean;
+  errors?: string[];
+};
 /**
  * Transform function type
  */
@@ -255,14 +257,14 @@ export type ErrorTransformer = (error: Error) => Error;
 /**
  * Use `object` for "any non-primitive object" intent, `unknown` for any value
  */
-type AnyRecord = Record<string, unknown>;
+type _AnyRecord = Record<string, unknown>;
 
 /**
  * Prefer `unknown` instead of `any` where concrete type is not known
  */
-type AnyValue = unknown;
+type _AnyValue = unknown;
 
 /**
  * Replace bare `any` in common aliases with unknown or generic forms
  */
-export type Result<_E, _T> = { error?: unknown; data?: unknown };
+export type Result<T, E = unknown> = { data?: T; error?: E };

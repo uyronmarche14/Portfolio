@@ -2,8 +2,7 @@
  * Base repository implementation with common functionality
  */
 
-import { AbstractRepository } from "@/lib/types/repository";
-import type { RepositoryConfig, RepositoryCache } from "@/lib/types/repository";
+import { AbstractRepository, type RepositoryConfig, type RepositoryCache } from "@/lib/types/repository";
 import type {
   DataResult,
   PaginatedResponse,
@@ -61,9 +60,9 @@ export class InMemoryCache<T> implements RepositoryCache<T> {
  * File-based repository implementation for static data
  */
 export abstract class FileBasedRepository<
-  T extends { id: string }, // <-- Add this constraint
-  TCreate = Omit<T, "id" | "createdAt" | "updatedAt">,
-  TUpdate = Partial<TCreate>,
+  T extends { id: string },
+  TCreate extends Omit<T, "id" | "createdAt" | "updatedAt"> = Omit<T, "id" | "createdAt" | "updatedAt">,
+  TUpdate extends Partial<TCreate> = Partial<TCreate>,
 > extends AbstractRepository<T, TCreate, TUpdate> {
   protected data: T[] = [];
   protected dataLoaded = false;
@@ -148,6 +147,9 @@ export abstract class FileBasedRepository<
   /**
    * Get paginated entities
    */
+  /**
+   * Get paginated entities
+   */
   async getPaginated(
     params: PaginationParams
   ): Promise<DataResult<PaginatedResponse<T>>> {
@@ -191,7 +193,20 @@ export abstract class FileBasedRepository<
 
       return this.createDataResult(response);
     } catch (error) {
-      return this.createDataResult(null, {
+      // Create an empty pagination response for error cases
+      const emptyResponse: PaginatedResponse<T> = {
+        data: [],
+        pagination: {
+          page: params.page,
+          limit: params.limit,
+          total: 0,
+          totalPages: 0,
+          hasNext: false,
+          hasPrev: false,
+        },
+      };
+
+      return this.createDataResult(emptyResponse, {
         type: "UNKNOWN_ERROR",
         message:
           error instanceof Error ? error.message : "Unknown error occurred",
@@ -200,6 +215,9 @@ export abstract class FileBasedRepository<
     }
   }
 
+  /**
+   * Get entity by ID
+   */
   /**
    * Get entity by ID
    */
@@ -226,7 +244,7 @@ export abstract class FileBasedRepository<
 
       return this.createDataResult(entity);
     } catch (error) {
-      return this.createDataResult(undefined, {
+      return this.createDataResult(null, {
         type: "UNKNOWN_ERROR",
         message:
           error instanceof Error ? error.message : "Unknown error occurred",
@@ -238,6 +256,9 @@ export abstract class FileBasedRepository<
   /**
    * Get entities by IDs
    */
+  /**
+   * Get entities by IDs
+   */
   async getByIds(ids: string[]): Promise<DataResult<T[]>> {
     try {
       await this.ensureDataLoaded();
@@ -246,7 +267,7 @@ export abstract class FileBasedRepository<
 
       return this.createDataResult(entities);
     } catch (error) {
-      return this.createDataResult(null, {
+      return this.createDataResult([], {
         type: "UNKNOWN_ERROR",
         message:
           error instanceof Error ? error.message : "Unknown error occurred",
@@ -258,12 +279,15 @@ export abstract class FileBasedRepository<
   /**
    * Create new entity
    */
+  /**
+   * Create new entity
+   */
   async create(item: TCreate): Promise<DataResult<T>> {
     try {
       // Validate input
       const validationErrors = await this.validateData(item, "create");
       if (validationErrors.length > 0) {
-        return this.createDataResult(undefined, {
+        return this.createDataResult(null as any, {
           type: "VALIDATION_ERROR",
           message: "Validation failed",
           details: validationErrors,
@@ -287,7 +311,7 @@ export abstract class FileBasedRepository<
 
       return this.createDataResult(entity);
     } catch (error) {
-      return this.createDataResult(undefined, {
+      return this.createDataResult(null as any, {
         type: "UNKNOWN_ERROR",
         message:
           error instanceof Error ? error.message : "Unknown error occurred",
@@ -319,7 +343,7 @@ export abstract class FileBasedRepository<
 
       return this.createDataResult(results);
     } catch (error) {
-      return this.createDataResult(undefined, {
+      return this.createDataResult([], {
         type: "UNKNOWN_ERROR",
         message:
           error instanceof Error ? error.message : "Unknown error occurred",
@@ -331,12 +355,15 @@ export abstract class FileBasedRepository<
   /**
    * Update entity
    */
+  /**
+   * Update entity
+   */
   async update(id: string, updates: TUpdate): Promise<DataResult<T>> {
     try {
       // Validate input
       const validationErrors = await this.validateData(updates, "update");
       if (validationErrors.length > 0) {
-        return this.createDataResult(undefined, {
+        return this.createDataResult(null as any, {
           type: "VALIDATION_ERROR",
           message: "Validation failed",
           details: validationErrors,
@@ -347,7 +374,7 @@ export abstract class FileBasedRepository<
 
       const index = this.data.findIndex((item) => item.id === id);
       if (index === -1) {
-        return this.createDataResult(undefined, {
+        return this.createDataResult(null as any, {
           type: "NOT_FOUND",
           message: `Entity with ID ${id} not found`,
         });
@@ -369,7 +396,7 @@ export abstract class FileBasedRepository<
 
       return this.createDataResult(updated);
     } catch (error) {
-      return this.createDataResult(null, {
+      return this.createDataResult(null as any, {
         type: "UNKNOWN_ERROR",
         message:
           error instanceof Error ? error.message : "Unknown error occurred",
@@ -378,6 +405,9 @@ export abstract class FileBasedRepository<
     }
   }
 
+  /**
+   * Update multiple entities
+   */
   /**
    * Update multiple entities
    */
@@ -403,7 +433,7 @@ export abstract class FileBasedRepository<
 
       return this.createDataResult(results);
     } catch (error) {
-      return this.createDataResult(undefined, {
+      return this.createDataResult([], {
         type: "UNKNOWN_ERROR",
         message:
           error instanceof Error ? error.message : "Unknown error occurred",
@@ -441,7 +471,7 @@ export abstract class FileBasedRepository<
 
       return this.createDataResult(true);
     } catch (error) {
-      return this.createDataResult(undefined, {
+      return this.createDataResult(false, {
         type: "UNKNOWN_ERROR",
         message:
           error instanceof Error ? error.message : "Unknown error occurred",
@@ -468,7 +498,7 @@ export abstract class FileBasedRepository<
 
       return this.createDataResult(true);
     } catch (error) {
-      return this.createDataResult(undefined, {
+      return this.createDataResult(false, {
         type: "UNKNOWN_ERROR",
         message:
           error instanceof Error ? error.message : "Unknown error occurred",
@@ -509,7 +539,7 @@ export abstract class FileBasedRepository<
 
       return this.createDataResult(result);
     } catch (error) {
-      return this.createDataResult(undefined, {
+      return this.createDataResult([], {
         type: "UNKNOWN_ERROR",
         message:
           error instanceof Error ? error.message : "Unknown error occurred",
@@ -574,7 +604,7 @@ export abstract class FileBasedRepository<
 
       return this.createDataResult(filtered);
     } catch (error) {
-      return this.createDataResult(undefined, {
+      return this.createDataResult([], {
         type: "UNKNOWN_ERROR",
         message:
           error instanceof Error ? error.message : "Unknown error occurred",
@@ -594,7 +624,7 @@ export abstract class FileBasedRepository<
 
       return this.createDataResult(exists);
     } catch (error) {
-      return this.createDataResult(undefined, {
+      return this.createDataResult(false, {
         type: "UNKNOWN_ERROR",
         message:
           error instanceof Error ? error.message : "Unknown error occurred",
@@ -617,7 +647,7 @@ export abstract class FileBasedRepository<
 
       return this.createDataResult(this.data.length);
     } catch (error) {
-      return this.createDataResult(undefined, {
+      return this.createDataResult(0, {
         type: "UNKNOWN_ERROR",
         message:
           error instanceof Error ? error.message : "Unknown error occurred",

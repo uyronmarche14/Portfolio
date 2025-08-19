@@ -63,6 +63,14 @@ export interface BaseEntity {
 }
 
 /**
+ * Helper type to add timestamp fields to any interface
+ */
+export type WithTimestamps<T> = T & {
+  createdAt: Date;
+  updatedAt: Date;
+};
+
+/**
  * Status types for various entities
  */
 export type EntityStatus = "active" | "inactive" | "draft" | "archived";

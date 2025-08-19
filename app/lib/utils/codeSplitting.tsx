@@ -1,5 +1,6 @@
-import React, { lazy, ComponentType } from "react";
-import { AppError } from "@/lib/types/error";
+import React, { lazy, type ComponentType } from "react";
+
+import type { AppError } from "@/lib/types/error";
 
 interface LazyComponentOptions {
   displayName?: string;

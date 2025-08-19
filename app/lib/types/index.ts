@@ -4,17 +4,17 @@
  */
 
 // Re-export all types for easy importing
-export * from './common';
-export * from './repository';
-export * from './technology';
-export * from './project';
-export * from './contact';
-export * from './about';
+export * from "./common";
+export * from "./repository";
+export * from "./technology";
+export * from "./project";
+export * from "./contact";
+export * from "./about";
 
 // Handle conflicting exports explicitly
-export type { ValidationError as AppValidationError } from './error';
-export type { ErrorHandler as AppErrorHandler } from './error';
-export type { ErrorCallback as AppErrorCallback } from './utils';
+export type { ValidationError as AppValidationError } from "./error";
+export type { ErrorHandler as AppErrorHandler } from "./error";
+export type { ErrorCallback as AppErrorCallback } from "./utils";
 
 // Export non-conflicting items from error and aliases
 export type {
@@ -31,8 +31,8 @@ export type {
   ErrorRecoveryStrategy,
   ErrorBoundaryState,
   ErrorNotification,
-  ErrorStatistics
-} from './error';
+  ErrorStatistics,
+} from "./error";
 
 // Export non-conflicting items from aliases
 export type {
@@ -69,8 +69,8 @@ export type {
   PromiseRejecter,
   Constructor,
   AbstractConstructor,
-  Class
-} from './aliases';
+  Class,
+} from "./aliases";
 
 // Type guards and utility functions
-export * from './utils';
+export * from "./utils";

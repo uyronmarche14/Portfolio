@@ -4,8 +4,10 @@
  */
 
 import { useState, useEffect, useCallback, useRef } from "react";
+
 import type { Project, AboutContent, DataResult } from "@/lib/types";
 import type { AppError } from "@/lib/types/error";
+
 import { RepositoryRegistry } from "@/lib/data/repositories";
 import {
   createNetworkError,
@@ -14,7 +16,6 @@ import {
   logError,
   getUserErrorMessage,
 } from "@/lib/utils/errorHandling";
-import type { RepositoryError } from "@/lib/types/repository";
 
 export interface PortfolioData {
   projects: Project[];
@@ -271,8 +272,8 @@ export function usePortfolioData(
   const clearCache = useCallback(() => {
     if (enableCaching) {
       // Clear repository caches
-      const projectRepository = RepositoryRegistry.getProjectRepository();
-      const aboutRepository = RepositoryRegistry.getAboutRepository();
+      const _projectRepository = RepositoryRegistry.getProjectRepository();
+    const _aboutRepository = RepositoryRegistry.getAboutRepository();
 
       // Note: This would need to be implemented in the repositories
       // projectRepository.clearCache?.();

@@ -4,7 +4,7 @@
  * Reusable Framer Motion animation variants and utilities
  */
 
-import { Variants } from 'framer-motion';
+import type { Variants } from 'framer-motion';
 
 /**
  * Common fade in animation

@@ -2,7 +2,7 @@
  * About section related type definitions
  */
 
-import { BaseEntity, ImageMetadata, Link, DateRange } from "./common";
+import type { BaseEntity, ImageMetadata, Link, DateRange } from "./common";
 import type { Technology } from "./technology";
 
 /**
