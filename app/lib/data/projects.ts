@@ -82,9 +82,9 @@ export const projects: LegacyProject[] = [
     paragraph:
       "A robust desktop application designed specifically for medical clinics to manage patient appointments, doctor schedules, and billing processes. Features include multi-user access control, automated appointment reminders via SMS, comprehensive reporting with Crystal Reports integration, and real-time availability checking across multiple clinic locations.",
     screenshots: [
-      "https://res.cloudinary.com/ddnxfpziq/image/upload/v1754572287/cs2_kshoze.png",
+      "https://res.cloudinary.com/ddnxfpziq/image/upload/v1754572284/cs1_zribt6.png",
       "https://res.cloudinary.com/ddnxfpziq/image/upload/v1754572288/cs5_rv2q9p.png",
-      "https://res.cloudinary.com/ddnxfpziq/image/upload/v1754572287/cs1_zribt6.png",
+      "https://res.cloudinary.com/ddnxfpziq/image/upload/v1754572287/cs2_kshoze.png",
       "https://res.cloudinary.com/ddnxfpziq/image/upload/v1754572287/cs3_jqtotw.png",
       "https://res.cloudinary.com/ddnxfpziq/image/upload/v1754572288/cs4_b34tjb.png",
     ],
@@ -238,9 +238,19 @@ export const projects: LegacyProject[] = [
     paragraph:
       "SwiftPass Guard is an automated Entry and Exit ID System built to enhance campus security and streamline attendance tracking. Using QR code scanning, the system records student entry and exit in real-time, storing the data in a cloud database while offering offline caching during network disruptions. It enforces department and schedule-based restrictions, grants professors unrestricted access, and prevents unauthorized entry through rigorous QR code validity checks. The admin control panel provides real-time monitoring, report generation, and log management. The system also features a backup battery power mode for uninterrupted operation during power outages.",
     screenshots: [
-      "https://res.cloudinary.com/ddnxfpziq/image/upload/v1754572284/swiftpass1.jpg",
-      "https://res.cloudinary.com/ddnxfpziq/image/upload/v1754572284/swiftpass2.jpg",
-      "https://res.cloudinary.com/ddnxfpziq/image/upload/v1754572285/swiftpass3.jpg",
+      "https://res.cloudinary.com/ddnxfpziq/image/upload/v1758386796/photo_15_2025-08-20_20-59-19_our2dv1758386201_1_kdj7rk.png",
+      "https://res.cloudinary.com/ddnxfpziq/image/upload/v1758387198/photo_6_2025-08-20_20-59-19_ssje1v1758386198_jxtzcx.png", // removed broken .wpg
+      "https://res.cloudinary.com/ddnxfpziq/image/upload/v1758387200/photo_5_2025-08-20_20-59-19_cspw4p1758386198_jjbzv9.png",
+      "https://res.cloudinary.com/ddnxfpziq/image/upload/v1758387198/photo_8_2025-08-20_20-59-19_xyv9rw1758386198_jwbf1n.png",
+      "https://res.cloudinary.com/ddnxfpziq/image/upload/v1758387198/photo_7_2025-08-20_20-59-19_yjvchl1758386198_owbgvu.png",
+      "https://res.cloudinary.com/ddnxfpziq/image/upload/v1758387198/photo_9_2025-08-20_20-59-19_dgo8hp1758386198_zibe1d.png",
+      "https://res.cloudinary.com/ddnxfpziq/image/upload/v1758387081/photo_1_2025-08-20_20-59-19_nw6f5b1758386199_is6scd.png",
+      "https://res.cloudinary.com/ddnxfpziq/image/upload/v1758387091/photo_2_2025-08-20_20-59-19_rzierg1758386200_hsvj1i.png",
+      "https://res.cloudinary.com/ddnxfpziq/image/upload/v1758387079/photo_14_2025-08-20_20-59-19_kbxb621758386201_mtnjvf.png",
+      "https://res.cloudinary.com/ddnxfpziq/image/upload/v1758387079/photo_16_2025-08-20_20-59-19_owprmr1758386201_cyykgi.png",
+      "https://res.cloudinary.com/ddnxfpziq/image/upload/v1758387203/photo_4_2025-08-20_20-59-19_v2hit41758386197_1_yrzmfi.png",
+      "https://res.cloudinary.com/ddnxfpziq/image/upload/v1758387200/photo_5_2025-08-20_20-59-19_cspw4p1758386198_jjbzv9.png"
+
     ],
     timeline: [
       {
@@ -295,9 +305,12 @@ export const projects: LegacyProject[] = [
     paragraph:
       "Solace Hotel is a full-stack booking system built with a modern TypeScript stack. Next.js/React powers the user-facing app on Netlify, while an Express.js API—hosted on Render—handles secure server logic. Supabase provides Postgres, authentication, storage, and row-level security. Guests can register, browse categories, check availability, and reserve rooms. Administrators manage rooms, pricing, and inventory and can review every booking and user. The architecture cleanly separates the web client and API, making it scalable and easy to maintain.",
     screenshots: [
-      "https://res.cloudinary.com/demo/image/upload/solace-hotel-home.jpg",
-      "https://res.cloudinary.com/demo/image/upload/solace-hotel-rooms.jpg",
-      "https://res.cloudinary.com/demo/image/upload/solace-hotel-admin.jpg",
+      "https://res.cloudinary.com/ddnxfpziq/image/upload/v1758387130/Screenshot_2025-08-13_204741_jllxby1758386199_duuocw.png",
+      "https://res.cloudinary.com/ddnxfpziq/image/upload/v1758387081/Screenshot_2025-08-13_204820_cdqm7r1758386200_ouutb0.png",
+      "https://res.cloudinary.com/ddnxfpziq/image/upload/v1758387473/Screenshot_2025-08-13_204832_uw2j8o1758385843_glakyn.png",
+      "https://res.cloudinary.com/ddnxfpziq/image/upload/v1758387473/Screenshot_2025-08-13_204843_em8hwf1758385843_ba9dny.png",
+      "https://res.cloudinary.com/ddnxfpziq/image/upload/v1758387478/Screenshot_2025-08-13_205010_zulckd1758385842_mujgow.png",
+      "https://res.cloudinary.com/ddnxfpziq/image/upload/v1758387204/Screenshot_2025-08-13_204941_pwzf4f1758385845_ekih08.png",
     ],
     timeline: [
       {

@@ -1,14 +1,29 @@
 import type { Metadata } from "next";
-import { Roboto_Slab } from "next/font/google";
+import localFont from 'next/font/local';
 import { Providers } from "@/providers";
 import { Navbar } from "@/components/layout";
 import "./globals.css";
 
-const robotoSlab = Roboto_Slab({
-  subsets: ["latin"],
-  weight: ["400", "700"],
-  display: "swap",
-  variable: "--font-roboto-slab",
+const RawknerFont = localFont({
+    src: [
+        {
+            path: './fonts/Rawkner-Black.woff2',
+            weight: '900',
+            style: 'normal',
+        },
+        {
+            path: './fonts/Rawkner-Black.woff',
+            weight: '900',
+            style: 'normal',
+        },
+        {
+            path: './fonts/Rawkner-Black.ttf',
+            weight: '900',
+            style: 'normal',
+        }
+    ],
+    display: 'swap',
+    variable: "--font-rawkner",
 });
 
 export const metadata: Metadata = {
@@ -41,7 +56,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning className={robotoSlab.variable}>
+    <html lang="en" suppressHydrationWarning className={`${RawknerFont.variable}`}>
       <body className="bg-background font-sans text-foreground antialiased">
         <Providers>
           <div className="flex min-h-screen flex-col">

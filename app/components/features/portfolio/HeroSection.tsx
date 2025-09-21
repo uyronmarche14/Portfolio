@@ -75,16 +75,6 @@ const itemVariants = {
   }
 };
 
-const floatingVariants = {
-  animate: {
-    y: [-10, 10, -10],
-    transition: {
-      duration: 6,
-      repeat: Infinity,
-      ease: "easeInOut"
-    }
-  }
-};
 
 /**
  * HeroSection component for the main landing section
@@ -123,26 +113,7 @@ const HeroSection = React.forwardRef<HTMLElement, HeroSectionProps>(
         )}
         {...props}
       >
-        {/* Background Elements */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <motion.div
-            variants={floatingVariants}
-            animate="animate"
-            className="absolute top-20 left-10 w-32 h-32 bg-primary/5 rounded-full blur-2xl"
-          />
-          <motion.div
-            variants={floatingVariants}
-            animate="animate"
-            style={{ animationDelay: '2s' }}
-            className="absolute bottom-20 right-10 w-40 h-40 bg-secondary/5 rounded-full blur-2xl"
-          />
-          <motion.div
-            variants={floatingVariants}
-            animate="animate"
-            style={{ animationDelay: '4s' }}
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-60 h-60 bg-accent/5 rounded-full blur-3xl"
-          />
-        </div>
+
 
         {/* Content */}
         <div className="max-w-4xl mx-auto px-4 md:px-6 lg:px-8 text-center relative z-10">
@@ -160,7 +131,7 @@ const HeroSection = React.forwardRef<HTMLElement, HeroSectionProps>(
               >
                 <Avatar className="w-32 h-32 md:w-40 md:h-40 border-4 border-primary/20 shadow-2xl">
                   <AvatarImage src={profileImage} alt={title} />
-                  <AvatarFallback className="text-2xl md:text-3xl font-bold">
+                  <AvatarFallback className="font-rawkner text-2xl md:text-3xl font-bold">
                     {title.split(' ').map(n => n[0]).join('')}
                   </AvatarFallback>
                 </Avatar>
@@ -170,7 +141,7 @@ const HeroSection = React.forwardRef<HTMLElement, HeroSectionProps>(
             {/* Title */}
             <motion.div variants={itemVariants} className="space-y-4">
               <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-foreground">
-                <span className="bg-gradient-to-r from-primary via-primary to-secondary bg-clip-text text-transparent">
+                <span className="font-rawkner bg-gradient-to-r from-primary via-primary to-secondary bg-clip-text text-transparent">
                   {title}
                 </span>
               </h1>

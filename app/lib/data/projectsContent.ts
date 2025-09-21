@@ -5,9 +5,12 @@ export const PROJECTS_CONTENT = {
     "Explore a collection of my latest works, showcasing innovative solutions and creative development approaches.",
   filterAll: "All",
   timelineTitle: "Development Timeline",
-  viewScreenshots: "View Porject",
+  viewScreenshots: "View Project",
   liveDemo: "Live Demo",
   github: "GitHub",
+  backToHome: "Back to Home",
+  liveUrl: "Live URL",
+  viewCode: "View Code",
 };
 
 export const ANIMATION_VARIANTS = {

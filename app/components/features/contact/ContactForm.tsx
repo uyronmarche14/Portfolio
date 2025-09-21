@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 
-import { motion, AnimatePresence } from "framer-motion";
+// import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, CheckCircle2, MessageCircle, Send } from "lucide-react";
 
 import { Button } from "@/components/ui/shadcn/button";
@@ -86,11 +86,12 @@ const ContactForm: React.FC<ContactFormProps> = ({ className = "" }) => {
       {/* Form */}
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-          <motion.div
+          {/* <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-          >
+          > */}
+          <div>
             <label
               htmlFor="name"
               className="mb-2 block text-sm font-medium text-foreground"
@@ -107,13 +108,15 @@ const ContactForm: React.FC<ContactFormProps> = ({ className = "" }) => {
               placeholder="Your full name"
               className="h-12 rounded-xl border-muted/30 bg-background/50 focus:border-primary/50"
             />
-          </motion.div>
+          </div>
+          {/* </motion.div> */}
 
-          <motion.div
+          {/* <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-          >
+          > */}
+          <div>
             <label
               htmlFor="email"
               className="mb-2 block text-sm font-medium text-foreground"
@@ -130,14 +133,16 @@ const ContactForm: React.FC<ContactFormProps> = ({ className = "" }) => {
               placeholder="your.email@example.com"
               className="h-12 rounded-xl border-muted/30 bg-background/50 focus:border-primary/50"
             />
-          </motion.div>
+          </div>
+          {/* </motion.div> */}
         </div>
 
-        <motion.div
+        {/* <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
-        >
+        > */}
+        <div>
           <label
             htmlFor="subject"
             className="mb-2 block text-sm font-medium text-foreground"
@@ -154,13 +159,15 @@ const ContactForm: React.FC<ContactFormProps> = ({ className = "" }) => {
             placeholder="What's this about?"
             className="h-12 rounded-xl border-muted/30 bg-background/50 focus:border-primary/50"
           />
-        </motion.div>
+        </div>
+        {/* </motion.div> */}
 
-        <motion.div
+        {/* <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
-        >
+        > */}
+        <div>
           <label
             htmlFor="message"
             className="mb-2 block text-sm font-medium text-foreground"
@@ -177,23 +184,20 @@ const ContactForm: React.FC<ContactFormProps> = ({ className = "" }) => {
             placeholder="Tell me about your project, timeline, and any specific requirements..."
             className="resize-none rounded-xl border-muted/30 bg-background/50 focus:border-primary/50"
           />
-        </motion.div>
+        </div>
+        {/* </motion.div> */}
 
         {/* Submit Button */}
-        <motion.div
+        {/* <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5 }}
           className="pt-4"
-        >
-          <AnimatePresence mode="wait">
+        > */}
+        <div className="pt-4">
+          {/* <AnimatePresence mode="wait"> */}
             {formState === "idle" && (
-              <motion.div
-                key="idle"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-              >
+              <div>
                 <Button
                   type="submit"
                   className="group h-12 rounded-xl bg-gradient-to-r from-primary to-secondary px-8 font-medium shadow-lg transition-all duration-300 hover:from-primary/90 hover:to-secondary/90 hover:shadow-xl"
@@ -201,42 +205,25 @@ const ContactForm: React.FC<ContactFormProps> = ({ className = "" }) => {
                   <span>Send Message</span>
                   <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
                 </Button>
-              </motion.div>
+              </div>
             )}
 
             {formState === "sending" && (
-              <motion.div
-                key="sending"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-              >
+              <div>
                 <Button
                   disabled
                   className="h-12 rounded-xl bg-primary/50 px-8 font-medium"
                 >
-                  <motion.div
-                    animate={{ rotate: 360 }}
-                    transition={{
-                      duration: 1,
-                      repeat: Infinity,
-                      ease: "linear",
-                    }}
-                  >
+                  <div>
                     <Send className="mr-2 h-4 w-4" />
-                  </motion.div>
+                  </div>
                   Sending...
                 </Button>
-              </motion.div>
+              </div>
             )}
 
             {formState === "sent" && (
-              <motion.div
-                key="sent"
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0 }}
-              >
+              <div>
                 <Button
                   disabled
                   className="h-12 rounded-xl bg-green-500 px-8 font-medium hover:bg-green-500"
@@ -244,19 +231,21 @@ const ContactForm: React.FC<ContactFormProps> = ({ className = "" }) => {
                   <CheckCircle2 className="mr-2 h-4 w-4" />
                   Message Sent!
                 </Button>
-              </motion.div>
+              </div>
             )}
-          </AnimatePresence>
-        </motion.div>
+          {/* </AnimatePresence> */}
+        </div>
+        {/* </motion.div> */}
       </form>
 
       {/* Alternative Contact */}
-      <motion.div
+      {/* <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.7 }}
         className="mt-8 border-t border-muted/20 pt-6 text-center"
-      >
+      > */}
+      <div className="mt-8 border-t border-muted/20 pt-6 text-center">
         <p className="text-muted-foreground text-sm">
           Prefer email? Reach out directly at{" "}
           <a
@@ -266,7 +255,8 @@ const ContactForm: React.FC<ContactFormProps> = ({ className = "" }) => {
             {contactInfo.emails[0]?.address}
           </a>
         </p>
-      </motion.div>
+      </div>
+      {/* </motion.div> */}
     </div>
   );
 };

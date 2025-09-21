@@ -1,4 +1,11 @@
+import bundleAnalyzer from "@next/bundle-analyzer";
 import type { NextConfig } from "next";
+
+// Bundle analyzer wrapper
+const withBundleAnalyzer = bundleAnalyzer({
+  enabled: process.env.ANALYZE === "true",
+  openAnalyzer: false,
+});
 
 const nextConfig: NextConfig = {
   // Enable static optimization
@@ -6,7 +13,13 @@ const nextConfig: NextConfig = {
 
   // Image optimization
   images: {
-    domains: ["res.cloudinary.com"],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "res.cloudinary.com",
+        pathname: "/**",
+      },
+    ],
     formats: ["image/webp", "image/avif"],
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
@@ -22,36 +35,18 @@ const nextConfig: NextConfig = {
       {
         source: "/(.*)",
         headers: [
-          {
-            key: "X-DNS-Prefetch-Control",
-            value: "on",
-          },
-          {
-            key: "Strict-Transport-Security",
-            value: "max-age=63072000; includeSubDomains; preload",
-          },
-          {
-            key: "X-Content-Type-Options",
-            value: "nosniff",
-          },
-          {
-            key: "X-Frame-Options",
-            value: "DENY",
-          },
-          {
-            key: "X-XSS-Protection",
-            value: "1; mode=block",
-          },
-          {
-            key: "Referrer-Policy",
-            value: "origin-when-cross-origin",
-          },
+          { key: "X-DNS-Prefetch-Control", value: "on" },
+          { key: "Strict-Transport-Security", value: "max-age=63072000; includeSubDomains; preload" },
+          { key: "X-Content-Type-Options", value: "nosniff" },
+          { key: "X-Frame-Options", value: "DENY" },
+          { key: "X-XSS-Protection", value: "1; mode=block" },
+          { key: "Referrer-Policy", value: "origin-when-cross-origin" },
         ],
       },
     ];
   },
 
-  // Experimental features for optimization
+  // Experimental features
   experimental: {
     optimizeCss: true,
     optimizePackageImports: [
@@ -62,58 +57,31 @@ const nextConfig: NextConfig = {
     ],
     turbo: {
       rules: {
-        "*.svg": {
-          loaders: ["@svgr/webpack"],
-          as: "*.js",
-        },
+        "*.svg": { loaders: ["@svgr/webpack"], as: "*.js" },
       },
     },
   },
 
-  // Bundle analyzer (only in analyze mode)
-  ...(process.env.ANALYZE === "true" && {
-    webpack: (config: any) => {
-      config.plugins.push(
-        new (require("@next/bundle-analyzer"))({
-          enabled: true,
-        })
-      );
-      return config;
-    },
-  }),
-
   // Webpack optimizations
-  webpack: (config: any, { dev, isServer }: any) => {
-    // Bundle analyzer
-    if (process.env.ANALYZE === "true") {
-      config.plugins.push(
-        new (require("@next/bundle-analyzer"))({
-          enabled: true,
-        })
-      );
-    }
-
-    // Optimize bundle splitting
+  webpack(config: any, { dev, isServer }: any) {
+    // Bundle splitting
     if (!dev && !isServer) {
       config.optimization.splitChunks = {
         ...config.optimization.splitChunks,
         cacheGroups: {
           ...config.optimization.splitChunks.cacheGroups,
-          // Separate vendor chunks
           vendor: {
             test: /[\\/]node_modules[\\/]/,
             name: "vendors",
             chunks: "all",
             priority: 10,
           },
-          // Separate UI library chunks
           ui: {
             test: /[\\/]node_modules[\\/](@radix-ui|lucide-react|@heroicons)[\\/]/,
             name: "ui-libs",
             chunks: "all",
             priority: 20,
           },
-          // Separate animation library chunks
           animations: {
             test: /[\\/]node_modules[\\/](framer-motion)[\\/]/,
             name: "animations",
@@ -123,23 +91,17 @@ const nextConfig: NextConfig = {
         },
       };
     }
-
     return config;
   },
 
-  // Performance optimizations
+  // Performance
   poweredByHeader: false,
   reactStrictMode: true,
 
-  // Static file caching
+  // Rewrites
   async rewrites() {
-    return [
-      {
-        source: "/static/:path*",
-        destination: "/:path*",
-      },
-    ];
+    return [{ source: "/static/:path*", destination: "/:path*" }];
   },
 };
 
-export default nextConfig;
+export default withBundleAnalyzer(nextConfig);

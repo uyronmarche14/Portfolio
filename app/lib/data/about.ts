@@ -104,7 +104,18 @@ export const timelineYears: TimelineYear[] = [
         title: "Professional Internship",
         description: "Started internship at Aique Innovation Solutions Corporation, learning Next.js, Tailwind CSS, React, TypeScript, and Scrum Agile methodology",
         icon: "briefcase"
+      },
+       {
+        title: "Professional Contract",
+        description: "Worked as a contract developer for frontend developer and backend developer, using Next.js, Tailwind CSS, React, TypeScript, and Scrum Agile methodology",  
+        icon: "contract"
+      },
+       {
+        title: "3d Architechture on Blender",
+        description: "Worked on 3d architechture projects using Blender making 3d models, animations, and renderings",  
+        icon: "blender"
       }
+
     ]
   }
 ];

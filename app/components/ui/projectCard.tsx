@@ -1,12 +1,11 @@
 "use client";
 
-import React from "react";
+import React, { useMemo } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { FiGithub, FiImage, FiFilter } from "react-icons/fi";
+import { FiArrowRight } from "react-icons/fi";
 import { getTechIcon } from "@/lib/utils/techIcons";
-import { PROJECTS_CONTENT } from "@/lib/data";
-import { Avatar } from "@/components/ui/shadcn/avatar";
 import { Button } from "./shadcn/button";
 
 interface Project {
@@ -16,7 +15,7 @@ interface Project {
   image: string;
   technologies: string[];
   category?: string;
-  screenshots?: string[];
+  screenshots: string[];
   features: string[];
   timeline?: Array<{
     date: string;
@@ -32,124 +31,100 @@ interface ProjectCardProps {
 }
 
 const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
+  const accent = useMemo(() => {
+    const primaryTech = project.technologies?.[0];
+    const techMeta = primaryTech ? getTechIcon(primaryTech) : null;
+    return techMeta?.color || "hsl(var(--primary))";
+  }, [project.technologies]);
+
+  // Use first Cloudinary screenshot as hero image
+  const heroSrc = project.screenshots?.[0] ?? project.image;
+
   return (
     <motion.div
-      variants={{
-        hidden: { opacity: 0, y: 20 },
-        visible: { opacity: 1, y: 0 },
-      }}
-      whileHover={{ y: -2 }}
-      className="relative overflow-hidden rounded-lg sm:rounded-xl border border-paragraph/10 bg-gradient-to-tl from-primary/10 via-background/50 to-background/50 transition-all duration-300 hover:border-primary/20 hover:from-primary/20 hover:shadow-xl hover:shadow-primary h-full"
+      variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
+      whileHover={{ y: -4 }}
+      transition={{ type: "spring", stiffness: 180, damping: 20 }}
+      className="relative flex h-full w-full flex-col overflow-hidden rounded-2xl border border-border/10 bg-gradient-to-br from-primary/20 via-background/60 to-background/80 shadow-lg hover:shadow-xl hover:shadow-primary/10 focus-within:ring-2 focus-within:ring-primary/40 hover:border-primary"
+      style={{
+        backgroundImage: `radial-gradient(60% 60% at 80% 0%, ${typeof accent === "string" ? accent : "hsl(var(--primary))"}1a, transparent 60%)`,
+      } as React.CSSProperties}
     >
-      {/* Shining Bottom-Right Border */}
+      {/* Decorative accent burst */}
+      <svg
+        aria-hidden
+        className="pointer-events-none absolute -right-8 top-8 h-24 w-24 opacity-40 blur-[0.4px] sm:h-28 sm:w-28"
+        viewBox="0 0 100 100"
+        fill="none"
+      >
+        <g fill="currentColor" style={{ color: accent }}>
+          {Array.from({ length: 16 }).map((_, i) => {
+            const angle = (i * Math.PI) / 8;
+            const x = 50 + Math.cos(angle) * 40;
+            const y = 50 + Math.sin(angle) * 40;
+            return <line key={i} x1="50" y1="50" x2={x} y2={y} stroke="currentColor" strokeWidth="2" strokeLinecap="round" />;
+          })}
+          <circle cx="50" cy="50" r="8" fill="currentColor" />
+        </g>
+      </svg>
 
-      {/* Image
-      <div className="relative h-56 w-full overflow-hidden">
-        <Image
-          src={project.image}
-          alt={project.title}
-          fill
-          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-          className="object-cover transition-transform duration-500 hover:scale-105 "
-        />
-      </div>
-       */}
+      {/* Hero image */}
+      {heroSrc ? (
+        <div className="relative aspect-video w-full shrink-0">
+          <Image
+            src={heroSrc}
+            alt={project.title}
+            fill
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+            className="object-cover"
+            priority={false}
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-background/40 to-transparent" />
+        </div>
+      ) : (
+        <div className="flex aspect-video w-full shrink-0 items-center justify-center bg-muted">
+          <span className="text-sm text-muted-foreground">No image</span>
+        </div>
+      )}
 
       {/* Content */}
-      <div className="space-y-4 md:space-y-6 p-4 md:p-6 h-full flex flex-col">
-        {/* Title + Icons */}
-        <div className="space-y-2 md:space-y-3">
-          <div className="flex flex-col md:flex-row md:items-start justify-between gap-2 md:gap-3">
-            <h3 className="text-lg md:text-xl lg:text-2xl font-semibold text-headline leading-tight">
-              {project.title}
-            </h3>
-            <div className="flex items-center -space-x-1 md:-space-x-2 flex-shrink-0">
-              {project.technologies.slice(0, 4).map((tech, index) => {
-                const techIcon = getTechIcon(tech);
-                return (
-                  <Avatar
-                    key={tech + index}
-                    className="flex h-7 w-7 md:h-8 md:w-8 lg:h-9 lg:w-9 items-center justify-center border border-paragraph/10 bg-accent/10 shadow-sm hover:bg-primary/20"
-                  >
-                    {techIcon && (
-                      <techIcon.icon
-                        className="h-4 w-4 md:h-5 md:w-5 lg:h-6 lg:w-6"
-                        color={techIcon.color}
-                      />
-                    )}
-                  </Avatar>
-                );
-              })}
-              {project.technologies.length > 4 && (
-                <div className="flex h-7 w-7 md:h-8 md:w-8 lg:h-9 lg:w-9 items-center justify-center rounded-full border border-paragraph/10 bg-accent/10 text-xs md:text-sm font-medium text-paragraph">
-                  +{project.technologies.length - 4}
-                </div>
-              )}
-            </div>
-          </div>
-
-          <p className="text-sm md:text-base leading-relaxed text-paragraph">
+      <div className="flex flex-1 flex-col p-4 sm:p-5">
+        <div className="mb-3">
+          <h3 className="font-rawkner text-2xl font-extrabold  bg-clip-text text-transparent bg-gradient-to-r from-white to-primary transition-all duration-500 hover:bg-gradient-to-r  tracking-tight text-headline sm:text-lg md:text-2xl">
+            {project.title}
+          </h3>
+          <p className="mt-1 line-clamp-3 text-sm text-paragraph">
             {project.description}
           </p>
         </div>
 
-        {/* Features List */}
-        {project.features && project.features.length > 0 && (
-          <div className="space-y-2 md:space-y-3 flex-1">
-            <div className="flex items-center gap-2 text-sm md:text-base font-medium text-foreground">
-              <FiFilter className="h-4 w-4 md:h-5 md:w-5 text-primary" />
-              Key Features
-            </div>
-            <div className="space-y-1.5 md:space-y-2">
-              {project.features.slice(0, 3).map((feature, index) => (
-                <div key={index} className="flex items-start gap-2 md:gap-3">
-                  <div className="mt-2 h-1.5 w-1.5 md:h-2 md:w-2 flex-shrink-0 rounded-full bg-primary" />
-                  <span className="text-sm md:text-base leading-relaxed text-paragraph break-words">
-                    {feature}
-                  </span>
-                </div>
-              ))}
-              {project.features.length > 3 && (
-                <div className="pl-4 md:pl-5 text-sm md:text-base text-paragraph/60">
-                  +{project.features.length - 3} more features
-                </div>
-              )}
-            </div>
-          </div>
-        )}
-
-        {/* Action Buttons (shadcn Button) */}
-        <div className="flex flex-col md:flex-row gap-2 md:gap-3 pt-2 mt-auto">
-          {project.screenshots?.length ? (
-            <Link href={`/projects/${project.id}`} passHref className="flex-1">
-              <Button
-                variant="outline"
-                size="sm"
-                className="w-full flex items-center justify-center gap-2 rounded-lg text-sm md:text-base hover:bg-primary"
+        {/* Tech chips */}
+        {project.technologies?.length ? (
+          <div className="mb-3 flex flex-wrap gap-1 text-[11px] text-foreground/80 sm:gap-1.5 sm:text-xs">
+            {project.technologies.slice(0, 3).map((t) => (
+              <span
+                key={t}
+                className="rounded-full border border-border/60 bg-background/40 px-2 py-0.5 backdrop-blur-sm"
               >
-                <FiImage className="h-4 w-4 md:h-5 md:w-5" />
-                <span className="truncate">{PROJECTS_CONTENT.viewScreenshots}</span>
+                {t}
+              </span>
+            ))}
+            {project.technologies.length > 3 && (
+              <span className="rounded-full border border-border/60 bg-background/40 px-2 py-0.5 backdrop-blur-sm">+{project.technologies.length - 3}</span>
+            )}
+          </div>
+        ) : null}
+
+        <div className="mt-auto">
+          <div className="h-px w-full bg-border/60" />
+          <div className="mt-3 flex items-center justify-between">
+            <Link href={`/projects/${project.id}`} passHref>
+              <Button size="sm" className="gap-2 rounded-xl hover:bg-accent bg-primary text-primary-foreground">
+                View Project
+                <FiArrowRight className="h-4 w-4" />
               </Button>
             </Link>
-          ) : null}
-
-          {project.githubUrl && (
-            <Button
-              variant="outline"
-              size="sm"
-              asChild
-              className="w-full md:flex-1 flex items-center justify-center gap-2 rounded-lg text-sm md:text-base hover:bg-primary"
-            >
-              <a
-                href={project.githubUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <FiGithub className="h-4 w-4 md:h-5 md:w-5" />
-                <span className="truncate">{PROJECTS_CONTENT.github}</span>
-              </a>
-            </Button>
-          )}
+          </div>
         </div>
       </div>
     </motion.div>
