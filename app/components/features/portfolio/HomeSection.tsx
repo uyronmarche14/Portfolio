@@ -26,6 +26,7 @@ const HomeSection: React.FC = () => {
         />
       ))}
       */}
+      
 
 
       <div className="container relative z-10 mx-auto px-4 text-center">
@@ -44,7 +45,7 @@ const HomeSection: React.FC = () => {
             ))}
           </span>{" "}
           <br className="hidden md:block" />
-          <span className="inline-flex flex-col items-center gap-1 md:flex-row md:gap-2">
+          <span className="inline-flex flex-col items-center gap-1 pt-2 md:flex-row md:gap-2">
             {HOME_CONTENT.title}
             <RotatingText
               texts={['Developer', '3d Artist', 'Software Engi', 'Project Manager', 'Dev Ops']} 

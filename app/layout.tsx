@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import localFont from 'next/font/local';
-import { Poppins } from 'next/font/google';
 import { Providers } from "@/providers";
 import { Navbar } from "@/components/layout";
 import "./globals.css";
+
 const RawknerFont = localFont({
     src: [
         {
@@ -24,13 +24,6 @@ const RawknerFont = localFont({
     ],
     display: 'swap',
     variable: "--font-rawkner",
-});
-
-const poppins = Poppins({
-    weight: ['400', '500', '600', '700'],
-    subsets: ['latin'],
-    display: 'swap',
-    variable: "--font-poppins",
 });
 
 export const metadata: Metadata = {
@@ -63,7 +56,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning className={`${RawknerFont.variable} ${poppins.variable}`}>
+    <html lang="en" suppressHydrationWarning className={`${RawknerFont.variable}`}>
       <body className="bg-background font-sans text-foreground antialiased">
         <Providers>
           <div className="flex min-h-screen flex-col">

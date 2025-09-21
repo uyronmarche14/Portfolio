@@ -10,9 +10,9 @@ interface CleanGridBackgroundProps {
 }
 
 export const CleanGridBackground: React.FC<CleanGridBackgroundProps> = ({
-  rows = 40,
-  cols = 70,
-  cellSize = 60,
+  rows = 90,
+  cols = 100,
+  cellSize = 100,
   opacity = 1,
   borderOpacity = 1,
   className = ""

@@ -5,5 +5,5 @@
  */
 
 // Main components
-export { default as ContactSection } from './test';
+export { default as ContactSection } from './ContactSection';
 export { default as ContactForm } from './ContactForm';

@@ -1,24 +1,46 @@
 "use client";
 
 import React from "react";
+import dynamic from "next/dynamic";
 import { CleanGridBackground } from "@/components/ui/bgRipple";
-import { HomeSection } from "@/components/features/portfolio";
-import { AboutSection } from "@/components/features/about";
-import { ProjectsSection } from "@/components/features/projects";
-import { ContactSection } from "@/components/features/contact";
 
-import { Footer } from "@/components/layout";
+// Dynamic imports for heavy components
+const HomeSection = dynamic(() => import("@/components/features/portfolio/HomeSection"), {
+  loading: () => <div className="min-h-screen flex items-center justify-center">Loading...</div>,
+  ssr: true,
+});
+
+const AboutSection = dynamic(() => import("@/components/features/about/AboutSection"), {
+  loading: () => <div className="min-h-screen flex items-center justify-center">Loading...</div>,
+  ssr: true,
+});
+
+const ProjectsSection = dynamic(() => import("@/components/features/projects/ProjectsSection"), {
+  loading: () => <div className="min-h-screen flex items-center justify-center">Loading...</div>,
+  ssr: true,
+});
+
+const ContactSection = dynamic(() => import("@/components/features/contact/ContactSection"), {
+  loading: () => <div className="min-h-screen flex items-center justify-center">Loading...</div>,
+  ssr: true,
+});
+
+const Footer = dynamic(() => import("@/components/layout/footer"), {
+  loading: () => <div className="py-8 flex items-center justify-center">Loading...</div>,
+  ssr: true,
+});
+
 import { PageLayout } from "./PageLayout";
 import { SectionLayout } from "./SectionLayout";
 
 /**
- * SinglePageLayout component using the new architecture
+ * SinglePageLayout component using dynamic imports for performance optimization
  *
- * This component has been refactored to:
- * - Use the new PageLayout and SectionLayout components
- * - Remove unnecessary dynamic imports for better SSR support
- * - Follow the new component structure patterns
- * - Maintain the same functionality with improved architecture
+ * This component has been optimized to:
+ * - Use dynamic imports for heavy components to reduce initial bundle size
+ * - Maintain SSR support for better SEO and initial load performance
+ * - Add loading states for better user experience
+ * - Keep the same functionality with improved loading performance
  */
 export default function SinglePageLayout() {
   return (
@@ -28,11 +50,11 @@ export default function SinglePageLayout() {
       maxWidth="full"
     >
       <CleanGridBackground
-        rows={40}
-        cols={60}
-        cellSize={30}
+        rows={80}
+        cols={100}
+        cellSize={20}
         opacity={0.6}
-        borderOpacity={0.3}
+        borderOpacity={0.2}
         className="z-0"
         aria-hidden="true"
       />
