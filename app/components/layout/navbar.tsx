@@ -72,10 +72,11 @@ const Navbar = () => {
           <div className="hover:shadow-3xl flex items-center rounded-2xl border border-white/[0.05] bg-white/[0.03] shadow-2xl shadow-black/20 backdrop-blur-xl transition-all duration-500 hover:shadow-black/30">
             {/* Avatar Section */}
             <div className="flex items-center px-4 py-3">
-              <Avatar className="h-8 w-8">
-                <AvatarImage src="https://res.cloudinary.com/ddnxfpziq/image/upload/v1753097383/113_UY_RON_MARCHE_RHYSS_TCU02311_vvabi3.jpg" />
-                <AvatarFallback>CN</AvatarFallback>
-              </Avatar>
+              <h1 
+                className="text-xl font-extrabold font-rawkner bg-clip-text text-transparent bg-gradient-to-r from-white to-primary transition-all duration-500 hover:bg-gradient-to-r hover:from-purple-300 hover:to-purple-500"
+              >
+                Rhyss
+              </h1>
             </div>
 
             {/* Vertical Separator */}

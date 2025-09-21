@@ -1,10 +1,12 @@
 "use client";
 
 import React from "react";
+import { CleanGridBackground } from "@/components/ui/bgRipple";
 import { HomeSection } from "@/components/features/portfolio";
 import { AboutSection } from "@/components/features/about";
 import { ProjectsSection } from "@/components/features/projects";
 import { ContactSection } from "@/components/features/contact";
+
 import { Footer } from "@/components/layout";
 import { PageLayout } from "./PageLayout";
 import { SectionLayout } from "./SectionLayout";
@@ -25,6 +27,15 @@ export default function SinglePageLayout() {
       withPadding={false}
       maxWidth="full"
     >
+      <CleanGridBackground
+        rows={40}
+        cols={60}
+        cellSize={30}
+        opacity={0.6}
+        borderOpacity={0.3}
+        className="z-0"
+        aria-hidden="true"
+      />
       <SectionLayout id="home" spacing="xl">
         <HomeSection />
       </SectionLayout>

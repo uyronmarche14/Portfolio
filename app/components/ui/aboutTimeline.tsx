@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { timelineYears } from "@/lib/data/about";
+import HeaderTitle from "@/components/ui/header";
 
 const AboutTimeline = () => {
   const [hoveredYear, setHoveredYear] = useState<string | null>(null);
@@ -16,27 +17,13 @@ const AboutTimeline = () => {
         transition={{ duration: 0.8 }}
         className="max-w-7xl mx-auto min-h-screen"
       >
-        <div className="text-center mb-12 md:mb-16">
-          <motion.h3 
-            className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-headline mb-4"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-          >
-            My{" "}
-            <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-              Journey
-            </span>
-          </motion.h3>
-          <motion.p 
-            className="text-paragraph/70 max-w-md mx-auto text-sm sm:text-base"
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            transition={{ delay: 0.4 }}
-          >
-            A timeline of growth, learning, and achievements
-          </motion.p>
-        </div>
+        
+        <HeaderTitle 
+            introText="My"  
+            highlightText="Journey"
+            description="A timeline of growth, learning, and achievements"
+            className="py-16"
+          />
 
         <div className="relative min-h-[800px]">
           {/* Central line - Desktop only */}
@@ -95,7 +82,7 @@ const AboutTimeline = () => {
                               initial={{ opacity: 0, x: -20 }}
                               whileInView={{ opacity: 1, x: 0 }}
                               transition={{ delay: (yearIndex * 0.1) + (featureIndex * 0.05) }}
-                              className={`relative overflow-hidden rounded-lg backdrop-blur-sm transition-all duration-300 min-h-[80px] ${
+                              className={`relative overflow-hidden rounded-xl backdrop-blur-sm transition-all duration-300 min-h-[80px] ${
                                 isFeatureHovered 
                                   ? "bg-primary/5 border border-primary/20 shadow-lg shadow-primary/10" 
                                   : "bg-background/80 border border-primary/10 shadow-md"
@@ -184,7 +171,7 @@ const AboutTimeline = () => {
                             initial={{ opacity: 0, x: isLeft ? -20 : 20 }}
                             whileInView={{ opacity: 1, x: 0 }}
                             transition={{ delay: (yearIndex * 0.1) + (featureIndex * 0.05) }}
-                            className={`relative overflow-hidden rounded-lg backdrop-blur-sm transition-all duration-300 min-h-[80px] ${
+                            className={`relative overflow-hidden rounded-xl backdrop-blur-sm transition-all duration-300 min-h-[80px] ${
                               isFeatureHovered 
                                 ? "bg-primary/5 border border-primary/20 shadow-lg shadow-primary/10" 
                                 : "bg-background/80 border border-primary/10 shadow-md"

@@ -1,7 +1,7 @@
 // Home section content data
 export const HOME_CONTENT = {
   name: "Rhyss",
-  title: "My Journey To Be A Developer.",
+  title: "My Journey To Be A  ",
   description:
     "I'm a backend, frontend, and mobile developer with a passion for data and a love for learning new things related to technology.",
 };
