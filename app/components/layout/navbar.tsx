@@ -4,7 +4,6 @@ import { useState, useEffect, useMemo } from "react";
 import { Menu, X, Music, FileText } from "lucide-react";
 import { Button } from "@/components/ui/shadcn/button";
 import ResumeDrawer from "@/components/ui/drawer/resumeDrawer";
-import MusicDrawer from "@/components/ui/drawer/musicDrawer";
 import {
   Avatar,
   AvatarImage,
@@ -57,9 +56,7 @@ const Navbar = () => {
   };
 
   return (
-    <motion.nav
-      initial={{ y: -20, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
+    <nav
       className={`fixed z-50 w-full transition-all duration-500 ${
         isScrolled
           ? "border-b border-white/[0.08] bg-gradient-to-b from-white/[0.05] to-transparent shadow-2xl shadow-black/30 backdrop-blur-2xl"
@@ -115,7 +112,6 @@ const Navbar = () => {
 
             {/* Action Buttons */}
             <div className="flex items-center gap-2 px-4 py-3">
-              <MusicDrawer />
               <ResumeDrawer />
             </div>
           </div>
@@ -151,11 +147,11 @@ const Navbar = () => {
         <div className="space-y-4 p-6">
           {/* Mobile Avatar Section */}
           <div className="flex items-center gap-3 border-b border-white/[0.08] pb-4">
-            <Avatar className="h-10 w-10">
-              <AvatarImage src="https://github.com/shadcn.png" />
-              <AvatarFallback>CN</AvatarFallback>
-            </Avatar>
-            <div className="text-sm font-medium text-white/80">Menu</div>
+             <h1 
+                className="text-xl font-extrabold font-rawkner bg-clip-text text-transparent bg-gradient-to-r from-white to-primary transition-all duration-500 hover:bg-gradient-to-r hover:from-purple-300 hover:to-purple-500"
+              >
+                Rhyss
+              </h1>
           </div>
 
           {/* Mobile Navigation Items */}
@@ -196,22 +192,10 @@ const Navbar = () => {
                 </Button>
               }
             />
-
-            <MusicDrawer
-              trigger={
-                <Button
-                  variant="ghost"
-                  className="w-full justify-start rounded-2xl border border-white/[0.08] px-4 py-3 text-white/60 backdrop-blur-sm transition-all duration-300 hover:bg-white/[0.08] hover:text-white/90"
-                >
-                  <Music className="mr-3 h-4 w-4" />
-                  Music Player
-                </Button>
-              }
-            />
           </motion.div>
         </div>
       </motion.div>
-    </motion.nav>
+    </nav>
   );
 };
 

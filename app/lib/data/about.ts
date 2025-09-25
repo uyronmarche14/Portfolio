@@ -105,6 +105,13 @@ export const timelineYears: TimelineYear[] = [
         description: "Started internship at Aique Innovation Solutions Corporation, learning Next.js, Tailwind CSS, React, TypeScript, and Scrum Agile methodology",
         icon: "briefcase"
       },
+
+    ]
+  },
+  {
+    year: "2025",
+    features: [
+
        {
         title: "Professional Contract",
         description: "Worked as a contract developer for frontend developer and backend developer, using Next.js, Tailwind CSS, React, TypeScript, and Scrum Agile methodology",  
@@ -114,6 +121,11 @@ export const timelineYears: TimelineYear[] = [
         title: "3d Architechture on Blender",
         description: "Worked on 3d architechture projects using Blender making 3d models, animations, and renderings",  
         icon: "blender"
+      },
+      {
+        title: "Advance Frontend Architechture ",
+        description: "Worked on frontend architechture projects using Next.js, Tailwind CSS, React, TypeScript, and Scrum Agile methodology",  
+        icon: "Code"
       }
 
     ]

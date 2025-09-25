@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { Badge } from '@/components/ui/shadcn/badge';
 
 // import { motion } from "framer-motion";
 import RotatingText from '@/components/ui/textChange'
@@ -61,6 +62,13 @@ const HomeSection: React.FC = () => {
             />
           </span>
         </h1>
+        <div className="flex flex-wrap items-center justify-center gap-1.5 sm:gap-2">
+          <Badge className="text-xs sm:text-sm md:text-base font-rawkner bg-transparent border border-white text-white hover:shadow-md hover:shadow-primary px-2 py-1 sm:px-3 sm:py-1.5" variant="default">React Dev</Badge>
+          <Badge className="text-xs sm:text-sm md:text-base font-rawkner bg-transparent border border-white text-white hover:shadow-md hover:shadow-primary px-2 py-1 sm:px-3 sm:py-1.5" variant="default">Typescript</Badge>
+          <Badge className="text-xs sm:text-sm md:text-base font-rawkner bg-transparent border border-white text-white hover:shadow-md hover:shadow-primary px-2 py-1 sm:px-3 sm:py-1.5" variant="default">Python</Badge>
+          <Badge className="text-xs sm:text-sm md:text-base font-rawkner bg-transparent border border-white text-white hover:shadow-md hover:shadow-primary px-2 py-1 sm:px-3 sm:py-1.5" variant="default">Figma</Badge>
+          <Badge className="text-xs sm:text-sm md:text-base font-rawkner bg-transparent border border-white text-white hover:shadow-md hover:shadow-primary px-2 py-1 sm:px-3 sm:py-1.5" variant="default">Blender</Badge>
+        </div>
         <p className="mx-auto mt-4 max-w-2xl text-base text-paragraph sm:text-lg md:text-xl">
           {HOME_CONTENT.description}
         </p>

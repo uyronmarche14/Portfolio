@@ -45,28 +45,12 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
       variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
       whileHover={{ y: -4 }}
       transition={{ type: "spring", stiffness: 180, damping: 20 }}
-      className="relative flex h-full w-full flex-col overflow-hidden rounded-2xl border border-border/10 bg-gradient-to-br from-primary/20 via-background/60 to-background/80 shadow-lg hover:shadow-xl hover:shadow-primary/10 focus-within:ring-2 focus-within:ring-primary/40 hover:border-primary"
+      className="relative flex h-full w-full flex-col overflow-hidden rounded-xl border border-border/10 bg-gradient-to-br from-primary/20 via-background/60 to-background/80 shadow-lg hover:shadow-xl hover:shadow-primary/10 focus-within:ring-2 focus-within:ring-primary/40 hover:border-primary"
       style={{
         backgroundImage: `radial-gradient(60% 60% at 80% 0%, ${typeof accent === "string" ? accent : "hsl(var(--primary))"}1a, transparent 60%)`,
       } as React.CSSProperties}
     >
-      {/* Decorative accent burst */}
-      <svg
-        aria-hidden
-        className="pointer-events-none absolute -right-8 top-8 h-24 w-24 opacity-40 blur-[0.4px] sm:h-28 sm:w-28"
-        viewBox="0 0 100 100"
-        fill="none"
-      >
-        <g fill="currentColor" style={{ color: accent }}>
-          {Array.from({ length: 16 }).map((_, i) => {
-            const angle = (i * Math.PI) / 8;
-            const x = 50 + Math.cos(angle) * 40;
-            const y = 50 + Math.sin(angle) * 40;
-            return <line key={i} x1="50" y1="50" x2={x} y2={y} stroke="currentColor" strokeWidth="2" strokeLinecap="round" />;
-          })}
-          <circle cx="50" cy="50" r="8" fill="currentColor" />
-        </g>
-      </svg>
+
 
       {/* Hero image */}
       {heroSrc ? (
