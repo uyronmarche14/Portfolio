@@ -1,23 +1,53 @@
 'use client';
 
-import React, { useState } from 'react';
-import { Facebook, Mail, Phone } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Mail, Phone, Calendar, MessageCircle } from 'lucide-react';
 import Header from "@/components/ui/header"
 import { Button } from '@/components/ui/shadcn/button';
 import { Input } from '@/components/ui/shadcn/input';
 import { Badge } from '@/components/ui/shadcn/badge';
+import { sendEmail, initializeEmailJS } from '@/lib/services/email';
 
 const CallToActionSection = () => {
   const [email, setEmail] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [message, setMessage] = useState('');
+
+  // Initialize EmailJS on component mount
+  useEffect(() => {
+    initializeEmailJS();
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    console.log('Email submitted:', email);
-    setEmail('');
-    setIsSubmitting(false);
+    
+    try {
+      const emailParams = {
+        from_email: email,
+        to_email: 'uyronmarcherhyssq@gmail.com',
+        message: `New client inquiry from portfolio: ${email}`,
+        reply_to: email,
+        subject: 'New Client Inquiry - Portfolio',
+      };
+
+      await sendEmail(emailParams);
+      
+      // Success state
+      setMessage('Thank you! I\'ll get back to you within 24 hours.');
+      setEmail('');
+      
+      // Clear success message after 5 seconds
+      setTimeout(() => setMessage(''), 5000);
+    } catch (error) {
+      console.error('Failed to send email:', error);
+      setMessage('Failed to send message. Please try again or contact me directly.');
+      
+      // Clear error message after 5 seconds
+      setTimeout(() => setMessage(''), 5000);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -25,9 +55,9 @@ const CallToActionSection = () => {
       {/* Background gradient effects */}
    
       <Header
-              introText='Get in'
-              highlightText='Touch'
-              description='Let&apos;s create something together'
+              introText='Ready to'
+              highlightText='Build Something Amazing?'
+              description='Let&apos;s transform your vision into a high-performance web application'
             />
 
       {/* Main CTA container */}
@@ -57,12 +87,15 @@ const CallToActionSection = () => {
 
             {/* Main CTA Heading */}
             <div className="space-y-2 md:space-y-4">
-              <h2 className="font-rawkner text-3xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-foreground leading-tight">Let&apos;s Create Something</h2>
-              <h3 className="font-rawkner text-2xl md:text-4xl lg:text-5xl xl:text-6xl font-light text-muted-foreground">Remarkable <span className="text-secondary-foreground">Together</span></h3>
+              <h2 className="font-rawkner text-3xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-foreground leading-tight">Let's Create Something Extraordinary</h2>
             </div>
 
             {/* CTA Description */}
-            <p className="text-sm md:text-lg lg:text-xl text-muted-foreground leading-relaxed">Let&apos;s turn your ideas into a brand that connects and converts. Our expert team is ready to craft a unique identity that reflects your vision and drives results.</p>
+            <p className="text-sm md:text-lg lg:text-xl text-muted-foreground leading-relaxed">
+              I specialize in creating high-performance web applications that drive business results. 
+              Whether you need a complete web solution, UI/UX improvements, or technical and hardware consultation, 
+              I&apos;m here to help bring your vision to life.
+            </p>
 
             {/* Email form */}
             <div className="space-y-4">
@@ -70,7 +103,7 @@ const CallToActionSection = () => {
                 <div className="relative flex-1">
                   <Input
                     type="email"
-                    placeholder="Enter your email address"
+                    placeholder="your.email@company.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
@@ -80,23 +113,40 @@ const CallToActionSection = () => {
                 <Button type="submit" disabled={isSubmitting || !email} className="rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground px-6 md:px-8 py-3 h-12 transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed shrink-0">
                   {isSubmitting ? (
                     <div className="flex items-center gap-2"><div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />Sending...</div>
-                  ) : ('Send Here Your Email')}
+                  ) : ('Start Your Project')}
                 </Button>
               </form>
+              {message && (
+                <p className={`text-sm ${message.includes('Thank you') ? 'text-green-300' : 'text-red-300'}`}>
+                  {message}
+                </p>
+              )}
             </div>
 
-            {/* Trust text */}
-            <div className="pt-6">
-              <p className="text-sm text-gray-100">Let&apos;s create the brand that stands out. Contact me today to discuss your project.</p>
+            {/* Trust text and contact alternatives */}
+            <div className="pt-2 space-y-3">
+              <p className="text-sm text-gray-100">Prefer to reach out directly? I typically respond within 24 hours.</p>
+              <div className="flex flex-wrap gap-4 text-sm">
+                <a href="mailto:ronbusinessemail4@gmail.com" className="flex items-center gap-2 text-secondary-foreground hover:text-secondary transition-colors">
+                  <Mail className="w-4 h-4" />
+                  ronbusinessemail4@gmail.com
+                </a>
+                <a href="tel:+639605875124" className="flex items-center gap-2 text-secondary-foreground hover:text-secondary transition-colors">
+                  <Phone className="w-4 h-4" />
+                  09605875124
+                </a>
+                <a href="https://www.linkedin.com/in/ron-marche-rhyss-uy-578b80240/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-secondary-foreground hover:text-secondary transition-colors">
+                  <MessageCircle className="w-4 h-4" />
+                  LinkedIn
+                </a>
+                <a href="https://calendly.com/your-calendar-link" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-secondary-foreground hover:text-secondary transition-colors">
+                  <Calendar className="w-4 h-4" />
+                  Book a Meeting
+                </a>
+              </div>
             </div>
 
-            {/* Contact links */}
-            <div className="flex flex-wrap gap-2 justify-start">
-              <a href="https://facebook.com/yourpage" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 px-4 py-2 bg-background/20 rounded-xl hover:bg-background/30 transition-all duration-300"><Facebook className="w-5 h-5" /><span>Facebook</span></a>
-              <a href="mailto:your@email.com" className="flex items-center gap-2 px-4 py-2 bg-background/20 rounded-xl hover:bg-background/30 transition-all duration-300"><Mail className="w-5 h-5" /><span>Email</span></a>
-              <a href="tel:+1234567890" className="flex items-center gap-2 px-4 py-2 bg-background/20 rounded-xl hover:bg-background/30 transition-all duration-300"><Phone className="w-5 h-5" /><span>Call Us</span></a>
-            </div>
-
+        
           </div>
         </div>
       </div>

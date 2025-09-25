@@ -1,12 +1,12 @@
 import {
   FaLinkedin,
   FaGithub,
-  FaTwitter,
+
   FaInstagram,
-  FaYoutube,
-  FaTiktok,
+
   FaDiscord,
   FaMedium,
+  FaGoogle,
 } from "react-icons/fa";
 import type { IconType } from "react-icons";
 
@@ -49,6 +49,12 @@ export const socialLinks: {
   color: string;
 }[] = [
   {
+    icon: FaGoogle,
+    href: "https://www.linkedin.com/in/ron-marche-rhyss-uy-578b80240/",
+    label: "Gmail",
+    color: "#0077B5",
+  },
+  {
     icon: FaLinkedin,
     href: "https://www.linkedin.com/in/ron-marche-rhyss-uy-578b80240/",
     label: "LinkedIn",
@@ -61,28 +67,10 @@ export const socialLinks: {
     color: "#333",
   },
   {
-    icon: FaTwitter,
-    href: "https://twitter.com/yourhandle",
-    label: "Twitter",
-    color: "#1DA1F2",
-  },
-  {
     icon: FaInstagram,
     href: "https://www.instagram.com/ronmarcheee/",
     label: "Instagram",
     color: "#E4405F",
-  },
-  {
-    icon: FaYoutube,
-    href: "https://www.youtube.com/@UyRonMarcheRhyssQ",
-    label: "YouTube",
-    color: "#FF0000",
-  },
-  {
-    icon: FaTiktok,
-    href: "https://www.tiktok.com/@ronmarcheuy",
-    label: "TikTok",
-    color: "#000000",
   },
   {
     icon: FaDiscord,

@@ -48,7 +48,7 @@ const nextConfig: NextConfig = {
 
   // Experimental features
   experimental: {
-    optimizeCss: true,
+    optimizeCss: false, // Disabled since critters was removed
     optimizePackageImports: [
       "lucide-react",
       "@heroicons/react",
