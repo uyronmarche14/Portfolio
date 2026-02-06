@@ -1,7 +1,11 @@
 {
   "compilerOptions": {
     "target": "es2015",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -12,18 +16,34 @@
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "jsx": "preserve",
+    "jsx": "react-jsx",
     "incremental": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./app/*"],
-      "@/components/*": ["./app/components/*"],
-      "@/lib/*": ["./app/lib/*"],
-      "@/content/*": ["./app/content/*"],
-      "@/types/*": ["./app/lib/types/*"],
-      "@/data/*": ["./app/lib/data/*"],
-      "@/hooks/*": ["./app/lib/hooks/*"],
-      "@/utils/*": ["./app/lib/utils/*"]
+      "@/*": [
+        "./app/*"
+      ],
+      "@/components/*": [
+        "./app/components/*"
+      ],
+      "@/lib/*": [
+        "./app/lib/*"
+      ],
+      "@/content/*": [
+        "./app/content/*"
+      ],
+      "@/types/*": [
+        "./app/lib/types/*"
+      ],
+      "@/data/*": [
+        "./app/lib/data/*"
+      ],
+      "@/hooks/*": [
+        "./app/lib/hooks/*"
+      ],
+      "@/utils/*": [
+        "./app/lib/utils/*"
+      ]
     },
     "plugins": [
       {
@@ -31,6 +51,14 @@
       }
     ]
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
-  "exclude": ["node_modules"]
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    ".next/dev/types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }

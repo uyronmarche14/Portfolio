@@ -1,18 +1,18 @@
 "use client";
 
-import React, { useState } from "react";
-import { FileText, Download, X } from "lucide-react";
-import {
-  Drawer,
-  DrawerTrigger,
-  DrawerContent,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerDescription,
-  DrawerFooter,
-  DrawerClose,
-} from "@/components/ui/shadcn/drawer";
 import { Button } from "@/components/ui/shadcn/button";
+import {
+    Drawer,
+    DrawerClose,
+    DrawerContent,
+    DrawerDescription,
+    DrawerFooter,
+    DrawerHeader,
+    DrawerTitle,
+    DrawerTrigger,
+} from "@/components/ui/shadcn/drawer";
+import { Download, FileText, X } from "lucide-react";
+import React, { useState } from "react";
 
 interface ResumeDrawerProps {
   trigger?: React.ReactNode;
@@ -52,7 +52,7 @@ const ResumeDrawer: React.FC<ResumeDrawerProps> = ({
           <Button
             variant="ghost"
             size="sm"
-            className="text-white/70 hover:text-white hover:bg-white/10 transition-all duration-300 rounded-xl px-4 py-2 border border-white/20 hover:border-white/40"
+            className="text-foreground/80 hover:text-foreground hover:bg-foreground/10 transition-all duration-300 rounded-xl px-4 py-2 border border-foreground/10 hover:border-foreground/30"
           >
             <FileText className="w-4 h-4" />
           </Button>

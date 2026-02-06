@@ -1,17 +1,46 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import { Mail, Phone, Calendar, MessageCircle } from 'lucide-react';
-import Header from "@/components/ui/header"
+import Header from "@/components/ui/header";
 import { Button } from '@/components/ui/shadcn/button';
 import { Input } from '@/components/ui/shadcn/input';
-import { Badge } from '@/components/ui/shadcn/badge';
-import { sendEmail, initializeEmailJS } from '@/lib/services/email';
+import Heading from "@/components/ui/typography/Heading";
+import Text from "@/components/ui/typography/Text";
+import { initializeEmailJS, sendEmail } from '@/lib/services/email';
+import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
+import { ArrowRight, Calendar, Mail, MessageCircle, Phone } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
 
-const CallToActionSection = () => {
+const ContactSection = () => {
   const [email, setEmail] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [message, setMessage] = useState('');
+
+  // 3D Perspective Logic
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+
+  const mouseX = useSpring(x, { stiffness: 500, damping: 100 });
+  const mouseY = useSpring(y, { stiffness: 500, damping: 100 });
+
+  const rotateX = useTransform(mouseY, [-0.5, 0.5], ["7deg", "-7deg"]);
+  const rotateY = useTransform(mouseX, [-0.5, 0.5], ["-7deg", "7deg"]);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+      const rect = e.currentTarget.getBoundingClientRect();
+      const width = rect.width;
+      const height = rect.height;
+      const mouseXFromCenter = e.clientX - rect.left - width / 2;
+      const mouseYFromCenter = e.clientY - rect.top - height / 2;
+      const xPct = mouseXFromCenter / width;
+      const yPct = mouseYFromCenter / height;
+      x.set(xPct);
+      y.set(yPct);
+  };
+
+  const handleMouseLeave = () => {
+      x.set(0);
+      y.set(0);
+  };
 
   // Initialize EmailJS on component mount
   useEffect(() => {
@@ -48,110 +77,120 @@ const CallToActionSection = () => {
     } finally {
       setIsSubmitting(false);
     }
-  };
+  };  
 
   return (
-    <section className="min-h-screen flex flex-col items-center justify-center relative">
-      {/* Background gradient effects */}
-   
-      <Header
-              introText='Ready to'
-              highlightText='Build Something Amazing?'
-              description='Let&apos;s transform your vision into a high-performance web application'
-            />
-
+    <section className="min-h-screen w-full relative overflow-hidden perspective-1000 py-4 sm:py-6 md:my-6 lg:my-8">
       {/* Main CTA container */}
-      <div className="max-w-6xl w-full relative z-10 px-2 sm:px-4 pb-8 sm:pb-12 md:pb-16 pt-12 sm:pt-16 md:pt-24">
-        <div className="relative bg-gradient-to-br from-primary/90 via-secondary/90 to-accent/90 backdrop-blur-xl rounded-3xl py-8 md:py-12 lg:py-16 shadow-2xl border border-border/50 max-w-7xl w-full hover:scale-105">
-
-          {/* Floating badges */}
-          <div className="absolute -top-4 right-16 md:right-20 animate-pulse">
-            <Badge className="bg-accent text-accent-foreground hover:bg-accent/80 border-border shadow-lg">Building Your Brand</Badge>
+      <div className="w-full h-full flex items-center justify-center px-3 sm:px-4">
+        <motion.div 
+            style={{ 
+                rotateX, 
+                rotateY, 
+                transformStyle: "preserve-3d",
+            }}
+            onMouseMove={handleMouseMove}
+            onMouseLeave={handleMouseLeave}
+            className="relative w-full min-h-[calc(100vh-2rem)] sm:min-h-[calc(100vh-3rem)] flex flex-col items-center justify-center bg-gradient-to-br from-primary/90 via-secondary/90 to-accent/90 backdrop-blur-xl transition-transform duration-200 ease-out rounded-2xl sm:rounded-3xl shadow-xl border-b-4 border-t-2 border-border/50 py-8 sm:py-12"
+        >
+          {/* Header - Hidden on mobile to save space */}
+          <div className="mb-6 sm:mb-8 md:mb-12 hidden sm:block">
+             <Header
+               introText='Ready to'
+               highlightText='Build Something Amazing?'
+               description='Let&apos;s transform your vision into a high-performance web application'
+             />
           </div>
-          <div className="absolute -bottom-4 left-32 md:left-40 animate-bounce">
-            <Badge className="bg-secondary text-secondary-foreground hover:bg-secondary/80 border-border shadow-lg">Vision</Badge>
-          </div>
-          <div className="absolute bottom-1/4 -right-4 md:-right-8 animate-bounce delay-500">
-            <Badge className="bg-muted text-muted-foreground hover:bg-muted/80 border-border shadow-lg">Excellence</Badge>
-          </div>
-          <div className="absolute -top-1 left-1/4 -translate-y-1/2 animate-pulse delay-700">
-            <Badge className="bg-destructive text-destructive-foreground hover:bg-destructive/80 border-border shadow-lg">Creative</Badge>
-          </div>
-
-          
 
           {/* CTA Content */}
-          <div className="w-full max-w-7xl text-start space-y-6 md:space-y-8 px-6 md:px-8">
+          <div className="w-full max-w-6xl text-start px-3 sm:px-4">
+            <div className="space-y-4 sm:space-y-6 md:space-y-8 py-6 sm:py-8 md:py-10 transform translate-z-20 border border-border/50 bg-background/40 backdrop-blur-xl rounded-2xl sm:rounded-3xl shadow-2xl px-4 sm:px-6 md:px-8">
+              {/* Badge Label */}
+              <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 backdrop-blur-md border border-primary/20 px-2.5 sm:px-3 py-1 text-[10px] sm:text-xs font-bold uppercase tracking-widest text-primary">
+                <span>Get In Touch</span>
+              </div>
 
-            
+              {/* Main CTA Heading - Responsive sizing */}
+              <Heading as="h2" className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-bold text-foreground leading-tight">
+                Let's Create Something <br className="hidden sm:block"/><span className="text-primary">Extraordinary</span>
+              </Heading>
 
-            {/* Main CTA Heading */}
-            <div className="space-y-2 md:space-y-4">
-              <h2 className="font-rawkner text-3xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-foreground leading-tight">Let's Create Something Extraordinary</h2>
-            </div>
+              {/* CTA Description - Smaller on mobile */}
+              <Text variant="large" className="text-muted-foreground max-w-3xl text-sm sm:text-base md:text-lg lg:text-xl font-light leading-relaxed">
+                I specialize in creating high-performance web applications that drive business results. 
+                Whether you need a complete web solution, UI/UX improvements, or technical consultation, 
+                I&apos;m here to help bring your vision to life.
+              </Text>
 
-            {/* CTA Description */}
-            <p className="text-sm md:text-lg lg:text-xl text-muted-foreground leading-relaxed">
-              I specialize in creating high-performance web applications that drive business results. 
-              Whether you need a complete web solution, UI/UX improvements, or technical and hardware consultation, 
-              I&apos;m here to help bring your vision to life.
-            </p>
+              {/* Email form - Responsive */}
+              <div className="space-y-3 sm:space-y-4 pt-2 sm:pt-4">
+                <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3 max-w-md sm:max-w-xl">
+                  <div className="relative flex-1">
+                    <Input
+                      type="email"
+                      placeholder="your.email@company.com"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      required
+                      className="bg-background/50 border-input text-foreground placeholder:text-muted-foreground focus:bg-background/80 focus:border-primary transition-all duration-300 h-11 sm:h-12 text-sm rounded-xl px-4"
+                    />
+                  </div>
+                  <Button 
+                    type="submit" 
+                    disabled={isSubmitting || !email} 
+                    className="rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground px-5 sm:px-6 h-11 sm:h-12 text-xs sm:text-sm font-bold uppercase tracking-widest transition-all duration-300 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed shrink-0 inline-flex items-center justify-center gap-2"
+                  >
+                    {isSubmitting ? (
+                      <div className="flex items-center gap-2">
+                        <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
+                        Sending...
+                      </div>
+                    ) : (
+                      <>
+                        <span className="hidden sm:inline">Start Your Project</span>
+                        <span className="sm:hidden">Start Project</span>
+                        <ArrowRight size={16} />
+                      </>
+                    )}
+                  </Button>
+                </form>
+                {message && (
+                  <p className={`text-sm sm:text-base font-medium ${message.includes('Thank you') ? 'text-green-500' : 'text-destructive'}`}>
+                    {message}
+                  </p>
+                )}
+              </div>
 
-            {/* Email form */}
-            <div className="space-y-4">
-              <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3 md:gap-4 max-w-2xl">
-                <div className="relative flex-1">
-                  <Input
-                    type="email"
-                    placeholder="your.email@company.com"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                    className="bg-background/20 border-border/50 text-foreground placeholder:text-muted-foreground focus:bg-background/30 focus:border-border/80 transition-all duration-300 h-12 rounded-xl"
-                  />
+              {/* Contact alternatives - Responsive grid */}
+              <div className="pt-4 sm:pt-6 space-y-2 sm:space-y-3">
+                <Text variant="small" className="text-muted-foreground font-medium text-xs sm:text-sm">
+                  Prefer to reach out directly? I typically respond within 24 hours.
+                </Text>
+                <div className="grid grid-cols-2 sm:flex sm:flex-wrap gap-3 sm:gap-4 md:gap-6 text-xs sm:text-sm">
+                  <a href="mailto:ronbusinessemail4@gmail.com" className="flex items-center gap-1.5 sm:gap-2 text-muted-foreground hover:text-primary transition-colors font-medium">
+                    <Mail className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
+                    <span className="truncate">Email</span>
+                  </a>
+                  <a href="tel:+639605875124" className="flex items-center gap-1.5 sm:gap-2 text-muted-foreground hover:text-primary transition-colors font-medium">
+                    <Phone className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
+                    <span className="truncate">Call</span>
+                  </a>
+                  <a href="https://www.linkedin.com/in/ron-marche-rhyss-uy-578b80240/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 sm:gap-2 text-muted-foreground hover:text-primary transition-colors font-medium">
+                    <MessageCircle className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
+                    LinkedIn
+                  </a>
+                  <a href="https://calendly.com/your-calendar-link" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 sm:gap-2 text-muted-foreground hover:text-primary transition-colors font-medium">
+                    <Calendar className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
+                    Book
+                  </a>
                 </div>
-                <Button type="submit" disabled={isSubmitting || !email} className="rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground px-6 md:px-8 py-3 h-12 transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed shrink-0">
-                  {isSubmitting ? (
-                    <div className="flex items-center gap-2"><div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />Sending...</div>
-                  ) : ('Start Your Project')}
-                </Button>
-              </form>
-              {message && (
-                <p className={`text-sm ${message.includes('Thank you') ? 'text-green-300' : 'text-red-300'}`}>
-                  {message}
-                </p>
-              )}
-            </div>
-
-            {/* Trust text and contact alternatives */}
-            <div className="pt-2 space-y-3">
-              <p className="text-sm text-gray-100">Prefer to reach out directly? I typically respond within 24 hours.</p>
-              <div className="flex flex-wrap gap-4 text-sm">
-                <a href="mailto:ronbusinessemail4@gmail.com" className="flex items-center gap-2 text-secondary-foreground hover:text-secondary transition-colors">
-                  <Mail className="w-4 h-4" />
-                  ronbusinessemail4@gmail.com
-                </a>
-                <a href="tel:+639605875124" className="flex items-center gap-2 text-secondary-foreground hover:text-secondary transition-colors">
-                  <Phone className="w-4 h-4" />
-                  09605875124
-                </a>
-                <a href="https://www.linkedin.com/in/ron-marche-rhyss-uy-578b80240/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-secondary-foreground hover:text-secondary transition-colors">
-                  <MessageCircle className="w-4 h-4" />
-                  LinkedIn
-                </a>
-                <a href="https://calendly.com/your-calendar-link" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-secondary-foreground hover:text-secondary transition-colors">
-                  <Calendar className="w-4 h-4" />
-                  Book a Meeting
-                </a>
               </div>
             </div>
-
-        
           </div>
-        </div>
+        </motion.div>
       </div>
     </section>
   );
 };
 
-export default CallToActionSection;
+export default ContactSection;

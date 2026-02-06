@@ -1,6 +1,6 @@
-import * as React from "react";
-import { cn } from "@/lib/utils";
 import { ErrorBoundary } from "@/components/ui/ErrorBoundary";
+import { cn } from "@/lib/utils";
+import * as React from "react";
 
 export interface PageLayoutProps {
   /**
@@ -90,3 +90,4 @@ const PageLayout = React.forwardRef<HTMLElement, PageLayoutProps>(
 PageLayout.displayName = "PageLayout";
 
 export { PageLayout };
+

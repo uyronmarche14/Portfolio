@@ -11,6 +11,8 @@ export interface LegacyProject {
   screenshots: string[];
   paragraph: string;
   features: string[];
+  category?: string;
+  status?: 'completed' | 'in-development' | 'planned';
   timeline?: {
     date: string;
     title: string;

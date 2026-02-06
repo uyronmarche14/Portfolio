@@ -1,8 +1,8 @@
 'use client';
 
-import * as React from 'react';
 import { motion } from 'framer-motion';
-import { ArrowDown, Download, Mail, Github, Linkedin } from 'lucide-react';
+import { ArrowDown, Download, Github, Linkedin, Mail } from 'lucide-react';
+import * as React from 'react';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/shadcn/avatar';
 import { Badge } from '@/components/ui/shadcn/badge';
@@ -256,3 +256,4 @@ const HeroSection = React.forwardRef<HTMLElement, HeroSectionProps>(
 HeroSection.displayName = 'HeroSection';
 
 export { HeroSection };
+

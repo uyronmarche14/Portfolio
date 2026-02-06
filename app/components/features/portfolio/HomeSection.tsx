@@ -1,21 +1,19 @@
 "use client";
 
-import React from "react";
 import { Badge } from '@/components/ui/shadcn/badge';
+import React from "react";
 
 // import { motion } from "framer-motion";
-import RotatingText from '@/components/ui/textChange'
+import RotatingText from '@/components/ui/textChange';
   
 
 import {
   HOME_CONTENT,
-  // BACKGROUND_ANIMATIONS,
-  // LETTER_ANIMATION,
 } from "@/lib/data/homeContent";
 
 const HomeSection: React.FC = () => {
   return (
-    <div className="relative flex min-h-screen snap-start flex-col items-center justify-center overflow-hidden">
+    <div className="relative w-full flex min-h-screen snap-start flex-col items-center justify-center overflow-hidden">
       {/* Enhanced animated background spots - COMMENTED OUT FOR PERFORMANCE
       {BACKGROUND_ANIMATIONS.map((bg, index) => (
         <motion.div
@@ -63,11 +61,11 @@ const HomeSection: React.FC = () => {
           </span>
         </h1>
         <div className="flex flex-wrap items-center justify-center gap-1.5 sm:gap-2">
-          <Badge className="text-xs sm:text-sm md:text-base font-rawkner bg-transparent border border-white text-white hover:shadow-md hover:shadow-primary px-2 py-1 sm:px-3 sm:py-1.5" variant="default">React Dev</Badge>
-          <Badge className="text-xs sm:text-sm md:text-base font-rawkner bg-transparent border border-white text-white hover:shadow-md hover:shadow-primary px-2 py-1 sm:px-3 sm:py-1.5" variant="default">Typescript</Badge>
-          <Badge className="text-xs sm:text-sm md:text-base font-rawkner bg-transparent border border-white text-white hover:shadow-md hover:shadow-primary px-2 py-1 sm:px-3 sm:py-1.5" variant="default">Python</Badge>
-          <Badge className="text-xs sm:text-sm md:text-base font-rawkner bg-transparent border border-white text-white hover:shadow-md hover:shadow-primary px-2 py-1 sm:px-3 sm:py-1.5" variant="default">Figma</Badge>
-          <Badge className="text-xs sm:text-sm md:text-base font-rawkner bg-transparent border border-white text-white hover:shadow-md hover:shadow-primary px-2 py-1 sm:px-3 sm:py-1.5" variant="default">Blender</Badge>
+          <Badge className="text-xs sm:text-sm md:text-base font-rawkner bg-background/20 backdrop-blur-sm border border-foreground/20 text-foreground/90 hover:bg-foreground/10 hover:shadow-md hover:shadow-primary/20 transition-all px-2 py-1 sm:px-3 sm:py-1.5" variant="default">React Dev</Badge>
+          <Badge className="text-xs sm:text-sm md:text-base font-rawkner bg-background/20 backdrop-blur-sm border border-foreground/20 text-foreground/90 hover:bg-foreground/10 hover:shadow-md hover:shadow-primary/20 transition-all px-2 py-1 sm:px-3 sm:py-1.5" variant="default">Typescript</Badge>
+          <Badge className="text-xs sm:text-sm md:text-base font-rawkner bg-background/20 backdrop-blur-sm border border-foreground/20 text-foreground/90 hover:bg-foreground/10 hover:shadow-md hover:shadow-primary/20 transition-all px-2 py-1 sm:px-3 sm:py-1.5" variant="default">Python</Badge>
+          <Badge className="text-xs sm:text-sm md:text-base font-rawkner bg-background/20 backdrop-blur-sm border border-foreground/20 text-foreground/90 hover:bg-foreground/10 hover:shadow-md hover:shadow-primary/20 transition-all px-2 py-1 sm:px-3 sm:py-1.5" variant="default">Figma</Badge>
+          <Badge className="text-xs sm:text-sm md:text-base font-rawkner bg-background/20 backdrop-blur-sm border border-foreground/20 text-foreground/90 hover:bg-foreground/10 hover:shadow-md hover:shadow-primary/20 transition-all px-2 py-1 sm:px-3 sm:py-1.5" variant="default">Blender</Badge>
         </div>
         <p className="mx-auto mt-4 max-w-2xl text-base text-paragraph sm:text-lg md:text-xl">
           {HOME_CONTENT.description}

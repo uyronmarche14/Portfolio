@@ -1,8 +1,7 @@
 "use client";
 
-import React from "react";
-import dynamic from "next/dynamic";
 import { CleanGridBackground } from "@/components/ui/bgRipple";
+import dynamic from "next/dynamic";
 
 // Dynamic imports for heavy components
 const HomeSection = dynamic(() => import("@/components/features/portfolio/HomeSection"), {
@@ -22,6 +21,11 @@ const ProjectsSection = dynamic(() => import("@/components/features/projects/Pro
 
 const ContactSection = dynamic(() => import("@/components/features/contact/ContactSection"), {
   loading: () => <div className="min-h-screen flex items-center justify-center">Loading...</div>,
+  ssr: true,
+});
+
+const WorkWithMeSection = dynamic(() => import("@/components/features/work/WorkWithMeSection"), {
+  loading: () => <div className="py-20 flex items-center justify-center text-zinc-500">Loading Work Section...</div>,
   ssr: true,
 });
 
@@ -50,21 +54,19 @@ export default function SinglePageLayout() {
       maxWidth="full"
     >
       <CleanGridBackground
-        rows={80}
-        cols={100}
         cellSize={20}
-        opacity={0.6}
-        borderOpacity={0.2}
         className="z-0"
         aria-hidden="true"
-      />
-      <SectionLayout id="home" spacing="xl">
+      />     
+       <SectionLayout id="home" spacing="xl">
         <HomeSection />
       </SectionLayout>
 
       <AboutSection />
 
       <ProjectsSection />
+
+      <WorkWithMeSection />
 
       <ContactSection />
 
@@ -74,3 +76,4 @@ export default function SinglePageLayout() {
     </PageLayout>
   );
 }
+

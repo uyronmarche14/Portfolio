@@ -1,7 +1,8 @@
+import { Navbar } from "@/components/layout";
+import ThemeSwitcher from "@/components/ui/ThemeSwitcher";
+import { Providers } from "@/providers";
 import type { Metadata } from "next";
 import localFont from 'next/font/local';
-import { Providers } from "@/providers";
-import { Navbar } from "@/components/layout";
 import "./globals.css";
 
 const RawknerFont = localFont({
@@ -65,6 +66,7 @@ export default function RootLayout({
               {children}
             </main>
           </div>
+          <ThemeSwitcher />
         </Providers>
       </body>
     </html>

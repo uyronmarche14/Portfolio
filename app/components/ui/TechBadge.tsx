@@ -1,45 +1,10 @@
 "use client";
 
-import * as React from "react";
-import { motion } from "framer-motion";
-import {
-  SiNextdotjs,
-  SiTypescript,
-  SiTailwindcss,
-  SiReact,
-  SiPrisma,
-  SiPostgresql,
-  SiMysql,
-  SiFirebase,
-  SiNodedotjs,
-  SiJavascript,
-  SiGooglemaps,
-  SiStripe,
-  SiRedux,
-} from "react-icons/si";
-import type { IconType } from "react-icons";
+import { techIconMap } from "@/lib/data/icons";
 import { cn } from "@/lib/utils";
-
-const techIconMap: Record<string, IconType> = {
-  "Next.js": SiNextdotjs,
-  TypeScript: SiTypescript,
-  TailwindCSS: SiTailwindcss,
-  React: SiReact,
-  Prisma: SiPrisma,
-  PostgreSQL: SiPostgresql,
-  MySQL: SiMysql,
-  Firebase: SiFirebase,
-  "Node.js": SiNodedotjs,
-  JavaScript: SiJavascript,
-  "Google Maps API": SiGooglemaps,
-  "Stripe API": SiStripe,
-  Redux: SiRedux,
-  "C#": SiReact,
-  Java: SiReact,
-  "Android Studio": SiReact,
-  WinForms: SiReact,
-  "OpenAI API": SiReact,
-};
+import { motion } from "framer-motion";
+import * as React from "react";
+import { SiReact } from "react-icons/si";
 
 export interface TechBadgeProps {
   /**

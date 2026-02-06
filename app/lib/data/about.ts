@@ -126,6 +126,16 @@ export const timelineYears: TimelineYear[] = [
         title: "Advance Frontend Architechture ",
         description: "Worked on frontend architechture projects using Next.js, Tailwind CSS, React, TypeScript, and Scrum Agile methodology",  
         icon: "Code"
+      },
+      {
+        title: "Joined a startup as a Fullstack Developer (Mostly Frontend Developer)",
+        description: "Worked as a Fullstack Developer for a startup company, mainly using vite, react, typescript, docker, aws, and mongodb", 
+        icon: "Code"
+      },
+      {
+        title: "Started my first work as a Software Engineer",
+        description: "worked in multiple projects AI Command Center for a fitness app and health Checker", 
+        icon: "Health"
       }
 
     ]

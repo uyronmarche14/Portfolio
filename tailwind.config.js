@@ -19,16 +19,16 @@ module.exports = {
   			border: 'hsl(var(--border))',
   			input: 'hsl(var(--input))',
   			ring: 'hsl(var(--ring))',
-  			background: '#0f0e17',
-  			foreground: '#ffffff',
-  			primary: '#ff8906',
-  			secondary: '#f25f4c',
+  			background: 'rgb(var(--background) / <alpha-value>)',
+  			foreground: 'rgb(var(--foreground) / <alpha-value>)',
+  			primary: 'rgb(var(--primary) / <alpha-value>)',
+  			secondary: 'rgb(var(--secondary) / <alpha-value>)',
+  			accent: 'rgb(var(--accent) / <alpha-value>)',
   			tertiary: '#e53170',
-  			headline: '#ffffff',
-  			paragraph: '#a7a9be',
+  			headline: 'rgb(var(--foreground) / <alpha-value>)',
+  			paragraph: 'rgb(var(--secondary) / <alpha-value>)',
   			destructive: '#ef4444',
   			muted: '#6b7280',
-  			accent: '#a855f7',
   			popover: '#1f2937',
   			card: '#111827'
   		},
@@ -55,22 +55,6 @@ module.exports = {
 			]
 		},
   		keyframes: {
-  			'accordion-down': {
-  				from: {
-  					height: '0'
-  				},
-  				to: {
-  					height: 'var(--radix-accordion-content-height)'
-  				}
-  			},
-  			'accordion-up': {
-  				from: {
-  					height: 'var(--radix-accordion-content-height)'
-  				},
-  				to: {
-  					height: '0'
-  				}
-  			},
   			'accordion-down': {
   				from: {
   					height: '0'

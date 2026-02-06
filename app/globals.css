@@ -6,7 +6,7 @@
 :root {
     --background: 255 255 255;
     --foreground: 17 17 17;
-    --primary: 59 130 246;
+    --primary: 255 137 6;
     --secondary: 107 114 128;
     --accent: 168 85 247;
     --grid-border: 0.05;
@@ -16,9 +16,31 @@
 [data-theme="dark"], .dark {
   --background: 17 17 17;
   --foreground: 255 255 255;
-  --primary: 59 130 246;
+  --primary: 255 137 6;
   --secondary: 156 163 175;
   --accent: 168 85 247;
+  --grid-border: 0.08;
+  --grid-opacity: 0.03;
+}
+
+/* Black & White Monochrome Theme */
+[data-theme="bw"], .bw {
+  --background: 0 0 0;
+  --foreground: 255 255 255;
+  --primary: 255 255 255;
+  --secondary: 160 160 160;
+  --accent: 200 200 200;
+  --grid-border: 0.1;
+  --grid-opacity: 0.04;
+}
+
+/* Light Theme */
+[data-theme="light"], .light {
+  --background: 255 255 255;
+  --foreground: 17 17 17;
+  --primary: 255 137 6;
+  --secondary: 75 85 99;
+  --accent: 139 92 246;
   --grid-border: 0.08;
   --grid-opacity: 0.03;
 }
