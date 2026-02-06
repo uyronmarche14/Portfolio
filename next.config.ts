@@ -62,6 +62,9 @@ const nextConfig: NextConfig = {
     ],
   },
 
+  // Turbopack config (required for Next.js 16+)
+  turbopack: {},
+
   // Webpack optimizations
   webpack(config: any, { dev, isServer }: any) {
     // Bundle splitting
