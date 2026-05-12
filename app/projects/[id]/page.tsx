@@ -68,9 +68,8 @@ export default function ProjectPage() {
       <main className="relative min-h-screen bg-background overflow-hidden">
         {/* Background */}
         <CleanGridBackground className="fixed inset-0 z-0" />
-        <div className="fixed inset-0 z-0 bg-gradient-to-b from-transparent via-background/60 to-background pointer-events-none" />
 
-        <div className="relative z-10 container mx-auto max-w-4xl px-4 sm:px-6 pb-16 pt-24 md:pt-32">
+        <div className="relative z-10 mx-auto w-full max-w-6xl px-4 pb-16 pt-28 sm:px-6 lg:px-8 md:pt-32">
           {/* Back Navigation */}
           <motion.div
             initial={{ opacity: 0, y: -10 }}
@@ -79,10 +78,10 @@ export default function ProjectPage() {
           >
             <Link
               href="/"
-              className="inline-flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors group"
+              className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-wider text-foreground/50 hover:text-primary transition-colors duration-150 group"
             >
-              <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
-              <span className="text-sm">{PROJECTS_CONTENT.backToHome}</span>
+              <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform duration-150" />
+              <span>{PROJECTS_CONTENT.backToHome}</span>
             </Link>
           </motion.div>
 
@@ -98,36 +97,35 @@ export default function ProjectPage() {
                 setCurrentImageIndex(0);
               }}
             >
-              <div className="relative overflow-hidden rounded-2xl border border-border/30">
+              <div className="relative overflow-hidden border-2 border-foreground shadow-brutal-lg">
                 <Image
                   width={1200}
                   height={675}
                   src={project.screenshots?.[0] ?? project.image}
                   alt={project.title}
-                  className="aspect-video w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  className="aspect-video w-full object-cover transition-transform duration-300 group-hover:scale-105"
                   priority
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-background/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               </div>
             </motion.div>
           )}
 
-          {/* Title & Description - Centered */}
+          {/* Title & Description */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
             className="text-center mb-12"
           >
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-rawkner font-bold text-foreground tracking-tight mb-6">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-rawkner font-bold text-foreground tracking-tight mb-6 uppercase">
               {project.title}
             </h1>
-            <p className="text-lg md:text-xl text-muted-foreground leading-relaxed max-w-2xl mx-auto">
+            <p className="text-lg md:text-xl text-foreground/60 leading-relaxed max-w-2xl mx-auto">
               {project.description}
             </p>
           </motion.div>
 
-          {/* Tech Stack & Links Row - Centered */}
+          {/* Tech Stack & Links Row */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -136,11 +134,11 @@ export default function ProjectPage() {
           >
             {/* Tech Badges */}
             <div className="flex flex-wrap justify-center gap-2">
-              {project.technologies?.slice(0, 8).map((tech) => (
-                <TechBadge key={tech} technology={tech} />
+              {project.technologies?.slice(0, 8).map((tech, i) => (
+                <TechBadge key={tech} technology={tech} index={i} size="sm" />
               ))}
               {project.technologies && project.technologies.length > 8 && (
-                <span className="px-3 py-1 text-xs text-muted-foreground bg-background/50 rounded-full border border-border/30">
+                <span className="px-3 py-1 font-mono text-xs text-foreground/50 bg-foreground/5 border-2 border-foreground/30 uppercase tracking-wider">
                   +{project.technologies.length - 8} more
                 </span>
               )}
@@ -153,7 +151,7 @@ export default function ProjectPage() {
                   href={project.githubUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-background/60 backdrop-blur-sm border border-border/50 text-sm text-foreground hover:border-primary/50 hover:text-primary transition-all duration-200 cursor-pointer"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 border-2 border-foreground bg-background font-mono text-xs font-bold uppercase tracking-wider text-foreground shadow-brutal-sm hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-brutal transition-all duration-150 cursor-pointer"
                 >
                   <Github className="w-4 h-4" />
                   View Code
@@ -164,7 +162,7 @@ export default function ProjectPage() {
                   href={project.liveUrl || project.liveDemoUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-primary text-primary-foreground text-sm font-medium hover:bg-primary/90 transition-all duration-200 cursor-pointer"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 border-2 border-foreground bg-primary font-mono text-xs font-bold uppercase tracking-wider text-background shadow-brutal-sm hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-brutal transition-all duration-150 cursor-pointer"
                 >
                   <ExternalLink className="w-4 h-4" />
                   Live Demo
@@ -174,7 +172,7 @@ export default function ProjectPage() {
           </motion.div>
 
           {/* Divider */}
-          <div className="w-16 h-px bg-border/50 mx-auto mb-16" />
+          <div className="w-16 h-1 bg-primary mx-auto mb-16" />
 
           {/* Overview Section */}
           {project.paragraph && (
@@ -184,16 +182,16 @@ export default function ProjectPage() {
               transition={{ delay: 0.4 }}
               className="mb-16"
             >
-              <h2 className="text-sm font-semibold text-primary uppercase tracking-widest mb-4 text-center">
+              <h2 className="font-mono text-xs font-bold text-primary uppercase tracking-widest mb-4 text-center">
                 Overview
               </h2>
-              <p className="text-muted-foreground leading-relaxed text-center max-w-2xl mx-auto">
+              <p className="text-foreground/60 leading-relaxed text-center max-w-2xl mx-auto">
                 {project.paragraph}
               </p>
             </motion.section>
           )}
 
-          {/* Features Section - Card Grid */}
+          {/* Features Section */}
           {project.features && project.features.length > 0 && (
             <motion.section
               initial={{ opacity: 0, y: 20 }}
@@ -201,18 +199,18 @@ export default function ProjectPage() {
               transition={{ delay: 0.5 }}
               className="mb-16"
             >
-              <h2 className="text-sm font-semibold text-primary uppercase tracking-widest mb-8 text-center">
+              <h2 className="font-mono text-xs font-bold text-primary uppercase tracking-widest mb-8 text-center">
                 Key Features
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {project.features.map((feature, index) => (
                   <div
                     key={index}
-                    className="p-5 rounded-xl bg-background/40 backdrop-blur-sm border border-border/30 hover:border-primary/30 transition-all duration-300"
+                    className="p-5 bg-foreground/5 border-2 border-foreground/20 hover:border-foreground transition-all duration-150"
                   >
                     <div className="flex items-start gap-3">
-                      <div className="w-1.5 h-1.5 bg-primary rounded-full mt-2 flex-shrink-0" />
-                      <span className="text-sm text-muted-foreground leading-relaxed">
+                      <div className="w-2 h-2 bg-primary mt-1.5 flex-shrink-0" />
+                      <span className="text-sm text-foreground/60 leading-relaxed">
                         {feature}
                       </span>
                     </div>
@@ -230,7 +228,7 @@ export default function ProjectPage() {
               transition={{ delay: 0.6 }}
               className="mb-16"
             >
-              <h2 className="text-sm font-semibold text-primary uppercase tracking-widest mb-8 text-center">
+              <h2 className="font-mono text-xs font-bold text-primary uppercase tracking-widest mb-8 text-center">
                 Screenshots
               </h2>
               <ScreenshotCarousel
@@ -253,7 +251,7 @@ export default function ProjectPage() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 bg-black/95 backdrop-blur-md flex items-center justify-center"
+            className="fixed inset-0 z-50 bg-black/95 flex items-center justify-center"
             onClick={() => setSelectedImage(null)}
           >
             <div
@@ -263,7 +261,7 @@ export default function ProjectPage() {
               {/* Close */}
               <button
                 onClick={() => setSelectedImage(null)}
-                className="absolute top-6 right-6 z-10 p-3 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors cursor-pointer"
+                className="absolute top-6 right-6 z-10 p-3 border-2 border-white/30 bg-white/10 hover:bg-white/20 text-white transition-all duration-150 cursor-pointer"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -273,13 +271,13 @@ export default function ProjectPage() {
                 <>
                   <button
                     onClick={() => navigateImage("prev")}
-                    className="absolute left-4 md:left-8 z-10 p-3 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors cursor-pointer"
+                    className="absolute left-4 md:left-8 z-10 p-3 border-2 border-white/30 bg-white/10 hover:bg-white/20 text-white transition-all duration-150 cursor-pointer"
                   >
                     <ChevronLeft className="w-5 h-5" />
                   </button>
                   <button
                     onClick={() => navigateImage("next")}
-                    className="absolute right-4 md:right-8 z-10 p-3 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors cursor-pointer"
+                    className="absolute right-4 md:right-8 z-10 p-3 border-2 border-white/30 bg-white/10 hover:bg-white/20 text-white transition-all duration-150 cursor-pointer"
                   >
                     <ChevronRight className="w-5 h-5" />
                   </button>
@@ -296,10 +294,10 @@ export default function ProjectPage() {
                         setCurrentImageIndex(i);
                         setSelectedImage(project.screenshots![i]);
                       }}
-                      className={`h-1.5 rounded-full transition-all cursor-pointer ${
+                      className={`transition-all cursor-pointer ${
                         i === currentImageIndex
-                          ? "w-6 bg-primary"
-                          : "w-1.5 bg-white/40 hover:bg-white/60"
+                          ? "w-6 h-2 bg-primary"
+                          : "w-2 h-2 bg-white/40 hover:bg-white/60"
                       }`}
                     />
                   ))}
@@ -317,7 +315,7 @@ export default function ProjectPage() {
                   height={900}
                   src={selectedImage}
                   alt={project.title}
-                  className="rounded-xl object-contain max-h-[85vh] shadow-2xl"
+                  className="object-contain max-h-[85vh] border-2 border-white/20"
                   priority
                 />
               </motion.div>

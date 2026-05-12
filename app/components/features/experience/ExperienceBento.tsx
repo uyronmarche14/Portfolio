@@ -1,244 +1,115 @@
 "use client";
+
 import { BentoGrid, BentoGridItem } from "@/components/ui/bento-grid";
 import HeaderTitle from "@/components/ui/header";
-import { timelineYears } from "@/lib/data/about";
-import {
-  Box,
-  Briefcase,
-  Code,
-  GraduationCap,
-  Laptop,
-  Shield,
-  Smartphone,
-  Trophy,
-} from "lucide-react";
+import { BrutalistCornerPattern } from "@/components/ui/accents/BrutalistCornerPattern";
+import { workExperience } from "@/lib/data/workExperience";
+import { Briefcase, Code, Laptop, Smartphone } from "lucide-react";
 
-// Helper to map icon strings to components
-const getIcon = (iconName: string) => {
-  switch (iconName.toLowerCase()) {
-    case "trophy": return <Trophy className="h-4 w-4 text-muted-foreground" />;
-    case "school": 
-    case "graduation-cap": return <GraduationCap className="h-4 w-4 text-muted-foreground" />;
-    case "laptop": return <Laptop className="h-4 w-4 text-muted-foreground" />;
-    case "shield": return <Shield className="h-4 w-4 text-muted-foreground" />;
-    case "android": return <Smartphone className="h-4 w-4 text-muted-foreground" />;
-    case "blender": return <Box className="h-4 w-4 text-muted-foreground" />;
-    case "code": return <Code className="h-4 w-4 text-muted-foreground" />;
-    default: return <Briefcase className="h-4 w-4 text-muted-foreground" />;
-  }
-};
+const roleIcons = {
+  freelance: <Briefcase className="h-5 w-5 text-primary" />,
+  aique: (
+    <div className="flex gap-2">
+      <Code className="h-4 w-4 text-primary" />
+      <Laptop className="h-4 w-4 text-primary" />
+    </div>
+  ),
+  beyondgen: (
+    <div className="flex gap-2">
+      <Briefcase className="h-4 w-4 text-primary" />
+      <Code className="h-4 w-4 text-primary" />
+    </div>
+  ),
+  keepitsimpleos: (
+    <div className="flex gap-2">
+      <Smartphone className="h-4 w-4 text-primary" />
+      <Laptop className="h-4 w-4 text-primary" />
+    </div>
+  ),
+  buildfast: (
+    <div className="flex gap-2">
+      <Code className="h-4 w-4 text-primary" />
+      <Briefcase className="h-4 w-4 text-primary" />
+    </div>
+  ),
+} as const;
+
+const cornerVariants = [
+  "confetti",
+  "geometric",
+  "waves",
+  "crosshairs",
+  "confetti",
+] as const;
 
 const ExperienceBento = () => {
-  // Extract and transform specific experiences
-  // We need to flatten the timelineYears to get accessible features
-  
-  // 1. Hero Item: Professional Contract (Freelance Developer)
-  const freelanceExp = timelineYears
-    .find(y => y.year === "2025")
-    ?.features.find(f => f.title.includes("Professional Contract"));
-
-  // 2. Internship
-  const internshipExp = timelineYears
-    .find(y => y.year === "2024")
-    ?.features.find(f => f.title.includes("Internship"));
-
-  // 3. 3D Architecture
-  const blenderExp = timelineYears
-    .find(y => y.year === "2025")
-    ?.features.find(f => f.title.includes("3d Architechture"));
-
-  // 4. IT Olympics (Cybersecurity)
-  const olympicsCyberExp = timelineYears
-    .find(y => y.year === "2023")
-    ?.features.find(f => f.title.includes("Cybersecurity"));
-    
-  // 5. IT Olympics (Android)
-  const olympicsAndroidExp = timelineYears
-    .find(y => y.year === "2024")
-    ?.features.find(f => f.title.includes("Android"));
-
-  // 6. University (Summary)
-  const universityExp = {
-    title: "Bachelor of Science in IT",
-    description: "Taguig City University (2021-2025). Dean's Lister, Officer roles in CSS and Robotics organizations.",
-    icon: "school",
-    header: <div className="flex flex-1 w-full h-full min-h-[6rem] rounded-xl bg-gradient-to-br from-neutral-200 dark:from-neutral-900 dark:to-neutral-800 to-neutral-100 animate-pulse" />
-  };
-
-  // Construct items array with specific content from user reference
-  const items = [
-    {
-      title: "Freelance Developer",
-      description: (
-        <div className="flex flex-col gap-3 h-full justify-end">
-            <p className="text-xs text-muted-foreground leading-relaxed line-clamp-3">Building modern web and mobile applications for clients around the world.</p>
-            <div className="flex flex-wrap gap-1.5">
-                {["React.js", "React Native", "Node.js"].map(tag => (
-                    <span key={tag} className="px-2 py-0.5 rounded-md bg-primary/10 text-primary text-[10px] font-bold border border-primary/20">{tag}</span>
-                ))}
-            </div>
-            <div className="mt-2 pt-2 border-t border-border/50">
-                <div className="flex items-center gap-2 mb-1">
-                    <span className="w-1.5 h-1.5 rounded-full bg-primary"></span>
-                    <span className="text-[10px] font-bold text-foreground">2 years</span>
-                </div>
-                <p className="text-[10px] text-muted-foreground italic">"Provided over 8 clients with different project mobile, web and such more"</p>
-            </div>
+  const items = workExperience.map((entry, index) => ({
+    title: entry.role,
+    description: (
+      <div className="flex h-full flex-col justify-end gap-3">
+        <div>
+          <p className="font-mono text-[10px] font-bold uppercase tracking-widest text-primary/80">
+            {entry.company}
+          </p>
+          <p className="mt-2 text-xs leading-relaxed text-foreground/60">
+            {entry.summary}
+          </p>
         </div>
-      ),
-      header: (
-        <div className="relative w-full h-full overflow-hidden">
-            <div className="absolute inset-0 bg-[url('https://res.cloudinary.com/ddnxfpziq/image/upload/v1761991336/bg1_t0hqmn.jpg')] bg-cover bg-center opacity-60 transition-all duration-500 group-hover/bento:opacity-80" />
-            <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-background via-background/95 to-transparent" />
+        <div className="flex flex-wrap gap-1.5">
+          {entry.stack.map((tag) => (
+            <span
+              key={tag}
+              className="border border-primary/30 bg-primary/10 px-2 py-0.5 font-mono text-[10px] font-bold uppercase tracking-wider text-primary"
+            >
+              {tag}
+            </span>
+          ))}
         </div>
-      ),
-      icon: <Briefcase className="h-5 w-5 text-primary" />,
-      className: "md:col-span-1 md:row-span-2",
-    },
-    {
-      title: "Student Leadership",
-      description: (
-        <div className="flex flex-col gap-3 h-full justify-end">
-            <p className="text-xs text-muted-foreground leading-relaxed">Leading student organizations and clubs to success through effective planning.</p>
-             <div className="flex flex-wrap gap-1.5">
-                {["Leadership", "Event Planning", "Management"].map(tag => (
-                    <span key={tag} className="px-2 py-0.5 rounded-md bg-primary/10 text-primary text-[10px] font-bold border border-primary/20">{tag}</span>
-                ))}
-            </div>
-            <div className="mt-2 pt-2 border-t border-border/50">
-                <div className="flex items-center gap-2 mb-1">
-                    <span className="w-1.5 h-1.5 rounded-full bg-primary"></span>
-                    <span className="text-[10px] font-bold text-foreground">4 years in College</span>
-                </div>
-                <p className="text-[10px] text-muted-foreground italic">"Organizational leadership & Team Management"</p>
-            </div>
+        <div className="mt-2 border-t-2 border-foreground/20 pt-2">
+          <div className="mb-1 flex items-center gap-2">
+            <span className="h-2 w-2 bg-primary" />
+            <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-foreground">
+              {entry.dateRange}
+            </span>
+          </div>
+          <p className="text-[10px] italic text-foreground/50">
+            &quot;{entry.highlight}&quot;
+          </p>
         </div>
-      ),
-      header: (
-        <div className="relative w-full h-full overflow-hidden">
-             <div className="absolute inset-0 bg-[url('https://res.cloudinary.com/ddnxfpziq/image/upload/v1752335587/photo_2024-09-22_21-31-55_2_zegp01.jpg')] bg-cover bg-center opacity-60" />
-             <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-background via-background/95 to-transparent" />
-        </div>
-      ),
-      icon: (
-        <div className="flex gap-2">
-            <Trophy className="h-4 w-4 text-primary" />
-            <Briefcase className="h-4 w-4 text-primary" />
-        </div>
-      ),
-      className: "md:col-span-1 md:row-span-2",
-    },
-    {
-      title: "Mobile Development",
-      description: (
-         <div className="flex flex-col gap-3 h-full justify-end">
-            <p className="text-xs text-muted-foreground leading-relaxed">Building cross-platform mobile applications with modern frameworks.</p>
-             <div className="flex flex-wrap gap-1.5">
-                {["React Native", "Android Studio", "Expo"].map(tag => (
-                    <span key={tag} className="px-2 py-0.5 rounded-md bg-primary/10 text-primary text-[10px] font-bold border border-primary/20">{tag}</span>
-                ))}
-            </div>
-            <div className="mt-2 pt-2 border-t border-border/50">
-                <div className="flex items-center gap-2 mb-1">
-                    <span className="w-1.5 h-1.5 rounded-full bg-primary"></span>
-                    <span className="text-[10px] font-bold text-foreground">3 years</span>
-                </div>
-                <p className="text-[10px] text-muted-foreground italic">"Specialized in modern mobile applications"</p>
-            </div>
-        </div>
-      ),
-      header: (
-        <div className="relative w-full h-full overflow-hidden">
-            <div className="absolute inset-0 bg-[url('https://res.cloudinary.com/ddnxfpziq/image/upload/v1752335562/ict4_hibmup.jpg')] bg-cover bg-center opacity-60" />
-            <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-background via-background/95 to-transparent" />
-        </div>
-      ),
-      icon: (
-        <div className="flex gap-2">
-            <Smartphone className="h-4 w-4 text-primary" />
-            <Code className="h-4 w-4 text-primary" />
-        </div>
-      ),
-      className: "md:col-span-1 md:row-span-2",
-    },
-    {
-      title: "Poster Graphic Design",
-      description: (
-        <div className="flex flex-col gap-3 h-full justify-end">
-            <p className="text-xs text-muted-foreground leading-relaxed">Creating visually appealing posters for events and promotions.</p>
-             <div className="flex flex-wrap gap-1.5">
-                {["Canva", "Design", "Visual Communication"].map(tag => (
-                    <span key={tag} className="px-2 py-0.5 rounded-md bg-primary/10 text-primary text-[10px] font-bold border border-primary/20">{tag}</span>
-                ))}
-            </div>
-            <div className="mt-2 pt-2 border-t border-border/50">
-                <div className="flex items-center gap-2 mb-1">
-                    <span className="w-1.5 h-1.5 rounded-full bg-primary"></span>
-                    <span className="text-[10px] font-bold text-foreground">2 years</span>
-                </div>
-                <p className="text-[10px] text-muted-foreground italic">"Modern Designs"</p>
-            </div>
-        </div>
-      ),
-      header: (
-        <div className="relative w-full h-full overflow-hidden">
-             <div className="absolute inset-0 bg-[url('https://res.cloudinary.com/ddnxfpziq/image/upload/v1752335526/a80b9819-8deb-4203-a284-a421b32dc81e_lrlptk.jpg')] bg-cover bg-center opacity-60" />
-             <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-background via-background/95 to-transparent" />
-        </div>
-      ),
-      icon: (
-        <div className="flex gap-2">
-            <Box className="h-4 w-4 text-primary" />
-            <Laptop className="h-4 w-4 text-primary" />
-        </div>
-      ),
-      className: "md:col-span-1",
-    },
-    {
-      title: "Web Development",
-      description: (
-         <div className="flex flex-col gap-3 h-full justify-end">
-            <p className="text-xs text-muted-foreground leading-relaxed">Building responsive and intuitive user interfaces.</p>
-             <div className="flex flex-wrap gap-1.5">
-                {["React.js", "Next.js", "Tailwind CSS"].map(tag => (
-                    <span key={tag} className="px-2 py-0.5 rounded-md bg-primary/10 text-primary text-[10px] font-bold border border-primary/20">{tag}</span>
-                ))}
-            </div>
-            <div className="mt-2 pt-2 border-t border-border/50">
-                <div className="flex items-center gap-2 mb-1">
-                    <span className="w-1.5 h-1.5 rounded-full bg-primary"></span>
-                    <span className="text-[10px] font-bold text-foreground">1 year</span>
-                </div>
-                <p className="text-[10px] text-muted-foreground italic">"Specialized in modern web applications"</p>
-            </div>
-        </div>
-      ),
-      header: (
-        <div className="relative w-full h-full overflow-hidden">
-             <div className="absolute inset-0 bg-[url('https://res.cloudinary.com/ddnxfpziq/image/upload/v1770363154/photo_2026-02-06_15-30-20_iyrqgb.jpg')] bg-cover bg-center opacity-60" />
-             <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-background via-background/95 to-transparent" />
-        </div>
-      ),
-      icon: (
-         <div className="flex gap-2">
-            <Code className="h-4 w-4 text-primary" />
-            <Laptop className="h-4 w-4 text-primary" />
-        </div>
-      ),
-      className: "md:col-span-2",
-    },
-  ];
+      </div>
+    ),
+    header: (
+      <div className="group/header relative h-full w-full overflow-hidden bg-foreground/5">
+        <div
+          className="absolute inset-0 scale-100 bg-cover bg-center grayscale transition-all duration-300 group-hover/bento:scale-105 group-hover/bento:grayscale-0"
+          style={{ backgroundImage: `url('${entry.image}')` }}
+        />
+        <div className="absolute inset-0 bg-primary/20 opacity-0 mix-blend-overlay transition-opacity duration-300 group-hover/bento:opacity-100" />
+        <BrutalistCornerPattern
+          variant={cornerVariants[index % cornerVariants.length]}
+          className="top-0 right-0 origin-top-right text-primary opacity-90 transition-transform duration-300 group-hover/bento:scale-110"
+        />
+      </div>
+    ),
+    icon: roleIcons[entry.id as keyof typeof roleIcons] || (
+      <Briefcase className="h-5 w-5 text-primary" />
+    ),
+    className:
+      index === workExperience.length - 1
+        ? "sm:col-span-2 lg:col-span-2"
+        : "sm:col-span-1 lg:col-span-1",
+  }));
 
   return (
-    <section id="experience" className="py-20 relative w-full">
-         <div className="mb-12 md:mb-16">
-             <HeaderTitle 
-            introText="About"
-            highlightText="My Experiences"
-            description="Your nonstop to experience everything"
-          />  
-        </div>
-      <BentoGrid className="max-w-6xl ">
+    <div id="experience" className="relative w-full py-10 sm:py-16 md:py-20">
+      <div className="mx-auto mb-8 max-w-6xl px-4 sm:mb-12 sm:px-6 md:mb-16 lg:px-4">
+        <HeaderTitle
+          introText="Resume-Backed"
+          highlightText="Experience"
+          description="My work history is prioritized from the updated resume first, then adapted into clearer portfolio summaries for the roles, systems, and product environments I’ve worked in."
+        />
+      </div>
+      <BentoGrid className="max-w-6xl lg:grid-cols-2">
         {items.map((item, i) => (
           <BentoGridItem
             key={i}
@@ -250,12 +121,8 @@ const ExperienceBento = () => {
           />
         ))}
       </BentoGrid>
-    </section>
+    </div>
   );
 };
-
-const Skeleton = () => (
-  <div className="flex flex-1 w-full h-full min-h-[6rem] rounded-xl bg-gradient-to-br from-neutral-200 dark:from-neutral-900 dark:to-neutral-800 to-neutral-100" />
-);
 
 export default ExperienceBento;

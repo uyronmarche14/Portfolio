@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/shadcn/button";
 import { NAV_ITEMS, NAVBAR_LABELS } from "@/lib/data/navbar";
 import { motion } from "framer-motion";
 import { FileText, Menu, X } from "lucide-react";
-import { useTheme } from "next-themes";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { type NavigationItem } from "./Navigation";
 
@@ -12,138 +12,129 @@ const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
   const [isScrolled, setIsScrolled] = useState(false);
-  const [mounted, setMounted] = useState(false);
-  const { theme } = useTheme();
-  
-  // Prevent hydration mismatch - only use theme after mount
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-  
-  // Determine if we're in light mode (only after mounted)
-  const isLight = mounted && theme === "light";
+  const pathname = usePathname();
+  const router = useRouter();
+  const toggleMenu = () => setIsOpen((value) => (value ? false : true));
 
-  const toggleMenu = () => setIsOpen(!isOpen);
-
-  // Handle scroll detection
   useEffect(() => {
+    if (pathname !== "/" && pathname !== "/cli" && pathname !== "/chatbot") {
+      setIsScrolled(true);
+      return;
+    }
+
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
     };
 
+    handleScroll();
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  }, [pathname]);
 
-  // Convert nav items to Navigation component format
   const navigationItems = useMemo(
     (): NavigationItem[] =>
       NAV_ITEMS.map((item) => ({
         label: item.label,
         href: item.href,
-        active: activeSection === item.href.substring(1),
+        active:
+          item.kind === "route"
+            ? pathname === item.href
+            : pathname === "/" && activeSection === item.href.substring(1),
       })),
-    [activeSection]
+    [activeSection, pathname]
   );
 
-  // Handle scroll to section with smooth behavior
   const handleNavigationClick = (
     item: NavigationItem,
     event: React.MouseEvent
   ) => {
     event.preventDefault();
+
+    const navItem = NAV_ITEMS.find(
+      (candidate) =>
+        candidate.label === item.label && candidate.href === item.href
+    );
+
+    if (navItem?.kind === "route") {
+      router.push(navItem.href);
+      setIsOpen(false);
+      return;
+    }
+
     const sectionId = item.href.substring(1);
+
+    if (pathname !== "/") {
+      router.push("/" + item.href);
+      setIsOpen(false);
+      return;
+    }
+
     const element = document.getElementById(sectionId);
     if (element) {
       element.scrollIntoView({ behavior: "smooth", block: "start" });
       setActiveSection(sectionId);
     }
-    setIsOpen(false); // Close mobile menu after clicking
+    setIsOpen(false);
   };
 
-  // Use neutral classes before mount to prevent hydration mismatch
-  const navBgClass = isScrolled
-    ? "border-b border-foreground/[0.08] bg-gradient-to-b from-foreground/[0.05] to-transparent shadow-2xl shadow-black/30 backdrop-blur-2xl"
-    : "bg-transparent";
-
-  const containerClass = "hover:shadow-3xl flex items-center rounded-2xl border shadow-2xl backdrop-blur-xl transition-all duration-500 border-foreground/[0.05] bg-foreground/[0.03] shadow-black/20 hover:shadow-black/30";
-  
-  const separatorClass = "h-8 w-px bg-foreground/[0.12]";
-  
-  const mobileNavClass = "overflow-hidden border-t backdrop-blur-2xl md:hidden border-foreground/[0.08] bg-foreground/[0.03]";
-  
-  const mobileBorderClass = "flex items-center gap-3 border-b pb-4 border-foreground/[0.08]";
-  
-  const mobileActionClass = "flex flex-col space-y-3 border-t pt-4 border-foreground/[0.08]";
+  const isSpecialPage = pathname === "/cli" || pathname === "/chatbot";
+  const navFrameClass =
+    isScrolled || isSpecialPage
+      ? "bg-background/95 supports-[backdrop-filter]:bg-background/85 backdrop-blur"
+      : "bg-background/90 supports-[backdrop-filter]:bg-background/75 backdrop-blur";
 
   return (
-    <nav
-      className={`fixed z-50 w-full transition-all duration-500 ${navBgClass}`}
-    >
-      <div className="relative mx-auto flex max-w-7xl items-center justify-center px-6 py-4 ">
-        {/* Center - Main Navigation */}
+    <nav className="fixed inset-x-0 top-4 z-50 px-4 sm:px-6 lg:px-8">
+      <div className="relative mx-auto flex w-full max-w-6xl items-center justify-center">
+        {/* Desktop Navigation */}
         <div className="hidden items-center md:flex">
-          <div className={containerClass}>
-            {/* Avatar Section */}
-            <div className="flex items-center px-4 py-3">
-              <h1 
-                className="text-xl font-extrabold font-rawkner bg-clip-text text-transparent bg-gradient-to-r from-foreground to-primary transition-all duration-500 hover:bg-gradient-to-r hover:from-purple-300 hover:to-purple-500"
-              >
+          <div className={"flex items-center border-2 border-foreground shadow-brutal transition-all duration-200 " + navFrameClass}>
+            {/* Brand */}
+            <div className="flex items-center px-5 py-3">
+              <h1 className="text-xl font-extrabold font-rawkner text-primary">
                 Rhyss
               </h1>
             </div>
 
-            {/* Vertical Separator */}
-            <div className={separatorClass} />
+            <div className="w-px h-10 bg-foreground" />
 
-            {/* Navigation Items */}
+            {/* Nav Links */}
             <div className="flex items-center px-2">
               {navigationItems.map((item) => (
                 <button
                   key={item.label}
                   onClick={(e) => handleNavigationClick(item, e)}
-                  className={`relative mx-1 rounded-xl px-4 py-2.5 text-sm font-medium tracking-wide transition-all duration-300 ${
-                    item.active
-                      ? "bg-foreground/20 text-foreground shadow-lg shadow-black/20 backdrop-blur-sm"
-                      : "text-foreground/60 hover:bg-foreground/[0.08] hover:text-foreground/90"
-                  }`}
+                  className={
+                    "relative mx-1 px-4 py-2.5 font-mono text-xs font-bold uppercase tracking-widest transition-all duration-150 " +
+                    (item.active
+                      ? "bg-primary text-background shadow-brutal-sm"
+                      : "text-foreground/60 hover:bg-foreground hover:text-background")
+                  }
                 >
                   {item.label}
-                  {item.active && (
-                    <motion.div
-                      className="absolute inset-0 rounded-xl border border-foreground/10 bg-gradient-to-r from-blue-400/20 to-purple-400/20"
-                      layoutId="activeTab"
-                      transition={{
-                        type: "spring",
-                        bounce: 0.2,
-                        duration: 0.6,
-                      }}
-                    />
-                  )}
                 </button>
               ))}
             </div>
 
-            {/* Vertical Separator */}
-            <div className={separatorClass} />
+            <div className="w-px h-10 bg-foreground" />
 
-            {/* Action Buttons */}
+            {/* Resume */}
             <div className="flex items-center gap-2 px-4 py-3">
               <ResumeDrawer />
             </div>
           </div>
         </div>
 
-        {/* Mobile Menu Button */}
+        {/* Mobile Menu Toggle */}
         <button
           onClick={toggleMenu}
-          className="hover:shadow-3xl rounded-2xl border p-3 shadow-2xl backdrop-blur-xl transition-all duration-500 focus:outline-none focus:ring-2 md:hidden border-foreground/[0.05] bg-foreground/[0.03] text-foreground/70 shadow-black/20 hover:bg-foreground/[0.08] hover:text-foreground hover:shadow-black/30 focus:ring-foreground/20"
+          className={"border-2 border-foreground p-3 shadow-brutal-sm transition-all duration-150 hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-brutal focus:outline-none md:hidden " + navFrameClass}
           aria-label={isOpen ? NAVBAR_LABELS.closeMenu : NAVBAR_LABELS.openMenu}
           aria-expanded={isOpen}
         >
           <motion.div
             animate={{ rotate: isOpen ? 180 : 0 }}
-            transition={{ duration: 0.3, ease: "easeInOut" }}
+            transition={{ duration: 0.2, ease: "easeInOut" }}
           >
             {isOpen ? <X size={20} /> : <Menu size={20} />}
           </motion.div>
@@ -157,52 +148,51 @@ const Navbar = () => {
           opacity: isOpen ? 1 : 0,
           height: isOpen ? "auto" : 0,
         }}
-        transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
-        className={mobileNavClass}
+        transition={{ duration: 0.2, ease: [0.4, 0, 0.2, 1] }}
+        className="mx-auto mt-3 w-full max-w-6xl overflow-hidden md:hidden"
         aria-hidden={!isOpen}
       >
-        <div className="space-y-4 p-6">
-          {/* Mobile Avatar Section */}
-          <div className={mobileBorderClass}>
-             <h1 
-                className="text-xl font-extrabold font-rawkner bg-clip-text text-transparent bg-gradient-to-r from-foreground to-primary transition-all duration-500 hover:bg-gradient-to-r hover:from-purple-300 hover:to-purple-500"
-              >
-                Rhyss
-              </h1>
+        <div className={"space-y-4 border-2 border-foreground p-6 shadow-brutal " + navFrameClass}>
+          {/* Brand */}
+          <div className="flex items-center gap-3 border-b-2 border-foreground pb-4">
+            <h1 className="text-xl font-extrabold font-rawkner text-primary">
+              Rhyss
+            </h1>
           </div>
 
-          {/* Mobile Navigation Items */}
+          {/* Links */}
           <div className="space-y-2">
             {navigationItems.map((item, index) => (
               <motion.button
                 key={item.label}
                 onClick={(e) => handleNavigationClick(item, e)}
-                className={`block w-full rounded-2xl px-4 py-3 text-left text-base font-medium transition-all duration-300 ${
-                  item.active
-                    ? "bg-foreground/20 text-foreground shadow-lg shadow-black/20 backdrop-blur-sm"
-                    : "text-foreground/60 hover:bg-foreground/[0.08] hover:text-foreground/90"
-                }`}
+                className={
+                  "block w-full px-4 py-3 text-left font-mono text-sm font-bold uppercase tracking-widest transition-all duration-150 " +
+                  (item.active
+                    ? "bg-primary text-background border-2 border-foreground shadow-brutal-sm"
+                    : "text-foreground/60 hover:bg-foreground hover:text-background border-2 border-transparent hover:border-foreground")
+                }
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: index * 0.1, duration: 0.3 }}
+                transition={{ delay: index * 0.05, duration: 0.2 }}
               >
                 {item.label}
               </motion.button>
             ))}
           </div>
 
-          {/* Mobile Action Buttons */}
+          {/* Resume */}
           <motion.div
-            className={mobileActionClass}
+            className="flex flex-col space-y-3 border-t-2 border-foreground pt-4"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3, duration: 0.3 }}
+            transition={{ delay: 0.2, duration: 0.2 }}
           >
             <ResumeDrawer
               trigger={
                 <Button
                   variant="ghost"
-                  className="w-full justify-start rounded-2xl border px-4 py-3 backdrop-blur-sm transition-all duration-300 border-foreground/[0.08] text-foreground/60 hover:bg-foreground/[0.08] hover:text-foreground/90"
+                  className="w-full justify-start border-2 border-foreground px-4 py-3 font-mono text-sm uppercase tracking-widest text-foreground hover:bg-foreground hover:text-background transition-all duration-150"
                 >
                   <FileText className="mr-3 h-4 w-4" />
                   View Resume

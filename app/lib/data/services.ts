@@ -41,7 +41,7 @@ export const serviceCards: ServiceCard[] = [
     description:
       "Building modern web and mobile applications for clients around the world.",
     skills: ["React.js", "React Native", "Node.js"],
-    experience: "2 years",
+    experience: "2+ years",
     highlight:
       "I had provided over 8 clients with different project mobile, web and such more",
     icon: Code,
@@ -52,7 +52,7 @@ export const serviceCards: ServiceCard[] = [
     description:
       "Leading student organizations and clubs to success through effective planning and execution.",
     skills: ["Leadership", "Event Planning", "Team Management"],
-    experience: "4 years in College",
+    experience: "4 academic years",
     highlight: "Organizational leadership",
     icon: Crown,
     additionalIcons: [BookOpen],
@@ -92,7 +92,7 @@ export const serviceCards: ServiceCard[] = [
     description:
       "Building responsive and intuitive user interfaces with modern frameworks and best practices.",
     skills: ["React.js", "Next.js", "Tailwind CSS"],
-    experience: "1 year",
+    experience: "2 years",
     highlight: "Specialized in modern web applications",
     icon: Globe,
     additionalIcons: [LayoutGrid, SiReact, SiNextdotjs, SiTailwindcss],

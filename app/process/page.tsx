@@ -3,7 +3,7 @@
 import { CleanGridBackground } from "@/components/ui/bgRipple";
 import { ProcessStep, processSteps } from "@/lib/data/process";
 import { AnimatePresence, motion } from "framer-motion";
-import { ArrowLeft, CheckCircle, Clock, Wrench, X } from "lucide-react";
+import { ArrowLeft, CheckCircle, Clock, FileText, X } from "lucide-react";
 import { useTheme } from "next-themes";
 import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
@@ -21,37 +21,37 @@ import ReactFlow, {
 } from "reactflow";
 import "reactflow/dist/style.css";
 
-// Custom Node Component - Responsive
+// Custom Node Component — Brutalist
 const ProcessNode = ({ data }: { data: { step: ProcessStep; theme: string } }) => {
   const { step, theme } = data;
   const isDark = theme !== "light";
 
   return (
     <div
-      className="px-3 py-2.5 sm:px-5 sm:py-4 rounded-lg sm:rounded-xl bg-background/80 backdrop-blur-sm border border-border/50 hover:border-primary/50 transition-all cursor-grab active:cursor-grabbing min-w-[120px] sm:min-w-[160px] max-w-[140px] sm:max-w-[180px]"
+      className="px-3 py-2.5 sm:px-5 sm:py-4 bg-background border-2 border-foreground shadow-brutal-sm hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-brutal transition-all duration-150 cursor-grab active:cursor-grabbing min-w-[120px] sm:min-w-[160px] max-w-[140px] sm:max-w-[180px]"
       style={{
-        background: isDark ? "rgba(17,17,17,0.9)" : "rgba(255,255,255,0.9)",
+        background: isDark ? "rgba(10,10,10,0.95)" : "rgba(255,251,240,0.95)",
       }}
     >
-      <Handle type="target" position={Position.Top} className="!bg-primary/50 !border-none !w-1.5 !h-1.5 sm:!w-2 sm:!h-2" />
+      <Handle type="target" position={Position.Top} className="!bg-primary !border-foreground !border !w-1.5 !h-1.5 sm:!w-2 sm:!h-2" />
       
       {/* Step Number */}
-      <div className="text-[8px] sm:text-[9px] font-bold text-primary mb-0.5 sm:mb-1">
-        STEP {step.id.padStart(2, "0")}
+      <div className="font-mono text-[8px] sm:text-[9px] font-bold text-primary uppercase tracking-widest mb-0.5 sm:mb-1">
+        Step {step.id.padStart(2, "0")}
       </div>
       
       {/* Title */}
-      <div className="text-[10px] sm:text-xs font-semibold text-foreground mb-0.5 sm:mb-1 leading-tight">
+      <div className="font-rawkner text-[10px] sm:text-xs font-bold text-foreground mb-0.5 sm:mb-1 leading-tight uppercase">
         {step.title}
       </div>
       
       {/* Duration */}
-      <div className="flex items-center gap-1 text-[8px] sm:text-[9px] text-muted-foreground">
+      <div className="flex items-center gap-1 font-mono text-[8px] sm:text-[9px] text-foreground/50 uppercase tracking-wider">
         <Clock className="w-2 h-2 sm:w-2.5 sm:h-2.5" />
         {step.duration}
       </div>
       
-      <Handle type="source" position={Position.Bottom} className="!bg-primary/50 !border-none !w-1.5 !h-1.5 sm:!w-2 sm:!h-2" />
+      <Handle type="source" position={Position.Bottom} className="!bg-primary !border-foreground !border !w-1.5 !h-1.5 sm:!w-2 sm:!h-2" />
     </div>
   );
 };
@@ -60,23 +60,59 @@ const nodeTypes = {
   process: ProcessNode,
 };
 
+const PROCESS_LAYOUT = [
+  { column: 0, row: 0 },
+  { column: -1, row: 1 },
+  { column: 1, row: 1 },
+  { column: 0, row: 2 },
+  { column: -1, row: 3 },
+  { column: 1, row: 3 },
+  { column: 0, row: 4 },
+  { column: -1, row: 5 },
+  { column: 1, row: 5 },
+  { column: 0, row: 6 },
+  { column: -1, row: 7 },
+  { column: 1, row: 7 },
+];
+
+const PROCESS_CONNECTIONS: Array<[string, string]> = [
+  ["1", "2"],
+  ["1", "3"],
+  ["2", "4"],
+  ["3", "4"],
+  ["4", "5"],
+  ["4", "6"],
+  ["5", "7"],
+  ["6", "7"],
+  ["7", "8"],
+  ["7", "9"],
+  ["8", "10"],
+  ["9", "10"],
+  ["10", "11"],
+  ["10", "12"],
+];
+
 // Responsive node positions
 const getNodes = (theme: string, isMobile: boolean): Node[] => {
-  const steps = processSteps;
-  const xOffset = isMobile ? 120 : 200;
-  const xSpread = isMobile ? 100 : 120;
-  const yGap = isMobile ? 80 : 100;
-  
-  return [
-    { id: "1", type: "process", data: { step: steps[0], theme }, position: { x: xOffset, y: 0 } },
-    { id: "2", type: "process", data: { step: steps[1], theme }, position: { x: xOffset - xSpread, y: yGap } },
-    { id: "3", type: "process", data: { step: steps[2], theme }, position: { x: xOffset + xSpread, y: yGap } },
-    { id: "4", type: "process", data: { step: steps[3], theme }, position: { x: xOffset, y: yGap * 2 } },
-    { id: "5", type: "process", data: { step: steps[4], theme }, position: { x: xOffset - xSpread, y: yGap * 3 } },
-    { id: "6", type: "process", data: { step: steps[5], theme }, position: { x: xOffset + xSpread, y: yGap * 3 } },
-    { id: "7", type: "process", data: { step: steps[6], theme }, position: { x: xOffset, y: yGap * 4 } },
-    { id: "8", type: "process", data: { step: steps[7], theme }, position: { x: xOffset, y: yGap * 5 } },
-  ];
+  const xCenter = isMobile ? 120 : 260;
+  const xSpread = isMobile ? 0 : 170;
+  const yGap = isMobile ? 88 : 118;
+
+  return processSteps.map((step, index) => {
+    const slot = isMobile
+      ? { column: 0, row: index }
+      : PROCESS_LAYOUT[index] ?? { column: 0, row: index };
+
+    return {
+      id: step.id,
+      type: "process",
+      data: { step, theme },
+      position: {
+        x: xCenter + slot.column * xSpread,
+        y: slot.row * yGap,
+      },
+    };
+  });
 };
 
 // Edge connections
@@ -84,31 +120,26 @@ const getEdges = (theme: string): Edge[] => {
   const isBW = theme === "bw";
   const isDark = theme !== "light";
   const color = isBW
-    ? "rgba(255,255,255,0.3)"
+    ? "rgba(255,255,255,0.5)"
     : isDark
-    ? "rgba(255,137,6,0.4)"
-    : "rgba(255,137,6,0.6)";
+    ? "rgba(255,120,20,0.6)"
+    : "rgba(255,107,0,0.7)";
 
   const edgeStyle = {
-    style: { stroke: color, strokeWidth: 1.5 },
+    style: { stroke: color, strokeWidth: 2 },
     markerEnd: { type: MarkerType.ArrowClosed, color, width: 10, height: 10 },
     animated: true,
   };
 
-  return [
-    { id: "e1-2", source: "1", target: "2", ...edgeStyle },
-    { id: "e1-3", source: "1", target: "3", ...edgeStyle },
-    { id: "e2-4", source: "2", target: "4", ...edgeStyle },
-    { id: "e3-4", source: "3", target: "4", ...edgeStyle },
-    { id: "e4-5", source: "4", target: "5", ...edgeStyle },
-    { id: "e4-6", source: "4", target: "6", ...edgeStyle },
-    { id: "e5-7", source: "5", target: "7", ...edgeStyle },
-    { id: "e6-7", source: "6", target: "7", ...edgeStyle },
-    { id: "e7-8", source: "7", target: "8", ...edgeStyle },
-  ];
+  return PROCESS_CONNECTIONS.map(([source, target]) => ({
+    id: `e${source}-${target}`,
+    source,
+    target,
+    ...edgeStyle,
+  }));
 };
 
-// Detail Side Panel - Full screen on mobile
+// Detail Side Panel — Brutalist
 const DetailPanel = ({
   step,
   isOpen,
@@ -126,7 +157,7 @@ const DetailPanel = ({
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           onClick={onClose}
-          className="fixed inset-0 z-40 bg-black/30 backdrop-blur-sm"
+          className="fixed inset-0 z-40 bg-black/60"
         />
 
         <motion.aside
@@ -134,35 +165,42 @@ const DetailPanel = ({
           animate={{ x: 0 }}
           exit={{ x: "100%" }}
           transition={{ type: "spring", damping: 30, stiffness: 300 }}
-          className="fixed right-0 top-0 bottom-0 z-50 w-full sm:w-[90%] sm:max-w-md bg-background/98 backdrop-blur-xl border-l border-border/30 overflow-y-auto"
+          className="fixed right-0 top-0 bottom-0 z-50 w-full sm:w-[90%] sm:max-w-md bg-background border-l-2 border-foreground overflow-y-auto"
         >
           <button
             onClick={onClose}
-            className="absolute top-4 right-4 p-2.5 text-muted-foreground hover:text-foreground transition-colors cursor-pointer bg-foreground/5 rounded-full"
+            className="absolute top-4 right-4 p-2.5 text-foreground/60 hover:text-foreground transition-colors cursor-pointer border-2 border-foreground hover:bg-foreground hover:text-background"
           >
             <X className="w-5 h-5" />
           </button>
 
           <div className="p-5 sm:p-6 pt-16">
             <div className="flex items-center gap-3 sm:gap-4 mb-5 sm:mb-6">
-              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-primary/10 flex items-center justify-center border border-primary/20">
-                <span className="text-base sm:text-lg font-bold text-primary">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-primary/10 flex items-center justify-center border-2 border-foreground">
+                <span className="font-mono text-base sm:text-lg font-bold text-primary">
                   {step.id.padStart(2, "0")}
                 </span>
               </div>
               <div>
-                <h2 className="text-lg sm:text-xl font-semibold text-foreground">{step.title}</h2>
-                <span className="text-xs text-primary">{step.duration}</span>
+                <h2 className="text-lg sm:text-xl font-bold font-rawkner text-foreground uppercase">{step.title}</h2>
+                <span className="font-mono text-xs text-primary uppercase tracking-wider">{step.duration}</span>
               </div>
             </div>
 
-            <p className="text-sm text-muted-foreground leading-relaxed mb-6 sm:mb-8">
-              {step.description}
-            </p>
+            <div className="mb-6 sm:mb-8 space-y-3">
+              <p className="text-sm text-foreground/70 leading-relaxed">
+                {step.description}
+              </p>
+              {step.expandedDescription?.map((paragraph) => (
+                <p key={paragraph} className="text-sm text-foreground/60 leading-relaxed">
+                  {paragraph}
+                </p>
+              ))}
+            </div>
 
             <section className="mb-6 sm:mb-8">
-              <h3 className="text-xs font-semibold text-primary uppercase tracking-widest mb-3 sm:mb-4">
-                What We Do
+              <h3 className="font-mono text-xs font-bold text-primary uppercase tracking-widest mb-3 sm:mb-4">
+                What This Phase Defines
               </h3>
               <ul className="space-y-2.5 sm:space-y-3">
                 {step.details.map((item, i) => (
@@ -170,10 +208,10 @@ const DetailPanel = ({
                     key={i}
                     initial={{ opacity: 0, x: 10 }}
                     animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: i * 0.05 }}
-                    className="flex gap-2.5 sm:gap-3 text-sm text-muted-foreground"
+                    transition={{ delay: i * 0.03 }}
+                    className="flex gap-2.5 sm:gap-3 text-sm text-foreground/60"
                   >
-                    <span className="w-1 h-1 rounded-full bg-primary mt-2 shrink-0" />
+                    <span className="w-2 h-2 bg-primary mt-1.5 shrink-0" />
                     {item}
                   </motion.li>
                 ))}
@@ -182,15 +220,15 @@ const DetailPanel = ({
 
             {step.tools && (
               <section className="mb-6 sm:mb-8">
-                <h3 className="text-xs font-semibold text-primary uppercase tracking-widest mb-3 sm:mb-4 flex items-center gap-2">
-                  <Wrench className="w-3 h-3" />
-                  Tools & Tech
+                <h3 className="font-mono text-xs font-bold text-primary uppercase tracking-widest mb-3 sm:mb-4 flex items-center gap-2">
+                  <FileText className="w-3 h-3" />
+                  Key Inputs
                 </h3>
                 <div className="flex flex-wrap gap-1.5 sm:gap-2">
                   {step.tools.map((tool) => (
                     <span
                       key={tool}
-                      className="px-2.5 sm:px-3 py-1 sm:py-1.5 text-xs text-foreground/70 bg-foreground/5 rounded-full border border-border/30"
+                      className="px-2.5 sm:px-3 py-1 sm:py-1.5 font-mono text-xs text-foreground/70 bg-foreground/5 border border-foreground/30 uppercase tracking-wider"
                     >
                       {tool}
                     </span>
@@ -201,14 +239,14 @@ const DetailPanel = ({
 
             {step.outcomes && (
               <section>
-                <h3 className="text-xs font-semibold text-primary uppercase tracking-widest mb-3 sm:mb-4 flex items-center gap-2">
+                <h3 className="font-mono text-xs font-bold text-primary uppercase tracking-widest mb-3 sm:mb-4 flex items-center gap-2">
                   <CheckCircle className="w-3 h-3" />
-                  Deliverables
+                  Outputs
                 </h3>
                 <div className="grid gap-2">
                   {step.outcomes.map((outcome) => (
-                    <div key={outcome} className="flex items-center gap-2.5 sm:gap-3 text-sm text-muted-foreground">
-                      <span className="w-3 sm:w-4 h-px bg-primary" />
+                    <div key={outcome} className="flex items-center gap-2.5 sm:gap-3 text-sm text-foreground/60">
+                      <span className="w-4 h-px bg-primary" />
                       {outcome}
                     </div>
                   ))}
@@ -227,7 +265,6 @@ export default function ProcessPage() {
   const theme = resolvedTheme || "dark";
   const [isMobile, setIsMobile] = useState(false);
 
-  // Detect mobile
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 640);
     checkMobile();
@@ -259,14 +296,14 @@ export default function ProcessPage() {
     <div className="h-screen w-screen bg-background text-foreground overflow-hidden">
       <CleanGridBackground className="fixed inset-0 z-0" />
 
-      {/* Header - Responsive */}
-      <header className="absolute top-16 sm:top-20 left-0 right-0 z-30 px-4 sm:px-6">
-        <div className="max-w-6xl mx-auto">
+      {/* Header */}
+      <header className="absolute left-0 right-0 top-28 z-30 px-4 sm:top-32 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-6xl">
           <Link
             href="/"
-            className="inline-flex items-center gap-2 text-xs sm:text-sm text-muted-foreground hover:text-primary transition-colors group"
+            className="inline-flex items-center gap-2 font-mono text-xs sm:text-sm uppercase tracking-wider text-foreground/50 hover:text-primary transition-colors duration-150 group"
           >
-            <ArrowLeft className="w-3.5 h-3.5 sm:w-4 sm:h-4 group-hover:-translate-x-1 transition-transform" />
+            <ArrowLeft className="w-3.5 h-3.5 sm:w-4 sm:h-4 group-hover:-translate-x-1 transition-transform duration-150" />
             Back to Home
           </Link>
         </div>
@@ -274,15 +311,15 @@ export default function ProcessPage() {
 
       {/* Tap hint on mobile */}
       {isMobile && (
-        <div className="absolute top-28 left-0 right-0 z-20 text-center">
-          <span className="text-[10px] text-muted-foreground/50">
-            Tap any step for details • Pinch to zoom
+        <div className="absolute left-0 right-0 top-40 z-20 text-center">
+          <span className="font-mono text-[10px] text-foreground/30 uppercase tracking-wider">
+            Tap any phase for details • Pinch to zoom
           </span>
         </div>
       )}
 
       {/* ReactFlow Canvas */}
-      <div className="absolute inset-0 pt-20 sm:pt-16">
+      <div className="absolute inset-0 pt-24 sm:pt-20">
         <ReactFlow
           nodes={nodes}
           edges={edges}
@@ -291,7 +328,7 @@ export default function ProcessPage() {
           onNodeClick={onNodeClick}
           nodeTypes={nodeTypes}
           fitView
-          fitViewOptions={{ padding: isMobile ? 0.2 : 0.3 }}
+          fitViewOptions={{ padding: isMobile ? 0.18 : 0.24 }}
           proOptions={{ hideAttribution: true }}
           nodesDraggable={!isMobile}
           nodesConnectable={false}
@@ -310,7 +347,7 @@ export default function ProcessPage() {
           {!isMobile && (
             <Controls
               showInteractive={false}
-              className="!bg-transparent !border-none !shadow-none [&>button]:!bg-foreground/5 [&>button]:!border-none [&>button]:!text-foreground/30 [&>button:hover]:!text-foreground/60 [&>button]:!rounded-md"
+              className="!bg-transparent !border-none !shadow-none [&>button]:!bg-foreground/5 [&>button]:!border-2 [&>button]:!border-foreground/20 [&>button]:!text-foreground/30 [&>button:hover]:!text-foreground/60 [&>button:hover]:!border-foreground/40"
             />
           )}
         </ReactFlow>

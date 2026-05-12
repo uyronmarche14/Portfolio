@@ -111,35 +111,54 @@ export const timelineYears: TimelineYear[] = [
   {
     year: "2025",
     features: [
-
-       {
-        title: "Professional Contract",
-        description: "Worked as a contract developer for frontend developer and backend developer, using Next.js, Tailwind CSS, React, TypeScript, and Scrum Agile methodology",  
-        icon: "contract"
-      },
-       {
-        title: "3d Architechture on Blender",
-        description: "Worked on 3d architechture projects using Blender making 3d models, animations, and renderings",  
-        icon: "blender"
+      {
+        title: "Freelance Software Developer (Jan 2024 - Present)",
+        description: "Designed and delivered full-stack web and mobile solutions for startup and enterprise clients, balancing hands-on engineering with AI-assisted tooling to improve quality, refactoring, and delivery speed.",
+        icon: "briefcase"
       },
       {
-        title: "Advance Frontend Architechture ",
-        description: "Worked on frontend architechture projects using Next.js, Tailwind CSS, React, TypeScript, and Scrum Agile methodology",  
-        icon: "Code"
+        title: "Frontend Developer at Aique (Jan 2025 - Jun 2025)",
+        description: "Built responsive and reusable React interfaces, integrated backend APIs across multiple user roles, and worked in an Agile environment with reviews, sprint planning, and iterative feature delivery.",
+        icon: "code"
       },
       {
-        title: "Joined a startup as a Fullstack Developer (Mostly Frontend Developer)",
-        description: "Worked as a Fullstack Developer for a startup company, mainly using vite, react, typescript, docker, aws, and mongodb", 
-        icon: "Code"
+        title: "Software Developer at Beyondgen (Aug 2025 - May 2026)",
+        description: "Developed a supplier quality management platform with multi-step approval workflows, audit logs, status tracking, and a Microsoft SQL Server backend built without an ORM.",
+        icon: "briefcase"
       },
       {
-        title: "Started my first work as a Software Engineer",
-        description: "worked in multiple projects AI Command Center for a fitness app and health Checker", 
-        icon: "Health"
-      }
-
+        title: "Software Engineer at KeepItSimpleOS (Sep 2025 - Nov 2025)",
+        description: "Built a centralized fitness platform for trainers to manage clients, messaging, and performance tracking while integrating third-party APIs and AI-assisted communication flows.",
+        icon: "smartphone"
+      },
+      {
+        title: "Full-Stack Developer at BuildFast (2025 - 2026)",
+        description: "Worked on AI-powered platforms with modern frontend and backend architecture, clearer separation of concerns, and production-ready workflows for shipping features under tight timelines.",
+        icon: "code"
+      },
+    ]
+  },
+  {
+    year: "2026",
+    features: [
+      {
+        title: "Freelance Software Developer (Jan 2024 - Present)",
+        description: "Continued delivering production-ready applications for clients while combining manual engineering discipline with AI-assisted workflows for refactoring, backend services, and scalable product delivery.",
+        icon: "briefcase"
+      },
+      {
+        title: "Beyondgen Delivery Phase (Aug 2025 - May 2026)",
+        description: "Closed out supplier compliance and approval workflow work, including reviewer and approver flows, audit visibility, and structured backend status tracking.",
+        icon: "briefcase"
+      },
+      {
+        title: "BuildFast AI Product Work (2025 - 2026)",
+        description: "Expanded into AI-focused product delivery, contributing to script generation, video workflow tooling, maintainable components, and architecture decisions across modern TypeScript stacks.",
+        icon: "code"
+      },
     ]
   }
+
 ];
 
 // Legacy export for backward compatibility

@@ -1,10 +1,114 @@
 // Home section content data
+export interface HeroSkillGroup {
+  title: string;
+  eyebrow: string;
+  description: string;
+  emphasis: "primary" | "secondary" | "neutral";
+  skills: string[];
+}
+
 export const HOME_CONTENT = {
-  name: "Rhyss",
-  title: "My Journey To Be A  ",
+  name: "Ron Marche Rhyss Q. Uy",
+  title: "BUILDING SOFTWARE AS A",
   description:
-    "I'm a Software Engineer with a passion for data and a drive to develop scalable software solutions.",
+    "BS Computer Science graduate from Taguig City University building scalable web, mobile, and AI-assisted software solutions.",
 };
+
+export const HERO_SKILL_GROUPS: HeroSkillGroup[] = [
+  {
+    title: "Languages",
+    eyebrow: "Programming Core",
+    description:
+      "The languages I rely on for application logic, scripting, and problem solving across products and prototypes.",
+    emphasis: "primary",
+    skills: ["HTML", "CSS", "JavaScript", "TypeScript", "Python", "C#", "SQL"],
+  },
+  {
+    title: "Frontend",
+    eyebrow: "Product UI",
+    description:
+      "Tools I use to design and ship responsive interfaces for web and mobile experiences.",
+    emphasis: "secondary",
+    skills: [
+      "React",
+      "Next.js",
+      "Vite",
+      "Tailwind CSS",
+      "ShadCN UI",
+      "React Native",
+    ],
+  },
+  {
+    title: "Backend",
+    eyebrow: "Systems & APIs",
+    description:
+      "Backend patterns and API building blocks I use for authentication, business logic, and structured app flows.",
+    emphasis: "neutral",
+    skills: [
+      "Node.js",
+      "Express.js",
+      "REST APIs",
+      "JWT Authentication",
+      "Role-Based Access Control",
+    ],
+  },
+  {
+    title: "Databases",
+    eyebrow: "Data & Storage",
+    description:
+      "Database and platform choices I use to model data, power app state, and support production workflows.",
+    emphasis: "primary",
+    skills: ["Microsoft SQL Server", "MySQL", "Supabase", "MongoDB"],
+  },
+  {
+    title: "Cloud & DevOps",
+    eyebrow: "Delivery Pipeline",
+    description:
+      "Infrastructure and deployment tooling I use to make builds, uploads, environments, and release workflows dependable.",
+    emphasis: "secondary",
+    skills: [
+      "Docker",
+      "AWS",
+      "S3 (Pre-signed URLs)",
+      "LocalStack",
+      "GitHub Actions",
+    ],
+  },
+  {
+    title: "AI & Automation",
+    eyebrow: "Applied AI",
+    description:
+      "AI systems and copilots I use for product features, workflow automation, rapid iteration, and LLM-powered experiences.",
+    emphasis: "neutral",
+    skills: [
+      "OpenAI API",
+      "Claude AI",
+      "GitHub Copilot",
+      "Antigravity",
+      "Kiro",
+      "LLM Integration",
+    ],
+  },
+  {
+    title: "Developer Tools",
+    eyebrow: "Workflow & Design",
+    description:
+      "My everyday toolkit for coding, collaboration, UI planning, project coordination, and creative exploration.",
+    emphasis: "primary",
+    skills: [
+      "Git",
+      "GitHub",
+      "VS Code",
+      "Cursor",
+      "Figma",
+      "Blender",
+      "Jira",
+      "Trello",
+      "GitLab",
+      "ClickUp",
+    ],
+  },
+];
 
 // Background animations configuration
 export const BACKGROUND_ANIMATIONS = [

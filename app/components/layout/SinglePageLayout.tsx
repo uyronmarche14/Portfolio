@@ -19,6 +19,16 @@ const ProjectsSection = dynamic(() => import("@/components/features/projects/Pro
   ssr: true,
 });
 
+const HobbyCarousel = dynamic(() => import("@/components/features/about/HobbyCarousel"), {
+  loading: () => <div className="min-h-screen flex items-center justify-center">Loading Hobbies...</div>,
+  ssr: true,
+});
+
+const AchievementExplorer = dynamic(() => import("@/components/features/achievements/AchievementExplorer"), {
+  loading: () => <div className="min-h-screen flex items-center justify-center">Loading Achievements...</div>,
+  ssr: true,
+});
+
 const ContactSection = dynamic(() => import("@/components/features/contact/ContactSection"), {
   loading: () => <div className="min-h-screen flex items-center justify-center">Loading...</div>,
   ssr: true,
@@ -63,6 +73,10 @@ export default function SinglePageLayout() {
       </SectionLayout>
 
       <AboutSection />
+
+      <HobbyCarousel />
+
+      <AchievementExplorer />
 
       <ProjectsSection />
 

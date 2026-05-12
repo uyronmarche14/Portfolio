@@ -2,6 +2,7 @@ import { Navbar } from "@/components/layout";
 import ThemeSwitcher from "@/components/ui/ThemeSwitcher";
 import { Providers } from "@/providers";
 import type { Metadata } from "next";
+import { JetBrains_Mono } from 'next/font/google';
 import localFont from 'next/font/local';
 import "./globals.css";
 
@@ -25,6 +26,13 @@ const RawknerFont = localFont({
     ],
     display: 'swap',
     variable: "--font-rawkner",
+});
+
+const MonoFont = JetBrains_Mono({
+    subsets: ['latin'],
+    weight: ['400', '500', '700'],
+    display: 'swap',
+    variable: '--font-mono',
 });
 
 export const metadata: Metadata = {
@@ -57,8 +65,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning className={`${RawknerFont.variable}`}>
-      <body className="bg-background font-sans text-foreground antialiased">
+    <html lang="en" suppressHydrationWarning className={`${RawknerFont.variable} ${MonoFont.variable}`}>
+      <body className="bg-background font-sans text-foreground">
         <Providers>
           <div className="flex min-h-screen flex-col">
             <Navbar />

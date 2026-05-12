@@ -9,7 +9,6 @@ const ThemeSwitcher = () => {
   const [mounted, setMounted] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
 
-  // Prevent hydration mismatch
   useEffect(() => {
     setMounted(true);
   }, []);
@@ -29,11 +28,11 @@ const ThemeSwitcher = () => {
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, y: 10, scale: 0.95 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 10, scale: 0.95 }}
-            transition={{ duration: 0.2 }}
-            className="absolute bottom-14 right-0 bg-card/95 backdrop-blur-xl border border-border/30 rounded-xl p-2 shadow-2xl min-w-[140px]"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 10 }}
+            transition={{ duration: 0.15 }}
+            className="absolute bottom-16 right-0 bg-background border-2 border-foreground shadow-brutal p-2 min-w-[160px]"
           >
             {themes.map((t) => (
               <button
@@ -42,16 +41,16 @@ const ThemeSwitcher = () => {
                   setTheme(t.id);
                   setIsOpen(false);
                 }}
-                className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-all duration-200 ${
+                className={`w-full flex items-center gap-3 px-3 py-2.5 text-left transition-all duration-150 font-mono text-xs uppercase tracking-wider ${
                   theme === t.id
-                    ? "bg-primary/20 text-foreground"
-                    : "text-paragraph hover:bg-foreground/5 hover:text-foreground"
+                    ? "bg-primary text-background font-bold"
+                    : "text-foreground hover:bg-foreground hover:text-background"
                 }`}
               >
                 <span className="text-lg">{t.icon}</span>
                 <div>
-                  <div className="text-sm font-medium">{t.label}</div>
-                  <div className="text-xs opacity-60">{t.description}</div>
+                  <div className="font-bold">{t.label}</div>
+                  <div className="text-[10px] opacity-60 normal-case tracking-normal">{t.description}</div>
                 </div>
               </button>
             ))}
@@ -61,10 +60,9 @@ const ThemeSwitcher = () => {
 
       {/* Toggle Button */}
       <motion.button
-        whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
         onClick={() => setIsOpen(!isOpen)}
-        className="w-12 h-12 rounded-full bg-card/90 backdrop-blur-xl border border-border/30 shadow-lg flex items-center justify-center text-xl hover:border-primary/50 transition-colors duration-300"
+        className="w-12 h-12 border-2 border-foreground bg-background shadow-brutal flex items-center justify-center text-xl hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-brutal-lg transition-all duration-150"
         aria-label="Toggle theme"
       >
         {currentTheme.icon}

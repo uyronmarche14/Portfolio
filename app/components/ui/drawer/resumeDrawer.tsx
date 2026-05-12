@@ -16,7 +16,7 @@ import React, { useState } from "react";
 
 interface ResumeDrawerProps {
   trigger?: React.ReactNode;
-  resumeUrl?: string; // Allow custom resume URL
+  resumeUrl?: string;
 }
 
 const ResumeDrawer: React.FC<ResumeDrawerProps> = ({
@@ -28,7 +28,6 @@ const ResumeDrawer: React.FC<ResumeDrawerProps> = ({
   const handleDownload = async () => {
     setIsLoading(true);
     try {
-      // Create a temporary link to download the file
       const link = document.createElement("a");
       link.href = resumeUrl;
       link.download = "resume.pdf";
@@ -38,7 +37,6 @@ const ResumeDrawer: React.FC<ResumeDrawerProps> = ({
       document.body.removeChild(link);
     } catch (error) {
       console.error("Download failed:", error);
-      // Fallback: open in new tab
       window.open(resumeUrl, "_blank");
     } finally {
       setIsLoading(false);
@@ -52,29 +50,29 @@ const ResumeDrawer: React.FC<ResumeDrawerProps> = ({
           <Button
             variant="ghost"
             size="sm"
-            className="text-foreground/80 hover:text-foreground hover:bg-foreground/10 transition-all duration-300 rounded-xl px-4 py-2 border border-foreground/10 hover:border-foreground/30"
+            className="text-foreground/80 hover:text-foreground hover:bg-foreground/10 transition-all duration-150 px-4 py-2 border-2 border-foreground/20 hover:border-foreground font-mono text-xs uppercase tracking-wider"
           >
             <FileText className="w-4 h-4" />
           </Button>
         )}
       </DrawerTrigger>
-      <DrawerContent className="h-full md:w-[50%] mt-24 ml-auto">
-        <DrawerHeader className="flex flex-row items-center justify-between border-b">
+      <DrawerContent className="h-full md:w-[50%] mt-24 ml-auto border-l-2 border-foreground">
+        <DrawerHeader className="flex flex-row items-center justify-between border-b-2 border-foreground">
           <div>
-            <DrawerTitle className="text-xl font-semibold">Resume</DrawerTitle>
+            <DrawerTitle className="text-xl">Resume</DrawerTitle>
             <DrawerDescription>
               View and download my professional resume
             </DrawerDescription>
           </div>
           <DrawerClose asChild>
-            <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+            <Button variant="ghost" size="sm" className="h-8 w-8 p-0 border-2 border-foreground">
               <X className="h-4 w-4" />
             </Button>
           </DrawerClose>
         </DrawerHeader>
 
         <div className="flex-1 p-4 overflow-hidden">
-          <div className="h-full w-full border rounded-lg overflow-hidden bg-gray-50">
+          <div className="h-full w-full border-2 border-foreground overflow-hidden bg-foreground/5">
             <iframe
               src={resumeUrl}
               width="100%"
@@ -88,7 +86,7 @@ const ResumeDrawer: React.FC<ResumeDrawerProps> = ({
           </div>
         </div>
 
-        <DrawerFooter className="border-t">
+        <DrawerFooter className="border-t-2 border-foreground">
           <div className="flex gap-2 justify-end">
             <Button
               variant="outline"
@@ -100,7 +98,6 @@ const ResumeDrawer: React.FC<ResumeDrawerProps> = ({
             <Button
               onClick={handleDownload}
               disabled={isLoading}
-              className="bg-primary hover:bg-blue-700"
             >
               <Download className="w-4 h-4 mr-2" />
               {isLoading ? "Downloading..." : "Download Resume"}

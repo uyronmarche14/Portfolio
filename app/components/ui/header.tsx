@@ -15,15 +15,19 @@ const Header: React.FC<HeaderProps> = ({
 }) => {
   return (
     <div className={`w-full flex flex-col items-center ${className}`}>
+      {/* Decorative line */}
+      <div className="w-16 h-1 bg-primary mb-6" />
+      
       <h2 className="text-xl sm:text-2xl md:text-5xl font-bold text-headline leading-tight text-center mb-4"> 
-        {introText} 
-        <span className="font-rawkner bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent"> 
-          {" "} 
+        <span className="font-mono text-xs sm:text-sm uppercase tracking-[0.3em] text-secondary block mb-2">
+          {introText}
+        </span>
+        <span className="font-rawkner text-primary"> 
           {highlightText} 
         </span> 
       </h2>
       {description && (
-        <p className="text-muted-foreground mx-auto max-w-2xl text-sm sm:text-base md:text-lg lg:text-xl leading-relaxed px-4 text-center">
+        <p className="text-foreground/70 mx-auto max-w-2xl text-sm sm:text-base md:text-lg lg:text-xl leading-relaxed px-4 text-center font-medium">
           {description}
         </p>
       )}
