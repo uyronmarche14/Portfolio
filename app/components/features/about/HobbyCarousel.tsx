@@ -32,37 +32,6 @@ export default function HobbyCarousel() {
   return (
     <section id="activities" className="relative w-full flex flex-col py-10 sm:py-14 overflow-hidden transition-colors duration-700">
       
-      {/* === Section Background === */}
-      {/* Color fallback when no image */}
-      <AnimatePresence>
-        {!activeHobby.image && (
-          <motion.div 
-            key="bg-color-fallback"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.8 }}
-            className="absolute inset-0 z-0 pointer-events-none bg-foreground/5"
-          />
-        )}
-      </AnimatePresence>
-      {/* Blurred image background when image exists */}
-      <AnimatePresence mode="wait">
-        {activeHobby.image && (
-          <motion.div
-            key={activeHobby.id + "-bg"}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 0.35 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.8 }}
-            className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat pointer-events-none blur-2xl scale-110"
-            style={{ backgroundImage: `url(${activeHobby.image})` }}
-          />
-        )}
-      </AnimatePresence>
-      {/* Dark overlay for contrast */}
-      <div className="absolute inset-0 z-0 bg-background/60 pointer-events-none" />
-
       {/* === Section Header === */}
       <div className="relative z-10 w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-4 mb-6 md:mb-8">
         <HeaderTitle 
