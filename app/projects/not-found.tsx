@@ -12,7 +12,7 @@ export default function ProjectNotFound() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3 }}
-        className="max-w-md w-full text-center border border-foreground bg-background shadow-soft-lg p-8 sm:p-12"
+        className="max-w-md w-full text-center rounded-2xl border border-foreground/15 bg-card p-8 shadow-soft-lg sm:p-12"
       >
         <h1 className="font-display text-7xl sm:text-8xl font-bold text-primary mb-4">404</h1>
         
