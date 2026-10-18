@@ -2,7 +2,9 @@
 
 import { motion, useReducedMotion } from "framer-motion";
 import Image from "next/image";
+import Link from "next/link";
 import { useState } from "react";
+import { Button } from "@/components/ui/shadcn/button";
 import { Badge } from "@/components/ui/shadcn/badge";
 
 import { FilterTabs } from "@/components/ui/FilterTabs";
@@ -73,6 +75,12 @@ const ExperienceCard = ({ entry, index, now }: ExperienceCardProps) => {
             </li>
           ))}
         </ul>
+        <Link
+          href={`/experience#${entry.id}`}
+          className="w-fit text-sm font-medium text-foreground/70 underline-offset-4 transition-colors hover:text-primary hover:underline"
+        >
+          Read more
+        </Link>
       </div>
 
       <div
@@ -134,6 +142,12 @@ const ExperienceSection = () => {
           </li>
         ))}
       </ol>
+
+      <div className="mt-10 flex justify-center">
+        <Button asChild size="lg">
+          <Link href="/experience">Read the full experience</Link>
+        </Button>
+      </div>
     </div>
   );
 };

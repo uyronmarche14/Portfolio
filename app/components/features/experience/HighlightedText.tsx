@@ -3,6 +3,8 @@ import { Fragment } from "react";
 interface HighlightedTextProps {
   text: string;
   terms?: string[];
+  /** `plain` emphasizes the phrases with weight only (for reading pages) */
+  variant?: "marker" | "plain";
 }
 
 const escape = (term: string) => term.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -11,7 +13,7 @@ const escape = (term: string) => term.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
  * Renders `text` with the given phrases wrapped in a hand-marked highlight
  * (see `.marker` in globals.css). Phrases that are not in the text are ignored.
  */
-export function HighlightedText({ text, terms = [] }: HighlightedTextProps) {
+export function HighlightedText({ text, terms = [], variant = "marker" }: HighlightedTextProps) {
   const present = terms.filter((term) => term && text.includes(term));
   if (present.length === 0) return <>{text}</>;
 
@@ -19,7 +21,11 @@ export function HighlightedText({ text, terms = [] }: HighlightedTextProps) {
   return (
     <>
       {text.split(pattern).map((part, i) =>
-        present.includes(part) ? (
+        present.includes(part) && variant === "plain" ? (
+          <strong key={i} className="font-medium text-foreground">
+            {part}
+          </strong>
+        ) : present.includes(part) ? (
           <span key={i} className="marker group/term">
             {part.split(" ").map((word, w, words) => (
               <Fragment key={w}>
