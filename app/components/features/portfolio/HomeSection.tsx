@@ -32,6 +32,7 @@ const HomeSection: React.FC = () => {
         <div className="grid items-center gap-14 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:gap-10">
           <div>
         <Badge variant="default" className="mb-8 h-7 px-3 text-[13px]">
+              <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-tone-teal" />
               {profileData.quickFacts.find((fact) => fact.label === "Based in")?.value}
             </Badge>
 
@@ -109,6 +110,10 @@ const HomeSection: React.FC = () => {
           </div>
 
           <figure className="relative mx-auto w-full max-w-sm lg:max-w-none">
+              <div
+                aria-hidden="true"
+                className="absolute -inset-5 -z-10 rounded-[2.5rem] bg-gradient-to-br from-tone-violet/30 via-transparent to-primary/30 blur-2xl"
+              />
             <div className="relative aspect-[4/5] w-full overflow-hidden rounded-3xl border border-foreground/15 bg-foreground/5">
               <Image
                 src={profileData.photo.src}

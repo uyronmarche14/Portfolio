@@ -3,7 +3,7 @@
 import { motion, useReducedMotion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, type CSSProperties } from "react";
 import { Button } from "@/components/ui/shadcn/button";
 import { Badge } from "@/components/ui/shadcn/badge";
 
@@ -23,6 +23,14 @@ interface ExperienceCardProps {
   now: string;
 }
 
+/** Each role gets its own accent: it recolors the card's artwork, number and links. */
+const ROLE_TONE: Record<string, string | undefined> = {
+  aique: "--tone-violet",
+  beyondgen: "--tone-teal",
+  keepitsimpleos: "--tone-rose",
+  buildfast: "--tone-amber",
+};
+
 const ExperienceCard = ({ entry, index, now }: ExperienceCardProps) => {
   const [view, setView] = useState<"art" | "photo">("art");
   const reduceMotion = useReducedMotion();
@@ -30,9 +38,11 @@ const ExperienceCard = ({ entry, index, now }: ExperienceCardProps) => {
   const num = String(index + 1).padStart(2, "0");
   const duration = entry.approximate ? null : formatDuration(monthsBetween(entry, now));
   const reversed = index % 2 === 1;
+  const tone = ROLE_TONE[entry.id];
 
   return (
     <motion.article
+      style={tone ? ({ "--primary": `var(${tone})` } as CSSProperties) : undefined}
       initial={reduceMotion ? false : { opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-10% 0px" }}

@@ -8,6 +8,8 @@ import { Badge } from "@/components/ui/shadcn/badge";
 import { categoryFilters, type Achievement } from "@/lib/data/achievements";
 
 import { categoryIcons } from "./categoryIcons";
+import { categoryTone } from "./categoryTone";
+
 
 interface AchievementLedgerProps {
   items: Achievement[];
@@ -50,7 +52,7 @@ export function AchievementLedger({ items, listKey, onOpen }: AchievementLedgerP
                 <span className="mt-0.5 block text-sm text-foreground/60">{item.issuer}</span>
               </span>
               <span className="hidden sm:block">
-                <Badge variant="default">
+                <Badge variant={categoryTone[item.category].badge}>
                   {CategoryIcon && <CategoryIcon className="h-3.5 w-3.5" aria-hidden="true" />}
                   {categoryLabel}
                 </Badge>

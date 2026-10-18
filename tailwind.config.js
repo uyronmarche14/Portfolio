@@ -30,6 +30,12 @@ module.exports = {
         tertiary: 'rgb(var(--tertiary) / <alpha-value>)',
         headline: 'rgb(var(--foreground) / <alpha-value>)',
         paragraph: 'rgb(var(--secondary) / <alpha-value>)',
+        tone: {
+          violet: 'rgb(var(--tone-violet) / <alpha-value>)',
+          teal: 'rgb(var(--tone-teal) / <alpha-value>)',
+          amber: 'rgb(var(--tone-amber) / <alpha-value>)',
+          rose: 'rgb(var(--tone-rose) / <alpha-value>)'
+        },
         destructive: {
           DEFAULT: 'rgb(var(--destructive) / <alpha-value>)',
           foreground: 'rgb(var(--destructive-foreground) / <alpha-value>)'
