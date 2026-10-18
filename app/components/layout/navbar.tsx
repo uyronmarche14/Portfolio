@@ -88,7 +88,7 @@ const Navbar = () => {
       <div className="relative mx-auto flex w-full max-w-6xl items-center justify-center">
         {/* Desktop Navigation */}
         <div className="hidden items-center md:flex">
-          <div className={"flex items-center border border-foreground shadow-soft transition-all duration-200 " + navFrameClass}>
+          <div className={"flex items-center rounded-full border border-foreground/15 shadow-soft-sm transition-all duration-200 " + navFrameClass}>
             {/* Brand */}
             <div className="flex items-center px-5 py-3">
               <h1 className="text-xl font-extrabold font-display text-primary">
@@ -96,7 +96,7 @@ const Navbar = () => {
               </h1>
             </div>
 
-            <div className="w-px h-10 bg-foreground" />
+            <div className="h-6 w-px bg-foreground/15" />
 
             {/* Nav Links */}
             <div className="flex items-center px-2">
@@ -105,10 +105,10 @@ const Navbar = () => {
                   key={item.label}
                   onClick={(e) => handleNavigationClick(item, e)}
                   className={
-                    "relative mx-1 px-4 py-2.5 font-mono text-xs font-bold uppercase tracking-widest transition-all duration-150 " +
+                    "relative mx-0.5 rounded-full px-4 py-2 text-sm font-medium transition-colors duration-150 " +
                     (item.active
-                      ? "bg-primary text-background shadow-soft-sm"
-                      : "text-foreground/60 hover:bg-foreground hover:text-background")
+                      ? "bg-foreground text-background"
+                      : "text-foreground/60 hover:bg-foreground/10 hover:text-foreground")
                   }
                 >
                   {item.label}
@@ -116,7 +116,7 @@ const Navbar = () => {
               ))}
             </div>
 
-            <div className="w-px h-10 bg-foreground" />
+            <div className="h-6 w-px bg-foreground/15" />
 
             {/* Resume */}
             <div className="flex items-center gap-2 px-4 py-3">
@@ -128,7 +128,7 @@ const Navbar = () => {
         {/* Mobile Menu Toggle */}
         <button
           onClick={toggleMenu}
-          className={"border border-foreground p-3 shadow-soft-sm transition-all duration-150 hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-soft focus:outline-none md:hidden " + navFrameClass}
+          className={"rounded-full border border-foreground/15 p-3 shadow-soft-sm transition-colors duration-150 hover:bg-foreground/5 focus:outline-none md:hidden " + navFrameClass}
           aria-label={isOpen ? NAVBAR_LABELS.closeMenu : NAVBAR_LABELS.openMenu}
           aria-expanded={isOpen}
         >
@@ -152,9 +152,9 @@ const Navbar = () => {
         className="mx-auto mt-3 w-full max-w-6xl overflow-hidden md:hidden"
         aria-hidden={!isOpen}
       >
-        <div className={"space-y-4 border border-foreground p-6 shadow-soft " + navFrameClass}>
+        <div className={"space-y-4 rounded-2xl border border-foreground/15 p-6 shadow-soft " + navFrameClass}>
           {/* Brand */}
-          <div className="flex items-center gap-3 border-b-2 border-foreground pb-4">
+          <div className="flex items-center gap-3 border-b border-foreground/15 pb-4">
             <h1 className="text-xl font-extrabold font-display text-primary">
               Rhyss
             </h1>
@@ -167,10 +167,10 @@ const Navbar = () => {
                 key={item.label}
                 onClick={(e) => handleNavigationClick(item, e)}
                 className={
-                  "block w-full px-4 py-3 text-left font-mono text-sm font-bold uppercase tracking-widest transition-all duration-150 " +
+                  "block w-full rounded-lg px-4 py-3 text-left text-sm font-medium transition-colors duration-150 " +
                   (item.active
-                    ? "bg-primary text-background border border-foreground shadow-soft-sm"
-                    : "text-foreground/60 hover:bg-foreground hover:text-background border border-transparent hover:border-foreground")
+                    ? "bg-foreground text-background"
+                    : "text-foreground/60 hover:bg-foreground/10 hover:text-foreground")
                 }
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
@@ -183,7 +183,7 @@ const Navbar = () => {
 
           {/* Resume */}
           <motion.div
-            className="flex flex-col space-y-3 border-t-2 border-foreground pt-4"
+            className="flex flex-col space-y-3 border-t border-foreground/15 pt-4"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2, duration: 0.2 }}
@@ -191,8 +191,8 @@ const Navbar = () => {
             <ResumeDrawer
               trigger={
                 <Button
-                  variant="ghost"
-                  className="w-full justify-start border border-foreground px-4 py-3 font-mono text-sm uppercase tracking-widest text-foreground hover:bg-foreground hover:text-background transition-all duration-150"
+                  variant="outline"
+                  className="w-full justify-start px-4 py-3"
                 >
                   <FileText className="mr-3 h-4 w-4" />
                   View Resume
