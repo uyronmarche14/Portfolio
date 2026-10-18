@@ -4,6 +4,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Button } from "@/components/ui/shadcn/button";
 import {
   ArrowLeft,
+  Check,
   ChevronLeft,
   ChevronRight,
   ExternalLink,
@@ -79,7 +80,7 @@ export default function ProjectPage() {
           >
             <Link
               href="/"
-              className="inline-flex items-center gap-2 font-mono text-xs text-foreground/50 hover:text-primary transition-colors duration-150 group"
+              className="inline-flex items-center gap-2 text-sm text-foreground/60 hover:text-foreground transition-colors duration-150 group"
             >
               <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform duration-150" />
               <span>{PROJECTS_CONTENT.backToHome}</span>
@@ -139,7 +140,7 @@ export default function ProjectPage() {
                 <TechBadge key={tech} technology={tech} index={i} size="sm" />
               ))}
               {project.technologies && project.technologies.length > 8 && (
-                <span className="px-3 py-1 font-mono text-xs text-foreground/50 bg-foreground/5 border border-foreground/30">
+                <span className="rounded-full px-3 py-1 font-mono text-xs text-foreground/60 bg-foreground/5 border border-foreground/15">
                   +{project.technologies.length - 8} more
                 </span>
               )}
@@ -148,32 +149,26 @@ export default function ProjectPage() {
             {/* Action Links */}
             <div className="flex items-center gap-4">
               {project.githubUrl && (
-                <a
-                  href={project.githubUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-5 py-2.5 border border-foreground/15 rounded-lg bg-background font-mono text-xs font-medium text-foreground shadow-soft-sm hover:shadow-soft transition-all duration-150 cursor-pointer"
-                >
-                  <Github className="w-4 h-4" />
-                  View Code
-                </a>
+                <Button asChild variant="outline">
+                  <a href={project.githubUrl} target="_blank" rel="noopener noreferrer">
+                    <Github className="h-4 w-4" />
+                    View Code
+                  </a>
+                </Button>
               )}
               {(project.liveUrl || project.liveDemoUrl) && (
-                <a
-                  href={project.liveUrl || project.liveDemoUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-5 py-2.5 border border-primary rounded-lg bg-primary font-mono text-xs font-medium text-background shadow-soft-sm hover:shadow-soft transition-all duration-150 cursor-pointer"
-                >
-                  <ExternalLink className="w-4 h-4" />
-                  Live Demo
-                </a>
+                <Button asChild variant="accent">
+                  <a href={project.liveUrl || project.liveDemoUrl} target="_blank" rel="noopener noreferrer">
+                    <ExternalLink className="h-4 w-4" />
+                    Live Demo
+                  </a>
+                </Button>
               )}
             </div>
           </motion.div>
 
           {/* Divider */}
-          <div className="w-16 h-1 bg-primary mx-auto mb-16" />
+          <div className="mx-auto mb-16 h-px w-24 bg-foreground/15" />
 
           {/* Overview Section */}
           {project.paragraph && (
@@ -207,11 +202,11 @@ export default function ProjectPage() {
                 {project.features.map((feature, index) => (
                   <div
                     key={index}
-                    className="p-5 bg-foreground/5 border border-foreground/20 hover:border-foreground transition-all duration-150"
+                    className="rounded-xl border border-foreground/15 bg-card p-5 transition-colors duration-200 hover:border-foreground/30"
                   >
                     <div className="flex items-start gap-3">
-                      <div className="w-2 h-2 bg-primary mt-1.5 flex-shrink-0" />
-                      <span className="text-sm text-foreground/60 leading-relaxed">
+                      <Check className="mt-0.5 h-4 w-4 flex-shrink-0 text-primary" aria-hidden="true" />
+                      <span className="text-sm leading-relaxed text-foreground/75">
                         {feature}
                       </span>
                     </div>

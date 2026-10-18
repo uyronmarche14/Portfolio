@@ -232,7 +232,7 @@ const DetailPanel = ({
                   {step.tools.map((tool) => (
                     <span
                       key={tool}
-                      className="px-2.5 sm:px-3 py-1 sm:py-1.5 font-mono text-xs text-foreground/70 bg-foreground/5 border border-foreground/30"
+                      className="rounded-full px-3 py-1 font-mono text-xs text-foreground/75 bg-foreground/[0.04] border border-foreground/15"
                     >
                       {tool}
                     </span>
@@ -305,7 +305,7 @@ export default function ProcessPage() {
         <div className="mx-auto max-w-6xl">
           <Link
             href="/"
-            className="inline-flex items-center gap-2 font-mono text-xs sm:text-sm text-foreground/50 hover:text-primary transition-colors duration-150 group"
+            className="inline-flex items-center gap-2 text-sm text-foreground/60 hover:text-foreground transition-colors duration-150 group"
           >
             <ArrowLeft className="w-3.5 h-3.5 sm:w-4 sm:h-4 group-hover:-translate-x-1 transition-transform duration-150" />
             Back to Home
