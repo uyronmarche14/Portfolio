@@ -1,13 +1,14 @@
 "use client";
 
 import { motion, useReducedMotion } from "framer-motion";
-import Image from "next/image";
 
 import HeaderTitle from "@/components/ui/header";
 import { workExperience, type WorkExperienceEntry } from "@/lib/data/workExperience";
 import { formatDuration, monthsBetween } from "@/lib/tenure";
 import { cn } from "@/lib/utils";
 
+import { HighlightedText } from "./HighlightedText";
+import { PhotoThumb } from "./PhotoThumb";
 import { experienceVisuals } from "./ExperienceVisuals";
 
 interface ExperienceCardProps {
@@ -53,19 +54,13 @@ const ExperienceCard = ({ entry, index, now }: ExperienceCardProps) => {
             {entry.role}
           </h3>
           <div className="mt-3 flex items-center gap-3">
-            <span className="relative h-11 w-11 shrink-0 overflow-hidden rounded-full border border-foreground/15 bg-foreground/5">
-              <Image
-                src={entry.image}
-                alt=""
-                fill
-                sizes="44px"
-                className="object-cover"
-              />
-            </span>
+            <PhotoThumb src={entry.image} label={entry.company} />
             <p className="text-base text-foreground/70">{entry.company}</p>
           </div>
         </div>
-        <p className="max-w-md text-base leading-relaxed text-foreground/80">{entry.summary}</p>
+        <p className="max-w-md text-base leading-relaxed text-foreground/80">
+          <HighlightedText text={entry.summary} terms={entry.highlights} />
+        </p>
         <p className="font-mono text-xs text-foreground/60">
           {entry.stack.slice(0, 4).join("  ·  ")}
         </p>
