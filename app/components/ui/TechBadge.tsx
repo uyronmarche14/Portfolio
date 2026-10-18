@@ -33,7 +33,7 @@ const TechBadge = React.forwardRef<HTMLDivElement, TechBadgeProps>(
     const IconComponent = techIconMap[technology] || SiReact;
 
     const sizeClasses = {
-      sm: "px-2 py-1 text-[10px]",
+      sm: "px-2 py-1 text-xs",
       default: "px-3 py-1.5 text-xs",
       lg: "px-4 py-2 text-sm",
     };
@@ -51,7 +51,7 @@ const TechBadge = React.forwardRef<HTMLDivElement, TechBadgeProps>(
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.2, delay: index * 0.03 }}
         className={cn(
-          "inline-flex items-center gap-2 border border-foreground bg-background text-foreground font-mono font-bold uppercase tracking-wider shadow-soft-sm hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-soft transition-all duration-150",
+          "inline-flex items-center gap-2 border border-foreground/15 rounded-lg bg-background text-foreground font-mono font-medium shadow-soft-sm hover:shadow-soft transition-all duration-150",
           sizeClasses[size],
           className
         )}

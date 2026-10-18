@@ -27,7 +27,7 @@ function AchievementDetail({ item }: { item: Achievement }) {
     >
       {/* Certificate / Award Image Preview */}
       {hasImage && (
-        <div className="relative w-full h-48 sm:h-56 md:h-64 border border-foreground overflow-hidden mb-6 group/img">
+        <div className="relative w-full h-48 sm:h-56 md:h-64 border border-foreground/15 rounded-lg overflow-hidden mb-6 group/img">
           <div
             className="absolute inset-0 bg-cover bg-center grayscale group-hover/img:grayscale-0 transition-all duration-500 scale-100 group-hover/img:scale-105"
             style={{ backgroundImage: `url(${item.image})` }}
@@ -35,7 +35,7 @@ function AchievementDetail({ item }: { item: Achievement }) {
           <div className="absolute inset-0 bg-primary/20 mix-blend-overlay opacity-0 group-hover/img:opacity-100 transition-opacity duration-300" />
           {/* Category badge on image */}
           <div className="absolute top-3 left-3 z-10">
-            <span className="px-2.5 py-1 bg-background border border-foreground font-mono text-[10px] font-bold uppercase tracking-wider text-foreground shadow-soft-sm">
+            <span className="px-2.5 py-1 bg-background border border-foreground/15 rounded-lg font-mono text-xs font-medium text-foreground shadow-soft-sm">
               {categoryFilters.find((f) => f.key === item.category)?.label}
             </span>
           </div>
@@ -46,12 +46,12 @@ function AchievementDetail({ item }: { item: Achievement }) {
       <div className="flex flex-col gap-4 flex-1">
         {/* Header Row: Icon + Title + Date */}
         <div className="flex items-start gap-4">
-          <div className="flex items-center justify-center border border-foreground bg-primary/10 p-3 shadow-soft-sm flex-shrink-0">
+          <div className="flex items-center justify-center border border-primary rounded-lg bg-primary/10 p-3 shadow-soft-sm flex-shrink-0">
             <Icon className="w-6 h-6 text-primary" />
           </div>
           <div className="flex-1 min-w-0">
             {!hasImage && (
-              <span className="inline-block mb-1.5 px-2 py-0.5 bg-primary/10 text-primary font-mono text-[10px] font-bold uppercase tracking-wider border border-primary/30">
+              <span className="inline-block mb-1.5 px-2 py-0.5 bg-primary/10 text-primary font-mono text-xs font-medium border border-primary/30 rounded-full">
                 {categoryFilters.find((f) => f.key === item.category)?.label}
               </span>
             )}
@@ -59,11 +59,11 @@ function AchievementDetail({ item }: { item: Achievement }) {
               {item.title}
             </h3>
             <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-1.5">
-              <span className="font-mono text-xs font-bold text-foreground/70 uppercase tracking-wider">
+              <span className="font-mono text-xs font-medium text-foreground/70">
                 {item.issuer}
               </span>
               <span className="w-1 h-1 bg-foreground/40" />
-              <span className="font-mono text-xs text-foreground/50 uppercase tracking-wider">
+              <span className="font-mono text-xs text-foreground/50">
                 {item.date}
               </span>
             </div>
@@ -90,7 +90,7 @@ function AchievementDetail({ item }: { item: Achievement }) {
             {item.tags.map((tag) => (
               <span
                 key={tag}
-                className="px-2.5 py-1 font-mono text-[10px] sm:text-[11px] font-bold uppercase tracking-wider border border-primary/30 text-primary bg-primary/10"
+                className="px-2.5 py-1 font-mono text-xs sm:text-xs font-medium border border-primary/30 rounded-full text-primary bg-primary/10"
               >
                 {tag}
               </span>
@@ -100,12 +100,12 @@ function AchievementDetail({ item }: { item: Achievement }) {
 
         {/* View Certificate Button */}
         {item.certificateUrl && (
-          <div className="mt-auto pt-4 border-t-2 border-foreground/20">
+          <div className="mt-auto pt-4 border-t border-foreground/20">
             <a
               href={item.certificateUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-4 py-2 border border-foreground bg-background font-mono text-xs font-bold uppercase tracking-wider text-foreground shadow-soft hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-soft-lg transition-all duration-200"
+              className="inline-flex items-center gap-2 px-4 py-2 border border-foreground/15 rounded-lg bg-background font-mono text-xs font-medium text-foreground shadow-soft hover:shadow-soft-lg transition-all duration-200"
             >
               <ExternalLink className="w-4 h-4" />
               View Certificate
@@ -135,7 +135,7 @@ function AchievementListItem({
       className={`
         w-full text-left p-3 sm:p-4 border transition-all duration-200 group/item
         ${isActive
-          ? "border-foreground bg-primary/10 shadow-soft-sm translate-x-[-2px] translate-y-[-2px]"
+          ? "border-primary bg-primary/10 shadow-soft-sm"
           : "border-foreground/20 bg-background hover:border-foreground/50 hover:bg-foreground/5"
         }
       `}
@@ -159,11 +159,11 @@ function AchievementListItem({
             {item.title}
           </div>
           <div className="flex items-center gap-2 mt-1">
-            <span className="font-mono text-[10px] text-foreground/50 uppercase tracking-wider truncate">
+            <span className="font-mono text-xs text-foreground/50 truncate">
               {item.issuer}
             </span>
           </div>
-          <span className="font-mono text-[10px] text-foreground/40 uppercase tracking-wider">
+          <span className="font-mono text-xs text-foreground/40">
             {item.date}
           </span>
         </div>
@@ -190,7 +190,7 @@ function MobileCompactCard({
       className={`
         flex-shrink-0 w-36 sm:w-44 p-3 border text-left transition-all duration-200
         ${isActive
-          ? "border-foreground bg-primary/10 shadow-soft-sm"
+          ? "border-primary bg-primary/10 shadow-soft-sm"
           : "border-foreground/20 bg-background"
         }
       `}
@@ -201,7 +201,7 @@ function MobileCompactCard({
       <div className="font-display font-bold text-xs tracking-wide leading-tight line-clamp-2 text-foreground">
         {item.title}
       </div>
-      <div className="font-mono text-[9px] text-foreground/40 uppercase tracking-wider mt-1 truncate">
+      <div className="font-mono text-xs text-foreground/40 mt-1 truncate">
         {item.date}
       </div>
     </button>
@@ -242,6 +242,7 @@ export default function AchievementExplorer() {
       {/* Section Header */}
       <div className="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-4 mb-8 md:mb-12">
         <HeaderTitle
+          index="04"
           introText="Leadership, Academics"
           highlightText="& Certifications"
           description="A collection of academic honors, student leadership roles, competitions, certifications, conference exposure, and technical support work across my university journey."
@@ -265,10 +266,10 @@ export default function AchievementExplorer() {
                 key={filter.key}
                 onClick={() => handleFilterChange(filter.key)}
                 className={`
-                  flex-shrink-0 px-3 sm:px-4 py-2 border font-mono text-[10px] sm:text-xs font-bold uppercase tracking-wider
+                  flex-shrink-0 px-3 sm:px-4 py-2 border font-mono text-xs sm:text-xs font-medium
                   transition-all duration-200
                   ${isActive
-                    ? "border-foreground bg-primary text-background shadow-soft-sm"
+                    ? "border-foreground/15 bg-foreground text-background shadow-soft-sm"
                     : "border-foreground/30 bg-background text-foreground/70 hover:border-foreground hover:text-foreground"
                   }
                 `}
@@ -295,14 +296,14 @@ export default function AchievementExplorer() {
               />
             ))}
             {filteredItems.length === 0 && (
-              <div className="text-center py-12 text-foreground/40 font-mono text-xs uppercase tracking-wider">
+              <div className="text-center py-12 text-foreground/40 font-mono text-xs">
                 No items in this category
               </div>
             )}
           </div>
 
           {/* Right: Detail Panel */}
-          <div className="achievement-panel-scroll border border-foreground bg-background shadow-soft p-6 sm:p-8 overflow-y-auto max-h-[60vh] pr-4">
+          <div className="achievement-panel-scroll border border-foreground/15 rounded-lg bg-background shadow-soft p-6 sm:p-8 overflow-y-auto max-h-[60vh] pr-4">
             <AnimatePresence mode="wait">
               {selectedItem && <AchievementDetail item={selectedItem} />}
             </AnimatePresence>
@@ -324,7 +325,7 @@ export default function AchievementExplorer() {
           </div>
 
           {/* Detail panel below */}
-          <div className="border border-foreground bg-background shadow-soft p-5 sm:p-6">
+          <div className="border border-foreground/15 rounded-lg bg-background shadow-soft p-5 sm:p-6">
             <AnimatePresence mode="wait">
               {selectedItem && <AchievementDetail item={selectedItem} />}
             </AnimatePresence>

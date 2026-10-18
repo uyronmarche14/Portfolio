@@ -66,6 +66,7 @@ export default function HobbyCarousel() {
       {/* === Section Header === */}
       <div className="relative z-10 w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-4 mb-8 md:mb-12">
         <HeaderTitle 
+          index="03"
           introText="Off Screen"
           highlightText="Activities"
           description="A visual look at the activities, leadership roles, competitions, event work, and campus experiences that shaped me outside the core project list."
@@ -79,7 +80,7 @@ export default function HobbyCarousel() {
           {/* Nav Buttons */}
           <button 
             onClick={handlePrev}
-            className="absolute left-2 md:left-6 z-50 p-3 bg-background border border-foreground shadow-soft hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-soft-lg transition-all hidden md:flex items-center justify-center"
+            className="absolute left-2 md:left-6 z-50 p-3 bg-background border border-foreground/15 rounded-lg shadow-soft hover:shadow-soft-lg transition-all hidden md:flex items-center justify-center"
             aria-label="Previous hobby"
           >
             <ChevronLeft className="w-5 h-5" />
@@ -87,7 +88,7 @@ export default function HobbyCarousel() {
           
           <button 
             onClick={handleNext}
-            className="absolute right-2 md:right-6 z-50 p-3 bg-background border border-foreground shadow-soft hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-soft-lg transition-all hidden md:flex items-center justify-center"
+            className="absolute right-2 md:right-6 z-50 p-3 bg-background border border-foreground/15 rounded-lg shadow-soft hover:shadow-soft-lg transition-all hidden md:flex items-center justify-center"
             aria-label="Next hobby"
           >
             <ChevronRight className="w-5 h-5" />
@@ -156,7 +157,7 @@ export default function HobbyCarousel() {
                       overflow-hidden cursor-pointer border bg-background group
                       transition-all duration-300
                       ${isActive 
-                        ? 'border-foreground shadow-soft-xl' 
+                        ? 'border-foreground/15 shadow-soft-xl' 
                         : 'border-foreground/30 shadow-none opacity-60'
                       }
                     `}
@@ -188,7 +189,7 @@ export default function HobbyCarousel() {
                           transition-all duration-500
                           ${hasImage 
                             ? 'border-white/80 bg-black/40 backdrop-blur-sm' 
-                            : 'border-foreground bg-primary/10 shadow-soft-sm'
+                            : 'border-primary bg-primary/10 shadow-soft-sm'
                           }
                           ${isActive ? 'scale-100 opacity-100' : 'scale-75 opacity-50'}
                         `}>
@@ -197,7 +198,7 @@ export default function HobbyCarousel() {
 
                         {/* Card Number */}
                         <span className={`
-                          font-mono text-xs sm:text-sm font-bold uppercase tracking-widest
+                          font-mono text-xs sm:text-sm font-medium
                           transition-all duration-500
                           ${hasImage ? 'text-white/40' : 'text-foreground/20'}
                           ${isActive ? 'opacity-100' : 'opacity-0'}
@@ -229,7 +230,7 @@ export default function HobbyCarousel() {
                               <span 
                                 key={tag} 
                                 className={`
-                                  px-2.5 py-1 font-mono text-[10px] sm:text-[11px] font-bold uppercase tracking-wider border
+                                  px-2.5 py-1 font-mono text-xs sm:text-xs font-medium border
                                   ${hasImage 
                                     ? 'border-white/30 text-white/90 bg-white/10 backdrop-blur-sm' 
                                     : 'border-primary/30 text-primary bg-primary/10'
@@ -244,18 +245,18 @@ export default function HobbyCarousel() {
 
                         {/* Separator + Meta Row */}
                         {(hobby.years || hobby.quote) && (
-                          <div className={`pt-3 border-t-2 ${hasImage ? 'border-white/20' : 'border-foreground/20'}`}>
+                          <div className={`pt-3 border-t ${hasImage ? 'border-white/20' : 'border-foreground/20'}`}>
                             <div className="flex items-center justify-between gap-4">
                               {hobby.years && (
                                 <div className="flex items-center gap-2">
                                   <span className={`w-2 h-2 ${hasImage ? 'bg-white' : 'bg-primary'}`} />
-                                  <span className={`font-mono text-[10px] sm:text-xs font-bold uppercase tracking-wider ${hasImage ? 'text-white/90' : 'text-foreground'}`}>
+                                  <span className={`font-mono text-xs sm:text-xs font-medium ${hasImage ? 'text-white/90' : 'text-foreground'}`}>
                                     {hobby.years}
                                   </span>
                                 </div>
                               )}
                               {hobby.quote && (
-                                <p className={`text-[10px] sm:text-xs italic truncate ${hasImage ? 'text-white/50' : 'text-foreground/50'}`}>
+                                <p className={`text-xs sm:text-xs italic truncate ${hasImage ? 'text-white/50' : 'text-foreground/50'}`}>
                                   &quot;{hobby.quote}&quot;
                                 </p>
                               )}
@@ -276,11 +277,11 @@ export default function HobbyCarousel() {
                                   rel="noopener noreferrer"
                                   onClick={(e) => e.stopPropagation()}
                                   className={`
-                                    inline-flex items-center gap-2 px-3 py-1.5 border font-mono text-[10px] sm:text-xs font-bold uppercase tracking-wider
-                                    transition-all duration-200 hover:translate-x-[-1px] hover:translate-y-[-1px]
+                                    inline-flex items-center gap-2 px-3 py-1.5 border font-mono text-xs sm:text-xs font-medium
+                                    transition-all duration-200
                                     ${hasImage 
                                       ? 'border-white/50 text-white bg-white/10 backdrop-blur-sm hover:bg-white/20 hover:border-white hover:shadow-[3px_3px_0px_rgba(255,255,255,0.3)]' 
-                                      : 'border-foreground text-foreground bg-background hover:shadow-soft-sm'
+                                      : 'border-foreground/15 text-foreground bg-background hover:shadow-soft-sm'
                                     }
                                   `}
                                   aria-label={`Visit ${link.label}`}
@@ -310,7 +311,7 @@ export default function HobbyCarousel() {
                 key={`indicator-${hobby.id}`}
                 onClick={() => setActiveIndex(index)}
                 className={`
-                  relative h-2 sm:h-3 transition-all duration-300 ease-out border border-foreground
+                  relative h-2 sm:h-3 transition-all duration-300 ease-out border border-foreground/15
                   ${isActive ? 'w-16 sm:w-24 bg-primary shadow-soft-sm' : 'w-6 sm:w-8 bg-foreground/20 hover:bg-foreground/40'}
                 `}
                 aria-label={`Select ${hobby.title}`}

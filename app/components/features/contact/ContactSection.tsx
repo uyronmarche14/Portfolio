@@ -56,7 +56,7 @@ const ContactSection = () => {
     <section id="contact" className="relative w-full overflow-hidden py-16 md:py-24">
       <div className="mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8">
         <SectionHeading
-          index="05"
+          index="07"
           title="Contact"
           subtitle="Have a project, a role or just a question? Leave your email and I'll reply."
         />

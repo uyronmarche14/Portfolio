@@ -48,7 +48,7 @@ const ExperienceBento = () => {
     description: (
       <div className="flex h-full flex-col justify-end gap-3">
         <div>
-          <p className="font-mono text-[10px] font-bold uppercase tracking-widest text-primary/80">
+          <p className="font-mono text-xs font-medium text-primary/80">
             {entry.company}
           </p>
           <p className="mt-2 text-xs leading-relaxed text-foreground/60">
@@ -59,20 +59,20 @@ const ExperienceBento = () => {
           {entry.stack.map((tag) => (
             <span
               key={tag}
-              className="border border-primary/30 bg-primary/10 px-2 py-0.5 font-mono text-[10px] font-bold uppercase tracking-wider text-primary"
+              className="border border-primary/30 rounded-full bg-primary/10 px-2 py-0.5 font-mono text-xs font-medium text-primary"
             >
               {tag}
             </span>
           ))}
         </div>
-        <div className="mt-2 border-t-2 border-foreground/20 pt-2">
+        <div className="mt-2 border-t border-foreground/20 pt-2">
           <div className="mb-1 flex items-center gap-2">
             <span className="h-2 w-2 bg-primary" />
-            <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-foreground">
+            <span className="font-mono text-xs font-medium text-foreground">
               {entry.dateRange}
             </span>
           </div>
-          <p className="text-[10px] italic text-foreground/50">
+          <p className="text-xs italic text-foreground/50">
             &quot;{entry.highlight}&quot;
           </p>
         </div>
@@ -104,6 +104,7 @@ const ExperienceBento = () => {
     <div id="experience" className="relative w-full py-10 sm:py-16 md:py-20">
       <div className="mx-auto mb-8 max-w-6xl px-4 sm:mb-12 sm:px-6 md:mb-16 lg:px-4">
         <HeaderTitle
+          index="02"
           introText="Resume-Backed"
           highlightText="Experience"
           description="My work history is prioritized from the updated resume first, then adapted into clearer portfolio summaries for the roles, systems, and product environments I’ve worked in."

@@ -5,19 +5,21 @@ interface HeaderProps {
   highlightText?: string;
   className?: string;
   description?: string;
+  index?: string;
 }
 
 const Header: React.FC<HeaderProps> = ({ 
   introText = "Hey there i am", 
   highlightText = "Ron Marche Rhyss Q. Uy",
   className = "",
-  description
+  description,
+  index
 }) => {
   return (
     <div className={`flex w-full flex-col items-start ${className}`}>
       <h2 className="font-display text-4xl font-semibold leading-tight text-headline md:text-5xl">
         <span className="mb-3 block font-mono text-xs font-medium text-primary">
-          {introText}
+          {index ? `${index} / ${introText}` : introText}
         </span>
         {highlightText}
       </h2>

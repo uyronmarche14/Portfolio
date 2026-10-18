@@ -32,7 +32,7 @@ const ThemeSwitcher = () => {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 10 }}
             transition={{ duration: 0.15 }}
-            className="absolute bottom-16 right-0 bg-background border border-foreground shadow-soft p-2 min-w-[160px]"
+            className="absolute bottom-16 right-0 bg-background border border-foreground/15 rounded-xl shadow-soft p-2 min-w-[160px]"
           >
             {themes.map((t) => (
               <button
@@ -41,16 +41,16 @@ const ThemeSwitcher = () => {
                   setTheme(t.id);
                   setIsOpen(false);
                 }}
-                className={`w-full flex items-center gap-3 px-3 py-2.5 text-left transition-all duration-150 font-mono text-xs uppercase tracking-wider ${
+                className={`w-full flex items-center gap-3 rounded-md px-3 py-2.5 text-left transition-all duration-150 font-mono text-xs ${
                   theme === t.id
-                    ? "bg-primary text-background font-bold"
+                    ? "bg-foreground text-background font-medium"
                     : "text-foreground hover:bg-foreground hover:text-background"
                 }`}
               >
                 <span className="text-lg">{t.icon}</span>
                 <div>
-                  <div className="font-bold">{t.label}</div>
-                  <div className="text-[10px] opacity-60 normal-case tracking-normal">{t.description}</div>
+                  <div className="font-medium">{t.label}</div>
+                  <div className="text-xs opacity-60 normal-case tracking-normal">{t.description}</div>
                 </div>
               </button>
             ))}
@@ -62,7 +62,7 @@ const ThemeSwitcher = () => {
       <motion.button
         whileTap={{ scale: 0.95 }}
         onClick={() => setIsOpen(!isOpen)}
-        className="w-12 h-12 border border-foreground bg-background shadow-soft flex items-center justify-center text-xl hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-soft-lg transition-all duration-150"
+        className="h-12 w-12 border border-foreground/15 rounded-full bg-background shadow-soft flex items-center justify-center text-xl hover:shadow-soft-lg transition-all duration-150"
         aria-label="Toggle theme"
       >
         {currentTheme.icon}

@@ -41,18 +41,18 @@ export const BentoGridItem = ({
       transition={{ duration: 0.15 }}
       className={cn(
         "group/bento transition-all duration-150 flex flex-col relative overflow-hidden",
-        "border border-foreground bg-background shadow-soft hover:shadow-soft-lg",
+        "border border-foreground/15 rounded-lg bg-background shadow-soft hover:shadow-soft-lg",
         className
       )}
     >
       {/* Image Block */}
-      <div className="relative w-full h-48 sm:h-56 md:h-64 border-b-2 border-foreground overflow-hidden bg-foreground/5">
+      <div className="relative w-full h-48 sm:h-56 md:h-64 border-b border-foreground/15 overflow-hidden bg-foreground/5">
         {header}
       </div>
 
       {/* Content Block */}
       <div className="relative z-10 flex flex-col flex-1 p-5 sm:p-6 justify-between bg-background">
-        <div className="self-start border border-foreground bg-primary/10 p-2 mb-4">
+        <div className="self-start border border-primary rounded-lg bg-primary/10 p-2 mb-4">
             {icon}
         </div>
         
