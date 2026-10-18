@@ -243,8 +243,8 @@ export default function AchievementExplorer() {
       <div className="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-4 mb-6 md:mb-8">
         <HeaderTitle
           index="04"
-          introText="Leadership, Academics"
-          highlightText="& Certifications"
+          introText="Achievements"
+          highlightText="Honors, Leadership & Certifications"
           description="A collection of academic honors, student leadership roles, competitions, certifications, conference exposure, and technical support work across my university journey."
         />
       </div>
