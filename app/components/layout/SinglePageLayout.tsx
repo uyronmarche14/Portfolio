@@ -45,6 +45,7 @@ const Footer = dynamic(() => import("@/components/layout/footer"), {
 });
 
 import { PageLayout } from "./PageLayout";
+import { SectionTracker } from "./SectionTracker";
 import { SectionLayout } from "./SectionLayout";
 
 /**
@@ -63,6 +64,7 @@ export default function SinglePageLayout() {
       withPadding={false}
       maxWidth="full"
     >
+      <SectionTracker />
       <CleanGridBackground
         cellSize={20}
         className="z-0"

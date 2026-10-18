@@ -2,35 +2,52 @@
 
 import { useEffect, useState } from "react";
 
+type Line = number | `${number}%`;
+
+const resolveLine = (line: Line) =>
+  typeof line === "string" ? (window.innerHeight * parseFloat(line)) / 100 : line;
+
 /**
- * Returns the id of the topmost element (from `ids`, in document order) that is
- * inside the reading zone just below the fixed navbar. Keeps the previous value
- * while nothing is in the zone.
+ * Returns the id of the last element (from `ids`, in document order) whose top
+ * has passed the reading line, measured from the top of the viewport. It looks
+ * elements up by id on every update, so lazily mounted or re-created sections
+ * are always found. Scroll events are caught from any scrolling ancestor.
  */
-export function useScrollSpy(ids: string[]): string | null {
+export function useScrollSpy(ids: string[], line: Line = 140): string | null {
   const [active, setActive] = useState<string | null>(ids[0] ?? null);
 
   useEffect(() => {
-    const elements = ids
-      .map((id) => document.getElementById(id))
-      .filter((el): el is HTMLElement => el !== null);
-    if (elements.length === 0) return;
+    let frame = 0;
 
-    const visible = new Set<string>();
-    const observer = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          if (entry.isIntersecting) visible.add(entry.target.id);
-          else visible.delete(entry.target.id);
-        }
-        const first = ids.find((id) => visible.has(id));
-        if (first) setActive(first);
-      },
-      { rootMargin: "-112px 0px -60% 0px" }
-    );
-    elements.forEach((el) => observer.observe(el));
-    return () => observer.disconnect();
-  }, [ids]);
+    const update = () => {
+      frame = 0;
+      const y = resolveLine(line);
+      let current: string | null = null;
+      for (const id of ids) {
+        const el = document.getElementById(id);
+        if (el && el.getBoundingClientRect().top <= y) current = id;
+      }
+      if (current) setActive(current);
+    };
+
+    const schedule = () => {
+      if (!frame) frame = requestAnimationFrame(update);
+    };
+
+    // capture: true also catches scrolling inside nested scroll containers
+    document.addEventListener("scroll", schedule, { capture: true, passive: true });
+    window.addEventListener("resize", schedule);
+    // sections can mount after the first paint, so re-measure a few times
+    const timers = [200, 800, 2000].map((ms) => window.setTimeout(schedule, ms));
+    schedule();
+
+    return () => {
+      document.removeEventListener("scroll", schedule, true);
+      window.removeEventListener("resize", schedule);
+      timers.forEach(window.clearTimeout);
+      if (frame) cancelAnimationFrame(frame);
+    };
+  }, [ids, line]);
 
   return active;
 }

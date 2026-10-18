@@ -37,7 +37,7 @@ const Footer = () => {
     ];
   
     return (
-      <footer className="relative w-full border-t border-foreground/15 py-8">
+      <footer className="relative w-full overflow-hidden border-t border-foreground/15 pt-10">
         <div className="mx-auto flex w-full max-w-6xl flex-col items-center justify-between gap-4 px-4 sm:flex-row sm:px-6 lg:px-8">
           <p className="font-mono text-xs text-foreground/50">
             &copy; {new Date().getFullYear()} Rhyss. All rights reserved.
@@ -52,6 +52,13 @@ const Footer = () => {
             ))}
           </div>
         </div>
+
+        <p
+          aria-hidden="true"
+          className="mt-6 translate-y-[8%] select-none bg-gradient-to-b from-foreground via-foreground/80 to-foreground/10 bg-clip-text text-center font-display text-[clamp(7rem,30vw,30rem)] leading-[0.8] text-transparent"
+        >
+          Rhyss
+        </p>
       </footer>
     );
   };

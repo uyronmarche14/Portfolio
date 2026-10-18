@@ -6,14 +6,37 @@ import { motion } from "framer-motion";
 import { FileText, Menu, X } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
+import { useScrollSpy } from "@/lib/hooks/useScrollSpy";
 import { type NavigationItem } from "./Navigation";
+
+/** Which nav item each page section belongs to. */
+const SECTION_TO_NAV: Record<string, string> = {
+  home: "home",
+  about: "about",
+  experience: "about",
+  journey: "about",
+  activities: "about",
+  achievements: "about",
+  projects: "projects",
+  "work-with-me": "projects",
+  contact: "contact",
+};
+const SPIED_SECTIONS = Object.keys(SECTION_TO_NAV);
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [activeSection, setActiveSection] = useState("home");
   const [isScrolled, setIsScrolled] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
+  const spied = useScrollSpy(SPIED_SECTIONS, "30%");
+  const activeSection =
+    pathname === "/"
+      ? SECTION_TO_NAV[spied ?? "home"] ?? "home"
+      : pathname.startsWith("/projects")
+      ? "projects"
+      : pathname.startsWith("/experience")
+      ? "about"
+      : "";
   const toggleMenu = () => setIsOpen((value) => (value ? false : true));
 
   useEffect(() => {
@@ -39,7 +62,7 @@ const Navbar = () => {
         active:
           item.kind === "route"
             ? pathname === item.href
-            : pathname === "/" && activeSection === item.href.substring(1),
+            : activeSection === item.href.substring(1),
       })),
     [activeSection, pathname]
   );
@@ -72,7 +95,6 @@ const Navbar = () => {
     const element = document.getElementById(sectionId);
     if (element) {
       element.scrollIntoView({ behavior: "smooth", block: "start" });
-      setActiveSection(sectionId);
     }
     setIsOpen(false);
   };
@@ -107,11 +129,18 @@ const Navbar = () => {
                   className={
                     "relative mx-0.5 rounded-full px-4 py-2 text-sm font-medium transition-colors duration-150 " +
                     (item.active
-                      ? "bg-foreground text-background"
+                      ? "text-background"
                       : "text-foreground/60 hover:bg-foreground/10 hover:text-foreground")
                   }
                 >
-                  {item.label}
+                  {item.active && (
+                    <motion.span
+                      layoutId="nav-pill"
+                      className="absolute inset-0 rounded-full bg-foreground"
+                      transition={{ type: "spring", stiffness: 420, damping: 34 }}
+                    />
+                  )}
+                  <span className="relative z-10">{item.label}</span>
                 </button>
               ))}
             </div>
