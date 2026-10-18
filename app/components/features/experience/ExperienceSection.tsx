@@ -1,8 +1,10 @@
 "use client";
 
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import Image from "next/image";
 import { useState, type KeyboardEvent } from "react";
 
+import HeaderTitle from "@/components/ui/header";
 import { Badge } from "@/components/ui/shadcn/badge";
 import { workExperience } from "@/lib/data/workExperience";
 import { formatDuration, monthsBetween } from "@/lib/tenure";
@@ -12,11 +14,18 @@ import { experienceVisuals } from "./ExperienceVisuals";
 
 const ExperienceSection = () => {
   const [activeIndex, setActiveIndex] = useState(0);
+  const [view, setView] = useState<"art" | "photo">("art");
   const reduceMotion = useReducedMotion();
   const now = new Date().toISOString().slice(0, 7);
   const entry = workExperience[activeIndex];
+  const num = String(activeIndex + 1).padStart(2, "0");
   const Visual = experienceVisuals[entry.id as keyof typeof experienceVisuals];
   const duration = entry.approximate ? null : formatDuration(monthsBetween(entry, now));
+
+  const select = (index: number) => {
+    setActiveIndex(index);
+    setView("art");
+  };
 
   const onKeyDown = (event: KeyboardEvent<HTMLButtonElement>) => {
     const last = workExperience.length - 1;
@@ -26,26 +35,26 @@ const ExperienceSection = () => {
       : null;
     if (next === null) return;
     event.preventDefault();
-    setActiveIndex(next);
+    select(next);
     document.getElementById(`experience-tab-${workExperience[next].id}`)?.focus();
   };
 
   return (
-    <div id="experience" className="relative w-full bg-background py-16 md:py-24">
-      <div className="mx-auto w-[min(100%-48px,1270px)]">
-        <header className="mx-auto max-w-2xl text-center">
-          <h2 className="font-sans text-4xl font-medium tracking-tight text-foreground lg:text-5xl">
-            Experience
-          </h2>
-          <p className="mt-4 text-lg text-secondary">
-            Where I&apos;ve worked, what I built there, and the stack behind it.
-          </p>
-        </header>
+    <div id="experience" className="relative w-full py-8 sm:py-10 md:py-12">
+      <div className="mx-auto mb-8 max-w-6xl px-4 sm:px-6 md:mb-10 lg:px-4">
+        <HeaderTitle
+          index="02"
+          introText="Resume-Backed"
+          highlightText="Experience"
+          description="My work history is prioritized from the updated resume first, then adapted into clearer portfolio summaries for the roles, systems, and product environments I’ve worked in."
+        />
+      </div>
 
+      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-4">
         <div
           role="tablist"
           aria-label="Roles"
-          className="mt-10 flex flex-wrap justify-center gap-2"
+          className="flex flex-wrap gap-2"
         >
           {workExperience.map((item, i) => (
             <button
@@ -56,7 +65,7 @@ const ExperienceSection = () => {
               aria-selected={i === activeIndex}
               aria-controls="experience-panel"
               tabIndex={i === activeIndex ? 0 : -1}
-              onClick={() => setActiveIndex(i)}
+              onClick={() => select(i)}
               onKeyDown={onKeyDown}
               className={cn(
                 "rounded-full border px-4 py-1.5 text-sm transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background",
@@ -91,7 +100,7 @@ const ExperienceSection = () => {
                   {duration ? ` · ${duration}` : ""}
                 </p>
                 <div>
-                  <h3 className="font-sans text-3xl font-medium tracking-tight text-foreground lg:text-4xl">
+                  <h3 className="font-display text-3xl text-foreground lg:text-4xl">
                     {entry.role}
                   </h3>
                   <p className="mt-1 text-base text-primary">{entry.company}</p>
@@ -111,7 +120,42 @@ const ExperienceSection = () => {
 
               <div className="relative min-h-[320px] border-t border-foreground/15 bg-foreground/[0.03] md:min-h-0 md:border-l md:border-t-0">
                 <div className="absolute inset-0">
-                  <Visual />
+                  {view === "art" ? (
+                    <Visual />
+                  ) : (
+                    <figure className="relative h-full w-full">
+                      <Image
+                        src={entry.image}
+                        alt={`${entry.company} work photo`}
+                        fill
+                        sizes="(max-width: 768px) 100vw, 50vw"
+                        className="object-cover"
+                      />
+                      <figcaption className="absolute bottom-4 left-4 rounded-full bg-background/85 px-3 py-1 font-mono text-xs text-foreground backdrop-blur">
+                        Fig. {num} / {entry.company}
+                      </figcaption>
+                    </figure>
+                  )}
+                </div>
+                <div
+                  role="group"
+                  aria-label="Visual"
+                  className="absolute right-4 top-4 z-10 flex rounded-full border border-foreground/15 bg-background/85 p-0.5 backdrop-blur"
+                >
+                  {(["art", "photo"] as const).map((mode) => (
+                    <button
+                      key={mode}
+                      type="button"
+                      aria-pressed={view === mode}
+                      onClick={() => setView(mode)}
+                      className={cn(
+                        "rounded-full px-3 py-1 text-xs transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+                        view === mode ? "bg-foreground text-background" : "text-foreground/60 hover:text-foreground"
+                      )}
+                    >
+                      {mode === "art" ? "Illustration" : "Photo"}
+                    </button>
+                  ))}
                 </div>
               </div>
             </motion.div>
