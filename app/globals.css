@@ -315,3 +315,23 @@
     from { opacity: 0; }
     to { opacity: 1; }
 }
+
+
+/* React Flow controls follow the site's rounded, hairline style */
+.react-flow__controls {
+    overflow: hidden;
+    border: 1px solid rgb(var(--foreground) / 0.15);
+    border-radius: 12px;
+    box-shadow: none;
+}
+
+.react-flow__controls-button {
+    background: rgb(var(--card));
+    border-bottom: 1px solid rgb(var(--foreground) / 0.1);
+    color: rgb(var(--foreground));
+    fill: rgb(var(--foreground));
+}
+
+.react-flow__controls-button:hover {
+    background: rgb(var(--foreground) / 0.06);
+}
