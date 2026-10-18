@@ -53,12 +53,27 @@ const Footer = () => {
           </div>
         </div>
 
-        <p
-          aria-hidden="true"
-          className="mt-6 translate-y-[8%] select-none bg-gradient-to-b from-foreground via-foreground/80 to-foreground/10 bg-clip-text text-center font-display text-[clamp(7rem,30vw,30rem)] leading-[0.8] text-transparent"
-        >
-          Rhyss
-        </p>
+        {/* textLength stretches the wordmark to exactly fill the viewport width */}
+        <svg viewBox="82 0 826 340" className="mt-6 block w-full" aria-hidden="true" focusable="false">
+          <defs>
+            <linearGradient id="rhyss-fade" x1="0" x2="0" y1="0" y2="1">
+              <stop offset="0" stopColor="rgb(var(--foreground))" />
+              <stop offset="0.55" stopColor="rgb(var(--foreground))" stopOpacity="0.7" />
+              <stop offset="1" stopColor="rgb(var(--foreground))" stopOpacity="0.08" />
+            </linearGradient>
+          </defs>
+          <text
+            x="0"
+            y="285"
+            fontSize="380"
+            fontFamily="var(--font-display), sans-serif"
+            fill="url(#rhyss-fade)"
+            textLength="1000"
+            lengthAdjust="spacingAndGlyphs"
+          >
+            Rhyss
+          </text>
+        </svg>
       </footer>
     );
   };
