@@ -1,8 +1,11 @@
 "use client";
 
 import { motion, useReducedMotion } from "framer-motion";
+import Image from "next/image";
+import { useState } from "react";
 import { Badge } from "@/components/ui/shadcn/badge";
 
+import { FilterTabs } from "@/components/ui/FilterTabs";
 import HeaderTitle from "@/components/ui/header";
 import { workExperience, type WorkExperienceEntry } from "@/lib/data/workExperience";
 import { formatDuration, monthsBetween } from "@/lib/tenure";
@@ -19,6 +22,7 @@ interface ExperienceCardProps {
 }
 
 const ExperienceCard = ({ entry, index, now }: ExperienceCardProps) => {
+  const [view, setView] = useState<"art" | "photo">("art");
   const reduceMotion = useReducedMotion();
   const Visual = experienceVisuals[entry.id as keyof typeof experienceVisuals];
   const num = String(index + 1).padStart(2, "0");
@@ -73,12 +77,36 @@ const ExperienceCard = ({ entry, index, now }: ExperienceCardProps) => {
 
       <div
         className={cn(
-          "relative min-h-[300px] bg-foreground/[0.05] md:min-h-0",
+          "relative min-h-[300px] md:min-h-0",
           reversed && "md:order-1"
         )}
       >
-        <div className="absolute inset-0 p-4 sm:p-6">
-          <Visual />
+        <div className="absolute inset-0">
+          {view === "art" ? (
+            <div className="h-full w-full p-4 sm:p-6">
+              <Visual />
+            </div>
+          ) : (
+            <Image
+              src={entry.image}
+              alt={`${entry.company} work photo`}
+              fill
+              sizes="(max-width: 768px) 100vw, 50vw"
+              className="object-cover"
+            />
+          )}
+        </div>
+        <div className={cn("absolute top-4 z-10 rounded-full bg-card/80 backdrop-blur", reversed ? "left-4" : "right-4")}>
+          <FilterTabs
+            label={`${entry.company} view`}
+            className="pb-0"
+            value={view}
+            onChange={setView}
+            items={[
+              { key: "art", label: "Visual" },
+              { key: "photo", label: "Photo" },
+            ]}
+          />
         </div>
       </div>
     </motion.article>
