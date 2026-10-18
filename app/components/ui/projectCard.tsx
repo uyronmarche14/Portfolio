@@ -1,7 +1,5 @@
 "use client";
 
-import { getTechIcon } from "@/lib/utils/techIcons";
-import { motion } from "framer-motion";
 import { Code2 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -29,110 +27,79 @@ interface Project {
 
 interface ProjectCardProps {
   project: Project;
+  index: number;
 }
 
-const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
+const ProjectCard: React.FC<ProjectCardProps> = ({ project, index }) => {
   const heroSrc = project.screenshots?.[0] ?? project.image;
-  const visibleTechs = project.technologies.slice(0, 5);
-  const isInDevelopment = project.status === 'in-development';
-  const hasImage = heroSrc && heroSrc.length > 0 && !heroSrc.includes('placeholder');
+  const isInDevelopment = project.status === "in-development";
+  const hasImage = heroSrc && heroSrc.length > 0 && !heroSrc.includes("placeholder");
+  const num = String(index).padStart(2, "0");
 
   return (
-    <motion.div
-      whileHover={{ x: -3, y: -3 }}
-      transition={{ type: "tween", duration: 0.15 }}
-      className="group relative flex h-[360px] sm:h-[400px] md:h-[420px] w-full flex-col overflow-hidden border border-foreground bg-background shadow-soft transition-all duration-150 hover:shadow-soft-lg"
-    >
-        {/* 1. Image Section (Top 55%) */}
-        <div className="relative h-[55%] w-full overflow-hidden bg-foreground/5 border-b-2 border-foreground">
-            {hasImage ? (
-            <Image
-                src={heroSrc}
-                alt={project.title}
-                fill
-                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                className="object-cover transition-transform duration-300 group-hover:scale-105"
-                priority={false}
-            />
-            ) : (
-            <div className="flex h-full w-full items-center justify-center bg-foreground/5 relative overflow-hidden">
-                <div className="flex flex-col items-center gap-2 z-10">
-                    <div className="w-12 h-12 sm:w-14 sm:h-14 border border-foreground bg-background flex items-center justify-center">
-                        <Code2 className="w-6 h-6 sm:w-7 sm:h-7 text-primary" />
-                    </div>
-                    <span className="font-mono text-xs font-bold uppercase tracking-wider text-foreground/60">Preview Coming Soon</span>
-                </div>
-            </div>
-            )}
+    <article className="group flex w-full flex-col">
+      <Link
+        href={`/projects/${project.id}`}
+        className="relative block aspect-[16/10] w-full overflow-hidden rounded-lg border border-foreground/15 bg-foreground/5"
+      >
+        {hasImage ? (
+          <Image
+            src={heroSrc}
+            alt={project.title}
+            fill
+            sizes="(max-width: 768px) 100vw, 50vw"
+            className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+          />
+        ) : (
+          <div className="flex h-full w-full flex-col items-center justify-center gap-2 text-foreground/50">
+            <Code2 className="h-7 w-7" />
+            <span className="font-mono text-xs">Preview coming soon</span>
+          </div>
+        )}
+      </Link>
 
-            {/* Floating Actions (Top Right) */}
-            <div className="absolute top-3 right-3 flex gap-2 translate-y-2 opacity-0 transition-all duration-150 group-hover:translate-y-0 group-hover:opacity-100">
-                {project.githubUrl && (
-                    <Link href={project.githubUrl} target="_blank" className="flex h-9 w-9 items-center justify-center border border-foreground bg-background text-foreground hover:bg-primary hover:text-background transition-colors duration-150 shadow-soft-sm">
-                        <FiGithub size={16} />
-                    </Link>
-                )}
-                {project.liveUrl && (
-                    <Link href={project.liveUrl} target="_blank" className="flex h-9 w-9 items-center justify-center border border-foreground bg-background text-foreground hover:bg-primary hover:text-background transition-colors duration-150 shadow-soft-sm">
-                        <FiExternalLink size={16} />
-                    </Link>
-                )}
-            </div>
+      <p className="mt-3 font-mono text-xs text-foreground/50">
+        Fig. {num} / {project.title}
+      </p>
 
-            {/* Status/Category Tags (Top Left) */}
-            <div className="absolute top-3 left-3 flex flex-col gap-2">
-                {isInDevelopment && (
-                    <span className="inline-flex items-center gap-1.5 border border-foreground bg-amber-400 px-2.5 py-1 font-mono text-[9px] sm:text-[10px] font-bold uppercase tracking-widest text-black shadow-soft-sm">
-                        <span className="w-1.5 h-1.5 bg-black animate-pulse" />
-                        In Dev
-                    </span>
-                )}
-                <span className="inline-block border border-foreground bg-background px-2.5 sm:px-3 py-1 font-mono text-[9px] sm:text-[10px] font-bold uppercase tracking-widest text-primary shadow-soft-sm">
-                    {project.category || "Development"}
-                </span>
-            </div>
-        </div>
+      <div className="mt-5 flex items-baseline justify-between gap-4">
+        <h3 className="font-display text-2xl font-semibold text-foreground md:text-3xl">
+          <Link href={`/projects/${project.id}`} className="hover:text-primary transition-colors">
+            <span className="mr-3 font-mono text-sm font-medium text-primary">{num}</span>
+            {project.title}
+          </Link>
+        </h3>
+        {isInDevelopment && (
+          <span className="shrink-0 rounded-full bg-primary/10 px-2.5 py-0.5 font-mono text-xs text-primary">
+            In development
+          </span>
+        )}
+      </div>
 
-        {/* 2. Content Section (Bottom 45%) */}
-        <div className="relative z-10 flex flex-1 flex-col justify-between p-4 sm:p-5 md:p-6 bg-transparent">
-            <div>
-                <h3 className="mb-2 font-display text-lg sm:text-xl md:text-2xl font-bold text-foreground transition-colors group-hover:text-primary leading-none">
-                    {project.title}
-                </h3>
-                <p className="line-clamp-2 text-xs sm:text-sm text-foreground/60 leading-relaxed">
-                    {project.description}
-                </p>
-            </div>
+      <p className="mt-2 line-clamp-3 text-sm leading-relaxed text-foreground/70 md:text-base">
+        {project.description}
+      </p>
 
-            <div className="mt-3 sm:mt-4 pt-3 sm:pt-4 border-t-2 border-foreground flex items-center justify-between">
-                {/* Tech Stack */}
-                <div className="flex items-center gap-1 sm:gap-1.5">
-                    {visibleTechs.map((tech) => {
-                        const meta = getTechIcon(tech);
-                        const Icon = meta?.icon;
-                        if (!Icon) return null;
-                        return (
-                            <div key={tech} className="group/icon relative">
-                                <div className="flex h-6 w-6 sm:h-7 sm:w-7 items-center justify-center border border-foreground/30 bg-background text-foreground/60 transition-colors group-hover/icon:text-primary group-hover/icon:border-primary">
-                                    <Icon size={10} className="sm:hidden" />
-                                    <Icon size={12} className="hidden sm:block" />
-                                </div>
-                            </div>
-                        );
-                    })}
-                </div>
+      <p className="mt-4 font-mono text-xs text-foreground/50">
+        {project.category || "Development"} · {project.technologies.slice(0, 5).join(" · ")}
+      </p>
 
-                {/* CTA Button */}
-                <Link href={`/projects/${project.id}`} passHref>
-                    <div className="group/btn flex items-center gap-1.5 sm:gap-2 font-mono text-[10px] sm:text-xs font-bold uppercase tracking-widest text-foreground transition-colors hover:text-primary">
-                        <span>Details</span>
-                        <FiArrowRight size={12} className="sm:hidden transition-transform duration-150 group-hover/btn:translate-x-1" />
-                        <FiArrowRight size={14} className="hidden sm:block transition-transform duration-150 group-hover/btn:translate-x-1" />
-                    </div>
-                </Link>
-            </div>
-        </div>
-    </motion.div>
+      <div className="mt-4 flex items-center gap-5 text-sm font-medium">
+        <Link href={`/projects/${project.id}`} className="inline-flex items-center gap-1.5 text-foreground hover:text-primary transition-colors">
+          Case study <FiArrowRight size={14} />
+        </Link>
+        {project.liveUrl && (
+          <Link href={project.liveUrl} target="_blank" className="inline-flex items-center gap-1.5 text-foreground/60 hover:text-primary transition-colors">
+            Live <FiExternalLink size={13} />
+          </Link>
+        )}
+        {project.githubUrl && (
+          <Link href={project.githubUrl} target="_blank" className="inline-flex items-center gap-1.5 text-foreground/60 hover:text-primary transition-colors">
+            Code <FiGithub size={13} />
+          </Link>
+        )}
+      </div>
+    </article>
   );
 };
 
