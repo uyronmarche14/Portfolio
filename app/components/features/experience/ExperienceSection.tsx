@@ -1,6 +1,7 @@
 "use client";
 
 import { motion, useReducedMotion } from "framer-motion";
+import Image from "next/image";
 
 import HeaderTitle from "@/components/ui/header";
 import { workExperience, type WorkExperienceEntry } from "@/lib/data/workExperience";
@@ -51,7 +52,18 @@ const ExperienceCard = ({ entry, index, now }: ExperienceCardProps) => {
           <h3 className="font-sans text-3xl font-semibold tracking-tight text-foreground lg:text-4xl">
             {entry.role}
           </h3>
-          <p className="mt-1.5 text-base text-foreground/70">{entry.company}</p>
+          <div className="mt-3 flex items-center gap-3">
+            <span className="relative h-11 w-11 shrink-0 overflow-hidden rounded-full border border-foreground/15 bg-foreground/5">
+              <Image
+                src={entry.image}
+                alt=""
+                fill
+                sizes="44px"
+                className="object-cover"
+              />
+            </span>
+            <p className="text-base text-foreground/70">{entry.company}</p>
+          </div>
         </div>
         <p className="max-w-md text-base leading-relaxed text-foreground/80">{entry.summary}</p>
         <p className="font-mono text-xs text-foreground/60">
