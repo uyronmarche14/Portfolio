@@ -100,11 +100,6 @@ export const timelineYears: TimelineYear[] = [
         description: "Competed in the IT Olympics at UMAK in the Android Productivity category",
         icon: "android"
       },
-      {
-        title: "Professional Internship",
-        description: "Started internship at Aique Innovation Solutions Corporation, learning Next.js, Tailwind CSS, React, TypeScript, and Scrum Agile methodology",
-        icon: "briefcase"
-      },
 
     ]
   },
@@ -112,28 +107,28 @@ export const timelineYears: TimelineYear[] = [
     year: "2025",
     features: [
       {
-        title: "Freelance Software Developer (Jan 2024 - Present)",
-        description: "Designed and delivered full-stack web and mobile solutions for startup and enterprise clients, balancing hands-on engineering with AI-assisted tooling to improve quality, refactoring, and delivery speed.",
-        icon: "briefcase"
+        title: "Graduated Cum Laude, BS Computer Science",
+        description: "Completed the degree at Taguig City University (2021 - 2025), with a Best Thesis finalist recognition and the Hon. Maria Laarni L. Cayetano Leadership Award.",
+        icon: "graduation-cap"
       },
       {
-        title: "Frontend Developer at Aique (Jan 2025 - Jun 2025)",
-        description: "Built responsive and reusable React interfaces, integrated backend APIs across multiple user roles, and worked in an Agile environment with reviews, sprint planning, and iterative feature delivery.",
+        title: "Frontend Developer Intern at Aique (Jan 2025 - Jun 2025)",
+        description: "Built responsive React interfaces, connected them to backend APIs, debugged and refined features, and took part in an Agile team with code reviews.",
         icon: "code"
       },
       {
-        title: "Software Developer at Beyondgen (Aug 2025 - May 2026)",
-        description: "Developed a supplier quality management platform with multi-step approval workflows, audit logs, status tracking, and a Microsoft SQL Server backend built without an ORM.",
+        title: "Full-Stack Software Developer / Project Manager at Beyondgen via Stockly (Aug 2025 - Jul 2026)",
+        description: "Worked on enterprise supplier quality management modernization: legacy analysis, approval workflows, roles and permissions, documentation, code review, regression checks, and CI validation.",
         icon: "briefcase"
       },
       {
         title: "Software Engineer at KeepItSimpleOS (Sep 2025 - Nov 2025)",
-        description: "Built a centralized fitness platform for trainers to manage clients, messaging, and performance tracking while integrating third-party APIs and AI-assisted communication flows.",
+        description: "Worked on application functionality, troubleshooting, and data-flow refinement for a trainer-client fitness platform with messaging and performance tracking.",
         icon: "smartphone"
       },
       {
-        title: "Full-Stack Developer at BuildFast (2025 - 2026)",
-        description: "Worked on AI-powered platforms with modern frontend and backend architecture, clearer separation of concerns, and production-ready workflows for shipping features under tight timelines.",
+        title: "Full-Stack Developer at BuildFast (Dec 2025 - Feb 2026)",
+        description: "Built backend services, APIs, reusable interfaces, and AI-assisted features aligned with contract milestones.",
         icon: "code"
       },
     ]
@@ -142,19 +137,9 @@ export const timelineYears: TimelineYear[] = [
     year: "2026",
     features: [
       {
-        title: "Freelance Software Developer (Jan 2024 - Present)",
-        description: "Continued delivering production-ready applications for clients while combining manual engineering discipline with AI-assisted workflows for refactoring, backend services, and scalable product delivery.",
+        title: "Technical Business Analyst at iOPEX Technologies (Aug 2026 - Present)",
+        description: "Analyzing live enterprise workflows, turning issues and requests into clear requirements, and building management and recruitment dashboards with KPI, SLA, and trend reporting.",
         icon: "briefcase"
-      },
-      {
-        title: "Beyondgen Delivery Phase (Aug 2025 - May 2026)",
-        description: "Closed out supplier compliance and approval workflow work, including reviewer and approver flows, audit visibility, and structured backend status tracking.",
-        icon: "briefcase"
-      },
-      {
-        title: "BuildFast AI Product Work (2025 - 2026)",
-        description: "Expanded into AI-focused product delivery, contributing to script generation, video workflow tooling, maintainable components, and architecture decisions across modern TypeScript stacks.",
-        icon: "code"
       },
     ]
   }

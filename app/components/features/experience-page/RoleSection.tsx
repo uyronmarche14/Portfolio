@@ -77,6 +77,8 @@ export function RoleSection({ entry, index, now, prev, next }: RoleSectionProps)
         {entry.highlight}
       </p>
 
+      {entry.image && (
+        <>
       <h3 id={`${entry.id}-photo`} className={H3}>Photo</h3>
       <figure>
         <div className="relative aspect-[16/9] w-full overflow-hidden rounded-xl border border-foreground/15 bg-foreground/5">
@@ -90,6 +92,8 @@ export function RoleSection({ entry, index, now, prev, next }: RoleSectionProps)
         </div>
         <figcaption className="mt-3 font-mono text-xs text-foreground/60">{entry.company}</figcaption>
       </figure>
+        </>
+      )}
 
       <h3 id={`${entry.id}-data`} className={H3}>Data</h3>
       <CodeBlock label={`experience/${entry.id}`} code={json} />
