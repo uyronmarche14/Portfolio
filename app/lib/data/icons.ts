@@ -1,5 +1,5 @@
 import type { IconType } from "react-icons";
-import { FaJava } from "react-icons/fa";
+import { SiOpenjdk } from "react-icons/si";
 import {
   SiAndroidstudio,
   SiDotnet,
@@ -34,7 +34,7 @@ export const techIconMap: Record<string, IconType> = {
   "Stripe API": SiStripe,
   Redux: SiRedux,
   "C#": SiDotnet,
-  Java: FaJava,
+  Java: SiOpenjdk,
   "Android Studio": SiAndroidstudio,
   WinForms: SiDotnet, // Using .NET icon as proxy
   "OpenAI API": SiOpenai,

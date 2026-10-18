@@ -102,6 +102,11 @@
         letter-spacing: -0.02em;
     }
 
+    /* One stroke weight for every Lucide / custom icon, so they match the hairline UI */
+    svg.lucide {
+        stroke-width: 1.75;
+    }
+
     input, button, textarea, select {
         font: inherit;
     }

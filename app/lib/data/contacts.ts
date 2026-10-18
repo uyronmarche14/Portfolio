@@ -1,13 +1,13 @@
 import {
-  FaLinkedin,
-  FaGithub,
+  SiLinkedin,
+  SiGithub,
 
-  FaInstagram,
+  SiInstagram,
 
-  FaDiscord,
-  FaMedium,
-  FaGoogle,
-} from "react-icons/fa";
+  SiDiscord,
+  SiMedium,
+  SiGoogle,
+} from "react-icons/si";
 import type { IconType } from "react-icons";
 
 // Legacy contact info structure for backward compatibility
@@ -41,37 +41,37 @@ export const socialLinks: {
   color: string;
 }[] = [
   {
-    icon: FaGoogle,
+    icon: SiGoogle,
     href: "mailto:uyronmarcherhyssq@gmail.com",
     label: "Gmail",
     color: "#EA4335",
   },
   {
-    icon: FaLinkedin,
+    icon: SiLinkedin,
     href: "https://www.linkedin.com/in/ron-marche-rhyss-uy-578b80240/",
     label: "LinkedIn",
     color: "#0077B5",
   },
   {
-    icon: FaGithub,
+    icon: SiGithub,
     href: "https://github.com/uyronmarche14",
     label: "GitHub",
     color: "#333",
   },
   {
-    icon: FaInstagram,
+    icon: SiInstagram,
     href: "https://www.instagram.com/ronmarcheee/",
     label: "Instagram",
     color: "#E4405F",
   },
   {
-    icon: FaDiscord,
+    icon: SiDiscord,
     href: "https://discord.com/users/881515697535090708",
     label: "Discord",
     color: "#7289DA",
   },
   {
-    icon: FaMedium,
+    icon: SiMedium,
     href: "https://medium.com/@ronmarcheuy",
     label: "Medium",
     color: "#00AB6C",

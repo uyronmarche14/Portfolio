@@ -1,6 +1,7 @@
 "use client";
 
 import { motion, useReducedMotion } from "framer-motion";
+import type { LucideIcon } from "lucide-react";
 import { useId, type KeyboardEvent } from "react";
 
 import { cn } from "@/lib/utils";
@@ -9,6 +10,7 @@ export interface FilterTabItem<K extends string = string> {
   key: K;
   label: string;
   count?: number;
+  icon?: LucideIcon;
 }
 
 interface FilterTabsProps<K extends string> {
@@ -67,7 +69,8 @@ export function FilterTabs<K extends string>({ items, value, onChange, label, cl
                   transition={reduceMotion ? { duration: 0 } : { type: "spring", stiffness: 420, damping: 34 }}
                 />
               )}
-              <span className="relative z-10">
+              <span className="relative z-10 inline-flex items-center gap-2">
+                {item.icon && <item.icon className="h-4 w-4" aria-hidden="true" />}
                 {item.label}
                 {item.count !== undefined && (
                   <span className={cn("ml-1.5 font-mono text-xs", active ? "text-background/60" : "text-foreground/40")}>

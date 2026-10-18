@@ -3,7 +3,7 @@
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import Image from "next/image";
 import Link from "next/link";
-import { FiArrowRight, FiCheck } from "react-icons/fi";
+import { ArrowRight, Check } from "lucide-react";
 
 const features = [
   "Strategic Planning",
@@ -41,13 +41,13 @@ const WorkWithMeSection = () => {
                 <ul className="mt-5 grid grid-cols-2 gap-2">
                   {features.map((item) => (
                     <li key={item} className="flex items-center gap-2 text-sm text-white">
-                      <FiCheck size={14} className="shrink-0 text-primary" strokeWidth={3} />
+                      <Check size={14} className="shrink-0 text-primary" strokeWidth={3} />
                       {item}
                     </li>
                   ))}
                 </ul>
                 <span className="mt-6 inline-flex items-center gap-2 text-sm font-medium text-white underline-offset-4 group-hover:underline">
-                  View process map <FiArrowRight size={16} />
+                  View process map <ArrowRight size={16} />
                 </span>
               </div>
             </div>

@@ -2,8 +2,15 @@
 
 import { useState, useMemo, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ExternalLink } from "lucide-react";
+import { ExternalLink, type LucideIcon } from "lucide-react";
 import { FilterTabs } from "@/components/ui/FilterTabs";
+import {
+  CertificationIcon,
+  CompetitionIcon,
+  EventsIcon,
+  HonorsIcon,
+  LeadershipIcon,
+} from "@/components/ui/icons";
 import HeaderTitle from "@/components/ui/header";
 import {
   achievementsData,
@@ -210,6 +217,14 @@ function MobileCompactCard({
 }
 
 // ─── Main Component ───
+const categoryIcons: Partial<Record<AchievementCategory, LucideIcon>> = {
+  school: HonorsIcon,
+  college: LeadershipIcon,
+  competitions: CompetitionIcon,
+  certifications: CertificationIcon,
+  professional: EventsIcon,
+};
+
 export default function AchievementExplorer() {
   const [activeFilter, setActiveFilter] = useState<AchievementCategory>("all");
   const [selectedId, setSelectedId] = useState<string>(achievementsData[0]?.id ?? "");
@@ -262,6 +277,7 @@ export default function AchievementExplorer() {
           items={categoryFilters.map((filter) => ({
             key: filter.key,
             label: filter.label,
+            icon: categoryIcons[filter.key],
             count:
               filter.key === "all"
                 ? achievementsData.length

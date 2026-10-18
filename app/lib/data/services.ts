@@ -10,6 +10,7 @@ import {
   Palette,
   AppWindow,
   LayoutGrid,
+  Smartphone,
 } from "lucide-react";
 
 import {
@@ -20,8 +21,6 @@ import {
   SiAndroid,
 } from "react-icons/si"; // Removed unused SiCanva'
 
-import { FaReact, FaAndroid } from "react-icons/fa";
-import { MdSmartphone } from "react-icons/md";
 
 import type { IconType } from "react-icons";
 
@@ -45,7 +44,7 @@ export const serviceCards: ServiceCard[] = [
     highlight:
       "I had provided over 8 clients with different project mobile, web and such more",
     icon: Code,
-    additionalIcons: [FaReact, MdSmartphone],
+    additionalIcons: [SiReact, Smartphone],
   },
   {
     title: "Student Leadership / President",
@@ -64,8 +63,8 @@ export const serviceCards: ServiceCard[] = [
     skills: ["React Native", "Android Studio", "Expo"],
     experience: "3 years",
     highlight: "Specialized in modern mobile applications",
-    icon: MdSmartphone,
-    additionalIcons: [FaAndroid, AppWindow, SiExpo, SiAndroid, SiReact],
+    icon: Smartphone,
+    additionalIcons: [AppWindow, SiExpo, SiAndroid, SiReact],
   },
   {
     title: "1:1 Tutoring",

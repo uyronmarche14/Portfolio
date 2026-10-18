@@ -1,10 +1,9 @@
 "use client";
 
-import { Code2 } from "lucide-react";
+import { ArrowRight, Code2, ExternalLink, Github } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
-import { FiArrowRight, FiExternalLink, FiGithub } from "react-icons/fi";
 
 interface Project {
   id: string;
@@ -86,16 +85,16 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, index }) => {
 
       <div className="mt-4 flex items-center gap-5 text-sm font-medium">
         <Link href={`/projects/${project.id}`} className="inline-flex items-center gap-1.5 text-foreground hover:text-primary transition-colors">
-          Case study <FiArrowRight size={14} />
+          Case study <ArrowRight size={14} />
         </Link>
         {project.liveUrl && (
           <Link href={project.liveUrl} target="_blank" className="inline-flex items-center gap-1.5 text-foreground/60 hover:text-primary transition-colors">
-            Live <FiExternalLink size={13} />
+            Live <ExternalLink size={13} />
           </Link>
         )}
         {project.githubUrl && (
           <Link href={project.githubUrl} target="_blank" className="inline-flex items-center gap-1.5 text-foreground/60 hover:text-primary transition-colors">
-            Code <FiGithub size={13} />
+            Code <Github size={13} />
           </Link>
         )}
       </div>
