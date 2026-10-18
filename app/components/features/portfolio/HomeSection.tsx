@@ -6,8 +6,14 @@ import React, { useState } from "react";
 
 import { Badge } from "@/components/ui/shadcn/badge";
 import { Button } from "@/components/ui/shadcn/button";
+import { HoverWord } from "./HoverWord";
+import { achievementsData } from "@/lib/data/achievements";
+import { projects } from "@/lib/data/projects";
 import { HERO_SKILL_GROUPS, HOME_CONTENT } from "@/lib/data/homeContent";
 import { profileData } from "@/lib/data/profile";
+
+const cumLaude = achievementsData.find((item) => item.id === "cum-laude-2025");
+const codex = projects.find((project) => project.id === "codex-express");
 
 const HomeSection: React.FC = () => {
   const currentlyLearning =
@@ -23,7 +29,9 @@ const HomeSection: React.FC = () => {
       <div className="relative z-10 mx-auto w-full max-w-6xl px-4 text-left sm:px-6 lg:px-8">
         <div className="grid items-center gap-14 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:gap-10">
           <div>
-        <p className="mb-8 font-mono text-xs font-medium text-secondary">Portfolio / 2026</p>
+        <Badge variant="default" className="mb-8 h-7 px-3 text-[13px]">
+              {profileData.quickFacts.find((fact) => fact.label === "Based in")?.value}
+            </Badge>
 
         <h1 className="mb-8 font-display text-6xl leading-[0.9] text-headline sm:text-7xl md:text-8xl lg:text-8xl">
           {HOME_CONTENT.nameLines.map((line) => (
@@ -33,6 +41,40 @@ const HomeSection: React.FC = () => {
 
         <p className="max-w-xl text-balance text-xl leading-snug text-foreground/80 md:text-2xl">
               {HOME_CONTENT.subtitle}
+            </p>
+
+            <p className="mt-6 max-w-lg text-base leading-relaxed text-foreground/70">
+              I turn{" "}
+              <HoverWord
+                title="Technical Business Analyst"
+                text="Translating business needs into clear, testable specifications before any code is written."
+              >
+                business requirements
+              </HoverWord>{" "}
+              into{" "}
+              <HoverWord
+                title="AI Architecture"
+                text="Designing AI-assisted systems and workflows that fit the problem they solve."
+              >
+                AI-assisted software
+              </HoverWord>
+              . I graduated{" "}
+              <HoverWord
+                title={cumLaude?.title}
+                text={`${cumLaude?.issuer}, ${cumLaude?.date}`}
+                image={cumLaude?.image}
+              >
+                Cum Laude
+              </HoverWord>{" "}
+              and have shipped projects like{" "}
+              <HoverWord
+                title={codex?.title}
+                text="An appointment scheduling web app built with Next.js and TypeScript."
+                image={codex?.screenshots[0]}
+              >
+                Codex Express
+              </HoverWord>
+              .
             </p>
 
         <div className="mt-8 flex flex-wrap gap-3">
