@@ -101,8 +101,8 @@ const ExperienceBento = () => {
   }));
 
   return (
-    <div id="experience" className="relative w-full py-10 sm:py-16 md:py-20">
-      <div className="mx-auto mb-8 max-w-6xl px-4 sm:mb-12 sm:px-6 md:mb-16 lg:px-4">
+    <div id="experience" className="relative w-full py-8 sm:py-10 md:py-12">
+      <div className="mx-auto mb-8 max-w-6xl px-4 sm:mb-10 sm:px-6 md:mb-10 lg:px-4">
         <HeaderTitle
           index="02"
           introText="Resume-Backed"

@@ -14,7 +14,7 @@ const features = [
 
 const WorkWithMeSection = () => {
   return (
-    <section id="work-with-me" className="group relative w-full py-16 md:py-24">
+    <section id="work-with-me" className="group relative w-full py-10 md:py-14">
       <div className="mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8">
         <SectionHeading
           index="06"

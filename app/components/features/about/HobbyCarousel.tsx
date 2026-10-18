@@ -30,7 +30,7 @@ export default function HobbyCarousel() {
   const activeHobby = useMemo(() => hobbiesData[activeIndex], [activeIndex]);
 
   return (
-    <section className="relative w-full min-h-screen flex flex-col justify-center py-16 sm:py-24 overflow-hidden transition-colors duration-700">
+    <section className="relative w-full flex flex-col py-10 sm:py-14 overflow-hidden transition-colors duration-700">
       
       {/* === Section Background === */}
       {/* Color fallback when no image */}
@@ -64,7 +64,7 @@ export default function HobbyCarousel() {
       <div className="absolute inset-0 z-0 bg-background/60 pointer-events-none" />
 
       {/* === Section Header === */}
-      <div className="relative z-10 w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-4 mb-8 md:mb-12">
+      <div className="relative z-10 w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-4 mb-6 md:mb-8">
         <HeaderTitle 
           index="03"
           introText="Off Screen"

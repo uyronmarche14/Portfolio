@@ -9,7 +9,7 @@ interface SectionHeadingProps {
 
 export function SectionHeading({ index, title, subtitle, className }: SectionHeadingProps) {
   return (
-    <header className={cn("mb-10 md:mb-14", className)}>
+    <header className={cn("mb-8 md:mb-10", className)}>
       <p className="font-mono text-xs font-medium text-primary">{index} / {title}</p>
       <h2 className="mt-3 font-display text-4xl font-semibold text-foreground md:text-5xl">{title}</h2>
       {subtitle && <p className="mt-3 max-w-2xl text-lg text-secondary">{subtitle}</p>}
