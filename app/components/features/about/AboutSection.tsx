@@ -6,7 +6,7 @@ import HeaderTitle from "@/components/ui/header";
 import Heading from "@/components/ui/typography/Heading";
 import Text from "@/components/ui/typography/Text";
 import { profileData } from "@/lib/data/profile";
-import ExperienceSection from "../experience/ExperienceSection";
+import ExperienceBento from "../experience/ExperienceBento";
 
 const AboutDoGrid = lazy(() => import("@/components/ui/aboutDo").then(mod => ({ default: mod.AboutDoGrid })));
 const AboutTimeline = lazy(() => import("@/components/ui/timeline/AboutTimeline"));
@@ -85,7 +85,7 @@ const AboutSection = () => {
 
       {/* Experience Bento */}
       <Suspense fallback={<div className="py-16 text-center"><div className="font-mono text-xs text-foreground/40">Loading skills...</div></div>}>
-        <ExperienceSection />
+        <ExperienceBento />
       </Suspense>
 
       {/* Timeline */}
