@@ -2,11 +2,16 @@ import { Navbar } from "@/components/layout";
 import ThemeSwitcher from "@/components/ui/ThemeSwitcher";
 import { Providers } from "@/providers";
 import type { Metadata } from "next";
-import { Bricolage_Grotesque, Geist_Mono, Inter } from 'next/font/google';
+import { Geist_Mono, Inter } from 'next/font/google';
+import localFont from 'next/font/local';
 import "./globals.css";
 
-const DisplayFont = Bricolage_Grotesque({
-    subsets: ['latin'],
+const DisplayFont = localFont({
+    src: [
+        { path: './fonts/Rawkner-Black.woff2', weight: '900', style: 'normal' },
+        { path: './fonts/Rawkner-Black.woff', weight: '900', style: 'normal' },
+        { path: './fonts/Rawkner-Black.ttf', weight: '900', style: 'normal' },
+    ],
     display: 'swap',
     variable: '--font-display',
 });
