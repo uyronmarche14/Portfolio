@@ -10,7 +10,7 @@ import { cn } from "@/lib/utils";
 
 import { RoleSection } from "./RoleSection";
 
-const SUBSECTIONS = [
+const ALL_SUBSECTIONS = [
   { key: "overview", label: "Overview" },
   { key: "stack", label: "Stack" },
   { key: "highlight", label: "Highlight" },
@@ -28,11 +28,12 @@ export default function ExperiencePage() {
   const now = new Date().toISOString().slice(0, 7);
   const roleIds = useMemo(() => workExperience.map((e) => e.id), []);
   const subIds = useMemo(
-    () => workExperience.flatMap((e) => SUBSECTIONS.map((s) => `${e.id}-${s.key}`)),
+    () => workExperience.flatMap((e) => ALL_SUBSECTIONS.map((s) => `${e.id}-${s.key}`)),
     []
   );
   const activeRole = useScrollSpy(roleIds) ?? roleIds[0];
   const activeSub = useScrollSpy(subIds);
+  const activeEntry = workExperience.find((entry) => entry.id === activeRole);
 
   return (
     <>
@@ -106,7 +107,7 @@ export default function ExperiencePage() {
             <div className="sticky top-28">
               <p className="text-sm font-semibold text-foreground">On this page</p>
               <ul className="mt-3 space-y-0.5 border-l border-foreground/10">
-                {SUBSECTIONS.map((sub) => {
+                {ALL_SUBSECTIONS.filter((sub) => sub.key !== "photo" || activeEntry?.image).map((sub) => {
                   const id = `${activeRole}-${sub.key}`;
                   return (
                     <li key={sub.key}>

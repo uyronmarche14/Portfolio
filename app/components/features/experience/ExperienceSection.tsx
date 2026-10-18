@@ -71,7 +71,7 @@ const ExperienceCard = ({ entry, index, now }: ExperienceCardProps) => {
             {entry.role}
           </h3>
           <div className="mt-3 flex items-center gap-3">
-            <PhotoThumb src={entry.image} label={entry.company} />
+            {entry.image && <PhotoThumb src={entry.image} label={entry.company} />}
             <p className="text-base text-foreground/70">{entry.company}</p>
           </div>
         </div>
@@ -100,7 +100,7 @@ const ExperienceCard = ({ entry, index, now }: ExperienceCardProps) => {
         )}
       >
         <div className="absolute inset-0">
-          {view === "art" ? (
+          {view === "art" || !entry.image ? (
             <div className="h-full w-full p-4 sm:p-6">
               <Visual />
             </div>
@@ -114,6 +114,7 @@ const ExperienceCard = ({ entry, index, now }: ExperienceCardProps) => {
             />
           )}
         </div>
+        {entry.image && (
         <div className={cn("absolute top-4 z-10 rounded-full bg-card/80 backdrop-blur", reversed ? "left-4" : "right-4")}>
           <FilterTabs
             label={`${entry.company} view`}
@@ -126,6 +127,7 @@ const ExperienceCard = ({ entry, index, now }: ExperienceCardProps) => {
             ]}
           />
         </div>
+        )}
       </div>
     </motion.article>
   );

@@ -62,6 +62,28 @@ export const achievementsData: Achievement[] = [
     impact: "Recognized for strong academic performance through graduation.",
   },
   {
+    id: "best-thesis-finalist-cict-2025",
+    title: "Best Thesis Finalist",
+    category: "school",
+    issuer: "CICT, Taguig City University",
+    date: "2025",
+    description:
+      "Recognized as a Best Thesis finalist in the College of Information and Communication Technology.",
+    icon: Medal,
+    tags: ["Thesis", "Research", "Recognition"],
+  },
+  {
+    id: "cayetano-leadership-award",
+    title: "Hon. Maria Laarni L. Cayetano Leadership Award",
+    category: "college",
+    issuer: "Taguig City University",
+    date: "2021 - 2025",
+    description:
+      "Awarded the Hon. Maria Laarni L. Cayetano Leadership Award during university for leadership and service.",
+    icon: Award,
+    tags: ["Leadership", "Award", "TCU"],
+  },
+  {
     id: "student-leadership-year-2025",
     title: "Student Leadership of the Year",
     category: "school",

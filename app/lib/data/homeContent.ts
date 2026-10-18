@@ -11,12 +11,44 @@ export const HOME_CONTENT = {
   name: "Ron Marche Rhyss Q. Uy",
   subtitle: "Technical Business Analyst\u00a0/ AI Architecture Engineer",
   nameLines: ["Ron Marche", "Rhyss Q. Uy"],
-  roles: ["Full Stack", "AI Engineering", "Mobile", "DevOps"],
+  roles: ["Business Analysis", "Full Stack", "KPI Dashboards", "AI-Assisted Engineering"],
   description:
-    "BS Computer Science graduate from Taguig City University building scalable web, mobile, and AI-assisted software solutions.",
+    "Technical Business Analyst and full-stack developer connecting business workflows, system architecture, data reporting, and practical software delivery.",
 };
 
 export const HERO_SKILL_GROUPS: HeroSkillGroup[] = [
+  {
+    title: "Business & Systems Analysis",
+    eyebrow: "Requirements & Process",
+    description:
+      "How I turn unclear requests into testable requirements, clear rules, and handoffs developers can act on.",
+    emphasis: "primary",
+    skills: [
+      "Requirements Gathering",
+      "BRDs & PRDs",
+      "Process Mapping",
+      "Functional Gap Analysis",
+      "Business Rules",
+      "Stakeholder Communication",
+      "UAT",
+      "Issue Triage",
+      "Role & Permission Modeling",
+    ],
+  },
+  {
+    title: "Reporting & Data",
+    eyebrow: "KPIs & Dashboards",
+    description:
+      "Turning multi-source operational data into KPIs, SLA views, exceptions, and trends that management can use.",
+    emphasis: "secondary",
+    skills: [
+      "Excel Reporting",
+      "KPI Design",
+      "SLA Monitoring",
+      "Dashboards",
+      "Data Cleansing & Validation",
+    ],
+  },
   {
     title: "Languages",
     eyebrow: "Programming Core",
@@ -49,6 +81,7 @@ export const HERO_SKILL_GROUPS: HeroSkillGroup[] = [
     skills: [
       "Node.js",
       "Express.js",
+      "NestJS",
       "REST APIs",
       "JWT Authentication",
       "Role-Based Access Control",
@@ -60,7 +93,7 @@ export const HERO_SKILL_GROUPS: HeroSkillGroup[] = [
     description:
       "Database and platform choices I use to model data, power app state, and support production workflows.",
     emphasis: "primary",
-    skills: ["Microsoft SQL Server", "MySQL", "Supabase", "MongoDB"],
+    skills: ["Microsoft SQL Server", "MySQL", "PostgreSQL / Supabase", "MongoDB", "Prisma"],
   },
   {
     title: "Cloud & DevOps",
@@ -83,12 +116,12 @@ export const HERO_SKILL_GROUPS: HeroSkillGroup[] = [
       "AI systems and copilots I use for product features, workflow automation, rapid iteration, and LLM-powered experiences.",
     emphasis: "neutral",
     skills: [
-      "OpenAI API",
-      "Claude AI",
-      "GitHub Copilot",
-      "Antigravity",
-      "Kiro",
-      "LLM Integration",
+      "Claude",
+      "ChatGPT",
+      "Codex",
+      "AI-Assisted Prototyping",
+      "AI-Assisted Documentation",
+      "Manual Review & Validation",
     ],
   },
   {

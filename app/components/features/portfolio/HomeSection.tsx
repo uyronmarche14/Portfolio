@@ -14,6 +14,7 @@ import { HERO_SKILL_GROUPS, HOME_CONTENT } from "@/lib/data/homeContent";
 import { profileData } from "@/lib/data/profile";
 
 const cumLaude = achievementsData.find((item) => item.id === "cum-laude-2025");
+const iopex = workExperience.find((entry) => entry.id === "iopex");
 const beyondgen = workExperience.find((entry) => entry.id === "beyondgen");
 const codex = projects.find((project) => project.id === "codex-express");
 
@@ -71,9 +72,17 @@ const HomeSection: React.FC = () => {
                 image={cumLaude?.image}
               >
                 Cum Laude
-              </HoverWord>{" "}
-              and have worked across freelance, startup, and product teams, building web, mobile, and
-              AI-assisted products. Recent work includes a supplier quality management platform at{" "}
+              </HoverWord>
+              , and I&apos;m now a Technical Business Analyst at{" "}
+              <HoverWord
+                title={iopex?.company}
+                href="/experience#iopex"
+                text={`${iopex?.role}, ${iopex?.dateRange}`}
+              >
+                iOPEX Technologies
+              </HoverWord>
+              , analyzing live enterprise workflows and building KPI dashboards. Before that I worked on supplier
+              quality management at{" "}
               <HoverWord
                 title={beyondgen?.company}
                 href="/experience#beyondgen"
@@ -81,8 +90,8 @@ const HomeSection: React.FC = () => {
                 image={beyondgen?.image}
               >
                 Beyondgen
-              </HoverWord>{" "}
-              and an appointment scheduling app,{" "}
+              </HoverWord>
+              , and built projects like{" "}
               <HoverWord
                 title={codex?.title}
                 href="/projects/codex-express"
@@ -91,7 +100,7 @@ const HomeSection: React.FC = () => {
               >
                 Codex Express
               </HoverWord>
-              . I&apos;m now going deeper into {currentlyLearning}.
+              . Next, I&apos;m going deeper into {currentlyLearning}.
             </p>
 
         <div className="mt-8 flex flex-wrap gap-3">
