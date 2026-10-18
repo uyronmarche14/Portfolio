@@ -32,6 +32,8 @@ export interface Achievement {
   tags?: string[];
   certificateUrl?: string;
   impact?: string;
+  /** shown as the large highlight card; the first flagged item wins */
+  featured?: boolean;
 }
 
 export const categoryFilters: { key: AchievementCategory; label: string }[] = [
@@ -46,6 +48,7 @@ export const categoryFilters: { key: AchievementCategory; label: string }[] = [
 export const achievementsData: Achievement[] = [
   {
     id: "cum-laude-2025",
+    featured: true,
     title: "Cum Laude",
     category: "school",
     issuer: "Taguig City University",
