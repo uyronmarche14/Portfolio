@@ -8,7 +8,7 @@ const ProjectsSection = () => {
   return (
     <section
       id="projects"
-      className="relative min-h-screen w-full snap-start overflow-hidden py-16 md:py-24"
+      className="relative w-full snap-start overflow-hidden py-10 md:py-14"
     >
       <div className="mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8">
         <SectionHeading

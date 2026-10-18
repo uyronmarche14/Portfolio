@@ -32,14 +32,14 @@ const TimelineRow = ({ year, title }: { year: string; title: string }) => {
 
 const AboutTimeline = () => {
   return (
-    <div className="w-full max-w-6xl mx-auto py-10 sm:py-16 md:py-24 px-4 sm:px-6 lg:px-4">
+    <div className="w-full max-w-6xl mx-auto py-8 sm:py-10 md:py-12 px-4 sm:px-6 lg:px-4">
       {/* Header */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.3 }}
-        className="mb-8 sm:mb-12 md:mb-16"
+        className="mb-8 md:mb-10"
       >
         <HeaderTitle 
           introText="My"  

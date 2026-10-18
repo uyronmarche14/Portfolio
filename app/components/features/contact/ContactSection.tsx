@@ -53,7 +53,7 @@ const ContactSection = () => {
   };  
 
   return (
-    <section id="contact" className="relative w-full overflow-hidden py-16 md:py-24">
+    <section id="contact" className="relative w-full overflow-hidden py-10 md:py-14">
       <div className="mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8">
         <SectionHeading
           index="07"

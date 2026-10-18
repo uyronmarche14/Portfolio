@@ -101,7 +101,7 @@ export const AboutDoGrid: React.FC<AboutDoGridProps> = ({
 }) => {
   return (
     <section className="mt-24">
-      <div className="text-center mb-16">
+      <div className="text-center mb-8">
           <HeaderTitle 
             introText="About"
             highlightText="My Experiences"

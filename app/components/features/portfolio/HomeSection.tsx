@@ -18,7 +18,7 @@ const HomeSection: React.FC = () => {
   );
 
   return (
-    <div className="relative flex min-h-screen w-full snap-start flex-col items-start justify-center overflow-hidden">
+    <div className="relative flex w-full snap-start flex-col items-start overflow-hidden pb-12 pt-32 md:pb-16">
       <div className="relative z-10 mx-auto w-full max-w-6xl px-4 text-left sm:px-6 lg:px-8">
         <p className="mb-8 font-mono text-xs font-medium text-secondary">Portfolio / 2026</p>
 

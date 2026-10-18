@@ -237,10 +237,10 @@ export default function AchievementExplorer() {
   return (
     <section
       id="achievements"
-      className="relative w-full min-h-screen flex flex-col justify-center py-16 sm:py-24 overflow-hidden"
+      className="relative w-full flex flex-col py-10 sm:py-14 overflow-hidden"
     >
       {/* Section Header */}
-      <div className="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-4 mb-8 md:mb-12">
+      <div className="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-4 mb-6 md:mb-8">
         <HeaderTitle
           index="04"
           introText="Leadership, Academics"
