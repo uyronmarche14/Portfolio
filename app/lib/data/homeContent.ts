@@ -9,6 +9,7 @@ export interface HeroSkillGroup {
 
 export const HOME_CONTENT = {
   name: "Ron Marche Rhyss Q. Uy",
+  subtitle: "Technical Business Analyst / AI Architecture Engineer",
   nameLines: ["Ron Marche", "Rhyss Q. Uy"],
   roles: ["Full Stack", "AI Engineering", "Mobile", "DevOps"],
   description:
