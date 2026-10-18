@@ -1,6 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
+import { Button } from "@/components/ui/shadcn/button";
 import {
   ArrowLeft,
   ChevronLeft,
@@ -97,7 +98,7 @@ export default function ProjectPage() {
                 setCurrentImageIndex(0);
               }}
             >
-              <div className="relative overflow-hidden border-2 border-foreground shadow-brutal-lg">
+              <div className="relative overflow-hidden border border-foreground shadow-soft-lg">
                 <Image
                   width={1200}
                   height={675}
@@ -117,7 +118,7 @@ export default function ProjectPage() {
             transition={{ delay: 0.2 }}
             className="text-center mb-12"
           >
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-display font-bold text-foreground tracking-tight mb-6 uppercase">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-display font-bold text-foreground tracking-tight mb-6">
               {project.title}
             </h1>
             <p className="text-lg md:text-xl text-foreground/60 leading-relaxed max-w-2xl mx-auto">
@@ -138,7 +139,7 @@ export default function ProjectPage() {
                 <TechBadge key={tech} technology={tech} index={i} size="sm" />
               ))}
               {project.technologies && project.technologies.length > 8 && (
-                <span className="px-3 py-1 font-mono text-xs text-foreground/50 bg-foreground/5 border-2 border-foreground/30 uppercase tracking-wider">
+                <span className="px-3 py-1 font-mono text-xs text-foreground/50 bg-foreground/5 border border-foreground/30 uppercase tracking-wider">
                   +{project.technologies.length - 8} more
                 </span>
               )}
@@ -151,7 +152,7 @@ export default function ProjectPage() {
                   href={project.githubUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-5 py-2.5 border-2 border-foreground bg-background font-mono text-xs font-bold uppercase tracking-wider text-foreground shadow-brutal-sm hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-brutal transition-all duration-150 cursor-pointer"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 border border-foreground bg-background font-mono text-xs font-bold uppercase tracking-wider text-foreground shadow-soft-sm hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-soft transition-all duration-150 cursor-pointer"
                 >
                   <Github className="w-4 h-4" />
                   View Code
@@ -162,7 +163,7 @@ export default function ProjectPage() {
                   href={project.liveUrl || project.liveDemoUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-5 py-2.5 border-2 border-foreground bg-primary font-mono text-xs font-bold uppercase tracking-wider text-background shadow-brutal-sm hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-brutal transition-all duration-150 cursor-pointer"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 border border-foreground bg-primary font-mono text-xs font-bold uppercase tracking-wider text-background shadow-soft-sm hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-soft transition-all duration-150 cursor-pointer"
                 >
                   <ExternalLink className="w-4 h-4" />
                   Live Demo
@@ -206,7 +207,7 @@ export default function ProjectPage() {
                 {project.features.map((feature, index) => (
                   <div
                     key={index}
-                    className="p-5 bg-foreground/5 border-2 border-foreground/20 hover:border-foreground transition-all duration-150"
+                    className="p-5 bg-foreground/5 border border-foreground/20 hover:border-foreground transition-all duration-150"
                   >
                     <div className="flex items-start gap-3">
                       <div className="w-2 h-2 bg-primary mt-1.5 flex-shrink-0" />
@@ -259,28 +260,37 @@ export default function ProjectPage() {
               onClick={(e) => e.stopPropagation()}
             >
               {/* Close */}
-              <button
+              <Button
                 onClick={() => setSelectedImage(null)}
-                className="absolute top-6 right-6 z-10 p-3 border-2 border-white/30 bg-white/10 hover:bg-white/20 text-white transition-all duration-150 cursor-pointer"
+                variant="outline"
+                size="icon"
+                aria-label="Close"
+                className="absolute top-6 right-6 z-10 border-white/30 bg-white/10 text-white hover:bg-white/20 hover:text-white"
               >
                 <X className="w-5 h-5" />
-              </button>
+              </Button>
 
               {/* Nav Buttons */}
               {project.screenshots && project.screenshots.length > 1 && (
                 <>
-                  <button
+                  <Button
                     onClick={() => navigateImage("prev")}
-                    className="absolute left-4 md:left-8 z-10 p-3 border-2 border-white/30 bg-white/10 hover:bg-white/20 text-white transition-all duration-150 cursor-pointer"
+                    variant="outline"
+                    size="icon"
+                    aria-label="Prev image"
+                    className="absolute left-4 md:left-8 z-10 border-white/30 bg-white/10 text-white hover:bg-white/20 hover:text-white"
                   >
                     <ChevronLeft className="w-5 h-5" />
-                  </button>
-                  <button
+                  </Button>
+                  <Button
                     onClick={() => navigateImage("next")}
-                    className="absolute right-4 md:right-8 z-10 p-3 border-2 border-white/30 bg-white/10 hover:bg-white/20 text-white transition-all duration-150 cursor-pointer"
+                    variant="outline"
+                    size="icon"
+                    aria-label="Next image"
+                    className="absolute right-4 md:right-8 z-10 border-white/30 bg-white/10 text-white hover:bg-white/20 hover:text-white"
                   >
                     <ChevronRight className="w-5 h-5" />
-                  </button>
+                  </Button>
                 </>
               )}
 
@@ -315,7 +325,7 @@ export default function ProjectPage() {
                   height={900}
                   src={selectedImage}
                   alt={project.title}
-                  className="object-contain max-h-[85vh] border-2 border-white/20"
+                  className="object-contain max-h-[85vh] border border-white/20"
                   priority
                 />
               </motion.div>

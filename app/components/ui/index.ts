@@ -76,3 +76,4 @@ export { Toast } from "./Toast";
 export { Tooltip } from "./Tooltip";
 export { FormField } from "./FormField";
 export { TechBadge } from "./TechBadge";
+export { SectionHeading } from "./SectionHeading";

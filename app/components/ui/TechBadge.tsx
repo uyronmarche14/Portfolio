@@ -51,7 +51,7 @@ const TechBadge = React.forwardRef<HTMLDivElement, TechBadgeProps>(
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.2, delay: index * 0.03 }}
         className={cn(
-          "inline-flex items-center gap-2 border-2 border-foreground bg-background text-foreground font-mono font-bold uppercase tracking-wider shadow-brutal-sm hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-brutal transition-all duration-150",
+          "inline-flex items-center gap-2 border border-foreground bg-background text-foreground font-mono font-bold uppercase tracking-wider shadow-soft-sm hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-soft transition-all duration-150",
           sizeClasses[size],
           className
         )}

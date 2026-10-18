@@ -88,7 +88,7 @@ const Navbar = () => {
       <div className="relative mx-auto flex w-full max-w-6xl items-center justify-center">
         {/* Desktop Navigation */}
         <div className="hidden items-center md:flex">
-          <div className={"flex items-center border-2 border-foreground shadow-brutal transition-all duration-200 " + navFrameClass}>
+          <div className={"flex items-center border border-foreground shadow-soft transition-all duration-200 " + navFrameClass}>
             {/* Brand */}
             <div className="flex items-center px-5 py-3">
               <h1 className="text-xl font-extrabold font-display text-primary">
@@ -107,7 +107,7 @@ const Navbar = () => {
                   className={
                     "relative mx-1 px-4 py-2.5 font-mono text-xs font-bold uppercase tracking-widest transition-all duration-150 " +
                     (item.active
-                      ? "bg-primary text-background shadow-brutal-sm"
+                      ? "bg-primary text-background shadow-soft-sm"
                       : "text-foreground/60 hover:bg-foreground hover:text-background")
                   }
                 >
@@ -128,7 +128,7 @@ const Navbar = () => {
         {/* Mobile Menu Toggle */}
         <button
           onClick={toggleMenu}
-          className={"border-2 border-foreground p-3 shadow-brutal-sm transition-all duration-150 hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-brutal focus:outline-none md:hidden " + navFrameClass}
+          className={"border border-foreground p-3 shadow-soft-sm transition-all duration-150 hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-soft focus:outline-none md:hidden " + navFrameClass}
           aria-label={isOpen ? NAVBAR_LABELS.closeMenu : NAVBAR_LABELS.openMenu}
           aria-expanded={isOpen}
         >
@@ -152,7 +152,7 @@ const Navbar = () => {
         className="mx-auto mt-3 w-full max-w-6xl overflow-hidden md:hidden"
         aria-hidden={!isOpen}
       >
-        <div className={"space-y-4 border-2 border-foreground p-6 shadow-brutal " + navFrameClass}>
+        <div className={"space-y-4 border border-foreground p-6 shadow-soft " + navFrameClass}>
           {/* Brand */}
           <div className="flex items-center gap-3 border-b-2 border-foreground pb-4">
             <h1 className="text-xl font-extrabold font-display text-primary">
@@ -169,8 +169,8 @@ const Navbar = () => {
                 className={
                   "block w-full px-4 py-3 text-left font-mono text-sm font-bold uppercase tracking-widest transition-all duration-150 " +
                   (item.active
-                    ? "bg-primary text-background border-2 border-foreground shadow-brutal-sm"
-                    : "text-foreground/60 hover:bg-foreground hover:text-background border-2 border-transparent hover:border-foreground")
+                    ? "bg-primary text-background border border-foreground shadow-soft-sm"
+                    : "text-foreground/60 hover:bg-foreground hover:text-background border border-transparent hover:border-foreground")
                 }
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
@@ -192,7 +192,7 @@ const Navbar = () => {
               trigger={
                 <Button
                   variant="ghost"
-                  className="w-full justify-start border-2 border-foreground px-4 py-3 font-mono text-sm uppercase tracking-widest text-foreground hover:bg-foreground hover:text-background transition-all duration-150"
+                  className="w-full justify-start border border-foreground px-4 py-3 font-mono text-sm uppercase tracking-widest text-foreground hover:bg-foreground hover:text-background transition-all duration-150"
                 >
                   <FileText className="mr-3 h-4 w-4" />
                   View Resume

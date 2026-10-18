@@ -1,6 +1,7 @@
 "use client";
 
 import { CleanGridBackground } from "@/components/ui/bgRipple";
+import { Button } from "@/components/ui/shadcn/button";
 import { ProcessStep, processSteps } from "@/lib/data/process";
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowLeft, CheckCircle, Clock, FileText, X } from "lucide-react";
@@ -28,7 +29,7 @@ const ProcessNode = ({ data }: { data: { step: ProcessStep; theme: string } }) =
 
   return (
     <div
-      className="px-3 py-2.5 sm:px-5 sm:py-4 bg-background border-2 border-foreground shadow-brutal-sm hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-brutal transition-all duration-150 cursor-grab active:cursor-grabbing min-w-[120px] sm:min-w-[160px] max-w-[140px] sm:max-w-[180px]"
+      className="px-3 py-2.5 sm:px-5 sm:py-4 bg-background border border-foreground shadow-soft-sm hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-soft transition-all duration-150 cursor-grab active:cursor-grabbing min-w-[120px] sm:min-w-[160px] max-w-[140px] sm:max-w-[180px]"
       style={{
         background: isDark ? "rgba(10,10,10,0.95)" : "rgba(255,251,240,0.95)",
       }}
@@ -41,7 +42,7 @@ const ProcessNode = ({ data }: { data: { step: ProcessStep; theme: string } }) =
       </div>
       
       {/* Title */}
-      <div className="font-display text-[10px] sm:text-xs font-bold text-foreground mb-0.5 sm:mb-1 leading-tight uppercase">
+      <div className="font-display text-[10px] sm:text-xs font-bold text-foreground mb-0.5 sm:mb-1 leading-tight">
         {step.title}
       </div>
       
@@ -167,22 +168,25 @@ const DetailPanel = ({
           transition={{ type: "spring", damping: 30, stiffness: 300 }}
           className="fixed right-0 top-0 bottom-0 z-50 w-full sm:w-[90%] sm:max-w-md bg-background border-l-2 border-foreground overflow-y-auto"
         >
-          <button
+          <Button
             onClick={onClose}
-            className="absolute top-4 right-4 p-2.5 text-foreground/60 hover:text-foreground transition-colors cursor-pointer border-2 border-foreground hover:bg-foreground hover:text-background"
+            variant="outline"
+            size="icon"
+            className="absolute top-4 right-4"
+            aria-label="Close"
           >
             <X className="w-5 h-5" />
-          </button>
+          </Button>
 
           <div className="p-5 sm:p-6 pt-16">
             <div className="flex items-center gap-3 sm:gap-4 mb-5 sm:mb-6">
-              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-primary/10 flex items-center justify-center border-2 border-foreground">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-primary/10 flex items-center justify-center border border-foreground">
                 <span className="font-mono text-base sm:text-lg font-bold text-primary">
                   {step.id.padStart(2, "0")}
                 </span>
               </div>
               <div>
-                <h2 className="text-lg sm:text-xl font-bold font-display text-foreground uppercase">{step.title}</h2>
+                <h2 className="text-lg sm:text-xl font-bold font-display text-foreground">{step.title}</h2>
                 <span className="font-mono text-xs text-primary uppercase tracking-wider">{step.duration}</span>
               </div>
             </div>
@@ -347,7 +351,7 @@ export default function ProcessPage() {
           {!isMobile && (
             <Controls
               showInteractive={false}
-              className="!bg-transparent !border-none !shadow-none [&>button]:!bg-foreground/5 [&>button]:!border-2 [&>button]:!border-foreground/20 [&>button]:!text-foreground/30 [&>button:hover]:!text-foreground/60 [&>button:hover]:!border-foreground/40"
+              className="!bg-transparent !border-none !shadow-none [&>button]:!bg-foreground/5 [&>button]:!border [&>button]:!border-foreground/20 [&>button]:!text-foreground/30 [&>button:hover]:!text-foreground/60 [&>button:hover]:!border-foreground/40"
             />
           )}
         </ReactFlow>

@@ -13,7 +13,7 @@ export default function ScreenshotCarousel({ screenshots, alt, onImageClick }: S
 
   if (!screenshots || screenshots.length === 0) {
     return (
-      <div className="relative aspect-video w-full bg-foreground/5 border-2 border-foreground flex items-center justify-center">
+      <div className="relative aspect-video w-full bg-foreground/5 border border-foreground flex items-center justify-center">
         <span className="font-mono text-xs uppercase tracking-wider text-foreground/40">No screenshots available</span>
       </div>
     );
@@ -39,7 +39,7 @@ export default function ScreenshotCarousel({ screenshots, alt, onImageClick }: S
         {visibleImages.map((screenshot, index) => (
           <div 
             key={index}
-            className="relative aspect-video overflow-hidden bg-foreground/5 cursor-pointer group border-2 border-foreground shadow-brutal-sm hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-brutal transition-all duration-150"
+            className="relative aspect-video overflow-hidden bg-foreground/5 cursor-pointer group border border-foreground shadow-soft-sm hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-soft transition-all duration-150"
             onClick={() => handleImageClick(screenshot, index)}
           >
             <Image

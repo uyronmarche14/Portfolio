@@ -27,7 +27,7 @@ function AchievementDetail({ item }: { item: Achievement }) {
     >
       {/* Certificate / Award Image Preview */}
       {hasImage && (
-        <div className="relative w-full h-48 sm:h-56 md:h-64 border-2 border-foreground overflow-hidden mb-6 group/img">
+        <div className="relative w-full h-48 sm:h-56 md:h-64 border border-foreground overflow-hidden mb-6 group/img">
           <div
             className="absolute inset-0 bg-cover bg-center grayscale group-hover/img:grayscale-0 transition-all duration-500 scale-100 group-hover/img:scale-105"
             style={{ backgroundImage: `url(${item.image})` }}
@@ -35,7 +35,7 @@ function AchievementDetail({ item }: { item: Achievement }) {
           <div className="absolute inset-0 bg-primary/20 mix-blend-overlay opacity-0 group-hover/img:opacity-100 transition-opacity duration-300" />
           {/* Category badge on image */}
           <div className="absolute top-3 left-3 z-10">
-            <span className="px-2.5 py-1 bg-background border-2 border-foreground font-mono text-[10px] font-bold uppercase tracking-wider text-foreground shadow-brutal-sm">
+            <span className="px-2.5 py-1 bg-background border border-foreground font-mono text-[10px] font-bold uppercase tracking-wider text-foreground shadow-soft-sm">
               {categoryFilters.find((f) => f.key === item.category)?.label}
             </span>
           </div>
@@ -46,7 +46,7 @@ function AchievementDetail({ item }: { item: Achievement }) {
       <div className="flex flex-col gap-4 flex-1">
         {/* Header Row: Icon + Title + Date */}
         <div className="flex items-start gap-4">
-          <div className="flex items-center justify-center border-2 border-foreground bg-primary/10 p-3 shadow-brutal-sm flex-shrink-0">
+          <div className="flex items-center justify-center border border-foreground bg-primary/10 p-3 shadow-soft-sm flex-shrink-0">
             <Icon className="w-6 h-6 text-primary" />
           </div>
           <div className="flex-1 min-w-0">
@@ -55,7 +55,7 @@ function AchievementDetail({ item }: { item: Achievement }) {
                 {categoryFilters.find((f) => f.key === item.category)?.label}
               </span>
             )}
-            <h3 className="font-display font-bold text-2xl sm:text-3xl md:text-4xl text-foreground uppercase tracking-wide leading-tight">
+            <h3 className="font-display font-bold text-2xl sm:text-3xl md:text-4xl text-foreground tracking-wide leading-tight">
               {item.title}
             </h3>
             <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-1.5">
@@ -105,7 +105,7 @@ function AchievementDetail({ item }: { item: Achievement }) {
               href={item.certificateUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-4 py-2 border-2 border-foreground bg-background font-mono text-xs font-bold uppercase tracking-wider text-foreground shadow-brutal hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-brutal-lg transition-all duration-200"
+              className="inline-flex items-center gap-2 px-4 py-2 border border-foreground bg-background font-mono text-xs font-bold uppercase tracking-wider text-foreground shadow-soft hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-soft-lg transition-all duration-200"
             >
               <ExternalLink className="w-4 h-4" />
               View Certificate
@@ -133,9 +133,9 @@ function AchievementListItem({
     <button
       onClick={onClick}
       className={`
-        w-full text-left p-3 sm:p-4 border-2 transition-all duration-200 group/item
+        w-full text-left p-3 sm:p-4 border transition-all duration-200 group/item
         ${isActive
-          ? "border-foreground bg-primary/10 shadow-brutal-sm translate-x-[-2px] translate-y-[-2px]"
+          ? "border-foreground bg-primary/10 shadow-soft-sm translate-x-[-2px] translate-y-[-2px]"
           : "border-foreground/20 bg-background hover:border-foreground/50 hover:bg-foreground/5"
         }
       `}
@@ -152,7 +152,7 @@ function AchievementListItem({
         <div className="flex-1 min-w-0">
           <div
             className={`
-              font-display font-bold text-sm uppercase tracking-wide leading-tight truncate
+              font-display font-bold text-sm tracking-wide leading-tight truncate
               ${isActive ? "text-foreground" : "text-foreground/80"}
             `}
           >
@@ -188,9 +188,9 @@ function MobileCompactCard({
     <button
       onClick={onClick}
       className={`
-        flex-shrink-0 w-36 sm:w-44 p-3 border-2 text-left transition-all duration-200
+        flex-shrink-0 w-36 sm:w-44 p-3 border text-left transition-all duration-200
         ${isActive
-          ? "border-foreground bg-primary/10 shadow-brutal-sm"
+          ? "border-foreground bg-primary/10 shadow-soft-sm"
           : "border-foreground/20 bg-background"
         }
       `}
@@ -198,7 +198,7 @@ function MobileCompactCard({
       <div className={`p-1.5 border mb-2 w-fit ${isActive ? "border-primary bg-primary/10" : "border-foreground/30"}`}>
         <Icon className={`w-4 h-4 ${isActive ? "text-primary" : "text-foreground/50"}`} />
       </div>
-      <div className="font-display font-bold text-xs uppercase tracking-wide leading-tight line-clamp-2 text-foreground">
+      <div className="font-display font-bold text-xs tracking-wide leading-tight line-clamp-2 text-foreground">
         {item.title}
       </div>
       <div className="font-mono text-[9px] text-foreground/40 uppercase tracking-wider mt-1 truncate">
@@ -265,10 +265,10 @@ export default function AchievementExplorer() {
                 key={filter.key}
                 onClick={() => handleFilterChange(filter.key)}
                 className={`
-                  flex-shrink-0 px-3 sm:px-4 py-2 border-2 font-mono text-[10px] sm:text-xs font-bold uppercase tracking-wider
+                  flex-shrink-0 px-3 sm:px-4 py-2 border font-mono text-[10px] sm:text-xs font-bold uppercase tracking-wider
                   transition-all duration-200
                   ${isActive
-                    ? "border-foreground bg-primary text-background shadow-brutal-sm"
+                    ? "border-foreground bg-primary text-background shadow-soft-sm"
                     : "border-foreground/30 bg-background text-foreground/70 hover:border-foreground hover:text-foreground"
                   }
                 `}
@@ -302,7 +302,7 @@ export default function AchievementExplorer() {
           </div>
 
           {/* Right: Detail Panel */}
-          <div className="achievement-panel-scroll border-2 border-foreground bg-background shadow-brutal p-6 sm:p-8 overflow-y-auto max-h-[60vh] pr-4">
+          <div className="achievement-panel-scroll border border-foreground bg-background shadow-soft p-6 sm:p-8 overflow-y-auto max-h-[60vh] pr-4">
             <AnimatePresence mode="wait">
               {selectedItem && <AchievementDetail item={selectedItem} />}
             </AnimatePresence>
@@ -324,7 +324,7 @@ export default function AchievementExplorer() {
           </div>
 
           {/* Detail panel below */}
-          <div className="border-2 border-foreground bg-background shadow-brutal p-5 sm:p-6">
+          <div className="border border-foreground bg-background shadow-soft p-5 sm:p-6">
             <AnimatePresence mode="wait">
               {selectedItem && <AchievementDetail item={selectedItem} />}
             </AnimatePresence>

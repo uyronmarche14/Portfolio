@@ -73,7 +73,7 @@ const AboutTimeline = () => {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ duration: 0.2 }}
-                    className="border-2 border-foreground/20 bg-foreground/5 p-4 sm:p-5 md:p-6"
+                    className="border border-foreground/20 bg-foreground/5 p-4 sm:p-5 md:p-6"
                   >
                     {/* Features */}
                     <div className="space-y-4 sm:space-y-5">
@@ -96,7 +96,7 @@ const AboutTimeline = () => {
                             
                             {/* Content */}
                             <div className="flex-1 pb-3 sm:pb-4">
-                              <h4 className="text-foreground font-bold font-display text-sm sm:text-base md:text-lg mb-1 sm:mb-2 group-hover/feature:text-primary transition-colors duration-150 uppercase">
+                              <h4 className="text-foreground font-bold font-display text-sm sm:text-base md:text-lg mb-1 sm:mb-2 group-hover/feature:text-primary transition-colors duration-150">
                                 {feature.title}
                               </h4>
                               <p className="text-foreground/60 text-xs sm:text-sm md:text-base leading-relaxed">

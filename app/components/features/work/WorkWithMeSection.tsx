@@ -29,7 +29,7 @@ const WorkWithMeSection = () => {
         <motion.div
           whileHover={{ x: -3, y: -3 }}
           transition={{ duration: 0.15 }}
-          className="relative h-[400px] sm:h-[450px] md:h-[550px] lg:h-[600px] w-full overflow-hidden border-2 border-foreground bg-background shadow-brutal transition-all duration-150 hover:shadow-brutal-xl"
+          className="relative h-[400px] sm:h-[450px] md:h-[550px] lg:h-[600px] w-full overflow-hidden border border-foreground bg-background shadow-soft transition-all duration-150 hover:shadow-soft-xl"
         >
           {/* Background Image */}
           <div className="absolute inset-0">
@@ -51,7 +51,7 @@ const WorkWithMeSection = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3 }}
               >
-                <div className="inline-flex items-center gap-2 border-2 border-white bg-primary px-3 py-1 font-mono text-[10px] sm:text-xs font-bold uppercase tracking-widest text-background mb-3 sm:mb-4 shadow-brutal-sm">
+                <div className="inline-flex items-center gap-2 border border-white bg-primary px-3 py-1 font-mono text-[10px] sm:text-xs font-bold uppercase tracking-widest text-background mb-3 sm:mb-4 shadow-soft-sm">
                   <span>Work With Me</span>
                 </div>
                 

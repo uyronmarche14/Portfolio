@@ -14,7 +14,7 @@ const Heading: React.FC<HeadingProps> = ({
   children, 
   ...props 
 }) => {
-  const baseStyles = "font-display font-bold text-headline leading-tight uppercase";
+  const baseStyles = "font-display font-bold text-headline leading-tight";
   
   const sizeStyles = {
     h1: "text-4xl sm:text-5xl md:text-6xl",
