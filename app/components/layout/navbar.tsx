@@ -17,7 +17,7 @@ const Navbar = () => {
   const toggleMenu = () => setIsOpen((value) => (value ? false : true));
 
   useEffect(() => {
-    if (pathname !== "/" && pathname !== "/cli" && pathname !== "/chatbot") {
+    if (pathname !== "/") {
       setIsScrolled(true);
       return;
     }
@@ -77,9 +77,9 @@ const Navbar = () => {
     setIsOpen(false);
   };
 
-  const isSpecialPage = pathname === "/cli" || pathname === "/chatbot";
+
   const navFrameClass =
-    isScrolled || isSpecialPage
+    isScrolled
       ? "bg-background/95 supports-[backdrop-filter]:bg-background/85 backdrop-blur"
       : "bg-background/90 supports-[backdrop-filter]:bg-background/75 backdrop-blur";
 
