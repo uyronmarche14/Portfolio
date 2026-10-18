@@ -3,6 +3,12 @@ export interface WorkExperienceEntry {
   role: string;
   company: string;
   dateRange: string;
+  /** ISO year-month, used for the tenure strip */
+  start: string;
+  /** ISO year-month, null while the role is ongoing */
+  end: string | null;
+  /** true when only the year is known, so the strip draws the bar as approximate */
+  approximate?: boolean;
   summary: string;
   stack: string[];
   highlight: string;
@@ -15,6 +21,8 @@ export const workExperience: WorkExperienceEntry[] = [
     role: "Freelance Software Developer",
     company: "Independent / Client Work",
     dateRange: "Jan 2024 - Present",
+    start: "2024-01",
+    end: null,
     summary:
       "Designing and delivering full-stack web and mobile solutions for startup and enterprise clients while combining hands-on engineering with AI-assisted workflows for refactoring, iteration, and delivery speed.",
     stack: ["React", "Next.js", "React Native", "Node.js"],
@@ -27,6 +35,8 @@ export const workExperience: WorkExperienceEntry[] = [
     role: "Frontend Developer",
     company: "Aique Innovation Solutions Corporation",
     dateRange: "Jan 2025 - Jun 2025",
+    start: "2025-01",
+    end: "2025-06",
     summary:
       "Built responsive and reusable React interfaces, connected backend APIs across multiple user roles, and worked in an Agile environment with sprint planning, code reviews, and iterative feature delivery.",
     stack: ["React", "TypeScript", "Next.js", "Tailwind CSS"],
@@ -39,6 +49,8 @@ export const workExperience: WorkExperienceEntry[] = [
     role: "Software Developer",
     company: "Beyondgen",
     dateRange: "Aug 2025 - May 2026",
+    start: "2025-08",
+    end: "2026-05",
     summary:
       "Developed a supplier quality management platform with multi-step approval workflows, audit logs, status tracking, and a Microsoft SQL Server backend built without an ORM.",
     stack: ["TypeScript", "Microsoft SQL Server", "Approval Workflows", "Audit Logs"],
@@ -51,6 +63,8 @@ export const workExperience: WorkExperienceEntry[] = [
     role: "Software Engineer",
     company: "KeepItSimpleOS",
     dateRange: "Sep 2025 - Nov 2025",
+    start: "2025-09",
+    end: "2025-11",
     summary:
       "Built a centralized fitness platform for trainers to manage clients, messaging, and performance tracking while integrating third-party APIs and AI-assisted communication flows.",
     stack: ["Platform Engineering", "Messaging", "3rd-Party APIs", "AI Workflows"],
@@ -63,6 +77,9 @@ export const workExperience: WorkExperienceEntry[] = [
     role: "Full-Stack Developer",
     company: "BuildFast",
     dateRange: "2025 - 2026",
+    start: "2025-01",
+    end: "2026-12",
+    approximate: true,
     summary:
       "Worked on AI-powered platforms with modern frontend and backend architecture, contributing to script generation, video workflow tooling, maintainable components, and faster feature delivery under tight timelines.",
     stack: ["TypeScript", "AI Platforms", "Script Generation", "Video Tooling"],
