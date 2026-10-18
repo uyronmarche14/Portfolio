@@ -26,7 +26,7 @@ export interface TechBadgeProps {
 }
 
 /**
- * TechBadge component — Neo-Brutalist style
+ * TechBadge: icon + label pill
  */
 const TechBadge = React.forwardRef<HTMLDivElement, TechBadgeProps>(
   ({ technology, index = 0, className, size = "default", ...props }, ref) => {
@@ -51,7 +51,7 @@ const TechBadge = React.forwardRef<HTMLDivElement, TechBadgeProps>(
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.2, delay: index * 0.03 }}
         className={cn(
-          "inline-flex items-center gap-2 border border-foreground/15 rounded-lg bg-background text-foreground font-mono font-medium shadow-soft-sm hover:shadow-soft transition-all duration-150",
+          "inline-flex items-center gap-2 rounded-full border border-foreground/15 bg-foreground/[0.04] text-foreground/80 font-mono font-medium transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/50 hover:bg-primary/10 hover:text-primary",
           sizeClasses[size],
           className
         )}
