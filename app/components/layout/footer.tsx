@@ -1,5 +1,6 @@
 "use client";
 import { Calendar, Github, Linkedin, Mail } from "lucide-react";
+import { Button } from "@/components/ui/shadcn/button";
 import { contactInfo, socialLinks as profileSocialLinks } from "@/lib/data/contacts";
 
 const Footer = () => {
@@ -36,44 +37,28 @@ const Footer = () => {
     ];
   
     return (
-      <footer className="relative w-full py-12 bg-transparent flex flex-col justify-center items-center overflow-hidden border-t-2 border-foreground">
-        <div className="relative max-w-6xl w-full px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col items-center">
-            {/* Brand & Social */}
-            <div className="flex items-center gap-6 mb-8">
-              <h1 className="text-xl font-extrabold font-display text-primary">
-                Rhyss
-              </h1>
-              <div className="w-px h-6 bg-foreground" />
-              <div className="flex gap-3">
-                {socialLinks.map(({ label, href, icon: Icon }) => (
-                  <a
-                    key={label}
-                    href={href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-9 h-9 border border-foreground bg-background flex items-center justify-center text-foreground hover:bg-primary hover:text-background hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-soft-sm transition-all duration-150"
-                    aria-label={label}
-                    title={label}
-                  >
-                    <Icon className="w-4 h-4" />
-                  </a>
-                ))}
-              </div>
-            </div>
-  
-            {/* Let's Work Text — always visible, raw brutalist */}
-            <div className="text-center">
-              <h2 className="font-display font-extrabold text-4xl sm:text-6xl md:text-8xl lg:text-9xl xl:text-[12rem] text-foreground select-none leading-none">
-                LET&apos;S WORK
-              </h2>
-              <div className="w-full h-1 bg-primary mt-4" />
-            </div>
-
-            {/* Copyright */}
-            <div className="mt-8 font-mono text-xs uppercase tracking-widest text-foreground/40">
-              &copy; {new Date().getFullYear()} Rhyss. All rights reserved.
-            </div>
+      <footer className="relative w-full border-t border-foreground/15 py-16">
+        <div className="mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8">
+          <p className="font-mono text-xs font-medium text-primary">Contact</p>
+          <h2 className="mt-4 max-w-4xl font-display text-4xl font-semibold leading-tight text-foreground sm:text-6xl md:text-7xl">
+            Have something in mind? Let&apos;s build it.
+          </h2>
+          <div className="mt-8 flex flex-wrap gap-3">
+            <Button asChild size="lg">
+              <a href={`mailto:${primaryEmail}`}>{primaryEmail}</a>
+            </Button>
+            {socialLinks.slice(1).map(({ label, href, icon: Icon }) => (
+              <Button key={label} asChild variant="outline" size="lg">
+                <a href={href} target="_blank" rel="noopener noreferrer">
+                  <Icon className="h-4 w-4" />
+                  {label}
+                </a>
+              </Button>
+            ))}
+          </div>
+          <div className="mt-16 flex items-center justify-between border-t border-foreground/15 pt-6 font-mono text-xs text-foreground/50">
+            <span>Rhyss</span>
+            <span>&copy; {new Date().getFullYear()} All rights reserved.</span>
           </div>
         </div>
       </footer>
