@@ -96,7 +96,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
         {/* 2. Content Section (Bottom 45%) */}
         <div className="relative z-10 flex flex-1 flex-col justify-between p-4 sm:p-5 md:p-6 bg-transparent">
             <div>
-                <h3 className="mb-2 font-rawkner text-lg sm:text-xl md:text-2xl font-bold text-foreground transition-colors group-hover:text-primary leading-none uppercase">
+                <h3 className="mb-2 font-display text-lg sm:text-xl md:text-2xl font-bold text-foreground transition-colors group-hover:text-primary leading-none uppercase">
                     {project.title}
                 </h3>
                 <p className="line-clamp-2 text-xs sm:text-sm text-foreground/60 leading-relaxed">

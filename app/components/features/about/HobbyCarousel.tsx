@@ -213,7 +213,7 @@ export default function HobbyCarousel() {
                         ${isActive ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}
                       `}>
                         {/* Title */}
-                        <div className={`font-rawkner font-bold uppercase tracking-wide text-3xl sm:text-4xl md:text-5xl leading-tight ${hasImage ? 'text-white' : 'text-foreground'}`}>
+                        <div className={`font-display font-bold uppercase tracking-wide text-3xl sm:text-4xl md:text-5xl leading-tight ${hasImage ? 'text-white' : 'text-foreground'}`}>
                           {hobby.title}
                         </div>
 

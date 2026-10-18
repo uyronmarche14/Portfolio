@@ -22,7 +22,7 @@ const HomeSection: React.FC = () => {
           Portfolio / 2026
         </div>
 
-        <h1 className="mb-4 text-4xl font-bold font-rawkner leading-none text-headline sm:mb-6 sm:text-5xl md:text-6xl lg:text-7xl uppercase">
+        <h1 className="mb-4 text-4xl font-bold font-display leading-none text-headline sm:mb-6 sm:text-5xl md:text-6xl lg:text-7xl uppercase">
           I&apos;m{" "}
           <span className="inline-block bg-primary px-2 py-1 text-background sm:px-3">
             {HOME_CONTENT.name}
@@ -75,7 +75,7 @@ const HomeSection: React.FC = () => {
                     <span className="border-2 border-foreground bg-foreground px-3 py-1 font-mono text-[10px] font-bold uppercase tracking-[0.25em] text-background">
                         Resume Driven
                     </span>
-                    <h3 className="font-rawkner text-xl uppercase text-primary sm:text-2xl">
+                    <h3 className="font-display text-xl uppercase text-primary sm:text-2xl">
                       Tech Stack & Arsenal
                     </h3>
                     <span className="font-mono text-[11px] uppercase tracking-[0.2em] text-foreground/60">
@@ -98,7 +98,7 @@ const HomeSection: React.FC = () => {
                                   {group.eyebrow}
                                 </span>
                               </div>
-                              <h4 className="mt-1 font-rawkner text-lg uppercase text-foreground sm:text-xl">
+                              <h4 className="mt-1 font-display text-lg uppercase text-foreground sm:text-xl">
                                 {group.title}
                               </h4>
                               <p className="mt-1 max-w-xs font-mono text-[11px] leading-relaxed text-foreground/60 sm:text-xs">

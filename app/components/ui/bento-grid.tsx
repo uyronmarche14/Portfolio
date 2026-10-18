@@ -57,7 +57,7 @@ export const BentoGridItem = ({
         </div>
         
         <div className="mt-auto">
-            <div className="font-rawkner font-bold text-xl sm:text-2xl text-foreground mb-2 uppercase tracking-wide">
+            <div className="font-display font-bold text-xl sm:text-2xl text-foreground mb-2 uppercase tracking-wide">
               {title}
             </div>
             <div className="font-sans font-normal text-foreground/70 text-xs sm:text-sm leading-relaxed">

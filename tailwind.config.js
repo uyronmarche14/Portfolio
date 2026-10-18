@@ -41,27 +41,9 @@ module.exports = {
         sm: 'calc(var(--radius) - 4px)'
       },
       fontFamily: {
-        rawkner: [
-          'var(--font-rawkner)',
-          'serif'
-        ],
-        poppins: [
-          'var(--font-poppins)',
-          'sans-serif'
-        ],
-        mono: [
-          'var(--font-mono)',
-          'JetBrains Mono',
-          'Fira Code',
-          'monospace'
-        ],
-        sans: [
-          'var(--font-poppins)',
-          'system-ui',
-          '-apple-system',
-          'BlinkMacSystemFont',
-          'sans-serif'
-        ]
+        display: ['var(--font-display)', 'system-ui', 'sans-serif'],
+        sans: ['var(--font-sans)', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+        mono: ['var(--font-mono)', 'ui-monospace', 'SFMono-Regular', 'Menlo', 'monospace']
       },
       boxShadow: {
         'brutal': '4px 4px 0px rgb(var(--shadow-color, 10 10 10) / 1)',

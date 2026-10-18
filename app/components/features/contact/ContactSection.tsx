@@ -70,7 +70,7 @@ const ContactSection = () => {
                 <span className="font-mono text-xs sm:text-sm uppercase tracking-[0.3em] text-foreground/80 block mb-2 font-bold">
                   Ready to
                 </span>
-                <span className="font-rawkner text-background"> 
+                <span className="font-display text-background"> 
                   Build Something Amazing?
                 </span> 
               </h2>
