@@ -1,260 +1,37 @@
 "use client";
 
-import { useState, useMemo, useCallback } from "react";
-import { Badge } from "@/components/ui/shadcn/badge";
-import { motion, AnimatePresence } from "framer-motion";
-import { ExternalLink, type LucideIcon } from "lucide-react";
+import { useMemo, useState } from "react";
+
 import { FilterTabs } from "@/components/ui/FilterTabs";
-import {
-  CertificationIcon,
-  CompetitionIcon,
-  EventsIcon,
-  HonorsIcon,
-  LeadershipIcon,
-} from "@/components/ui/icons";
 import HeaderTitle from "@/components/ui/header";
 import {
   achievementsData,
   categoryFilters,
   type AchievementCategory,
-  type Achievement,
 } from "@/lib/data/achievements";
 
-// ─── Detail Panel ───
-function AchievementDetail({ item }: { item: Achievement }) {
-  const Icon = item.icon;
-  const hasImage = !!item.image;
+import { AchievementDialog } from "./AchievementDialog";
+import { AchievementFeatured } from "./AchievementFeatured";
+import { AchievementLedger } from "./AchievementLedger";
+import { categoryIcons } from "./categoryIcons";
 
-  return (
-    <motion.div
-      key={item.id}
-      initial={{ opacity: 0, y: 12 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -12 }}
-      transition={{ duration: 0.3, ease: "easeOut" }}
-      className="h-full flex flex-col"
-    >
-      {/* Certificate / Award Image Preview */}
-      {hasImage && (
-        <div className="relative w-full h-48 sm:h-56 md:h-64 border border-foreground/15 rounded-lg overflow-hidden mb-6 group/img">
-          <div
-            className="absolute inset-0 bg-cover bg-center grayscale group-hover/img:grayscale-0 transition-all duration-500 scale-100 group-hover/img:scale-105"
-            style={{ backgroundImage: `url(${item.image})` }}
-          />
-          <div className="absolute inset-0 bg-primary/20 mix-blend-overlay opacity-0 group-hover/img:opacity-100 transition-opacity duration-300" />
-          {/* Category badge on image */}
-          <div className="absolute top-3 left-3 z-10">
-            <Badge variant="glass">
-              {categoryFilters.find((f) => f.key === item.category)?.label}
-            </Badge>
-          </div>
-        </div>
-      )}
-
-      {/* Content */}
-      <div className="flex flex-col gap-4 flex-1">
-        {/* Header Row: Icon + Title + Date */}
-        <div className="flex items-start gap-4">
-          <div className="flex items-center justify-center border border-primary rounded-lg bg-primary/10 p-3 shadow-soft-sm flex-shrink-0">
-            <Icon className="w-6 h-6 text-primary" />
-          </div>
-          <div className="flex-1 min-w-0">
-            {!hasImage && (
-              <Badge variant="accent" className="mb-1.5">
-                {categoryFilters.find((f) => f.key === item.category)?.label}
-              </Badge>
-            )}
-            <h3 className="font-display font-bold text-2xl sm:text-3xl md:text-4xl text-foreground tracking-wide leading-tight">
-              {item.title}
-            </h3>
-            <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-1.5">
-              <span className="font-mono text-xs font-medium text-foreground/70">
-                {item.issuer}
-              </span>
-              <span className="w-1 h-1 bg-foreground/40" />
-              <span className="font-mono text-xs text-foreground/50">
-                {item.date}
-              </span>
-            </div>
-          </div>
-        </div>
-
-        {/* Description */}
-        <p className="font-sans text-sm sm:text-base text-foreground/70 leading-relaxed">
-          {item.description}
-        </p>
-
-        {/* Impact Statement */}
-        {item.impact && (
-          <div className="flex items-start gap-3 pl-4 border-l-4 border-primary">
-            <p className="font-sans text-sm text-foreground/80 italic">
-              &quot;{item.impact}&quot;
-            </p>
-          </div>
-        )}
-
-        {/* Tags */}
-        {item.tags && item.tags.length > 0 && (
-          <div className="flex flex-wrap gap-1.5">
-            {item.tags.map((tag) => (
-              <Badge key={tag} variant="accent">
-                {tag}
-              </Badge>
-            ))}
-          </div>
-        )}
-
-        {/* View Certificate Button */}
-        {item.certificateUrl && (
-          <div className="mt-auto pt-4 border-t border-foreground/20">
-            <a
-              href={item.certificateUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-4 py-2 border border-foreground/15 rounded-lg bg-background font-mono text-xs font-medium text-foreground shadow-soft hover:shadow-soft-lg transition-all duration-200"
-            >
-              <ExternalLink className="w-4 h-4" />
-              View Certificate
-            </a>
-          </div>
-        )}
-      </div>
-    </motion.div>
-  );
-}
-
-// ─── List Item ───
-function AchievementListItem({
-  item,
-  isActive,
-  onClick,
-}: {
-  item: Achievement;
-  isActive: boolean;
-  onClick: () => void;
-}) {
-  const Icon = item.icon;
-
-  return (
-    <button
-      onClick={onClick}
-      className={`
-        w-full rounded-xl text-left p-3 sm:p-4 border transition-all duration-200 group/item
-        ${isActive
-          ? "border-primary/60 bg-primary/10"
-          : "border-foreground/20 bg-background hover:border-foreground/50 hover:bg-foreground/5"
-        }
-      `}
-    >
-      <div className="flex items-start gap-3">
-        <div
-          className={`
-            flex-shrink-0 p-1.5 border transition-colors duration-200
-            ${isActive ? "border-primary bg-primary/10" : "border-foreground/30 bg-foreground/5"}
-          `}
-        >
-          <Icon className={`w-4 h-4 ${isActive ? "text-primary" : "text-foreground/50"}`} />
-        </div>
-        <div className="flex-1 min-w-0">
-          <div
-            className={`
-              font-display font-bold text-sm tracking-wide leading-tight truncate
-              ${isActive ? "text-foreground" : "text-foreground/80"}
-            `}
-          >
-            {item.title}
-          </div>
-          <div className="flex items-center gap-2 mt-1">
-            <span className="font-mono text-xs text-foreground/50 truncate">
-              {item.issuer}
-            </span>
-          </div>
-          <span className="font-mono text-xs text-foreground/40">
-            {item.date}
-          </span>
-        </div>
-      </div>
-    </button>
-  );
-}
-
-// ─── Mobile Compact Card ───
-function MobileCompactCard({
-  item,
-  isActive,
-  onClick,
-}: {
-  item: Achievement;
-  isActive: boolean;
-  onClick: () => void;
-}) {
-  const Icon = item.icon;
-
-  return (
-    <button
-      onClick={onClick}
-      className={`
-        flex-shrink-0 w-36 sm:w-44 rounded-xl p-3 border text-left transition-all duration-200
-        ${isActive
-          ? "border-primary/60 bg-primary/10"
-          : "border-foreground/20 bg-background"
-        }
-      `}
-    >
-      <div className={`rounded-lg p-1.5 border mb-2 w-fit ${isActive ? "border-primary bg-primary/10" : "border-foreground/30"}`}>
-        <Icon className={`w-4 h-4 ${isActive ? "text-primary" : "text-foreground/50"}`} />
-      </div>
-      <div className="font-display font-bold text-xs tracking-wide leading-tight line-clamp-2 text-foreground">
-        {item.title}
-      </div>
-      <div className="font-mono text-xs text-foreground/40 mt-1 truncate">
-        {item.date}
-      </div>
-    </button>
-  );
-}
-
-// ─── Main Component ───
-const categoryIcons: Partial<Record<AchievementCategory, LucideIcon>> = {
-  school: HonorsIcon,
-  college: LeadershipIcon,
-  competitions: CompetitionIcon,
-  certifications: CertificationIcon,
-  professional: EventsIcon,
-};
+const featuredItem = achievementsData.find((a) => a.featured) ?? achievementsData[0];
 
 export default function AchievementExplorer() {
   const [activeFilter, setActiveFilter] = useState<AchievementCategory>("all");
-  const [selectedId, setSelectedId] = useState<string>(achievementsData[0]?.id ?? "");
+  const [openId, setOpenId] = useState<string | null>(null);
 
-  const filteredItems = useMemo(() => {
-    if (activeFilter === "all") return achievementsData;
-    return achievementsData.filter((a) => a.category === activeFilter);
-  }, [activeFilter]);
-
-  const selectedItem = useMemo(() => {
-    return filteredItems.find((a) => a.id === selectedId) ?? filteredItems[0];
-  }, [selectedId, filteredItems]);
-
-  const handleFilterChange = useCallback(
-    (key: AchievementCategory) => {
-      setActiveFilter(key);
-      // Auto-select first item when filter changes
-      const newFiltered = key === "all" ? achievementsData : achievementsData.filter((a) => a.category === key);
-      if (newFiltered.length > 0) {
-        setSelectedId(newFiltered[0].id);
-      }
-    },
-    []
+  const filteredItems = useMemo(
+    () => (activeFilter === "all" ? achievementsData : achievementsData.filter((a) => a.category === activeFilter)),
+    [activeFilter]
   );
 
+  // The featured card can be opened while a filter hides it; fall back to the full list then.
+  const dialogItems = filteredItems.some((a) => a.id === openId) ? filteredItems : achievementsData;
+
   return (
-    <section
-      id="achievements"
-      className="relative w-full flex flex-col py-12 md:py-16 overflow-hidden"
-    >
-      {/* Section Header */}
-      <div className="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-4 mb-10 md:mb-12">
+    <section id="achievements" className="relative w-full overflow-hidden py-12 md:py-16">
+      <div className="mx-auto mb-10 w-full max-w-6xl px-4 sm:px-6 md:mb-12 lg:px-4">
         <HeaderTitle
           index="04"
           introText="Achievements"
@@ -263,75 +40,30 @@ export default function AchievementExplorer() {
         />
       </div>
 
-      {/* Main Content */}
-      <div className="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-4">
-        
-        {/* ── Filter Tabs ── */}
-        <FilterTabs
-          label="Achievement categories"
-          className="mb-6"
-          value={activeFilter}
-          onChange={handleFilterChange}
-          items={categoryFilters.map((filter) => ({
-            key: filter.key,
-            label: filter.label,
-            icon: categoryIcons[filter.key],
-            count:
-              filter.key === "all"
-                ? achievementsData.length
-                : achievementsData.filter((a) => a.category === filter.key).length,
-          }))}
-        />
+      <div className="mx-auto w-full max-w-6xl space-y-10 px-4 sm:px-6 lg:px-4">
+        {featuredItem && <AchievementFeatured item={featuredItem} onOpen={setOpenId} />}
 
-        {/* ── Desktop: Master-Detail Layout ── */}
-        <div className="hidden lg:grid lg:grid-cols-[280px_1fr] gap-6 min-h-[60vh]">
-          {/* Left: Scrollable List */}
-          <div className="achievement-panel-scroll flex flex-col gap-2 overflow-y-auto max-h-[60vh] pr-3">
-            {filteredItems.map((item) => (
-              <AchievementListItem
-                key={item.id}
-                item={item}
-                isActive={selectedItem?.id === item.id}
-                onClick={() => setSelectedId(item.id)}
-              />
-            ))}
-            {filteredItems.length === 0 && (
-              <div className="text-center py-12 text-foreground/40 font-mono text-xs">
-                No items in this category
-              </div>
-            )}
-          </div>
-
-          {/* Right: Detail Panel */}
-          <div className="achievement-panel-scroll border border-foreground/15 rounded-lg bg-background shadow-soft p-6 sm:p-8 overflow-y-auto max-h-[60vh] pr-4">
-            <AnimatePresence mode="wait">
-              {selectedItem && <AchievementDetail item={selectedItem} />}
-            </AnimatePresence>
-          </div>
-        </div>
-
-        {/* ── Mobile: Horizontal Scroll + Detail Below ── */}
-        <div className="lg:hidden flex flex-col gap-6">
-          {/* Horizontal card strip */}
-          <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
-            {filteredItems.map((item) => (
-              <MobileCompactCard
-                key={item.id}
-                item={item}
-                isActive={selectedItem?.id === item.id}
-                onClick={() => setSelectedId(item.id)}
-              />
-            ))}
-          </div>
-
-          {/* Detail panel below */}
-          <div className="border border-foreground/15 rounded-lg bg-background shadow-soft p-5 sm:p-6">
-            <AnimatePresence mode="wait">
-              {selectedItem && <AchievementDetail item={selectedItem} />}
-            </AnimatePresence>
-          </div>
+        <div>
+          <FilterTabs
+            label="Achievement categories"
+            className="mb-4"
+            value={activeFilter}
+            onChange={setActiveFilter}
+            items={categoryFilters.map((filter) => ({
+              key: filter.key,
+              label: filter.label,
+              icon: categoryIcons[filter.key],
+              count:
+                filter.key === "all"
+                  ? achievementsData.length
+                  : achievementsData.filter((a) => a.category === filter.key).length,
+            }))}
+          />
+          <AchievementLedger items={filteredItems} listKey={activeFilter} onOpen={setOpenId} />
         </div>
       </div>
+
+      <AchievementDialog items={dialogItems} openId={openId} onOpenChange={setOpenId} />
     </section>
   );
 }
