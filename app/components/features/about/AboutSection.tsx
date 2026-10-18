@@ -15,11 +15,11 @@ const AboutSection = () => {
   return (
     <section
       id="about"
-      className="relative flex flex-col snap-start overflow-hidden py-8 sm:py-10 md:py-12 w-full"
+      className="relative flex flex-col snap-start overflow-hidden py-12 md:py-16 w-full"
     >
       <div className="relative w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-4">
         <div className="relative mb-8 sm:mb-10 md:mb-12">
-          <div className="relative z-10 text-left">
+          <div className="relative z-10 text-center">
             <HeaderTitle
                index="01"
                introText="About"

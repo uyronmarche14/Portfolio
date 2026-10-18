@@ -112,8 +112,8 @@ const ExperienceSection = () => {
   const now = new Date().toISOString().slice(0, 7);
 
   return (
-    <div id="experience" className="relative w-full py-8 sm:py-10 md:py-12">
-      <div className="mx-auto mb-8 max-w-6xl px-4 sm:px-6 md:mb-10 lg:px-4">
+    <div id="experience" className="relative w-full py-12 md:py-16">
+      <div className="mx-auto mb-10 max-w-6xl px-4 sm:px-6 md:mb-12 lg:px-4">
         <HeaderTitle
           index="02"
           introText="Resume-Backed"
