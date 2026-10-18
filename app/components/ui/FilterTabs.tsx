@@ -11,6 +11,8 @@ export interface FilterTabItem<K extends string = string> {
   label: string;
   count?: number;
   icon?: LucideIcon;
+  /** color class for the icon while the tab is inactive */
+  iconClassName?: string;
 }
 
 interface FilterTabsProps<K extends string> {
@@ -76,7 +78,12 @@ export function FilterTabs<K extends string>({ items, value, onChange, label, cl
                 />
               )}
               <span className="relative z-10 inline-flex items-center gap-2 whitespace-nowrap">
-                {item.icon && <item.icon className="h-4 w-4" aria-hidden="true" />}
+                {item.icon && (
+                  <item.icon
+                    className={cn("h-4 w-4 transition-colors", !active && item.iconClassName)}
+                    aria-hidden="true"
+                  />
+                )}
                 {item.label}
                 {item.count !== undefined && (
                   <span className={cn("ml-1.5 font-mono text-xs", active ? "text-background/60" : "text-foreground/40")}>

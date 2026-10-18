@@ -14,6 +14,10 @@
     --secondary: 98 94 86;
     --accent: 255 192 152;
     --primary-foreground: 244 241 234;
+    --tone-violet: 109 91 230;
+    --tone-teal: 13 148 136;
+    --tone-amber: 180 108 0;
+    --tone-rose: 205 52 100;
     --muted: 107 114 128;
     --card: 255 253 248;
     --popover: 255 253 248;
@@ -37,6 +41,10 @@
     --secondary: 160 156 148;
     --accent: 255 160 110;
     --primary-foreground: 10 10 10;
+    --tone-violet: 139 123 255;
+    --tone-teal: 45 212 191;
+    --tone-amber: 245 181 68;
+    --tone-rose: 240 113 143;
     --card: 23 23 23;
     --popover: 23 23 23;
     --border: 244 241 234;
@@ -54,6 +62,10 @@
     --secondary: 180 180 180;
     --accent: 200 200 200;
     --primary-foreground: 0 0 0;
+    --tone-violet: 200 200 200;
+    --tone-teal: 170 170 170;
+    --tone-amber: 220 220 220;
+    --tone-rose: 190 190 190;
     --border: 255 255 255;
     --input: 255 255 255;
     --ring: 255 255 255;
@@ -69,6 +81,10 @@
     --secondary: 98 94 86;
     --accent: 255 192 152;
     --primary-foreground: 244 241 234;
+    --tone-violet: 109 91 230;
+    --tone-teal: 13 148 136;
+    --tone-amber: 180 108 0;
+    --tone-rose: 205 52 100;
     --card: 255 253 248;
     --popover: 255 253 248;
     --border: 10 10 10;
@@ -88,7 +104,11 @@
 
     body {
         color: rgb(var(--foreground) / 1);
-        background: rgb(var(--background) / 1);
+        background-color: rgb(var(--background) / 1);
+        background-image:
+            radial-gradient(55% 38% at 88% 0%, rgb(var(--tone-violet) / 0.09), transparent 70%),
+            radial-gradient(45% 32% at 6% 8%, rgb(var(--primary) / 0.07), transparent 70%);
+        background-attachment: fixed;
         overflow-x: hidden;
     }
 

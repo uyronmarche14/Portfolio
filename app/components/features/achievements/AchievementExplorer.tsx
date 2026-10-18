@@ -15,6 +15,8 @@ import { AchievementDialog } from "./AchievementDialog";
 import { AchievementFeatured } from "./AchievementFeatured";
 import { AchievementLedger } from "./AchievementLedger";
 import { categoryIcons } from "./categoryIcons";
+import { categoryTone } from "./categoryTone";
+
 
 const PAGE_SIZE = 6;
 
@@ -66,6 +68,7 @@ export default function AchievementExplorer() {
               key: filter.key,
               label: filter.label,
               icon: categoryIcons[filter.key],
+              iconClassName: filter.key === "all" ? undefined : categoryTone[filter.key].icon,
               count:
                 filter.key === "all"
                   ? achievementsData.length

@@ -15,6 +15,8 @@ import {
 import { categoryFilters, type Achievement } from "@/lib/data/achievements";
 
 import { categoryIcons } from "./categoryIcons";
+import { categoryTone } from "./categoryTone";
+
 
 interface AchievementDialogProps {
   items: Achievement[];
@@ -65,7 +67,7 @@ export function AchievementDialog({ items, openId, onOpenChange }: AchievementDi
               )}
             </div>
             <div className="space-y-4 p-6 sm:p-8">
-              <Badge variant="accent">
+              <Badge variant={categoryTone[item.category].badge}>
                 {CategoryIcon && <CategoryIcon className="h-3.5 w-3.5" aria-hidden="true" />}
                 {categoryLabel}
               </Badge>

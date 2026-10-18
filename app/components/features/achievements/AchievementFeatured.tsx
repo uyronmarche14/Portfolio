@@ -8,6 +8,8 @@ import { Button } from "@/components/ui/shadcn/button";
 import { categoryFilters, type Achievement } from "@/lib/data/achievements";
 
 import { categoryIcons } from "./categoryIcons";
+import { categoryTone } from "./categoryTone";
+
 
 interface AchievementFeaturedProps {
   item: Achievement;
@@ -30,7 +32,7 @@ export function AchievementFeatured({ item, onOpen }: AchievementFeaturedProps) 
       className="grid overflow-hidden rounded-2xl border border-foreground/15 bg-card md:min-h-[400px] md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]"
     >
       <div className="flex flex-col justify-center gap-4 p-8 sm:p-10 lg:p-14">
-        <Badge variant="accent" className="w-fit">
+        <Badge variant={categoryTone[item.category].badge} className="w-fit">
           {CategoryIcon && <CategoryIcon className="h-3.5 w-3.5" aria-hidden="true" />}
           {categoryLabel}
         </Badge>

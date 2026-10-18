@@ -15,6 +15,10 @@ const badgeVariants = cva(
           "bg-foreground/[0.06] text-foreground/80 ring-foreground/10 hover:bg-foreground/10 hover:text-foreground",
         accent:
           "bg-primary/10 text-primary ring-primary/25 hover:bg-primary/15",
+        violet: "bg-tone-violet/10 text-tone-violet ring-tone-violet/25 hover:bg-tone-violet/15",
+        teal: "bg-tone-teal/10 text-tone-teal ring-tone-teal/25 hover:bg-tone-teal/15",
+        amber: "bg-tone-amber/10 text-tone-amber ring-tone-amber/25 hover:bg-tone-amber/15",
+        rose: "bg-tone-rose/10 text-tone-rose ring-tone-rose/25 hover:bg-tone-rose/15",
         outline:
           "bg-transparent text-foreground/80 ring-foreground/20 hover:ring-foreground/40 hover:text-foreground",
         solid: "bg-foreground text-background ring-transparent",
