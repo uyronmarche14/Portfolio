@@ -10,7 +10,8 @@ import type { ReactNode } from "react";
  */
 
 const ink = "rgb(var(--foreground))";
-const line = "rgb(var(--foreground) / 0.16)";
+const line = "rgb(var(--foreground) / 0.08)";
+const bar = "rgb(var(--foreground) / 0.18)";
 const faint = "rgb(var(--foreground) / 0.07)";
 const paper = "rgb(var(--card))";
 const accent = "rgb(var(--primary))";
@@ -32,9 +33,9 @@ const Reveal = ({ i, children }: { i: number; children: ReactNode }) => {
 
 const Frame = ({ children }: { children: ReactNode }) => (
   <svg
-    viewBox="0 0 560 480"
+    viewBox="32 36 496 408"
     className="h-full w-full"
-    preserveAspectRatio="xMidYMid slice"
+    preserveAspectRatio="xMidYMid meet"
     aria-hidden="true"
     focusable="false"
   >
@@ -55,7 +56,7 @@ export const FreelanceVisual = () => (
     </Reveal>
     <Reveal i={1}>
       <rect x="72" y="122" width="170" height="14" rx="7" fill={ink} opacity="0.85" />
-      <rect x="72" y="146" width="120" height="8" rx="4" fill={line} />
+      <rect x="72" y="146" width="120" height="8" rx="4" fill={bar} />
       <rect x="72" y="166" width="84" height="26" rx="13" fill={accent} />
     </Reveal>
     <Reveal i={2}>
@@ -63,7 +64,7 @@ export const FreelanceVisual = () => (
         <g key={c}>
           <rect x={72 + c * 108} y="226" width="96" height="84" rx="10" fill={faint} stroke={line} />
           <rect x={84 + c * 108} y="240" width="40" height="6" rx="3" fill={ink} opacity="0.5" />
-          <rect x={84 + c * 108} y="256" width="64" height="5" rx="2.5" fill={line} />
+          <rect x={84 + c * 108} y="256" width="64" height="5" rx="2.5" fill={bar} />
           <rect x={84 + c * 108} y="288" width="30" height="10" rx="5" fill={c === 1 ? accent : accentSoft} />
         </g>
       ))}
@@ -75,7 +76,7 @@ export const FreelanceVisual = () => (
         <g key={r}>
           <circle cx="376" cy={182 + r * 52} r="11" fill={r === 0 ? accent : faint} />
           <rect x="396" y={174 + r * 52} width="64" height="7" rx="3.5" fill={ink} opacity="0.55" />
-          <rect x="396" y={188 + r * 52} width="44" height="5" rx="2.5" fill={line} />
+          <rect x="396" y={188 + r * 52} width="44" height="5" rx="2.5" fill={bar} />
         </g>
       ))}
     </Reveal>
@@ -106,19 +107,19 @@ export const AiqueVisual = () => (
     <Reveal i={1}>
       <rect x="80" y="138" width="200" height="120" rx="12" fill={faint} stroke={line} />
       <rect x="98" y="156" width="90" height="10" rx="5" fill={ink} opacity="0.7" />
-      <rect x="98" y="176" width="150" height="6" rx="3" fill={line} />
-      <rect x="98" y="190" width="120" height="6" rx="3" fill={line} />
+      <rect x="98" y="176" width="150" height="6" rx="3" fill={bar} />
+      <rect x="98" y="190" width="120" height="6" rx="3" fill={bar} />
       <rect x="98" y="214" width="72" height="26" rx="13" fill={accent} />
       <rect x="178" y="214" width="72" height="26" rx="13" fill="none" stroke={line} />
     </Reveal>
     <Reveal i={2}>
       <rect x="300" y="138" width="180" height="56" rx="12" fill={paper} stroke={line} />
-      <rect x="316" y="156" width="80" height="6" rx="3" fill={line} />
+      <rect x="316" y="156" width="80" height="6" rx="3" fill={bar} />
       <rect x="316" y="170" width="140" height="10" rx="5" fill={faint} />
       <rect x="300" y="206" width="180" height="52" rx="12" fill={paper} stroke={line} />
       <rect x="316" y="224" width="38" height="20" rx="10" fill={accent} />
       <circle cx="343" cy="234" r="7" fill="rgb(var(--primary-foreground))" />
-      <rect x="368" y="228" width="84" height="6" rx="3" fill={line} />
+      <rect x="368" y="228" width="84" height="6" rx="3" fill={bar} />
     </Reveal>
     <Reveal i={3}>
       <path d="M180 258v52M390 258v52" stroke={accent} strokeWidth="1.5" strokeDasharray="4 4" fill="none" />
@@ -159,7 +160,7 @@ export const BeyondgenVisual = () => {
           {n.done ? (
             <path d={`M${n.x - 8 - (i === 2 ? 30 : 0)} 142l6 6 11-12`} stroke="rgb(var(--primary-foreground))" strokeWidth="2.2" fill="none" strokeLinecap="round" strokeLinejoin="round" />
           ) : (
-            <circle cx={n.x - 30} cy="142" r="4" fill={line} />
+            <circle cx={n.x - 30} cy="142" r="4" fill={bar} />
           )}
           <text x={n.x - (i === 2 ? 30 : 0)} y="186" fontSize="12" textAnchor="middle" fill={ink} opacity="0.7" fontFamily={mono}>
             {n.label}
@@ -193,7 +194,7 @@ export const KeepItSimpleVisual = () => (
       <rect x="48" y="56" width="260" height="368" rx="16" fill={paper} stroke={line} />
       <circle cx="82" cy="92" r="14" fill={accentSoft} stroke={accent} strokeOpacity="0.6" />
       <rect x="106" y="82" width="80" height="8" rx="4" fill={ink} opacity="0.65" />
-      <rect x="106" y="96" width="48" height="6" rx="3" fill={line} />
+      <rect x="106" y="96" width="48" height="6" rx="3" fill={bar} />
       <path d="M48 124h260" stroke={line} />
     </Reveal>
     {[
@@ -209,7 +210,7 @@ export const KeepItSimpleVisual = () => (
     ))}
     <Reveal i={5}>
       <rect x="64" y="362" width="228" height="38" rx="19" fill="none" stroke={line} />
-      <rect x="84" y="378" width="90" height="6" rx="3" fill={line} />
+      <rect x="84" y="378" width="90" height="6" rx="3" fill={bar} />
     </Reveal>
     <Reveal i={6}>
       <rect x="328" y="56" width="188" height="170" rx="16" fill={paper} stroke={line} />

@@ -1,11 +1,8 @@
 "use client";
 
 import { motion, useReducedMotion } from "framer-motion";
-import Image from "next/image";
-import { Fragment, useState } from "react";
 
 import HeaderTitle from "@/components/ui/header";
-import { Badge } from "@/components/ui/shadcn/badge";
 import { workExperience, type WorkExperienceEntry } from "@/lib/data/workExperience";
 import { formatDuration, monthsBetween } from "@/lib/tenure";
 import { cn } from "@/lib/utils";
@@ -19,7 +16,6 @@ interface ExperienceCardProps {
 }
 
 const ExperienceCard = ({ entry, index, now }: ExperienceCardProps) => {
-  const [view, setView] = useState<"art" | "photo">("art");
   const reduceMotion = useReducedMotion();
   const Visual = experienceVisuals[entry.id as keyof typeof experienceVisuals];
   const num = String(index + 1).padStart(2, "0");
@@ -32,76 +28,45 @@ const ExperienceCard = ({ entry, index, now }: ExperienceCardProps) => {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-10% 0px" }}
       transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-      className="grid overflow-hidden rounded-[14px] border border-foreground/15 bg-card md:min-h-[440px] md:grid-cols-2"
+      className={cn(
+        "grid overflow-hidden rounded-2xl border border-foreground/15 bg-card md:min-h-[460px]",
+        reversed
+          ? "md:grid-cols-[minmax(0,55fr)_minmax(0,45fr)]"
+          : "md:grid-cols-[minmax(0,45fr)_minmax(0,55fr)]"
+      )}
     >
       <div
         className={cn(
-          "flex flex-col justify-center gap-5 p-8 sm:p-10 lg:p-14",
+          "flex flex-col justify-center gap-4 p-8 sm:p-10 lg:p-14",
           reversed && "md:order-2"
         )}
       >
-        <p className="font-mono text-xs text-secondary">
-          <span className="text-primary">{num}</span> / {entry.dateRange}
+        <p className="font-mono text-xs text-foreground/60">
+          <span className="text-primary">{num}</span>
+          <span className="mx-2 text-foreground/30">/</span>
+          {entry.dateRange}
           {duration ? ` · ${duration}` : ""}
         </p>
         <div>
-          <h3 className="font-display text-3xl text-foreground lg:text-4xl">{entry.role}</h3>
-          <p className="mt-1 text-base text-primary">{entry.company}</p>
+          <h3 className="font-sans text-3xl font-semibold tracking-tight text-foreground lg:text-4xl">
+            {entry.role}
+          </h3>
+          <p className="mt-1.5 text-base text-foreground/70">{entry.company}</p>
         </div>
-        <p className="max-w-lg text-base leading-relaxed text-foreground/70">{entry.summary}</p>
-        <ul className="flex flex-wrap gap-1.5">
-          {entry.stack.map((tag) => (
-            <li key={tag}>
-              <Badge variant="outline">{tag}</Badge>
-            </li>
-          ))}
-        </ul>
-        <p className="text-sm text-foreground/60">{entry.highlight}</p>
+        <p className="max-w-md text-base leading-relaxed text-foreground/80">{entry.summary}</p>
+        <p className="font-mono text-xs text-foreground/60">
+          {entry.stack.slice(0, 4).join("  ·  ")}
+        </p>
       </div>
 
       <div
         className={cn(
-          "relative min-h-[320px] border-t border-foreground/15 md:min-h-0 md:border-t-0",
-          reversed ? "md:order-1 md:border-r" : "md:border-l"
+          "relative min-h-[300px] bg-foreground/[0.05] md:min-h-0",
+          reversed && "md:order-1"
         )}
       >
-        <div className="absolute inset-0">
-          {view === "art" ? (
-            <Visual />
-          ) : (
-            <figure className="relative h-full w-full">
-              <Image
-                src={entry.image}
-                alt={`${entry.company} work photo`}
-                fill
-                sizes="(max-width: 768px) 100vw, 50vw"
-                className="object-cover"
-              />
-              <figcaption className="absolute bottom-4 left-4 rounded-full bg-background/85 px-3 py-1 font-mono text-xs text-foreground backdrop-blur">
-                Fig. {num} / {entry.company}
-              </figcaption>
-            </figure>
-          )}
-        </div>
-        <div
-          role="group"
-          aria-label={`${entry.company} visual`}
-          className="absolute right-4 top-4 z-10 flex rounded-full border border-foreground/15 bg-background/85 p-0.5 backdrop-blur"
-        >
-          {(["art", "photo"] as const).map((mode) => (
-            <button
-              key={mode}
-              type="button"
-              aria-pressed={view === mode}
-              onClick={() => setView(mode)}
-              className={cn(
-                "rounded-full px-3 py-1 text-xs transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
-                view === mode ? "bg-foreground text-background" : "text-foreground/60 hover:text-foreground"
-              )}
-            >
-              {mode === "art" ? "Illustration" : "Photo"}
-            </button>
-          ))}
+        <div className="absolute inset-0 p-4 sm:p-6">
+          <Visual />
         </div>
       </div>
     </motion.article>
@@ -122,20 +87,11 @@ const ExperienceSection = () => {
         />
       </div>
 
-      <ol className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-4">
+      <ol className="mx-auto max-w-6xl space-y-6 px-4 sm:px-6 md:space-y-8 lg:px-4">
         {workExperience.map((entry, i) => (
-          <Fragment key={entry.id}>
-            {i > 0 && (
-              <li aria-hidden="true" className="flex flex-col items-center py-1">
-                <span className="h-8 w-px bg-foreground/15" />
-                <span className="h-2 w-2 rounded-full bg-primary" />
-                <span className="h-8 w-px bg-foreground/15" />
-              </li>
-            )}
-            <li>
-              <ExperienceCard entry={entry} index={i} now={now} />
-            </li>
-          </Fragment>
+          <li key={entry.id}>
+            <ExperienceCard entry={entry} index={i} now={now} />
+          </li>
         ))}
       </ol>
     </div>
