@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/shadcn/button';
 import { Input } from '@/components/ui/shadcn/input';
 import { contactInfo, socialLinks as profileSocialLinks } from "@/lib/data/contacts";
 import { initializeEmailJS, sendEmail } from '@/lib/services/email';
-import { ArrowRight, Github, Mail, MessageCircle, Phone } from 'lucide-react';
+import { ArrowRight, Github, Linkedin, Mail, Phone } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 
 const ContactSection = () => {
@@ -106,7 +106,7 @@ const ContactSection = () => {
                 <a href={`tel:${phoneHref}`}><Phone className="h-4 w-4" />Call</a>
               </Button>
               <Button asChild variant="outline">
-                <a href={linkedInUrl} target="_blank" rel="noopener noreferrer"><MessageCircle className="h-4 w-4" />LinkedIn</a>
+                <a href={linkedInUrl} target="_blank" rel="noopener noreferrer"><Linkedin className="h-4 w-4" />LinkedIn</a>
               </Button>
               <Button asChild variant="outline">
                 <a href={githubUrl} target="_blank" rel="noopener noreferrer"><Github className="h-4 w-4" />GitHub</a>

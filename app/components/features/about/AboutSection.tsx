@@ -3,6 +3,7 @@ import { CldImage } from "next-cloudinary";
 import { lazy, Suspense } from "react";
 
 import HeaderTitle from "@/components/ui/header";
+import { factIcons } from "@/components/ui/icons/factIcons";
 import Heading from "@/components/ui/typography/Heading";
 import Text from "@/components/ui/typography/Text";
 import { profileData } from "@/lib/data/profile";
@@ -66,7 +67,14 @@ const AboutSection = () => {
               <div className="space-y-3 sm:space-y-4">
                 {profileData.quickFacts.map((fact) => (
                   <div key={fact.label} className="flex items-start sm:items-center gap-3 sm:gap-4">
-                    <span className="mt-2 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-primary sm:mt-0" />
+                    {(() => {
+                      const FactIcon = factIcons[fact.label];
+                      return FactIcon ? (
+                        <FactIcon className="mt-0.5 h-4 w-4 flex-shrink-0 text-foreground/50 sm:mt-0" aria-hidden="true" />
+                      ) : (
+                        <span className="mt-2 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-primary sm:mt-0" />
+                      );
+                    })()}
                     <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2 min-w-0">
                       <span className="font-mono text-xs font-medium text-headline whitespace-nowrap sm:text-sm">
                         {fact.label}:
