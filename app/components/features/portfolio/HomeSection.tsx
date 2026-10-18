@@ -1,6 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
+import Image from "next/image";
 import React, { useState } from "react";
 
 import { factIcons } from "@/components/ui/icons/factIcons";
@@ -21,18 +22,15 @@ const HomeSection: React.FC = () => {
   return (
     <div className="relative flex w-full snap-start flex-col items-start overflow-hidden pb-12 pt-32 md:pb-16">
       <div className="relative z-10 mx-auto w-full max-w-6xl px-4 text-left sm:px-6 lg:px-8">
+        <div className="grid items-center gap-14 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:gap-10">
+          <div>
         <p className="mb-8 font-mono text-xs font-medium text-secondary">Portfolio / 2026</p>
 
-        <h1 className="mb-8 font-display text-6xl leading-[0.9] text-headline sm:text-7xl md:text-8xl lg:text-9xl">
+        <h1 className="mb-8 font-display text-6xl leading-[0.9] text-headline sm:text-7xl md:text-8xl lg:text-8xl">
           {HOME_CONTENT.nameLines.map((line) => (
             <span key={line} className="block">{line}</span>
           ))}
         </h1>
-
-        <p className="mb-5 flex items-center gap-2 font-mono text-sm font-medium text-primary">
-          <span className="h-2 w-2 rounded-full bg-primary" aria-hidden="true" />
-          Currently learning {currentlyLearning}
-        </p>
 
         <p className="max-w-2xl text-lg leading-relaxed text-foreground/80 sm:text-xl md:text-2xl">
           {HOME_CONTENT.description}
@@ -59,8 +57,26 @@ const HomeSection: React.FC = () => {
             {isStackExpanded ? "Hide tech stack" : "Tech stack & tools"}
           </Button>
         </div>
+          </div>
 
-        <dl className="mt-12 grid max-w-3xl grid-cols-1 gap-6 border-t border-foreground/15 pt-6 sm:grid-cols-3">
+          <figure className="relative mx-auto w-full max-w-sm lg:max-w-none">
+            <div className="relative aspect-[4/5] w-full overflow-hidden rounded-3xl border border-foreground/15 bg-foreground/5">
+              <Image
+                src={profileData.photo.src}
+                alt={profileData.photo.alt}
+                fill
+                priority
+                sizes="(max-width: 1024px) 90vw, 420px"
+                className="object-cover object-top"
+              />
+            </div>
+            <figcaption className="absolute -bottom-5 left-4 right-4 rounded-xl border border-foreground/15 bg-card/95 px-4 py-3 shadow-soft-lg backdrop-blur sm:left-auto sm:right-auto sm:-left-6 sm:max-w-[16rem] lg:-left-10">
+              <span className="block font-mono text-xs text-primary">Currently learning</span>
+              <span className="mt-1 block text-sm text-foreground">{currentlyLearning}</span>
+            </figcaption>
+          </figure>
+        </div>
+        <dl className="mt-16 grid grid-cols-1 gap-6 border-t border-foreground/15 pt-6 sm:grid-cols-3">
           {profileData.quickFacts
             .filter((fact) => ["Based in", "Education", "Favorite Tech"].includes(fact.label))
             .map((fact) => {
