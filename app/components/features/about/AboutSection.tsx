@@ -19,7 +19,7 @@ const AboutSection = () => {
     >
       <div className="relative w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-4">
         <div className="relative mb-12 sm:mb-16 md:mb-20 lg:mb-24">
-          <div className="relative z-10 text-center sm:text-left">         
+          <div className="relative z-10 text-left">
             <HeaderTitle
                introText={profileData.header.intro}
                highlightText={profileData.header.highlight}
@@ -30,9 +30,9 @@ const AboutSection = () => {
 
         <div className="grid grid-cols-1 gap-8 sm:gap-12 md:gap-16 lg:grid-cols-2">
           <div className="flex justify-center lg:justify-start order-1 lg:order-1">
-            {/* Profile Image — Brutalist frame */}
+            {/* Profile image */}
             <div className="relative w-full max-w-md lg:max-w-none">
-              <div className="relative aspect-[3/4] sm:aspect-[4/5] lg:aspect-[3/4] w-full max-w-[350px] sm:max-w-[400px] lg:max-w-[450px] mx-auto lg:mx-0 overflow-hidden border border-foreground shadow-soft">
+              <div className="relative aspect-[3/4] sm:aspect-[4/5] lg:aspect-[3/4] w-full max-w-[350px] sm:max-w-[400px] lg:max-w-[450px] mx-auto lg:mx-0 overflow-hidden rounded-xl border border-foreground/15">
                 {process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME ? (
                     <CldImage
                     src={profileData.photo.src}
@@ -43,7 +43,7 @@ const AboutSection = () => {
                     priority
                     />
                 ) : (
-                    <div className="w-full h-full bg-foreground/5 flex items-center justify-center text-foreground/40 font-mono text-sm uppercase">
+                    <div className="w-full h-full bg-foreground/5 flex items-center justify-center text-foreground/40 font-mono text-sm">
                         No Cloudinary Configured
                     </div>
                 )}
@@ -71,9 +71,9 @@ const AboutSection = () => {
               <div className="space-y-3 sm:space-y-4">
                 {profileData.quickFacts.map((fact) => (
                   <div key={fact.label} className="flex items-start sm:items-center gap-3 sm:gap-4">
-                    <span className="h-2 w-2 bg-primary flex-shrink-0 mt-2 sm:mt-0" />
+                    <span className="mt-2 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-primary sm:mt-0" />
                     <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2 min-w-0">
-                      <span className="font-mono font-bold text-headline text-xs sm:text-sm uppercase tracking-wider whitespace-nowrap">
+                      <span className="font-mono text-xs font-medium text-headline whitespace-nowrap sm:text-sm">
                         {fact.label}:
                       </span>
                       <Text as="span" variant="small" className="text-sm sm:text-base break-words">
@@ -89,12 +89,12 @@ const AboutSection = () => {
       </div>
 
       {/* Experience Bento */}
-      <Suspense fallback={<div className="py-16 text-center"><div className="font-mono text-xs uppercase tracking-wider text-foreground/40">Loading skills...</div></div>}>
+      <Suspense fallback={<div className="py-16 text-center"><div className="font-mono text-xs text-foreground/40">Loading skills...</div></div>}>
         <ExperienceBento />
       </Suspense>
 
       {/* Timeline */}
-      <Suspense fallback={<div className="py-16 text-center"><div className="font-mono text-xs uppercase tracking-wider text-foreground/40">Loading timeline...</div></div>}>
+      <Suspense fallback={<div className="py-16 text-center"><div className="font-mono text-xs text-foreground/40">Loading timeline...</div></div>}>
         <AboutTimeline />
       </Suspense>
     </section>
