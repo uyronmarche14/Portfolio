@@ -16,123 +16,96 @@ const HomeSection: React.FC = () => {
   );
 
   return (
-    <div className="relative w-full flex min-h-screen snap-start flex-col items-start justify-center overflow-hidden">
-      <div className="w-full relative z-10 mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 text-left">
-        <div className="mb-4 font-mono text-xs uppercase tracking-[0.3em] text-foreground/50 sm:mb-6 sm:text-sm">
-          Portfolio / 2026
-        </div>
+    <div className="relative flex min-h-screen w-full snap-start flex-col items-start justify-center overflow-hidden">
+      <div className="relative z-10 mx-auto w-full max-w-6xl px-4 text-left sm:px-6 lg:px-8">
+        <p className="mb-6 font-mono text-xs font-medium text-secondary">Portfolio / 2026</p>
 
-        <h1 className="mb-4 text-4xl font-bold font-display leading-none text-headline sm:mb-6 sm:text-5xl md:text-6xl lg:text-7xl">
-          I&apos;m{" "}
-          <span className="inline-block bg-primary px-2 py-1 text-background sm:px-3">
-            {HOME_CONTENT.name}
-          </span>
-          <br />
-          <span className="flex flex-col items-start gap-3 pt-3">
-            <span>{HOME_CONTENT.title}</span>
-            <RotatingText
-              texts={[
-                "Full Stack Developer",
-                "AI Engineer",
-                "Software Engineer",
-                "Project Manager",
-                "DevOps Engineer",
-                "Data Scientist",
-              ]}
-              mainClassName="inline-flex justify-center whitespace-nowrap border border-foreground bg-foreground px-2 sm:px-3 py-1 sm:py-2 text-background overflow-hidden"
-              staggerFrom={"last"}
-              initial={{ y: "100%" }}
-              animate={{ y: 0 }}
-              exit={{ y: "-120%" }}
-              staggerDuration={0.025}
-              splitLevelClassName="overflow-hidden pb-0.5 sm:pb-1 md:pb-1"
-              transition={{ type: "spring", damping: 30, stiffness: 400 }}
-              rotationInterval={2000}
-            />
-          </span>
+        <h1 className="mb-6 font-display text-5xl font-semibold leading-[0.95] text-headline sm:text-6xl md:text-7xl lg:text-8xl">
+          {HOME_CONTENT.name}
         </h1>
 
-        <div className="mb-6">
-          <Button
-            variant="outline"
-            onClick={() => setIsStackExpanded(!isStackExpanded)}
-            className="rounded-none border border-foreground bg-primary px-6 py-5 font-mono text-xs font-bold uppercase text-background shadow-soft-sm transition-all duration-150 hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-soft sm:text-sm"
-          >
-            {isStackExpanded ? "Hide Tech Stack & Tools" : "View Tech Stack & Tools"}
-          </Button>
-
-          <AnimatePresence>
-            {isStackExpanded && (
-              <motion.div
-                initial={{ height: 0, opacity: 0, marginTop: 0 }}
-                animate={{ height: "auto", opacity: 1, marginTop: 16 }}
-                exit={{ height: 0, opacity: 0, marginTop: 0 }}
-                transition={{ duration: 0.3, ease: "easeInOut" }}
-                className="overflow-hidden"
-              >
-                <div className="border border-foreground bg-background p-4 shadow-soft-sm sm:p-5">
-                  <div className="mb-4 flex flex-wrap items-center gap-3 border-b-2 border-foreground pb-3">
-                    <span className="border border-foreground bg-foreground px-3 py-1 font-mono text-[10px] font-bold uppercase tracking-[0.25em] text-background">
-                        Resume Driven
-                    </span>
-                    <h3 className="font-display text-xl text-primary sm:text-2xl">
-                      Tech Stack & Arsenal
-                    </h3>
-                    <span className="font-mono text-[11px] uppercase tracking-[0.2em] text-foreground/60">
-                      {HERO_SKILL_GROUPS.length} groups / {totalSkills}+ tools
-                    </span>
-                  </div>
-
-                  <div className="space-y-3">
-                    {HERO_SKILL_GROUPS.map((group) => {
-                      return (
-                        <div
-                          key={group.title}
-                          className="border-b border-foreground/20 pb-3 last:border-b-0 last:pb-0"
-                        >
-                          <div className="flex flex-col gap-2 lg:flex-row lg:items-start lg:gap-4">
-                            <div className="shrink-0 lg:w-56">
-                              <div className="flex items-center gap-2">
-                                <span className="h-2 w-2 bg-primary" />
-                                <span className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-foreground/60">
-                                  {group.eyebrow}
-                                </span>
-                              </div>
-                              <h4 className="mt-1 font-display text-lg text-foreground sm:text-xl">
-                                {group.title}
-                              </h4>
-                              <p className="mt-1 max-w-xs font-mono text-[11px] leading-relaxed text-foreground/60 sm:text-xs">
-                                {group.description}
-                              </p>
-                            </div>
-
-                            <div className="flex flex-wrap items-start gap-2">
-                            {group.skills.map((skill) => (
-                              <Badge
-                                key={`${group.title}-${skill}`}
-                                  className="border border-foreground/30 bg-transparent px-2.5 py-1 font-mono text-[10px] font-bold uppercase text-foreground transition-colors duration-150 hover:bg-foreground hover:text-background sm:text-xs"
-                                variant="outline"
-                              >
-                                {skill}
-                              </Badge>
-                            ))}
-                            </div>
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
+        <div className="mb-8 flex flex-wrap items-center gap-x-3 gap-y-2 text-xl text-secondary sm:text-2xl md:text-3xl">
+          <span>{HOME_CONTENT.title}</span>
+          <RotatingText
+            texts={[
+              "Full Stack Developer",
+              "AI Engineer",
+              "Software Engineer",
+              "Project Manager",
+              "DevOps Engineer",
+              "Data Scientist",
+            ]}
+            mainClassName="inline-flex justify-center whitespace-nowrap rounded-full bg-primary/10 px-3 py-1 font-medium text-primary overflow-hidden"
+            staggerFrom={"last"}
+            initial={{ y: "100%" }}
+            animate={{ y: 0 }}
+            exit={{ y: "-120%" }}
+            staggerDuration={0.025}
+            splitLevelClassName="overflow-hidden pb-0.5"
+            transition={{ type: "spring", damping: 30, stiffness: 400 }}
+            rotationInterval={2000}
+          />
         </div>
 
         <p className="max-w-2xl text-base leading-relaxed text-foreground/70 sm:text-lg md:text-xl">
           {HOME_CONTENT.description}
         </p>
 
-        <div className="mt-8 h-1 w-24 bg-primary" />
+        <div className="mt-8 flex flex-wrap gap-3">
+          <Button asChild size="lg">
+            <a href="#projects">See my work</a>
+          </Button>
+          <Button
+            variant="outline"
+            size="lg"
+            onClick={() => setIsStackExpanded(!isStackExpanded)}
+            aria-expanded={isStackExpanded}
+          >
+            {isStackExpanded ? "Hide tech stack" : "Tech stack & tools"}
+          </Button>
+        </div>
+
+        <AnimatePresence>
+          {isStackExpanded && (
+            <motion.div
+              initial={{ height: 0, opacity: 0, marginTop: 0 }}
+              animate={{ height: "auto", opacity: 1, marginTop: 24 }}
+              exit={{ height: 0, opacity: 0, marginTop: 0 }}
+              transition={{ duration: 0.3, ease: "easeInOut" }}
+              className="overflow-hidden"
+            >
+              <div className="rounded-xl border border-foreground/15 bg-card p-5 sm:p-6">
+                <p className="mb-5 font-mono text-xs text-secondary">
+                  {HERO_SKILL_GROUPS.length} groups / {totalSkills}+ tools
+                </p>
+                <div className="space-y-5">
+                  {HERO_SKILL_GROUPS.map((group, i) => (
+                    <div
+                      key={group.title}
+                      className="flex flex-col gap-3 border-t border-foreground/10 pt-5 first:border-t-0 first:pt-0 lg:flex-row lg:gap-8"
+                    >
+                      <div className="shrink-0 lg:w-56">
+                        <p className="font-mono text-xs text-primary">
+                          {String(i + 1).padStart(2, "0")} / {group.eyebrow}
+                        </p>
+                        <h4 className="mt-1 font-display text-xl font-semibold text-foreground">
+                          {group.title}
+                        </h4>
+                      </div>
+                      <div className="flex flex-wrap items-start gap-2">
+                        {group.skills.map((skill) => (
+                          <Badge key={`${group.title}-${skill}`} variant="outline">
+                            {skill}
+                          </Badge>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </div>
   );

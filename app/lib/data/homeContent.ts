@@ -9,7 +9,7 @@ export interface HeroSkillGroup {
 
 export const HOME_CONTENT = {
   name: "Ron Marche Rhyss Q. Uy",
-  title: "BUILDING SOFTWARE AS A",
+  title: "I build software as a",
   description:
     "BS Computer Science graduate from Taguig City University building scalable web, mobile, and AI-assisted software solutions.",
 };
