@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback, useMemo } from "react";
+import { Badge } from "@/components/ui/shadcn/badge";
 import { motion, AnimatePresence } from "framer-motion";
 import { hobbiesData } from "@/lib/data/hobbies";
 import HeaderTitle from "@/components/ui/header";
@@ -196,18 +197,9 @@ export default function HobbyCarousel() {
                         {hobby.tags && hobby.tags.length > 0 && (
                           <div className="flex flex-wrap gap-1.5">
                             {hobby.tags.map(tag => (
-                              <span 
-                                key={tag} 
-                                className={`
-                                  rounded-full px-2.5 py-1 font-mono text-xs font-medium border
-                                  ${hasImage 
-                                    ? 'border-white/30 text-white/90 bg-white/10 backdrop-blur-sm' 
-                                    : 'border-primary/30 text-primary bg-primary/10'
-                                  }
-                                `}
-                              >
+                              <Badge key={tag} variant={hasImage ? "glass" : "accent"}>
                                 {tag}
-                              </span>
+                              </Badge>
                             ))}
                           </div>
                         )}

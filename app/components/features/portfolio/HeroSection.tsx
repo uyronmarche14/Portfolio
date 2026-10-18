@@ -168,7 +168,7 @@ const HeroSection = React.forwardRef<HTMLElement, HeroSectionProps>(
                     transition={{ delay: 0.8 + index * 0.1 }}
                     whileHover={{ scale: 1.05 }}
                   >
-                    <Badge variant="secondary" className="text-sm px-3 py-1">
+                    <Badge variant="default" className="h-7 px-2.5 text-sm">
                       {skill}
                     </Badge>
                   </motion.div>

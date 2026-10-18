@@ -41,7 +41,7 @@ const HomeSection: React.FC = () => {
         <ul className="mt-5 flex flex-wrap gap-2">
           {HOME_CONTENT.roles.map((role) => (
             <li key={role}>
-              <Badge variant="outline">{role}</Badge>
+              <Badge variant="default">{role}</Badge>
             </li>
           ))}
         </ul>
