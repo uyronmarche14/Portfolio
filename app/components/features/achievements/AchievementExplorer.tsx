@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 
 import { FilterTabs } from "@/components/ui/FilterTabs";
 import HeaderTitle from "@/components/ui/header";
+import { Button } from "@/components/ui/shadcn/button";
 import {
   achievementsData,
   categoryFilters,
@@ -15,16 +16,27 @@ import { AchievementFeatured } from "./AchievementFeatured";
 import { AchievementLedger } from "./AchievementLedger";
 import { categoryIcons } from "./categoryIcons";
 
+const PAGE_SIZE = 6;
+
 const featuredItem = achievementsData.find((a) => a.featured) ?? achievementsData[0];
 
 export default function AchievementExplorer() {
   const [activeFilter, setActiveFilter] = useState<AchievementCategory>("all");
   const [openId, setOpenId] = useState<string | null>(null);
+  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
 
   const filteredItems = useMemo(
     () => (activeFilter === "all" ? achievementsData : achievementsData.filter((a) => a.category === activeFilter)),
     [activeFilter]
   );
+
+  const visibleItems = filteredItems.slice(0, visibleCount);
+  const remaining = filteredItems.length - visibleItems.length;
+
+  const changeFilter = (key: AchievementCategory) => {
+    setActiveFilter(key);
+    setVisibleCount(PAGE_SIZE);
+  };
 
   // The featured card can be opened while a filter hides it; fall back to the full list then.
   const dialogItems = filteredItems.some((a) => a.id === openId) ? filteredItems : achievementsData;
@@ -48,7 +60,8 @@ export default function AchievementExplorer() {
             label="Achievement categories"
             className="mb-4"
             value={activeFilter}
-            onChange={setActiveFilter}
+            onChange={changeFilter}
+            fullWidth
             items={categoryFilters.map((filter) => ({
               key: filter.key,
               label: filter.label,
@@ -59,7 +72,15 @@ export default function AchievementExplorer() {
                   : achievementsData.filter((a) => a.category === filter.key).length,
             }))}
           />
-          <AchievementLedger items={filteredItems} listKey={activeFilter} onOpen={setOpenId} />
+          <AchievementLedger items={visibleItems} listKey={activeFilter} onOpen={setOpenId} />
+          {remaining > 0 && (
+            <div className="mt-8 flex justify-center">
+              <Button variant="outline" size="lg" onClick={() => setVisibleCount((count) => count + PAGE_SIZE)}>
+                Load more
+                <span className="font-mono text-xs text-foreground/50">{remaining} left</span>
+              </Button>
+            </div>
+          )}
         </div>
       </div>
 

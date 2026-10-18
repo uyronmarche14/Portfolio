@@ -19,10 +19,12 @@ interface FilterTabsProps<K extends string> {
   onChange: (key: K) => void;
   label: string;
   className?: string;
+  /** stretch the tabs to fill the full width, sharing it equally */
+  fullWidth?: boolean;
 }
 
 /** Segmented tabs with a pill that slides to the active item. */
-export function FilterTabs<K extends string>({ items, value, onChange, label, className }: FilterTabsProps<K>) {
+export function FilterTabs<K extends string>({ items, value, onChange, label, className, fullWidth }: FilterTabsProps<K>) {
   const reduceMotion = useReducedMotion();
   const groupId = useId();
 
@@ -43,7 +45,10 @@ export function FilterTabs<K extends string>({ items, value, onChange, label, cl
       <div
         role="tablist"
         aria-label={label}
-        className="inline-flex min-w-max gap-1 rounded-full border border-foreground/15 bg-foreground/[0.04] p-1"
+        className={cn(
+          "flex min-w-max gap-1 rounded-full border border-foreground/15 bg-foreground/[0.04] p-1",
+          fullWidth ? "w-full" : "w-fit"
+        )}
       >
         {items.map((item, i) => {
           const active = item.key === value;
@@ -58,6 +63,7 @@ export function FilterTabs<K extends string>({ items, value, onChange, label, cl
               onClick={() => onChange(item.key)}
               onKeyDown={(e) => onKeyDown(e, i)}
               className={cn(
+                fullWidth && "flex-auto",
                 "relative rounded-full px-4 py-1.5 text-sm font-medium transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
                 active ? "text-background" : "text-foreground/70 hover:text-foreground"
               )}
@@ -69,7 +75,7 @@ export function FilterTabs<K extends string>({ items, value, onChange, label, cl
                   transition={reduceMotion ? { duration: 0 } : { type: "spring", stiffness: 420, damping: 34 }}
                 />
               )}
-              <span className="relative z-10 inline-flex items-center gap-2">
+              <span className="relative z-10 inline-flex items-center gap-2 whitespace-nowrap">
                 {item.icon && <item.icon className="h-4 w-4" aria-hidden="true" />}
                 {item.label}
                 {item.count !== undefined && (
