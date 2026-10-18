@@ -9,6 +9,8 @@ import { HERO_SKILL_GROUPS, HOME_CONTENT } from "@/lib/data/homeContent";
 import { profileData } from "@/lib/data/profile";
 
 const HomeSection: React.FC = () => {
+  const currentlyLearning =
+    profileData.quickFacts.find((fact) => fact.label === "Learning")?.value ?? "";
   const [isStackExpanded, setIsStackExpanded] = useState(false);
   const totalSkills = HERO_SKILL_GROUPS.reduce(
     (count, group) => count + group.skills.length,
@@ -25,6 +27,11 @@ const HomeSection: React.FC = () => {
             <span key={line} className="block">{line}</span>
           ))}
         </h1>
+
+        <p className="mb-5 flex items-center gap-2 font-mono text-sm font-medium text-primary">
+          <span className="h-2 w-2 rounded-full bg-primary" aria-hidden="true" />
+          Currently learning {currentlyLearning}
+        </p>
 
         <p className="max-w-2xl text-lg leading-relaxed text-foreground/80 sm:text-xl md:text-2xl">
           {HOME_CONTENT.description}
@@ -54,7 +61,7 @@ const HomeSection: React.FC = () => {
 
         <dl className="mt-12 grid max-w-3xl grid-cols-1 gap-6 border-t border-foreground/15 pt-6 sm:grid-cols-3">
           {profileData.quickFacts
-            .filter((fact) => ["Based in", "Education", "Learning"].includes(fact.label))
+            .filter((fact) => ["Based in", "Education", "Favorite Tech"].includes(fact.label))
             .map((fact) => (
               <div key={fact.label}>
                 <dt className="font-mono text-xs text-secondary">{fact.label}</dt>
