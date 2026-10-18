@@ -22,7 +22,7 @@ const Header: React.FC<HeaderProps> = ({
         <span className="font-mono text-xs sm:text-sm uppercase tracking-[0.3em] text-secondary block mb-2">
           {introText}
         </span>
-        <span className="font-rawkner text-primary"> 
+        <span className="font-display text-primary"> 
           {highlightText} 
         </span> 
       </h2>

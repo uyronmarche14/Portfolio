@@ -2,35 +2,23 @@ import { Navbar } from "@/components/layout";
 import ThemeSwitcher from "@/components/ui/ThemeSwitcher";
 import { Providers } from "@/providers";
 import type { Metadata } from "next";
-import { JetBrains_Mono } from 'next/font/google';
-import localFont from 'next/font/local';
+import { Bricolage_Grotesque, Geist_Mono, Inter } from 'next/font/google';
 import "./globals.css";
 
-const RawknerFont = localFont({
-    src: [
-        {
-            path: './fonts/Rawkner-Black.woff2',
-            weight: '900',
-            style: 'normal',
-        },
-        {
-            path: './fonts/Rawkner-Black.woff',
-            weight: '900',
-            style: 'normal',
-        },
-        {
-            path: './fonts/Rawkner-Black.ttf',
-            weight: '900',
-            style: 'normal',
-        }
-    ],
+const DisplayFont = Bricolage_Grotesque({
+    subsets: ['latin'],
     display: 'swap',
-    variable: "--font-rawkner",
+    variable: '--font-display',
 });
 
-const MonoFont = JetBrains_Mono({
+const SansFont = Inter({
     subsets: ['latin'],
-    weight: ['400', '500', '700'],
+    display: 'swap',
+    variable: '--font-sans',
+});
+
+const MonoFont = Geist_Mono({
+    subsets: ['latin'],
     display: 'swap',
     variable: '--font-mono',
 });
@@ -65,7 +53,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning className={`${RawknerFont.variable} ${MonoFont.variable}`}>
+    <html lang="en" suppressHydrationWarning className={`${DisplayFont.variable} ${SansFont.variable} ${MonoFont.variable}`}>
       <body className="bg-background font-sans text-foreground">
         <Providers>
           <div className="flex min-h-screen flex-col">

@@ -117,7 +117,7 @@ export default function ProjectPage() {
             transition={{ delay: 0.2 }}
             className="text-center mb-12"
           >
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-rawkner font-bold text-foreground tracking-tight mb-6 uppercase">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-display font-bold text-foreground tracking-tight mb-6 uppercase">
               {project.title}
             </h1>
             <p className="text-lg md:text-xl text-foreground/60 leading-relaxed max-w-2xl mx-auto">

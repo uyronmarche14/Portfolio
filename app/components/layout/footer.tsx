@@ -41,7 +41,7 @@ const Footer = () => {
           <div className="flex flex-col items-center">
             {/* Brand & Social */}
             <div className="flex items-center gap-6 mb-8">
-              <h1 className="text-xl font-extrabold font-rawkner text-primary">
+              <h1 className="text-xl font-extrabold font-display text-primary">
                 Rhyss
               </h1>
               <div className="w-px h-6 bg-foreground" />
@@ -64,7 +64,7 @@ const Footer = () => {
   
             {/* Let's Work Text — always visible, raw brutalist */}
             <div className="text-center">
-              <h2 className="font-rawkner font-extrabold text-4xl sm:text-6xl md:text-8xl lg:text-9xl xl:text-[12rem] text-foreground select-none leading-none uppercase">
+              <h2 className="font-display font-extrabold text-4xl sm:text-6xl md:text-8xl lg:text-9xl xl:text-[12rem] text-foreground select-none leading-none uppercase">
                 LET&apos;S WORK
               </h2>
               <div className="w-full h-1 bg-primary mt-4" />

@@ -41,7 +41,7 @@ const ProcessNode = ({ data }: { data: { step: ProcessStep; theme: string } }) =
       </div>
       
       {/* Title */}
-      <div className="font-rawkner text-[10px] sm:text-xs font-bold text-foreground mb-0.5 sm:mb-1 leading-tight uppercase">
+      <div className="font-display text-[10px] sm:text-xs font-bold text-foreground mb-0.5 sm:mb-1 leading-tight uppercase">
         {step.title}
       </div>
       
@@ -182,7 +182,7 @@ const DetailPanel = ({
                 </span>
               </div>
               <div>
-                <h2 className="text-lg sm:text-xl font-bold font-rawkner text-foreground uppercase">{step.title}</h2>
+                <h2 className="text-lg sm:text-xl font-bold font-display text-foreground uppercase">{step.title}</h2>
                 <span className="font-mono text-xs text-primary uppercase tracking-wider">{step.duration}</span>
               </div>
             </div>

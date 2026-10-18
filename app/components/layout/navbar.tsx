@@ -91,7 +91,7 @@ const Navbar = () => {
           <div className={"flex items-center border-2 border-foreground shadow-brutal transition-all duration-200 " + navFrameClass}>
             {/* Brand */}
             <div className="flex items-center px-5 py-3">
-              <h1 className="text-xl font-extrabold font-rawkner text-primary">
+              <h1 className="text-xl font-extrabold font-display text-primary">
                 Rhyss
               </h1>
             </div>
@@ -155,7 +155,7 @@ const Navbar = () => {
         <div className={"space-y-4 border-2 border-foreground p-6 shadow-brutal " + navFrameClass}>
           {/* Brand */}
           <div className="flex items-center gap-3 border-b-2 border-foreground pb-4">
-            <h1 className="text-xl font-extrabold font-rawkner text-primary">
+            <h1 className="text-xl font-extrabold font-display text-primary">
               Rhyss
             </h1>
           </div>

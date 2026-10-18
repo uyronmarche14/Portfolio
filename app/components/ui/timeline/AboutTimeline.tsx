@@ -15,7 +15,7 @@ const TimelineRow = ({ year, title }: { year: string; title: string }) => {
   return (
     <div className="flex items-center justify-between w-full py-3 sm:py-4 cursor-pointer group">
       {/* Year */}
-      <span className="font-rawkner text-sm sm:text-lg md:text-xl font-bold text-foreground/50 group-hover:text-foreground transition-colors duration-150 w-14 sm:w-20 md:w-28 shrink-0">
+      <span className="font-display text-sm sm:text-lg md:text-xl font-bold text-foreground/50 group-hover:text-foreground transition-colors duration-150 w-14 sm:w-20 md:w-28 shrink-0">
         {year}
       </span>
 
@@ -96,7 +96,7 @@ const AboutTimeline = () => {
                             
                             {/* Content */}
                             <div className="flex-1 pb-3 sm:pb-4">
-                              <h4 className="text-foreground font-bold font-rawkner text-sm sm:text-base md:text-lg mb-1 sm:mb-2 group-hover/feature:text-primary transition-colors duration-150 uppercase">
+                              <h4 className="text-foreground font-bold font-display text-sm sm:text-base md:text-lg mb-1 sm:mb-2 group-hover/feature:text-primary transition-colors duration-150 uppercase">
                                 {feature.title}
                               </h4>
                               <p className="text-foreground/60 text-xs sm:text-sm md:text-base leading-relaxed">

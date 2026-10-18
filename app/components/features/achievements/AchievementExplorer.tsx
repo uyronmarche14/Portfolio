@@ -55,7 +55,7 @@ function AchievementDetail({ item }: { item: Achievement }) {
                 {categoryFilters.find((f) => f.key === item.category)?.label}
               </span>
             )}
-            <h3 className="font-rawkner font-bold text-2xl sm:text-3xl md:text-4xl text-foreground uppercase tracking-wide leading-tight">
+            <h3 className="font-display font-bold text-2xl sm:text-3xl md:text-4xl text-foreground uppercase tracking-wide leading-tight">
               {item.title}
             </h3>
             <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-1.5">
@@ -152,7 +152,7 @@ function AchievementListItem({
         <div className="flex-1 min-w-0">
           <div
             className={`
-              font-rawkner font-bold text-sm uppercase tracking-wide leading-tight truncate
+              font-display font-bold text-sm uppercase tracking-wide leading-tight truncate
               ${isActive ? "text-foreground" : "text-foreground/80"}
             `}
           >
@@ -198,7 +198,7 @@ function MobileCompactCard({
       <div className={`p-1.5 border mb-2 w-fit ${isActive ? "border-primary bg-primary/10" : "border-foreground/30"}`}>
         <Icon className={`w-4 h-4 ${isActive ? "text-primary" : "text-foreground/50"}`} />
       </div>
-      <div className="font-rawkner font-bold text-xs uppercase tracking-wide leading-tight line-clamp-2 text-foreground">
+      <div className="font-display font-bold text-xs uppercase tracking-wide leading-tight line-clamp-2 text-foreground">
         {item.title}
       </div>
       <div className="font-mono text-[9px] text-foreground/40 uppercase tracking-wider mt-1 truncate">

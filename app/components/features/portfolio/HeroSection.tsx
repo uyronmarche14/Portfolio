@@ -131,7 +131,7 @@ const HeroSection = React.forwardRef<HTMLElement, HeroSectionProps>(
               >
                 <Avatar className="w-32 h-32 md:w-40 md:h-40 border-4 border-primary/20 shadow-2xl">
                   <AvatarImage src={profileImage} alt={title} />
-                  <AvatarFallback className="font-rawkner text-2xl md:text-3xl font-bold">
+                  <AvatarFallback className="font-display text-2xl md:text-3xl font-bold">
                     {title.split(' ').map(n => n[0]).join('')}
                   </AvatarFallback>
                 </Avatar>
@@ -141,7 +141,7 @@ const HeroSection = React.forwardRef<HTMLElement, HeroSectionProps>(
             {/* Title */}
             <motion.div variants={itemVariants} className="space-y-4">
               <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-foreground">
-                <span className="font-rawkner bg-gradient-to-r from-primary via-primary to-secondary bg-clip-text text-transparent">
+                <span className="font-display bg-gradient-to-r from-primary via-primary to-secondary bg-clip-text text-transparent">
                   {title}
                 </span>
               </h1>

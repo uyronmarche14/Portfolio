@@ -49,7 +49,7 @@ const AboutDoCard: React.FC<AboutDoCardProps> = ({
               </div>
             )}
           </div>
-          <h4 className="text-xl font-bold font-rawkner text-foreground uppercase">{title}</h4>
+          <h4 className="text-xl font-bold font-display text-foreground uppercase">{title}</h4>
         </div>
 
         {/* Description */}
