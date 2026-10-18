@@ -3,6 +3,7 @@
 import { AnimatePresence, motion } from "framer-motion";
 import React, { useState } from "react";
 
+import { factIcons } from "@/components/ui/icons/factIcons";
 import { Badge } from "@/components/ui/shadcn/badge";
 import { Button } from "@/components/ui/shadcn/button";
 import { HERO_SKILL_GROUPS, HOME_CONTENT } from "@/lib/data/homeContent";
@@ -62,12 +63,18 @@ const HomeSection: React.FC = () => {
         <dl className="mt-12 grid max-w-3xl grid-cols-1 gap-6 border-t border-foreground/15 pt-6 sm:grid-cols-3">
           {profileData.quickFacts
             .filter((fact) => ["Based in", "Education", "Favorite Tech"].includes(fact.label))
-            .map((fact) => (
+            .map((fact) => {
+              const FactIcon = factIcons[fact.label];
+              return (
               <div key={fact.label}>
-                <dt className="font-mono text-xs text-secondary">{fact.label}</dt>
+                <dt className="flex items-center gap-1.5 font-mono text-xs text-secondary">
+                  {FactIcon && <FactIcon className="h-3.5 w-3.5" aria-hidden="true" />}
+                  {fact.label}
+                </dt>
                 <dd className="mt-1 text-sm text-foreground">{fact.value}</dd>
               </div>
-            ))}
+              );
+            })}
         </dl>
 
         <AnimatePresence>
