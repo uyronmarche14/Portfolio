@@ -3,6 +3,7 @@
 import { useState, useMemo, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ExternalLink } from "lucide-react";
+import { FilterTabs } from "@/components/ui/FilterTabs";
 import HeaderTitle from "@/components/ui/header";
 import {
   achievementsData,
@@ -133,9 +134,9 @@ function AchievementListItem({
     <button
       onClick={onClick}
       className={`
-        w-full text-left p-3 sm:p-4 border transition-all duration-200 group/item
+        w-full rounded-xl text-left p-3 sm:p-4 border transition-all duration-200 group/item
         ${isActive
-          ? "border-primary bg-primary/10 shadow-soft-sm"
+          ? "border-primary/60 bg-primary/10"
           : "border-foreground/20 bg-background hover:border-foreground/50 hover:bg-foreground/5"
         }
       `}
@@ -188,14 +189,14 @@ function MobileCompactCard({
     <button
       onClick={onClick}
       className={`
-        flex-shrink-0 w-36 sm:w-44 p-3 border text-left transition-all duration-200
+        flex-shrink-0 w-36 sm:w-44 rounded-xl p-3 border text-left transition-all duration-200
         ${isActive
-          ? "border-primary bg-primary/10 shadow-soft-sm"
+          ? "border-primary/60 bg-primary/10"
           : "border-foreground/20 bg-background"
         }
       `}
     >
-      <div className={`p-1.5 border mb-2 w-fit ${isActive ? "border-primary bg-primary/10" : "border-foreground/30"}`}>
+      <div className={`rounded-lg p-1.5 border mb-2 w-fit ${isActive ? "border-primary bg-primary/10" : "border-foreground/30"}`}>
         <Icon className={`w-4 h-4 ${isActive ? "text-primary" : "text-foreground/50"}`} />
       </div>
       <div className="font-display font-bold text-xs tracking-wide leading-tight line-clamp-2 text-foreground">
@@ -253,35 +254,20 @@ export default function AchievementExplorer() {
       <div className="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-4">
         
         {/* ── Filter Tabs ── */}
-        <div className="achievement-filter-scroll flex items-center gap-2 mb-6 overflow-x-auto pb-3">
-          {categoryFilters.map((filter) => {
-            const isActive = activeFilter === filter.key;
-            const count =
+        <FilterTabs
+          label="Achievement categories"
+          className="mb-6"
+          value={activeFilter}
+          onChange={handleFilterChange}
+          items={categoryFilters.map((filter) => ({
+            key: filter.key,
+            label: filter.label,
+            count:
               filter.key === "all"
                 ? achievementsData.length
-                : achievementsData.filter((a) => a.category === filter.key).length;
-
-            return (
-              <button
-                key={filter.key}
-                onClick={() => handleFilterChange(filter.key)}
-                className={`
-                  flex-shrink-0 px-3 sm:px-4 py-2 border font-mono text-xs sm:text-xs font-medium
-                  transition-all duration-200
-                  ${isActive
-                    ? "border-foreground/15 bg-foreground text-background shadow-soft-sm"
-                    : "border-foreground/30 bg-background text-foreground/70 hover:border-foreground hover:text-foreground"
-                  }
-                `}
-              >
-                {filter.label}
-                <span className={`ml-1.5 ${isActive ? "text-background/70" : "text-foreground/40"}`}>
-                  {count}
-                </span>
-              </button>
-            );
-          })}
-        </div>
+                : achievementsData.filter((a) => a.category === filter.key).length,
+          }))}
+        />
 
         {/* ── Desktop: Master-Detail Layout ── */}
         <div className="hidden lg:grid lg:grid-cols-[280px_1fr] gap-6 min-h-[60vh]">
