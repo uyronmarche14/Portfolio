@@ -36,7 +36,7 @@ export function AchievementLedger({ items, listKey, onOpen }: AchievementLedgerP
             <button
               type="button"
               onClick={() => onOpen(item.id)}
-              className="group grid w-full grid-cols-[3rem_minmax(0,1fr)_auto] items-center gap-4 rounded-lg px-2 py-4 text-left transition-colors duration-200 hover:bg-foreground/[0.04] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:grid-cols-[3rem_minmax(0,1fr)_11rem_5rem_1.5rem] sm:px-3"
+              className="group grid w-full grid-cols-[3rem_minmax(0,1fr)_auto] items-center gap-4 rounded-lg px-2 py-4 text-left transition-colors duration-200 hover:bg-foreground/[0.04] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:grid-cols-[3rem_minmax(0,1fr)_11rem_6.5rem_1.5rem] sm:px-3"
             >
               <span className="relative flex h-12 w-12 items-center justify-center overflow-hidden rounded-lg border border-foreground/15 bg-foreground/5 text-foreground/50">
                 {item.image ? (
@@ -55,7 +55,7 @@ export function AchievementLedger({ items, listKey, onOpen }: AchievementLedgerP
                   {categoryLabel}
                 </Badge>
               </span>
-              <span className="font-mono text-xs text-foreground/50 sm:text-right">{item.date}</span>
+              <span className="whitespace-nowrap font-mono text-xs text-foreground/50 sm:text-right">{item.date}</span>
               <ArrowUpRight
                 className="hidden h-4 w-4 text-foreground/30 transition-all duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-primary motion-reduce:transition-none sm:block"
                 aria-hidden="true"
