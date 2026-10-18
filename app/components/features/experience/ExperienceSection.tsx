@@ -1,6 +1,5 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
 import Image from "next/image";
 import { useState } from "react";
 
@@ -13,7 +12,6 @@ import { ExperienceTenureStrip } from "./ExperienceTenureStrip";
 
 const ExperienceSection = () => {
   const [activeId, setActiveId] = useState<string | null>(null);
-  const reduceMotion = useReducedMotion();
   const now = new Date().toISOString().slice(0, 7);
 
   return (
@@ -37,12 +35,8 @@ const ExperienceSection = () => {
             const duration = entry.approximate ? null : formatDuration(monthsBetween(entry, now));
 
             return (
-              <motion.li
+              <li
                 key={entry.id}
-                initial={reduceMotion ? false : { opacity: 0, y: 16 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-10% 0px" }}
-                transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
                 onMouseEnter={() => setActiveId(entry.id)}
                 onMouseLeave={() => setActiveId(null)}
                 className="grid gap-5 border-t border-foreground/15 py-8 md:grid-cols-[11rem_minmax(0,1fr)_13rem] md:gap-8"
@@ -87,7 +81,7 @@ const ExperienceSection = () => {
                     Fig. {num} / {entry.company}
                   </figcaption>
                 </figure>
-              </motion.li>
+              </li>
             );
           })}
         </ol>
