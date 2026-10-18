@@ -26,7 +26,7 @@ const TimelineRow = ({ year, title }: { year: string; title: string }) => {
 
 const AboutTimeline = () => {
   return (
-    <div className="mx-auto w-full max-w-6xl px-4 py-12 sm:px-6 md:py-16 lg:px-4">
+    <div id="journey" className="mx-auto w-full max-w-6xl px-4 py-12 sm:px-6 md:py-16 lg:px-4">
       <div className="mb-10 md:mb-12">
         <HeaderTitle
           introText="Timeline"

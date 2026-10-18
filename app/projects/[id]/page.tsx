@@ -17,11 +17,12 @@ import Link from "next/link";
 import { notFound, useParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 
+import { DocsLayout, DocsRail, docsLinkClass } from "@/components/layout/DocsLayout";
 import Footer from "@/components/layout/footer";
-import { CleanGridBackground } from "@/components/ui/bgRipple";
 import ScreenshotCarousel from "@/components/ui/ScreenshotCarousel";
 import TechBadge from "@/components/ui/TechBadge";
 
+import { useScrollSpy } from "@/lib/hooks/useScrollSpy";
 import { projects } from "@/lib/data/projects";
 import { PROJECTS_CONTENT } from "@/lib/data/projectsContent";
 
@@ -32,6 +33,13 @@ export default function ProjectPage() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   if (!project) notFound();
+
+  const tocItems = [
+    project.paragraph ? { id: "overview", label: "Overview" } : null,
+    project.features?.length ? { id: "features", label: "Key features" } : null,
+    project.screenshots?.length ? { id: "screenshots", label: "Screenshots" } : null,
+  ].filter((item): item is { id: string; label: string } => item !== null);
+  const activeSection = useScrollSpy(tocItems.map((item) => item.id));
 
   const navigateImage = useCallback(
     (direction: "prev" | "next") => {
@@ -68,87 +76,56 @@ export default function ProjectPage() {
 
   return (
     <>
-      <main className="relative min-h-screen bg-background overflow-hidden">
-        {/* Background */}
-        <CleanGridBackground className="fixed inset-0 z-0" />
-
-        <div className="relative z-10 mx-auto w-full max-w-6xl px-4 pb-16 pt-28 sm:px-6 lg:px-8 md:pt-32">
-          {/* Back Navigation */}
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="mb-12"
-          >
+      <DocsLayout
+        sidebar={
+          <>
             <Link
               href="/"
-              className="inline-flex items-center gap-2 text-sm text-foreground/60 hover:text-foreground transition-colors duration-150 group"
+              className="inline-flex items-center gap-2 text-sm text-foreground/60 transition-colors hover:text-foreground"
             >
-              <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform duration-150" />
-              <span>{PROJECTS_CONTENT.backToHome}</span>
+              <ArrowLeft className="h-4 w-4" />
+              {PROJECTS_CONTENT.backToHome}
             </Link>
-          </motion.div>
-
-          {/* Hero Image */}
-          {project.image && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 }}
-              className="mb-12 cursor-pointer group"
-              onClick={() => {
-                setSelectedImage(project.screenshots?.[0] ?? project.image);
-                setCurrentImageIndex(0);
-              }}
-            >
-              <div className="relative overflow-hidden border border-foreground/15 rounded-lg shadow-soft-lg">
-                <Image
-                  width={1200}
-                  height={675}
-                  src={project.screenshots?.[0] ?? project.image}
-                  alt={project.title}
-                  className="aspect-video w-full object-cover transition-transform duration-300 group-hover:scale-105"
-                  priority
-                />
-              </div>
-            </motion.div>
-          )}
-
-          {/* Title & Description */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="text-center mb-12"
+            <p className="mt-8 text-sm font-semibold text-foreground">Projects</p>
+            <ul className="mt-3 space-y-0.5">
+              {projects.map((item) => (
+                <li key={item.id}>
+                  <Link href={`/projects/${item.id}`} className={docsLinkClass(item.id === project.id)}>
+                    {item.title}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </>
+        }
+        rail={<DocsRail items={tocItems} active={activeSection} />}
+      >
+        <article>
+          <Link
+            href="/"
+            className="mb-8 inline-flex items-center gap-2 text-sm text-foreground/60 hover:text-foreground lg:hidden"
           >
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-display font-bold text-foreground tracking-tight mb-6">
+            <ArrowLeft className="h-4 w-4" />
+            {PROJECTS_CONTENT.backToHome}
+          </Link>
+
+          <header>
+            <p className="font-mono text-xs text-primary">{project.category || "Project"}</p>
+            <h1 className="mt-3 font-sans text-4xl font-semibold tracking-tight text-foreground md:text-5xl">
               {project.title}
             </h1>
-            <p className="text-lg md:text-xl text-foreground/60 leading-relaxed max-w-2xl mx-auto">
-              {project.description}
-            </p>
-          </motion.div>
+            <p className="mt-4 max-w-[60ch] text-lg leading-relaxed text-foreground/70">{project.description}</p>
 
-          {/* Tech Stack & Links Row */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-            className="flex flex-col items-center gap-6 mb-16"
-          >
-            {/* Tech Badges */}
-            <div className="flex flex-wrap justify-center gap-2">
+            <div className="mt-6 flex flex-wrap gap-2">
               {project.technologies?.slice(0, 8).map((tech, i) => (
                 <TechBadge key={tech} technology={tech} index={i} size="sm" />
               ))}
               {project.technologies && project.technologies.length > 8 && (
-                <Badge variant="default">
-                  +{project.technologies.length - 8} more
-                </Badge>
+                <Badge variant="default">+{project.technologies.length - 8} more</Badge>
               )}
             </div>
 
-            {/* Action Links */}
-            <div className="flex items-center gap-4">
+            <div className="mt-6 flex flex-wrap items-center gap-3">
               {project.githubUrl && (
                 <Button asChild variant="outline">
                   <a href={project.githubUrl} target="_blank" rel="noopener noreferrer">
@@ -166,80 +143,67 @@ export default function ProjectPage() {
                 </Button>
               )}
             </div>
-          </motion.div>
+          </header>
 
-          {/* Divider */}
-          <div className="mx-auto mb-16 h-px w-24 bg-foreground/15" />
-
-          {/* Overview Section */}
-          {project.paragraph && (
-            <motion.section
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4 }}
-              className="mb-16"
+          {project.image && (
+            <figure
+              className="mt-10 cursor-pointer"
+              onClick={() => {
+                setSelectedImage(project.screenshots?.[0] ?? project.image);
+                setCurrentImageIndex(0);
+              }}
             >
-              <h2 className="font-mono text-xs font-medium text-primary mb-4 text-center">
-                Overview
-              </h2>
-              <p className="text-foreground/60 leading-relaxed text-center max-w-2xl mx-auto">
-                {project.paragraph}
-              </p>
-            </motion.section>
-          )}
-
-          {/* Features Section */}
-          {project.features && project.features.length > 0 && (
-            <motion.section
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5 }}
-              className="mb-16"
-            >
-              <h2 className="font-mono text-xs font-medium text-primary mb-8 text-center">
-                Key Features
-              </h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {project.features.map((feature, index) => (
-                  <div
-                    key={index}
-                    className="rounded-xl border border-foreground/15 bg-card p-5 transition-colors duration-200 hover:border-foreground/30"
-                  >
-                    <div className="flex items-start gap-3">
-                      <Check className="mt-0.5 h-4 w-4 flex-shrink-0 text-primary" aria-hidden="true" />
-                      <span className="text-sm leading-relaxed text-foreground/75">
-                        {feature}
-                      </span>
-                    </div>
-                  </div>
-                ))}
+              <div className="relative overflow-hidden rounded-xl border border-foreground/15">
+                <Image
+                  width={1200}
+                  height={675}
+                  src={project.screenshots?.[0] ?? project.image}
+                  alt={project.title}
+                  className="aspect-video w-full object-cover"
+                  priority
+                />
               </div>
-            </motion.section>
+            </figure>
           )}
 
-          {/* Screenshots Gallery */}
-          {project.screenshots && project.screenshots.length > 0 && (
-            <motion.section
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.6 }}
-              className="mb-16"
-            >
-              <h2 className="font-mono text-xs font-medium text-primary mb-8 text-center">
-                Screenshots
-              </h2>
-              <ScreenshotCarousel
-                screenshots={project.screenshots}
-                alt={project.title}
-                onImageClick={(imageUrl, index) => {
-                  setSelectedImage(imageUrl);
-                  setCurrentImageIndex(index || 0);
-                }}
-              />
-            </motion.section>
+          {project.paragraph && (
+            <section id="overview" className="scroll-mt-28 pt-14">
+              <h2 className="font-sans text-2xl font-semibold tracking-tight text-foreground">Overview</h2>
+              <p className="mt-4 max-w-[66ch] text-[17px] leading-[1.75] text-foreground/80">{project.paragraph}</p>
+            </section>
           )}
-        </div>
-      </main>
+
+          {project.features && project.features.length > 0 && (
+            <section id="features" className="scroll-mt-28 pt-14">
+              <h2 className="font-sans text-2xl font-semibold tracking-tight text-foreground">Key features</h2>
+              <ul className="mt-5 divide-y divide-foreground/10 border-y border-foreground/10">
+                {project.features.map((feature, index) => (
+                  <li key={index} className="flex items-start gap-3 py-3.5">
+                    <Check className="mt-1 h-4 w-4 flex-shrink-0 text-primary" aria-hidden="true" />
+                    <span className="max-w-[66ch] text-[16px] leading-relaxed text-foreground/80">{feature}</span>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
+
+          {project.screenshots && project.screenshots.length > 0 && (
+            <section id="screenshots" className="scroll-mt-28 pt-14">
+              <h2 className="font-sans text-2xl font-semibold tracking-tight text-foreground">Screenshots</h2>
+              <div className="mt-5">
+                <ScreenshotCarousel
+                  screenshots={project.screenshots}
+                  alt={project.title}
+                  onImageClick={(imageUrl, index) => {
+                    setSelectedImage(imageUrl);
+                    setCurrentImageIndex(index || 0);
+                  }}
+                />
+              </div>
+            </section>
+          )}
+        </article>
+      </DocsLayout>
 
       {/* Lightbox Modal */}
       <AnimatePresence>
