@@ -1,6 +1,7 @@
 "use client";
 
 import { techIconMap } from "@/lib/data/icons";
+import { badgeVariants } from "@/components/ui/shadcn/badge";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 import * as React from "react";
@@ -51,7 +52,8 @@ const TechBadge = React.forwardRef<HTMLDivElement, TechBadgeProps>(
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.2, delay: index * 0.03 }}
         className={cn(
-          "inline-flex items-center gap-2 rounded-full border border-foreground/15 bg-foreground/[0.04] text-foreground/80 font-mono font-medium transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/50 hover:bg-primary/10 hover:text-primary",
+          badgeVariants({ variant: "default" }),
+          "h-auto gap-2 font-sans",
           sizeClasses[size],
           className
         )}

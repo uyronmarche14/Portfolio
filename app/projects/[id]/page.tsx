@@ -1,6 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
+import { Badge } from "@/components/ui/shadcn/badge";
 import { Button } from "@/components/ui/shadcn/button";
 import {
   ArrowLeft,
@@ -140,9 +141,9 @@ export default function ProjectPage() {
                 <TechBadge key={tech} technology={tech} index={i} size="sm" />
               ))}
               {project.technologies && project.technologies.length > 8 && (
-                <span className="rounded-full px-3 py-1 font-mono text-xs text-foreground/60 bg-foreground/5 border border-foreground/15">
+                <Badge variant="default">
                   +{project.technologies.length - 8} more
-                </span>
+                </Badge>
               )}
             </div>
 

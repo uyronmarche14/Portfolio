@@ -1,6 +1,7 @@
 "use client";
 
 import { CleanGridBackground } from "@/components/ui/bgRipple";
+import { Badge } from "@/components/ui/shadcn/badge";
 import { Button } from "@/components/ui/shadcn/button";
 import { ProcessStep, processSteps } from "@/lib/data/process";
 import { AnimatePresence, motion } from "framer-motion";
@@ -230,12 +231,9 @@ const DetailPanel = ({
                 </h3>
                 <div className="flex flex-wrap gap-1.5 sm:gap-2">
                   {step.tools.map((tool) => (
-                    <span
-                      key={tool}
-                      className="rounded-full px-3 py-1 font-mono text-xs text-foreground/75 bg-foreground/[0.04] border border-foreground/15"
-                    >
+                    <Badge key={tool} variant="default">
                       {tool}
-                    </span>
+                    </Badge>
                   ))}
                 </div>
               </section>

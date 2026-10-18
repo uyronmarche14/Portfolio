@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useMemo, useCallback } from "react";
+import { Badge } from "@/components/ui/shadcn/badge";
 import { motion, AnimatePresence } from "framer-motion";
 import { ExternalLink, type LucideIcon } from "lucide-react";
 import { FilterTabs } from "@/components/ui/FilterTabs";
@@ -43,9 +44,9 @@ function AchievementDetail({ item }: { item: Achievement }) {
           <div className="absolute inset-0 bg-primary/20 mix-blend-overlay opacity-0 group-hover/img:opacity-100 transition-opacity duration-300" />
           {/* Category badge on image */}
           <div className="absolute top-3 left-3 z-10">
-            <span className="px-2.5 py-1 bg-background border border-foreground/15 rounded-lg font-mono text-xs font-medium text-foreground shadow-soft-sm">
+            <Badge variant="glass">
               {categoryFilters.find((f) => f.key === item.category)?.label}
-            </span>
+            </Badge>
           </div>
         </div>
       )}
@@ -59,9 +60,9 @@ function AchievementDetail({ item }: { item: Achievement }) {
           </div>
           <div className="flex-1 min-w-0">
             {!hasImage && (
-              <span className="inline-block mb-1.5 px-2 py-0.5 bg-primary/10 text-primary font-mono text-xs font-medium border border-primary/30 rounded-full">
+              <Badge variant="accent" className="mb-1.5">
                 {categoryFilters.find((f) => f.key === item.category)?.label}
-              </span>
+              </Badge>
             )}
             <h3 className="font-display font-bold text-2xl sm:text-3xl md:text-4xl text-foreground tracking-wide leading-tight">
               {item.title}
@@ -96,12 +97,9 @@ function AchievementDetail({ item }: { item: Achievement }) {
         {item.tags && item.tags.length > 0 && (
           <div className="flex flex-wrap gap-1.5">
             {item.tags.map((tag) => (
-              <span
-                key={tag}
-                className="px-2.5 py-1 font-mono text-xs sm:text-xs font-medium border border-primary/30 rounded-full text-primary bg-primary/10"
-              >
+              <Badge key={tag} variant="accent">
                 {tag}
-              </span>
+              </Badge>
             ))}
           </div>
         )}

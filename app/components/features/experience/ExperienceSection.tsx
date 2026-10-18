@@ -1,6 +1,7 @@
 "use client";
 
 import { motion, useReducedMotion } from "framer-motion";
+import { Badge } from "@/components/ui/shadcn/badge";
 
 import HeaderTitle from "@/components/ui/header";
 import { workExperience, type WorkExperienceEntry } from "@/lib/data/workExperience";
@@ -61,9 +62,13 @@ const ExperienceCard = ({ entry, index, now }: ExperienceCardProps) => {
         <p className="max-w-md text-base leading-relaxed text-foreground/80">
           <HighlightedText text={entry.summary} terms={entry.highlights} />
         </p>
-        <p className="font-mono text-xs text-foreground/60">
-          {entry.stack.slice(0, 4).join("  ·  ")}
-        </p>
+        <ul className="flex flex-wrap gap-1.5">
+          {entry.stack.slice(0, 4).map((tag) => (
+            <li key={tag}>
+              <Badge variant="default">{tag}</Badge>
+            </li>
+          ))}
+        </ul>
       </div>
 
       <div
