@@ -10,7 +10,6 @@ export * from "./technology";
 export * from "./project";
 export * from "./contact";
 export * from "./about";
-export * from "./portfolioKnowledge";
 
 // Handle conflicting exports explicitly
 export type { ValidationError as AppValidationError } from "./error";
