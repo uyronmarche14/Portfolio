@@ -8,109 +8,61 @@ import {
   AccordionTrigger,
 } from "@/components/ui/shadcn/accordion";
 import { timelineYears } from "@/lib/data/about";
-import { motion } from "framer-motion";
-import { MoreHorizontal } from "lucide-react";
+import { Plus } from "lucide-react";
 
 const TimelineRow = ({ year, title }: { year: string; title: string }) => {
   return (
-    <div className="flex items-center justify-between w-full py-3 sm:py-4 cursor-pointer group">
-      {/* Year */}
-      <span className="font-display text-sm sm:text-lg md:text-xl font-bold text-foreground/50 group-hover:text-foreground transition-colors duration-150 w-14 sm:w-20 md:w-28 shrink-0">
+    <div className="flex w-full items-center gap-4 py-4 text-left sm:gap-6 sm:py-5">
+      <span className="w-14 shrink-0 font-display text-base text-foreground/60 transition-colors duration-150 group-hover:text-foreground group-data-[state=open]:text-primary sm:w-20 sm:text-xl md:w-24">
         {year}
       </span>
-
-      {/* Title */}
-      <span className="flex-1 font-mono text-xs sm:text-sm md:text-base font-medium text-foreground/50 group-hover:text-foreground transition-colors duration-150 line-clamp-1 truncate">
+      <span className="flex-1 truncate font-sans text-sm font-medium text-foreground/70 transition-colors duration-150 group-hover:text-foreground group-data-[state=open]:text-foreground sm:text-base">
         {title}
       </span>
-
-      {/* Indicator */}
-      <MoreHorizontal className="w-4 h-4 sm:w-5 sm:h-5 text-foreground/20 group-hover:text-primary transition-colors duration-150 shrink-0 ml-2 sm:ml-4" />
+      <Plus className="h-4 w-4 shrink-0 text-foreground/40 transition-transform duration-200 group-hover:text-primary group-data-[state=open]:rotate-45 group-data-[state=open]:text-primary sm:h-5 sm:w-5" />
     </div>
   );
 };
 
 const AboutTimeline = () => {
   return (
-    <div className="w-full max-w-6xl mx-auto py-8 sm:py-10 md:py-12 px-4 sm:px-6 lg:px-4">
-      {/* Header */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.3 }}
-        className="mb-8 md:mb-10"
-      >
-        <HeaderTitle 
-          introText="My"  
-          highlightText="Journey"
+    <div className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6 sm:py-10 md:py-12 lg:px-4">
+      <div className="mb-8 md:mb-10">
+        <HeaderTitle
+          introText="Timeline"
+          highlightText="My Journey"
           description="A timeline of growth, learning, and achievements"
         />
-      </motion.div>
+      </div>
 
-      {/* Timeline Accordion */}
       <Accordion type="single" collapsible className="w-full">
-        {timelineYears.map((yearData, index) => {
+        {timelineYears.map((yearData) => {
           const headerTitle = yearData.features[0]?.title || yearData.year;
-          
+
           return (
-            <motion.div
-              key={yearData.year}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.2, delay: index * 0.05 }}
-            >
             <AccordionItem
-                value={yearData.year}
-                className="border-b border-foreground/20 hover:border-foreground/40 transition-colors duration-150"
-              >
-                <AccordionTrigger className="hover:no-underline py-0 [&>svg]:hidden">
-                  <TimelineRow year={yearData.year} title={headerTitle} />
-                </AccordionTrigger>
-                <AccordionContent className="pt-3 sm:pt-4 pb-4 sm:pb-6">
-                  <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ duration: 0.2 }}
-                    className="border border-foreground/20 bg-foreground/5 p-4 sm:p-5 md:p-6"
-                  >
-                    {/* Features */}
-                    <div className="space-y-4 sm:space-y-5">
-                      {yearData.features.map((feature, i) => (
-                        <motion.div
-                          key={i}
-                          initial={{ opacity: 0, y: 10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ delay: i * 0.05, duration: 0.2 }}
-                          className="group/feature"
-                        >
-                          <div className="flex gap-3 sm:gap-4">
-                            {/* Accent Line */}
-                            <div className="flex flex-col items-center pt-1 sm:pt-1.5">
-                              <div className="w-2 h-2 sm:w-2.5 sm:h-2.5 bg-primary" />
-                              {i < yearData.features.length - 1 && (
-                                <div className="w-px flex-1 bg-primary/30 mt-1.5 sm:mt-2" />
-                              )}
-                            </div>
-                            
-                            {/* Content */}
-                            <div className="flex-1 pb-3 sm:pb-4">
-                              <h4 className="text-foreground font-bold font-display text-sm sm:text-base md:text-lg mb-1 sm:mb-2 group-hover/feature:text-primary transition-colors duration-150">
-                                {feature.title}
-                              </h4>
-                              <p className="text-foreground/60 text-xs sm:text-sm md:text-base leading-relaxed">
-                                {feature.description}
-                              </p>
-                            </div>
-                          </div>
-                        </motion.div>
-                      ))}
+              key={yearData.year}
+              value={yearData.year}
+              className="border-b border-foreground/15 transition-colors duration-150 hover:border-foreground/30"
+            >
+              <AccordionTrigger className="group w-full py-0 hover:no-underline hover:text-inherit [&>svg]:hidden">
+                <TimelineRow year={yearData.year} title={headerTitle} />
+              </AccordionTrigger>
+              <AccordionContent className="pb-6 pt-0 sm:pl-[6.5rem] md:pl-[7rem]">
+                <div className="space-y-5 border-l border-primary/30 pl-5">
+                  {yearData.features.map((feature, i) => (
+                    <div key={i}>
+                      <h4 className="font-display text-base text-foreground sm:text-lg">
+                        {feature.title}
+                      </h4>
+                      <p className="mt-1 text-sm leading-relaxed text-foreground/70 sm:text-base">
+                        {feature.description}
+                      </p>
                     </div>
-                  </motion.div>
-                </AccordionContent>
-              </AccordionItem>
-            </motion.div>
+                  ))}
+                </div>
+              </AccordionContent>
+            </AccordionItem>
           );
         })}
       </Accordion>
