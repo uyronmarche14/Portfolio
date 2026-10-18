@@ -14,6 +14,8 @@ export interface WorkExperienceEntry {
   highlights?: string[];
   stack: string[];
   highlight: string;
+  /** optional extra bullets for the full Experience page; add real ones, never invented */
+  details?: string[];
   image: string;
 }
 
