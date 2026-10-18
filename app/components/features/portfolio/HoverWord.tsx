@@ -1,7 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import { useId, type ReactNode } from "react";
+import Link from "next/link";
+import { useId, type MouseEvent, type ReactNode } from "react";
 
 interface HoverWordProps {
   children: ReactNode;
@@ -9,23 +10,39 @@ interface HoverWordProps {
   text: string;
   title?: string;
   image?: string;
+  /** `#section` scrolls to a section on this page; any other value is a route */
+  href?: string;
 }
 
 /**
  * Inline word with a dotted underline. Hover or keyboard focus opens a small
  * card with an optional picture; tapping focuses it on touch screens.
  */
-export function HoverWord({ children, text, title, image }: HoverWordProps) {
+export function HoverWord({ children, text, title, image, href }: HoverWordProps) {
   const id = useId();
+  const className =
+    "underline decoration-primary/60 decoration-dotted underline-offset-4 outline-none transition-colors hover:text-foreground focus-visible:rounded-sm focus-visible:ring-2 focus-visible:ring-ring " +
+    (href ? "cursor-pointer" : "cursor-help");
+
+  const scrollToSection = (event: MouseEvent<HTMLAnchorElement>) => {
+    event.preventDefault();
+    document.getElementById(href!.slice(1))?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
   return (
     <span className="group/word relative inline-block">
-      <span
-        tabIndex={0}
-        aria-describedby={id}
-        className="cursor-help underline decoration-primary/60 decoration-dotted underline-offset-4 outline-none transition-colors hover:text-foreground focus-visible:rounded-sm focus-visible:ring-2 focus-visible:ring-ring"
-      >
-        {children}
-      </span>
+      {href?.startsWith("#") ? (
+        <a href={href} onClick={scrollToSection} aria-describedby={id} className={className}>
+          {children}
+        </a>
+      ) : href ? (
+        <Link href={href} aria-describedby={id} className={className}>
+          {children}
+        </Link>
+      ) : (
+        <span tabIndex={0} aria-describedby={id} className={className}>
+          {children}
+        </span>
+      )}
       <span
         id={id}
         role="tooltip"
@@ -39,6 +56,7 @@ export function HoverWord({ children, text, title, image }: HoverWordProps) {
         <span className="block p-3">
           {title && <span className="block text-sm font-medium text-foreground">{title}</span>}
           <span className="mt-0.5 block text-sm leading-snug text-foreground/70">{text}</span>
+          {href && <span className="mt-2 block font-mono text-xs text-primary">Click to open</span>}
         </span>
       </span>
     </span>

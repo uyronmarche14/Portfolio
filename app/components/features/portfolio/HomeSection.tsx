@@ -9,10 +9,12 @@ import { Button } from "@/components/ui/shadcn/button";
 import { HoverWord } from "./HoverWord";
 import { achievementsData } from "@/lib/data/achievements";
 import { projects } from "@/lib/data/projects";
+import { workExperience } from "@/lib/data/workExperience";
 import { HERO_SKILL_GROUPS, HOME_CONTENT } from "@/lib/data/homeContent";
 import { profileData } from "@/lib/data/profile";
 
 const cumLaude = achievementsData.find((item) => item.id === "cum-laude-2025");
+const beyondgen = workExperience.find((entry) => entry.id === "beyondgen");
 const codex = projects.find((project) => project.id === "codex-express");
 
 const HomeSection: React.FC = () => {
@@ -43,10 +45,11 @@ const HomeSection: React.FC = () => {
               {HOME_CONTENT.subtitle}
             </p>
 
-            <p className="mt-6 max-w-lg text-base leading-relaxed text-foreground/70">
+            <p className="mt-6 max-w-xl text-base leading-relaxed text-foreground/70">
               I turn{" "}
               <HoverWord
                 title="Technical Business Analyst"
+                href="#about"
                 text="Translating business needs into clear, testable specifications before any code is written."
               >
                 business requirements
@@ -54,6 +57,7 @@ const HomeSection: React.FC = () => {
               into{" "}
               <HoverWord
                 title="AI Architecture"
+                href="#projects"
                 text="Designing AI-assisted systems and workflows that fit the problem they solve."
               >
                 AI-assisted software
@@ -61,20 +65,32 @@ const HomeSection: React.FC = () => {
               . I graduated{" "}
               <HoverWord
                 title={cumLaude?.title}
+                href="#achievements"
                 text={`${cumLaude?.issuer}, ${cumLaude?.date}`}
                 image={cumLaude?.image}
               >
                 Cum Laude
               </HoverWord>{" "}
-              and have shipped projects like{" "}
+              and have worked across freelance, startup, and product teams, building web, mobile, and
+              AI-assisted products. Recent work includes a supplier quality management platform at{" "}
+              <HoverWord
+                title={beyondgen?.company}
+                href="/experience#beyondgen"
+                text={`${beyondgen?.role}, ${beyondgen?.dateRange}`}
+                image={beyondgen?.image}
+              >
+                Beyondgen
+              </HoverWord>{" "}
+              and an appointment scheduling app,{" "}
               <HoverWord
                 title={codex?.title}
+                href="/projects/codex-express"
                 text="An appointment scheduling web app built with Next.js and TypeScript."
                 image={codex?.screenshots[0]}
               >
                 Codex Express
               </HoverWord>
-              .
+              . I&apos;m now going deeper into {currentlyLearning}.
             </p>
 
         <div className="mt-8 flex flex-wrap gap-3">
@@ -104,8 +120,8 @@ const HomeSection: React.FC = () => {
               />
             </div>
             <figcaption className="absolute -bottom-5 left-4 right-4 rounded-xl border border-foreground/15 bg-card/95 px-4 py-3 shadow-soft-lg backdrop-blur sm:left-auto sm:right-auto sm:-left-6 sm:max-w-[16rem] lg:-left-10">
-              <span className="block font-mono text-xs text-primary">Currently learning</span>
-              <span className="mt-1 block text-sm text-foreground">{currentlyLearning}</span>
+              <span className="block font-mono text-xs text-primary">Role</span>
+              <span className="mt-1 block text-sm text-foreground">{HOME_CONTENT.subtitle}</span>
             </figcaption>
           </figure>
         </div>
