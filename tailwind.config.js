@@ -16,26 +16,29 @@ module.exports = {
     },
     extend: {
       colors: {
-        border: 'hsl(var(--border))',
-        input: 'hsl(var(--input))',
-        ring: 'hsl(var(--ring))',
+        border: 'rgb(var(--border) / <alpha-value>)',
+        input: 'rgb(var(--input) / <alpha-value>)',
+        ring: 'rgb(var(--ring) / <alpha-value>)',
         background: 'rgb(var(--background) / <alpha-value>)',
         foreground: 'rgb(var(--foreground) / <alpha-value>)',
-        primary: 'rgb(var(--primary) / <alpha-value>)',
+        primary: {
+          DEFAULT: 'rgb(var(--primary) / <alpha-value>)',
+          foreground: 'rgb(var(--primary-foreground) / <alpha-value>)'
+        },
         secondary: 'rgb(var(--secondary) / <alpha-value>)',
         accent: 'rgb(var(--accent) / <alpha-value>)',
-        tertiary: '#e53170',
+        tertiary: 'rgb(var(--tertiary) / <alpha-value>)',
         headline: 'rgb(var(--foreground) / <alpha-value>)',
         paragraph: 'rgb(var(--secondary) / <alpha-value>)',
-        destructive: '#ef4444',
-        muted: '#6b7280',
-        popover: '#1f2937',
-        card: '#111827'
+        destructive: 'rgb(var(--destructive) / <alpha-value>)',
+        muted: 'rgb(var(--muted) / <alpha-value>)',
+        popover: 'rgb(var(--popover) / <alpha-value>)',
+        card: 'rgb(var(--card) / <alpha-value>)'
       },
       borderRadius: {
-        lg: '6px',
-        md: '4px',
-        sm: '2px'
+        lg: 'var(--radius)',
+        md: 'calc(var(--radius) - 2px)',
+        sm: 'calc(var(--radius) - 4px)'
       },
       fontFamily: {
         rawkner: [

@@ -13,6 +13,16 @@
     --primary: 220 38 38;
     --secondary: 80 80 80;
     --accent: 251 191 36;
+    --primary-foreground: 255 251 240;
+    --muted: 107 114 128;
+    --card: 17 24 39;
+    --popover: 31 41 55;
+    --destructive: 239 68 68;
+    --tertiary: 229 49 112;
+    --border: 10 10 10;
+    --input: 10 10 10;
+    --ring: 220 38 38;
+    --radius: 6px;
     --border-width: 2px;
     --shadow-offset: 4px;
     --shadow-color: 10 10 10;
@@ -25,6 +35,10 @@
     --primary: 239 68 68;
     --secondary: 160 160 160;
     --accent: 252 211 77;
+    --primary-foreground: 10 10 10;
+    --border: 245 245 245;
+    --input: 245 245 245;
+    --ring: 239 68 68;
     --shadow-color: 245 245 245;
     --grid-dot-opacity: 0.08;
 }
@@ -36,6 +50,10 @@
     --primary: 255 255 255;
     --secondary: 180 180 180;
     --accent: 200 200 200;
+    --primary-foreground: 0 0 0;
+    --border: 255 255 255;
+    --input: 255 255 255;
+    --ring: 255 255 255;
     --shadow-color: 255 255 255;
     --grid-dot-opacity: 0.1;
 }
