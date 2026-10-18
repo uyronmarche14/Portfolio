@@ -32,7 +32,7 @@ const AboutSection = () => {
           <div className="flex justify-center lg:justify-start order-1 lg:order-1">
             {/* Profile Image — Brutalist frame */}
             <div className="relative w-full max-w-md lg:max-w-none">
-              <div className="relative aspect-[3/4] sm:aspect-[4/5] lg:aspect-[3/4] w-full max-w-[350px] sm:max-w-[400px] lg:max-w-[450px] mx-auto lg:mx-0 overflow-hidden border-2 border-foreground shadow-brutal">
+              <div className="relative aspect-[3/4] sm:aspect-[4/5] lg:aspect-[3/4] w-full max-w-[350px] sm:max-w-[400px] lg:max-w-[450px] mx-auto lg:mx-0 overflow-hidden border border-foreground shadow-soft">
                 {process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME ? (
                     <CldImage
                     src={profileData.photo.src}

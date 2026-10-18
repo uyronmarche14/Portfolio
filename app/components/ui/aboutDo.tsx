@@ -27,7 +27,7 @@ const AboutDoCard: React.FC<AboutDoCardProps> = ({
 }) => {
   return (
     <motion.div
-      className="group p-8 bg-background border-2 border-foreground shadow-brutal hover:translate-x-[-3px] hover:translate-y-[-3px] hover:shadow-brutal-lg transition-all duration-150 relative overflow-hidden"
+      className="group p-8 bg-background border border-foreground shadow-soft hover:translate-x-[-3px] hover:translate-y-[-3px] hover:shadow-soft-lg transition-all duration-150 relative overflow-hidden"
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.05, duration: 0.2 }}
@@ -49,7 +49,7 @@ const AboutDoCard: React.FC<AboutDoCardProps> = ({
               </div>
             )}
           </div>
-          <h4 className="text-xl font-bold font-display text-foreground uppercase">{title}</h4>
+          <h4 className="text-xl font-bold font-display text-foreground">{title}</h4>
         </div>
 
         {/* Description */}

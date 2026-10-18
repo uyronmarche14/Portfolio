@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { Button } from "@/components/ui/shadcn/button";
 import { PortfolioErrorBoundary } from "@/components/ui/ErrorBoundary";
 import { PageSkeleton } from "@/components/ui/LoadingSkeletons";
 import { usePerformanceMonitor, measureRender } from "@/lib/utils/performance";
@@ -197,12 +198,9 @@ export const OptimizedPageWrapper: React.FC<{
               {error.message || "An unexpected error occurred"}
             </p>
             {onRetry && (
-              <button
-                onClick={onRetry}
-                className="text-primary-foreground rounded-md bg-primary px-4 py-2 hover:bg-primary/90"
-              >
+              <Button onClick={onRetry} variant="accent">
                 Try Again
-              </button>
+              </Button>
             )}
           </div>
         </PortfolioErrorBoundary>

@@ -32,7 +32,7 @@ const ThemeSwitcher = () => {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 10 }}
             transition={{ duration: 0.15 }}
-            className="absolute bottom-16 right-0 bg-background border-2 border-foreground shadow-brutal p-2 min-w-[160px]"
+            className="absolute bottom-16 right-0 bg-background border border-foreground shadow-soft p-2 min-w-[160px]"
           >
             {themes.map((t) => (
               <button
@@ -62,7 +62,7 @@ const ThemeSwitcher = () => {
       <motion.button
         whileTap={{ scale: 0.95 }}
         onClick={() => setIsOpen(!isOpen)}
-        className="w-12 h-12 border-2 border-foreground bg-background shadow-brutal flex items-center justify-center text-xl hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-brutal-lg transition-all duration-150"
+        className="w-12 h-12 border border-foreground bg-background shadow-soft flex items-center justify-center text-xl hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-soft-lg transition-all duration-150"
         aria-label="Toggle theme"
       >
         {currentTheme.icon}

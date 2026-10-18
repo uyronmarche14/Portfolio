@@ -41,7 +41,7 @@ export const BentoGridItem = ({
       transition={{ duration: 0.15 }}
       className={cn(
         "group/bento transition-all duration-150 flex flex-col relative overflow-hidden",
-        "border-2 border-foreground bg-background shadow-brutal hover:shadow-brutal-lg",
+        "border border-foreground bg-background shadow-soft hover:shadow-soft-lg",
         className
       )}
     >
@@ -52,12 +52,12 @@ export const BentoGridItem = ({
 
       {/* Content Block */}
       <div className="relative z-10 flex flex-col flex-1 p-5 sm:p-6 justify-between bg-background">
-        <div className="self-start border-2 border-foreground bg-primary/10 p-2 mb-4">
+        <div className="self-start border border-foreground bg-primary/10 p-2 mb-4">
             {icon}
         </div>
         
         <div className="mt-auto">
-            <div className="font-display font-bold text-xl sm:text-2xl text-foreground mb-2 uppercase tracking-wide">
+            <div className="font-display font-bold text-xl sm:text-2xl text-foreground mb-2 tracking-wide">
               {title}
             </div>
             <div className="font-sans font-normal text-foreground/70 text-xs sm:text-sm leading-relaxed">

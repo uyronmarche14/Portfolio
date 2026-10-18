@@ -50,7 +50,7 @@ const ResumeDrawer: React.FC<ResumeDrawerProps> = ({
           <Button
             variant="ghost"
             size="sm"
-            className="text-foreground/80 hover:text-foreground hover:bg-foreground/10 transition-all duration-150 px-4 py-2 border-2 border-foreground/20 hover:border-foreground font-mono text-xs uppercase tracking-wider"
+            className="text-foreground/80 hover:text-foreground hover:bg-foreground/10 transition-all duration-150 px-4 py-2 border border-foreground/20 hover:border-foreground font-mono text-xs uppercase tracking-wider"
           >
             <FileText className="w-4 h-4" />
           </Button>
@@ -65,14 +65,14 @@ const ResumeDrawer: React.FC<ResumeDrawerProps> = ({
             </DrawerDescription>
           </div>
           <DrawerClose asChild>
-            <Button variant="ghost" size="sm" className="h-8 w-8 p-0 border-2 border-foreground">
+            <Button variant="ghost" size="sm" className="h-8 w-8 p-0 border border-foreground">
               <X className="h-4 w-4" />
             </Button>
           </DrawerClose>
         </DrawerHeader>
 
         <div className="flex-1 p-4 overflow-hidden">
-          <div className="h-full w-full border-2 border-foreground overflow-hidden bg-foreground/5">
+          <div className="h-full w-full border border-foreground overflow-hidden bg-foreground/5">
             <iframe
               src={resumeUrl}
               width="100%"

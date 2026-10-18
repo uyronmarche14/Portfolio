@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { Button } from "@/components/ui/shadcn/button";
 
 interface ErrorBoundaryState {
   hasError: boolean;
@@ -24,12 +25,9 @@ const DefaultErrorFallback: React.FC<{ error: Error; retry: () => void }> = ({
     <p className="mb-4 text-sm text-red-600">
       {error.message || "An unexpected error occurred"}
     </p>
-    <button
-      onClick={retry}
-      className="rounded-md bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
-    >
+    <Button onClick={retry} variant="destructive">
       Try again
-    </button>
+    </Button>
   </div>
 );
 
@@ -84,12 +82,9 @@ const PortfolioErrorFallback: React.FC<{
     <p className="mb-4 text-sm text-muted-foreground max-w-md">
       {error.message || "Something went wrong in this section"}
     </p>
-    <button
-      onClick={retry}
-      className="rounded-md bg-destructive px-3 py-1.5 text-sm font-medium text-destructive-foreground hover:bg-destructive/90 focus:outline-none focus:ring-2 focus:ring-destructive focus:ring-offset-2"
-    >
+    <Button onClick={retry} variant="destructive" size="sm">
       Retry {section}
-    </button>
+    </Button>
   </div>
 );
 

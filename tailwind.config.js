@@ -30,7 +30,10 @@ module.exports = {
         tertiary: 'rgb(var(--tertiary) / <alpha-value>)',
         headline: 'rgb(var(--foreground) / <alpha-value>)',
         paragraph: 'rgb(var(--secondary) / <alpha-value>)',
-        destructive: 'rgb(var(--destructive) / <alpha-value>)',
+        destructive: {
+          DEFAULT: 'rgb(var(--destructive) / <alpha-value>)',
+          foreground: 'rgb(var(--destructive-foreground) / <alpha-value>)'
+        },
         muted: 'rgb(var(--muted) / <alpha-value>)',
         popover: 'rgb(var(--popover) / <alpha-value>)',
         card: 'rgb(var(--card) / <alpha-value>)'
@@ -46,11 +49,11 @@ module.exports = {
         mono: ['var(--font-mono)', 'ui-monospace', 'SFMono-Regular', 'Menlo', 'monospace']
       },
       boxShadow: {
-        'brutal': '4px 4px 0px rgb(var(--shadow-color, 10 10 10) / 1)',
-        'brutal-sm': '2px 2px 0px rgb(var(--shadow-color, 10 10 10) / 1)',
-        'brutal-lg': '6px 6px 0px rgb(var(--shadow-color, 10 10 10) / 1)',
-        'brutal-xl': '8px 8px 0px rgb(var(--shadow-color, 10 10 10) / 1)',
-        'brutal-primary': '4px 4px 0px rgb(var(--primary) / 1)',
+        'soft-sm': '0 1px 2px rgb(var(--foreground) / 0.06)',
+        'soft': '0 2px 8px rgb(var(--foreground) / 0.08)',
+        'soft-lg': '0 8px 24px rgb(var(--foreground) / 0.10)',
+        'soft-xl': '0 16px 40px rgb(var(--foreground) / 0.12)',
+        'soft-primary': '0 2px 8px rgb(var(--primary) / 0.25)',
         'none': 'none',
       },
       keyframes: {

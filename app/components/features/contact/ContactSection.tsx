@@ -59,7 +59,7 @@ const ContactSection = () => {
     <section className="min-h-screen w-full relative overflow-hidden py-4 sm:py-6 md:my-6 lg:my-8">
       <div className="w-full h-full flex items-center justify-center px-3 sm:px-4">
         {/* Outer container — solid vivid primary background */}
-        <div className="relative w-full min-h-[calc(100vh-2rem)] sm:min-h-[calc(100vh-3rem)] flex flex-col items-center justify-center bg-primary border-2 border-foreground shadow-brutal-lg py-8 sm:py-12">
+        <div className="relative w-full min-h-[calc(100vh-2rem)] sm:min-h-[calc(100vh-3rem)] flex flex-col items-center justify-center bg-primary border border-foreground shadow-soft-lg py-8 sm:py-12">
           
           {/* Header */}
           <div className="mb-6 sm:mb-8 md:mb-12 hidden sm:block w-full flex flex-col items-center">
@@ -82,16 +82,16 @@ const ContactSection = () => {
 
           {/* Inner Card — solid background */}
           <div className="w-full max-w-6xl text-start px-3 sm:px-4">
-            <div className="space-y-4 sm:space-y-6 md:space-y-8 py-6 sm:py-8 md:py-10 border-2 border-foreground bg-background shadow-brutal-lg px-4 sm:px-6 md:px-8">
+            <div className="space-y-4 sm:space-y-6 md:space-y-8 py-6 sm:py-8 md:py-10 border border-foreground bg-background shadow-soft-lg px-4 sm:px-6 md:px-8">
               {/* Badge */}
-              <div className="inline-flex items-center gap-2 border-2 border-foreground bg-foreground px-3 py-1 font-mono text-[10px] sm:text-xs font-bold uppercase tracking-widest text-background shadow-brutal-sm">
+              <div className="inline-flex items-center gap-2 border border-foreground bg-foreground px-3 py-1 font-mono text-[10px] sm:text-xs font-bold uppercase tracking-widest text-background shadow-soft-sm">
                 <span>Get In Touch</span>
               </div>
 
               {/* Main Heading */}
               <Heading as="h2" className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-bold text-foreground leading-[1.4] sm:leading-[1.3] pb-2">
                 Let&apos;s Create Something <br className="hidden sm:block"/>
-                <span className="bg-primary text-background px-3 py-2 inline-block mt-4 sm:mt-6 border-2 border-foreground shadow-brutal-sm leading-none">Extraordinary</span>
+                <span className="bg-primary text-background px-3 py-2 inline-block mt-4 sm:mt-6 border border-foreground shadow-soft-sm leading-none">Extraordinary</span>
               </Heading>
 
               {/* Description */}
@@ -111,17 +111,17 @@ const ContactSection = () => {
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       required
-                      className="bg-background border-2 border-foreground text-foreground placeholder:text-foreground/30 focus:border-primary transition-all duration-150 h-11 sm:h-12 text-sm px-4 font-mono"
+                      className="bg-background border border-foreground text-foreground placeholder:text-foreground/30 focus:border-primary transition-all duration-150 h-11 sm:h-12 text-sm px-4 font-mono"
                     />
                   </div>
                   <Button 
                     type="submit" 
                     disabled={isSubmitting || !email} 
-                    className="bg-foreground text-background border-2 border-foreground px-5 sm:px-6 h-11 sm:h-12 font-mono text-xs sm:text-sm font-bold uppercase tracking-widest shadow-brutal-sm hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-brutal transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed shrink-0 inline-flex items-center justify-center gap-2"
+                    className="bg-foreground text-background border border-foreground px-5 sm:px-6 h-11 sm:h-12 font-mono text-xs sm:text-sm font-bold uppercase tracking-widest shadow-soft-sm hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-soft transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed shrink-0 inline-flex items-center justify-center gap-2"
                   >
                     {isSubmitting ? (
                       <div className="flex items-center gap-2">
-                        <div className="w-4 h-4 border-2 border-current border-t-transparent animate-spin" />
+                        <div className="w-4 h-4 border border-current border-t-transparent animate-spin" />
                         Sending...
                       </div>
                     ) : (

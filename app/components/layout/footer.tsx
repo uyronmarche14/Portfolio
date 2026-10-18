@@ -52,7 +52,7 @@ const Footer = () => {
                     href={href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-9 h-9 border-2 border-foreground bg-background flex items-center justify-center text-foreground hover:bg-primary hover:text-background hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-brutal-sm transition-all duration-150"
+                    className="w-9 h-9 border border-foreground bg-background flex items-center justify-center text-foreground hover:bg-primary hover:text-background hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-soft-sm transition-all duration-150"
                     aria-label={label}
                     title={label}
                   >
@@ -64,7 +64,7 @@ const Footer = () => {
   
             {/* Let's Work Text — always visible, raw brutalist */}
             <div className="text-center">
-              <h2 className="font-display font-extrabold text-4xl sm:text-6xl md:text-8xl lg:text-9xl xl:text-[12rem] text-foreground select-none leading-none uppercase">
+              <h2 className="font-display font-extrabold text-4xl sm:text-6xl md:text-8xl lg:text-9xl xl:text-[12rem] text-foreground select-none leading-none">
                 LET&apos;S WORK
               </h2>
               <div className="w-full h-1 bg-primary mt-4" />

@@ -8,38 +8,41 @@
    ═══════════════════════════════════════════════ */
 
 :root {
-    --background: 255 251 240;
+    --background: 244 241 234;
     --foreground: 10 10 10;
-    --primary: 220 38 38;
-    --secondary: 80 80 80;
-    --accent: 251 191 36;
-    --primary-foreground: 255 251 240;
+    --primary: 200 66 6;
+    --secondary: 98 94 86;
+    --accent: 255 192 152;
+    --primary-foreground: 244 241 234;
     --muted: 107 114 128;
-    --card: 17 24 39;
-    --popover: 31 41 55;
-    --destructive: 239 68 68;
+    --card: 255 253 248;
+    --popover: 255 253 248;
+    --destructive: 220 38 38;
+    --destructive-foreground: 255 255 255;
     --tertiary: 229 49 112;
     --border: 10 10 10;
     --input: 10 10 10;
-    --ring: 220 38 38;
-    --radius: 6px;
-    --border-width: 2px;
-    --shadow-offset: 4px;
+    --ring: 200 66 6;
+    --radius: 8px;
+    --border-width: 1px;
+    --shadow-offset: 0px;
     --shadow-color: 10 10 10;
     --grid-dot-opacity: 0.12;
 }
 
 [data-theme="dark"], .dark {
     --background: 10 10 10;
-    --foreground: 245 245 245;
-    --primary: 239 68 68;
-    --secondary: 160 160 160;
-    --accent: 252 211 77;
+    --foreground: 244 241 234;
+    --primary: 255 122 56;
+    --secondary: 160 156 148;
+    --accent: 255 160 110;
     --primary-foreground: 10 10 10;
-    --border: 245 245 245;
-    --input: 245 245 245;
-    --ring: 239 68 68;
-    --shadow-color: 245 245 245;
+    --card: 23 23 23;
+    --popover: 23 23 23;
+    --border: 244 241 234;
+    --input: 244 241 234;
+    --ring: 255 122 56;
+    --shadow-color: 244 241 234;
     --grid-dot-opacity: 0.08;
 }
 
@@ -60,11 +63,17 @@
 
 /* Light Theme */
 [data-theme="light"], .light {
-    --background: 255 251 240;
+    --background: 244 241 234;
     --foreground: 10 10 10;
-    --primary: 220 38 38;
-    --secondary: 75 85 99;
-    --accent: 251 191 36;
+    --primary: 200 66 6;
+    --secondary: 98 94 86;
+    --accent: 255 192 152;
+    --primary-foreground: 244 241 234;
+    --card: 255 253 248;
+    --popover: 255 253 248;
+    --border: 10 10 10;
+    --input: 10 10 10;
+    --ring: 200 66 6;
     --shadow-color: 10 10 10;
     --grid-dot-opacity: 0.1;
 }

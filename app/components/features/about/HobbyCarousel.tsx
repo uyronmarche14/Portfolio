@@ -79,7 +79,7 @@ export default function HobbyCarousel() {
           {/* Nav Buttons */}
           <button 
             onClick={handlePrev}
-            className="absolute left-2 md:left-6 z-50 p-3 bg-background border-2 border-foreground shadow-brutal hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-brutal-lg transition-all hidden md:flex items-center justify-center"
+            className="absolute left-2 md:left-6 z-50 p-3 bg-background border border-foreground shadow-soft hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-soft-lg transition-all hidden md:flex items-center justify-center"
             aria-label="Previous hobby"
           >
             <ChevronLeft className="w-5 h-5" />
@@ -87,7 +87,7 @@ export default function HobbyCarousel() {
           
           <button 
             onClick={handleNext}
-            className="absolute right-2 md:right-6 z-50 p-3 bg-background border-2 border-foreground shadow-brutal hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-brutal-lg transition-all hidden md:flex items-center justify-center"
+            className="absolute right-2 md:right-6 z-50 p-3 bg-background border border-foreground shadow-soft hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-soft-lg transition-all hidden md:flex items-center justify-center"
             aria-label="Next hobby"
           >
             <ChevronRight className="w-5 h-5" />
@@ -153,10 +153,10 @@ export default function HobbyCarousel() {
                     }}
                     className={`
                       absolute w-[calc(100%-2rem)] md:w-[calc(100%-4rem)] max-w-6xl h-full 
-                      overflow-hidden cursor-pointer border-2 bg-background group
+                      overflow-hidden cursor-pointer border bg-background group
                       transition-all duration-300
                       ${isActive 
-                        ? 'border-foreground shadow-brutal-xl' 
+                        ? 'border-foreground shadow-soft-xl' 
                         : 'border-foreground/30 shadow-none opacity-60'
                       }
                     `}
@@ -184,11 +184,11 @@ export default function HobbyCarousel() {
                       <div className="flex items-start justify-between mb-auto">
                         {/* Brutalist Icon Box */}
                         <div className={`
-                          flex items-center justify-center border-2 p-3 sm:p-4
+                          flex items-center justify-center border p-3 sm:p-4
                           transition-all duration-500
                           ${hasImage 
                             ? 'border-white/80 bg-black/40 backdrop-blur-sm' 
-                            : 'border-foreground bg-primary/10 shadow-brutal-sm'
+                            : 'border-foreground bg-primary/10 shadow-soft-sm'
                           }
                           ${isActive ? 'scale-100 opacity-100' : 'scale-75 opacity-50'}
                         `}>
@@ -213,7 +213,7 @@ export default function HobbyCarousel() {
                         ${isActive ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}
                       `}>
                         {/* Title */}
-                        <div className={`font-display font-bold uppercase tracking-wide text-3xl sm:text-4xl md:text-5xl leading-tight ${hasImage ? 'text-white' : 'text-foreground'}`}>
+                        <div className={`font-display font-bold tracking-wide text-3xl sm:text-4xl md:text-5xl leading-tight ${hasImage ? 'text-white' : 'text-foreground'}`}>
                           {hobby.title}
                         </div>
 
@@ -276,11 +276,11 @@ export default function HobbyCarousel() {
                                   rel="noopener noreferrer"
                                   onClick={(e) => e.stopPropagation()}
                                   className={`
-                                    inline-flex items-center gap-2 px-3 py-1.5 border-2 font-mono text-[10px] sm:text-xs font-bold uppercase tracking-wider
+                                    inline-flex items-center gap-2 px-3 py-1.5 border font-mono text-[10px] sm:text-xs font-bold uppercase tracking-wider
                                     transition-all duration-200 hover:translate-x-[-1px] hover:translate-y-[-1px]
                                     ${hasImage 
                                       ? 'border-white/50 text-white bg-white/10 backdrop-blur-sm hover:bg-white/20 hover:border-white hover:shadow-[3px_3px_0px_rgba(255,255,255,0.3)]' 
-                                      : 'border-foreground text-foreground bg-background hover:shadow-brutal-sm'
+                                      : 'border-foreground text-foreground bg-background hover:shadow-soft-sm'
                                     }
                                   `}
                                   aria-label={`Visit ${link.label}`}
@@ -310,8 +310,8 @@ export default function HobbyCarousel() {
                 key={`indicator-${hobby.id}`}
                 onClick={() => setActiveIndex(index)}
                 className={`
-                  relative h-2 sm:h-3 transition-all duration-300 ease-out border-2 border-foreground
-                  ${isActive ? 'w-16 sm:w-24 bg-primary shadow-brutal-sm' : 'w-6 sm:w-8 bg-foreground/20 hover:bg-foreground/40'}
+                  relative h-2 sm:h-3 transition-all duration-300 ease-out border border-foreground
+                  ${isActive ? 'w-16 sm:w-24 bg-primary shadow-soft-sm' : 'w-6 sm:w-8 bg-foreground/20 hover:bg-foreground/40'}
                 `}
                 aria-label={`Select ${hobby.title}`}
                 title={hobby.title}

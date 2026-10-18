@@ -22,7 +22,7 @@ const HomeSection: React.FC = () => {
           Portfolio / 2026
         </div>
 
-        <h1 className="mb-4 text-4xl font-bold font-display leading-none text-headline sm:mb-6 sm:text-5xl md:text-6xl lg:text-7xl uppercase">
+        <h1 className="mb-4 text-4xl font-bold font-display leading-none text-headline sm:mb-6 sm:text-5xl md:text-6xl lg:text-7xl">
           I&apos;m{" "}
           <span className="inline-block bg-primary px-2 py-1 text-background sm:px-3">
             {HOME_CONTENT.name}
@@ -39,7 +39,7 @@ const HomeSection: React.FC = () => {
                 "DevOps Engineer",
                 "Data Scientist",
               ]}
-              mainClassName="inline-flex justify-center whitespace-nowrap border-2 border-foreground bg-foreground px-2 sm:px-3 py-1 sm:py-2 text-background overflow-hidden"
+              mainClassName="inline-flex justify-center whitespace-nowrap border border-foreground bg-foreground px-2 sm:px-3 py-1 sm:py-2 text-background overflow-hidden"
               staggerFrom={"last"}
               initial={{ y: "100%" }}
               animate={{ y: 0 }}
@@ -56,7 +56,7 @@ const HomeSection: React.FC = () => {
           <Button
             variant="outline"
             onClick={() => setIsStackExpanded(!isStackExpanded)}
-            className="rounded-none border-2 border-foreground bg-primary px-6 py-5 font-mono text-xs font-bold uppercase text-background shadow-brutal-sm transition-all duration-150 hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-brutal sm:text-sm"
+            className="rounded-none border border-foreground bg-primary px-6 py-5 font-mono text-xs font-bold uppercase text-background shadow-soft-sm transition-all duration-150 hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-soft sm:text-sm"
           >
             {isStackExpanded ? "Hide Tech Stack & Tools" : "View Tech Stack & Tools"}
           </Button>
@@ -70,12 +70,12 @@ const HomeSection: React.FC = () => {
                 transition={{ duration: 0.3, ease: "easeInOut" }}
                 className="overflow-hidden"
               >
-                <div className="border-2 border-foreground bg-background p-4 shadow-brutal-sm sm:p-5">
+                <div className="border border-foreground bg-background p-4 shadow-soft-sm sm:p-5">
                   <div className="mb-4 flex flex-wrap items-center gap-3 border-b-2 border-foreground pb-3">
-                    <span className="border-2 border-foreground bg-foreground px-3 py-1 font-mono text-[10px] font-bold uppercase tracking-[0.25em] text-background">
+                    <span className="border border-foreground bg-foreground px-3 py-1 font-mono text-[10px] font-bold uppercase tracking-[0.25em] text-background">
                         Resume Driven
                     </span>
-                    <h3 className="font-display text-xl uppercase text-primary sm:text-2xl">
+                    <h3 className="font-display text-xl text-primary sm:text-2xl">
                       Tech Stack & Arsenal
                     </h3>
                     <span className="font-mono text-[11px] uppercase tracking-[0.2em] text-foreground/60">
@@ -98,7 +98,7 @@ const HomeSection: React.FC = () => {
                                   {group.eyebrow}
                                 </span>
                               </div>
-                              <h4 className="mt-1 font-display text-lg uppercase text-foreground sm:text-xl">
+                              <h4 className="mt-1 font-display text-lg text-foreground sm:text-xl">
                                 {group.title}
                               </h4>
                               <p className="mt-1 max-w-xs font-mono text-[11px] leading-relaxed text-foreground/60 sm:text-xs">
