@@ -5,8 +5,8 @@ import React, { useState } from "react";
 
 import { Badge } from "@/components/ui/shadcn/badge";
 import { Button } from "@/components/ui/shadcn/button";
-import RotatingText from "@/components/ui/textChange";
 import { HERO_SKILL_GROUPS, HOME_CONTENT } from "@/lib/data/homeContent";
+import { profileData } from "@/lib/data/profile";
 
 const HomeSection: React.FC = () => {
   const [isStackExpanded, setIsStackExpanded] = useState(false);
@@ -18,38 +18,25 @@ const HomeSection: React.FC = () => {
   return (
     <div className="relative flex min-h-screen w-full snap-start flex-col items-start justify-center overflow-hidden">
       <div className="relative z-10 mx-auto w-full max-w-6xl px-4 text-left sm:px-6 lg:px-8">
-        <p className="mb-6 font-mono text-xs font-medium text-secondary">Portfolio / 2026</p>
+        <p className="mb-8 font-mono text-xs font-medium text-secondary">Portfolio / 2026</p>
 
-        <h1 className="mb-6 font-display text-5xl font-semibold leading-[0.95] text-headline sm:text-6xl md:text-7xl lg:text-8xl">
-          {HOME_CONTENT.name}
+        <h1 className="mb-8 font-display text-6xl leading-[0.9] text-headline sm:text-7xl md:text-8xl lg:text-9xl">
+          {HOME_CONTENT.nameLines.map((line) => (
+            <span key={line} className="block">{line}</span>
+          ))}
         </h1>
 
-        <div className="mb-8 flex flex-wrap items-center gap-x-3 gap-y-2 text-xl text-secondary sm:text-2xl md:text-3xl">
-          <span>{HOME_CONTENT.title}</span>
-          <RotatingText
-            texts={[
-              "Full Stack Developer",
-              "AI Engineer",
-              "Software Engineer",
-              "Project Manager",
-              "DevOps Engineer",
-              "Data Scientist",
-            ]}
-            mainClassName="inline-flex justify-center whitespace-nowrap rounded-full bg-primary/10 px-3 py-1 font-medium text-primary overflow-hidden"
-            staggerFrom={"last"}
-            initial={{ y: "100%" }}
-            animate={{ y: 0 }}
-            exit={{ y: "-120%" }}
-            staggerDuration={0.025}
-            splitLevelClassName="overflow-hidden pb-0.5"
-            transition={{ type: "spring", damping: 30, stiffness: 400 }}
-            rotationInterval={2000}
-          />
-        </div>
-
-        <p className="max-w-2xl text-base leading-relaxed text-foreground/70 sm:text-lg md:text-xl">
+        <p className="max-w-2xl text-lg leading-relaxed text-foreground/80 sm:text-xl md:text-2xl">
           {HOME_CONTENT.description}
         </p>
+
+        <ul className="mt-5 flex flex-wrap gap-2">
+          {HOME_CONTENT.roles.map((role) => (
+            <li key={role}>
+              <Badge variant="outline">{role}</Badge>
+            </li>
+          ))}
+        </ul>
 
         <div className="mt-8 flex flex-wrap gap-3">
           <Button asChild size="lg">
@@ -64,6 +51,17 @@ const HomeSection: React.FC = () => {
             {isStackExpanded ? "Hide tech stack" : "Tech stack & tools"}
           </Button>
         </div>
+
+        <dl className="mt-12 grid max-w-3xl grid-cols-1 gap-6 border-t border-foreground/15 pt-6 sm:grid-cols-3">
+          {profileData.quickFacts
+            .filter((fact) => ["Based in", "Education", "Learning"].includes(fact.label))
+            .map((fact) => (
+              <div key={fact.label}>
+                <dt className="font-mono text-xs text-secondary">{fact.label}</dt>
+                <dd className="mt-1 text-sm text-foreground">{fact.value}</dd>
+              </div>
+            ))}
+        </dl>
 
         <AnimatePresence>
           {isStackExpanded && (
