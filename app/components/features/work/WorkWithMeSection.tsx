@@ -17,7 +17,7 @@ const WorkWithMeSection = () => {
     <section id="work-with-me" className="group relative w-full py-16 md:py-24">
       <div className="mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8">
         <SectionHeading
-          index="04"
+          index="06"
           title="Work with me"
           subtitle="From first document to a synced timeline, here is how a project runs."
         />

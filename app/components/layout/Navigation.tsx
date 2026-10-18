@@ -65,8 +65,8 @@ const navigationVariants = {
   },
   underline: {
     container: 'space-x-6',
-    item: 'border-b-2 border-transparent hover:border-accent-foreground/50',
-    active: 'border-b-2 border-primary text-primary',
+    item: 'border-b border-transparent hover:border-accent-foreground/50',
+    active: 'border-b border-primary text-primary',
   },
 };
 

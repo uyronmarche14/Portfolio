@@ -29,30 +29,30 @@ const ProcessNode = ({ data }: { data: { step: ProcessStep; theme: string } }) =
 
   return (
     <div
-      className="px-3 py-2.5 sm:px-5 sm:py-4 bg-background border border-foreground shadow-soft-sm hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-soft transition-all duration-150 cursor-grab active:cursor-grabbing min-w-[120px] sm:min-w-[160px] max-w-[140px] sm:max-w-[180px]"
+      className="px-3 py-2.5 sm:px-5 sm:py-4 bg-background border border-foreground/15 rounded-lg shadow-soft-sm hover:shadow-soft transition-all duration-150 cursor-grab active:cursor-grabbing min-w-[120px] sm:min-w-[160px] max-w-[140px] sm:max-w-[180px]"
       style={{
         background: isDark ? "rgba(10,10,10,0.95)" : "rgba(255,251,240,0.95)",
       }}
     >
-      <Handle type="target" position={Position.Top} className="!bg-primary !border-foreground !border !w-1.5 !h-1.5 sm:!w-2 sm:!h-2" />
+      <Handle type="target" position={Position.Top} className="!bg-primary !border-primary !border !w-1.5 !h-1.5 sm:!w-2 sm:!h-2" />
       
       {/* Step Number */}
-      <div className="font-mono text-[8px] sm:text-[9px] font-bold text-primary uppercase tracking-widest mb-0.5 sm:mb-1">
+      <div className="font-mono text-[8px] sm:text-xs font-medium text-primary mb-0.5 sm:mb-1">
         Step {step.id.padStart(2, "0")}
       </div>
       
       {/* Title */}
-      <div className="font-display text-[10px] sm:text-xs font-bold text-foreground mb-0.5 sm:mb-1 leading-tight">
+      <div className="font-display text-xs sm:text-xs font-bold text-foreground mb-0.5 sm:mb-1 leading-tight">
         {step.title}
       </div>
       
       {/* Duration */}
-      <div className="flex items-center gap-1 font-mono text-[8px] sm:text-[9px] text-foreground/50 uppercase tracking-wider">
+      <div className="flex items-center gap-1 font-mono text-[8px] sm:text-xs text-foreground/50">
         <Clock className="w-2 h-2 sm:w-2.5 sm:h-2.5" />
         {step.duration}
       </div>
       
-      <Handle type="source" position={Position.Bottom} className="!bg-primary !border-foreground !border !w-1.5 !h-1.5 sm:!w-2 sm:!h-2" />
+      <Handle type="source" position={Position.Bottom} className="!bg-primary !border-primary !border !w-1.5 !h-1.5 sm:!w-2 sm:!h-2" />
     </div>
   );
 };
@@ -166,7 +166,7 @@ const DetailPanel = ({
           animate={{ x: 0 }}
           exit={{ x: "100%" }}
           transition={{ type: "spring", damping: 30, stiffness: 300 }}
-          className="fixed right-0 top-0 bottom-0 z-50 w-full sm:w-[90%] sm:max-w-md bg-background border-l-2 border-foreground overflow-y-auto"
+          className="fixed right-0 top-0 bottom-0 z-50 w-full sm:w-[90%] sm:max-w-md bg-background border-l border-foreground/15 overflow-y-auto"
         >
           <Button
             onClick={onClose}
@@ -180,14 +180,14 @@ const DetailPanel = ({
 
           <div className="p-5 sm:p-6 pt-16">
             <div className="flex items-center gap-3 sm:gap-4 mb-5 sm:mb-6">
-              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-primary/10 flex items-center justify-center border border-foreground">
-                <span className="font-mono text-base sm:text-lg font-bold text-primary">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-primary/10 flex items-center justify-center border border-primary rounded-lg">
+                <span className="font-mono text-base sm:text-lg font-medium text-primary">
                   {step.id.padStart(2, "0")}
                 </span>
               </div>
               <div>
                 <h2 className="text-lg sm:text-xl font-bold font-display text-foreground">{step.title}</h2>
-                <span className="font-mono text-xs text-primary uppercase tracking-wider">{step.duration}</span>
+                <span className="font-mono text-xs text-primary">{step.duration}</span>
               </div>
             </div>
 
@@ -203,7 +203,7 @@ const DetailPanel = ({
             </div>
 
             <section className="mb-6 sm:mb-8">
-              <h3 className="font-mono text-xs font-bold text-primary uppercase tracking-widest mb-3 sm:mb-4">
+              <h3 className="font-mono text-xs font-medium text-primary mb-3 sm:mb-4">
                 What This Phase Defines
               </h3>
               <ul className="space-y-2.5 sm:space-y-3">
@@ -224,7 +224,7 @@ const DetailPanel = ({
 
             {step.tools && (
               <section className="mb-6 sm:mb-8">
-                <h3 className="font-mono text-xs font-bold text-primary uppercase tracking-widest mb-3 sm:mb-4 flex items-center gap-2">
+                <h3 className="font-mono text-xs font-medium text-primary mb-3 sm:mb-4 flex items-center gap-2">
                   <FileText className="w-3 h-3" />
                   Key Inputs
                 </h3>
@@ -232,7 +232,7 @@ const DetailPanel = ({
                   {step.tools.map((tool) => (
                     <span
                       key={tool}
-                      className="px-2.5 sm:px-3 py-1 sm:py-1.5 font-mono text-xs text-foreground/70 bg-foreground/5 border border-foreground/30 uppercase tracking-wider"
+                      className="px-2.5 sm:px-3 py-1 sm:py-1.5 font-mono text-xs text-foreground/70 bg-foreground/5 border border-foreground/30"
                     >
                       {tool}
                     </span>
@@ -243,7 +243,7 @@ const DetailPanel = ({
 
             {step.outcomes && (
               <section>
-                <h3 className="font-mono text-xs font-bold text-primary uppercase tracking-widest mb-3 sm:mb-4 flex items-center gap-2">
+                <h3 className="font-mono text-xs font-medium text-primary mb-3 sm:mb-4 flex items-center gap-2">
                   <CheckCircle className="w-3 h-3" />
                   Outputs
                 </h3>
@@ -305,7 +305,7 @@ export default function ProcessPage() {
         <div className="mx-auto max-w-6xl">
           <Link
             href="/"
-            className="inline-flex items-center gap-2 font-mono text-xs sm:text-sm uppercase tracking-wider text-foreground/50 hover:text-primary transition-colors duration-150 group"
+            className="inline-flex items-center gap-2 font-mono text-xs sm:text-sm text-foreground/50 hover:text-primary transition-colors duration-150 group"
           >
             <ArrowLeft className="w-3.5 h-3.5 sm:w-4 sm:h-4 group-hover:-translate-x-1 transition-transform duration-150" />
             Back to Home
@@ -316,7 +316,7 @@ export default function ProcessPage() {
       {/* Tap hint on mobile */}
       {isMobile && (
         <div className="absolute left-0 right-0 top-40 z-20 text-center">
-          <span className="font-mono text-[10px] text-foreground/30 uppercase tracking-wider">
+          <span className="font-mono text-xs text-foreground/30">
             Tap any phase for details • Pinch to zoom
           </span>
         </div>

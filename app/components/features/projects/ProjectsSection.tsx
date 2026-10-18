@@ -12,7 +12,7 @@ const ProjectsSection = () => {
     >
       <div className="mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8">
         <SectionHeading
-          index="03"
+          index="05"
           title={PROJECTS_CONTENT.sectionTitle}
           subtitle={PROJECTS_CONTENT.sectionDescription}
         />

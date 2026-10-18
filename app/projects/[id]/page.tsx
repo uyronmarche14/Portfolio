@@ -79,7 +79,7 @@ export default function ProjectPage() {
           >
             <Link
               href="/"
-              className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-wider text-foreground/50 hover:text-primary transition-colors duration-150 group"
+              className="inline-flex items-center gap-2 font-mono text-xs text-foreground/50 hover:text-primary transition-colors duration-150 group"
             >
               <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform duration-150" />
               <span>{PROJECTS_CONTENT.backToHome}</span>
@@ -98,7 +98,7 @@ export default function ProjectPage() {
                 setCurrentImageIndex(0);
               }}
             >
-              <div className="relative overflow-hidden border border-foreground shadow-soft-lg">
+              <div className="relative overflow-hidden border border-foreground/15 rounded-lg shadow-soft-lg">
                 <Image
                   width={1200}
                   height={675}
@@ -139,7 +139,7 @@ export default function ProjectPage() {
                 <TechBadge key={tech} technology={tech} index={i} size="sm" />
               ))}
               {project.technologies && project.technologies.length > 8 && (
-                <span className="px-3 py-1 font-mono text-xs text-foreground/50 bg-foreground/5 border border-foreground/30 uppercase tracking-wider">
+                <span className="px-3 py-1 font-mono text-xs text-foreground/50 bg-foreground/5 border border-foreground/30">
                   +{project.technologies.length - 8} more
                 </span>
               )}
@@ -152,7 +152,7 @@ export default function ProjectPage() {
                   href={project.githubUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-5 py-2.5 border border-foreground bg-background font-mono text-xs font-bold uppercase tracking-wider text-foreground shadow-soft-sm hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-soft transition-all duration-150 cursor-pointer"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 border border-foreground/15 rounded-lg bg-background font-mono text-xs font-medium text-foreground shadow-soft-sm hover:shadow-soft transition-all duration-150 cursor-pointer"
                 >
                   <Github className="w-4 h-4" />
                   View Code
@@ -163,7 +163,7 @@ export default function ProjectPage() {
                   href={project.liveUrl || project.liveDemoUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-5 py-2.5 border border-foreground bg-primary font-mono text-xs font-bold uppercase tracking-wider text-background shadow-soft-sm hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-soft transition-all duration-150 cursor-pointer"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 border border-primary rounded-lg bg-primary font-mono text-xs font-medium text-background shadow-soft-sm hover:shadow-soft transition-all duration-150 cursor-pointer"
                 >
                   <ExternalLink className="w-4 h-4" />
                   Live Demo
@@ -183,7 +183,7 @@ export default function ProjectPage() {
               transition={{ delay: 0.4 }}
               className="mb-16"
             >
-              <h2 className="font-mono text-xs font-bold text-primary uppercase tracking-widest mb-4 text-center">
+              <h2 className="font-mono text-xs font-medium text-primary mb-4 text-center">
                 Overview
               </h2>
               <p className="text-foreground/60 leading-relaxed text-center max-w-2xl mx-auto">
@@ -200,7 +200,7 @@ export default function ProjectPage() {
               transition={{ delay: 0.5 }}
               className="mb-16"
             >
-              <h2 className="font-mono text-xs font-bold text-primary uppercase tracking-widest mb-8 text-center">
+              <h2 className="font-mono text-xs font-medium text-primary mb-8 text-center">
                 Key Features
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -229,7 +229,7 @@ export default function ProjectPage() {
               transition={{ delay: 0.6 }}
               className="mb-16"
             >
-              <h2 className="font-mono text-xs font-bold text-primary uppercase tracking-widest mb-8 text-center">
+              <h2 className="font-mono text-xs font-medium text-primary mb-8 text-center">
                 Screenshots
               </h2>
               <ScreenshotCarousel

@@ -13,8 +13,8 @@ export default function ScreenshotCarousel({ screenshots, alt, onImageClick }: S
 
   if (!screenshots || screenshots.length === 0) {
     return (
-      <div className="relative aspect-video w-full bg-foreground/5 border border-foreground flex items-center justify-center">
-        <span className="font-mono text-xs uppercase tracking-wider text-foreground/40">No screenshots available</span>
+      <div className="relative aspect-video w-full bg-foreground/5 border border-foreground/15 rounded-lg flex items-center justify-center">
+        <span className="font-mono text-xs text-foreground/40">No screenshots available</span>
       </div>
     );
   }
@@ -39,7 +39,7 @@ export default function ScreenshotCarousel({ screenshots, alt, onImageClick }: S
         {visibleImages.map((screenshot, index) => (
           <div 
             key={index}
-            className="relative aspect-video overflow-hidden bg-foreground/5 cursor-pointer group border border-foreground shadow-soft-sm hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-soft transition-all duration-150"
+            className="relative aspect-video overflow-hidden bg-foreground/5 cursor-pointer group border border-foreground/15 rounded-lg shadow-soft-sm hover:shadow-soft transition-all duration-150"
             onClick={() => handleImageClick(screenshot, index)}
           >
             <Image
@@ -50,7 +50,7 @@ export default function ScreenshotCarousel({ screenshots, alt, onImageClick }: S
               priority={index < 2}
             />
             <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity duration-150 flex items-center justify-center">
-              <span className="text-white font-mono text-xs font-bold uppercase tracking-wider">Click to view</span>
+              <span className="text-white font-mono text-xs font-medium">Click to view</span>
             </div>
           </div>
         ))}

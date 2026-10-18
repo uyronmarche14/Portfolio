@@ -20,7 +20,7 @@ const TimelineRow = ({ year, title }: { year: string; title: string }) => {
       </span>
 
       {/* Title */}
-      <span className="flex-1 font-mono text-xs sm:text-sm md:text-base font-bold uppercase tracking-wider text-foreground/50 group-hover:text-foreground transition-colors duration-150 line-clamp-1 truncate">
+      <span className="flex-1 font-mono text-xs sm:text-sm md:text-base font-medium text-foreground/50 group-hover:text-foreground transition-colors duration-150 line-clamp-1 truncate">
         {title}
       </span>
 
@@ -63,7 +63,7 @@ const AboutTimeline = () => {
             >
             <AccordionItem
                 value={yearData.year}
-                className="border-b-2 border-foreground/20 hover:border-foreground/40 transition-colors duration-150"
+                className="border-b border-foreground/20 hover:border-foreground/40 transition-colors duration-150"
               >
                 <AccordionTrigger className="hover:no-underline py-0 [&>svg]:hidden">
                   <TimelineRow year={yearData.year} title={headerTitle} />

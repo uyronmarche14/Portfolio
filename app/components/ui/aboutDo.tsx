@@ -27,7 +27,7 @@ const AboutDoCard: React.FC<AboutDoCardProps> = ({
 }) => {
   return (
     <motion.div
-      className="group p-8 bg-background border border-foreground shadow-soft hover:translate-x-[-3px] hover:translate-y-[-3px] hover:shadow-soft-lg transition-all duration-150 relative overflow-hidden"
+      className="group p-8 bg-background border border-foreground/15 rounded-lg shadow-soft hover:shadow-soft-lg transition-all duration-150 relative overflow-hidden"
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.05, duration: 0.2 }}
@@ -60,7 +60,7 @@ const AboutDoCard: React.FC<AboutDoCardProps> = ({
           {skills.map((skill) => (
             <span
               key={skill}
-              className="text-[10px] px-2 py-1 bg-primary/10 text-primary border border-primary/30 font-mono font-bold uppercase tracking-wider"
+              className="text-xs px-2 py-1 bg-primary/10 text-primary border border-primary/30 rounded-full font-mono font-medium"
             >
               {skill}
             </span>
@@ -68,10 +68,10 @@ const AboutDoCard: React.FC<AboutDoCardProps> = ({
         </div>
 
         {/* Experience and Highlight */}
-        <div className="pt-4 border-t-2 border-foreground/20 space-y-2">
+        <div className="pt-4 border-t border-foreground/20 space-y-2">
           <p className="text-sm text-foreground/60 flex items-center gap-2">
             <span className="w-2 h-2 bg-primary" />
-            <span className="font-mono text-xs font-bold uppercase tracking-wider">{experience}</span>
+            <span className="font-mono text-xs font-medium">{experience}</span>
           </p>
           <p className="text-sm text-foreground/40 italic">
             &quot;{highlight}&quot;

@@ -21,7 +21,8 @@ const AboutSection = () => {
         <div className="relative mb-12 sm:mb-16 md:mb-20 lg:mb-24">
           <div className="relative z-10 text-left">
             <HeaderTitle
-               introText={profileData.header.intro}
+               index="01"
+               introText="About"
                highlightText={profileData.header.highlight}
                description={profileData.header.description}
              />
@@ -54,12 +55,6 @@ const AboutSection = () => {
           <div className="space-y-6 sm:space-y-8 order-2 lg:order-2">
             {/* Bio */}
             <div className="space-y-3 sm:space-y-4">
-              <Heading as="h2" className="text-xl sm:text-2xl md:text-3xl">
-                {profileData.bio.title}
-                <span className="text-primary ml-2">
-                  {profileData.bio.highlight}
-                </span>
-              </Heading>
               <Text variant="default">
                 {profileData.bio.description}
               </Text>
