@@ -1,4 +1,3 @@
-import { describe, expect, it } from "@jest/globals";
 import { axisRange, formatDuration, monthsBetween, toMonthIndex } from "./tenure";
 
 describe("tenure helpers", () => {
