@@ -44,10 +44,10 @@ export function VisualFrame({ children }: { children: ReactNode }) {
       >
         <defs>
           <filter id="ev-sh1" x="-20%" y="-20%" width="140%" height="150%">
-            <feDropShadow dx="0" dy="3" stdDeviation="4" floodColor="rgb(var(--foreground))" floodOpacity="0.1" />
+            <feDropShadow dx="0" dy="4" stdDeviation="5" floodColor="rgb(var(--primary))" floodOpacity="0.22" />
           </filter>
           <filter id="ev-sh2" x="-25%" y="-20%" width="150%" height="160%">
-            <feDropShadow dx="0" dy="12" stdDeviation="12" floodColor="rgb(var(--foreground))" floodOpacity="0.18" />
+            <feDropShadow dx="0" dy="14" stdDeviation="14" floodColor="rgb(var(--primary))" floodOpacity="0.34" />
           </filter>
         </defs>
         {children}
@@ -67,10 +67,11 @@ interface SurfaceProps {
   fill?: string;
 }
 
-/** Rounded surface with a hairline ring and an elevation shadow. */
+/** Rounded surface with a hairline ring and a tinted elevation shadow. Floating surfaces drift gently. */
 export function Surface({ x, y, w, h, r = 14, e = 1, fill = C.paper }: SurfaceProps) {
+  const play = usePlay();
   return (
-    <rect
+    <motion.rect
       x={x}
       y={y}
       width={w}
@@ -79,6 +80,8 @@ export function Surface({ x, y, w, h, r = 14, e = 1, fill = C.paper }: SurfacePr
       fill={fill}
       stroke={C.line}
       filter={e ? `url(#ev-sh${e})` : undefined}
+      animate={play && e === 2 ? { y: [y, y - 4, y] } : undefined}
+      transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
     />
   );
 }
