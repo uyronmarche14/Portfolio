@@ -41,7 +41,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, index }) => {
     <article className="group flex w-full flex-col">
       <Link
         href={`/projects/${project.id}`}
-        className="relative block aspect-[16/10] w-full rounded-lg"
+        className="relative block aspect-[16/10] w-full overflow-hidden rounded-lg border border-foreground/15 bg-foreground/[0.04]"
       >
         {hasProjectVisual(project.id) ? (
           <>
@@ -52,7 +52,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, index }) => {
                 alt={`${project.title} screenshot`}
                 fill
                 sizes="(max-width: 768px) 100vw, 50vw"
-                className="rounded-lg object-cover opacity-0 transition-opacity duration-300 group-hover:opacity-100 motion-reduce:transition-none"
+                className="object-cover opacity-0 transition-opacity duration-300 group-hover:opacity-100 motion-reduce:transition-none"
               />
             )}
           </>
