@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
 
-import ExperiencePage from "@/components/features/experience-page/ExperiencePage";
+import ExperienceIndex from "@/components/features/experience-page/ExperienceIndex";
 
 export const metadata: Metadata = {
   title: "Experience - Ron Marche",
-  description: "Work experience in detail: roles, stack, highlights and photos.",
+  description: "Work experience in detail: one page per role with the stack, highlights and photos.",
 };
 
 export default function Page() {
-  return <ExperiencePage />;
+  return <ExperienceIndex />;
 }

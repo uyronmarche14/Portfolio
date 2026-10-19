@@ -86,7 +86,7 @@ const ExperienceCard = ({ entry, index, now }: ExperienceCardProps) => {
           ))}
         </ul>
         <Link
-          href={`/experience#${entry.id}`}
+          href={`/experience/${entry.id}`}
           className="w-fit text-sm font-medium text-foreground/70 underline-offset-4 transition-colors hover:text-primary hover:underline"
         >
           Read more
