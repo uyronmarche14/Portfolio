@@ -121,7 +121,7 @@ const HomeSection: React.FC = () => {
           <figure className="relative mx-auto w-full max-w-sm lg:max-w-none">
               <div
                 aria-hidden="true"
-                className="absolute -inset-5 -z-10 rounded-[2.5rem] bg-gradient-to-br from-tone-violet/30 via-transparent to-primary/30 blur-2xl"
+                className="absolute -inset-2 -z-10 rounded-[2rem] bg-gradient-to-br from-tone-violet/15 via-transparent to-primary/15 blur-xl"
               />
             <div className="relative aspect-[4/5] w-full overflow-hidden rounded-3xl border border-foreground/15 bg-foreground/5">
               <Image
