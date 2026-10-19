@@ -1,11 +1,10 @@
 "use client";
-import { CldImage } from "next-cloudinary";
+import { motion } from "framer-motion";
 import { lazy, Suspense } from "react";
 
 import HeaderTitle from "@/components/ui/header";
 import { factIcons } from "@/components/ui/icons/factIcons";
-import Heading from "@/components/ui/typography/Heading";
-import Text from "@/components/ui/typography/Text";
+import { ScrollRevealText } from "@/components/ui/ScrollRevealText";
 import { profileData } from "@/lib/data/profile";
 import ExperienceSection from "../experience/ExperienceSection";
 
@@ -30,64 +29,32 @@ const AboutSection = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 gap-8 sm:gap-12 md:gap-16 lg:grid-cols-2">
-          <div className="flex justify-center lg:justify-start order-1 lg:order-1">
-            {/* Profile image */}
-            <div className="relative w-full max-w-md lg:max-w-none">
-              <div className="relative aspect-[3/4] sm:aspect-[4/5] lg:aspect-[3/4] w-full max-w-[350px] sm:max-w-[400px] lg:max-w-[450px] mx-auto lg:mx-0 overflow-hidden rounded-xl border border-foreground/15">
-                {process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME ? (
-                    <CldImage
-                    src={profileData.photo.src}
-                    alt={profileData.photo.alt}
-                    fill
-                    sizes="(max-width: 640px) 90vw, (max-width: 1024px) 50vw, 450px"
-                    className="object-cover"
-                    priority
-                    />
-                ) : (
-                    <div className="w-full h-full bg-foreground/5 flex items-center justify-center text-foreground/40 font-mono text-sm">
-                        No Cloudinary Configured
-                    </div>
-                )}
-              </div>
-            </div>
-          </div>
+        <div className="mx-auto max-w-4xl">
+          <ScrollRevealText
+            text={profileData.bio.description}
+            className="font-sans text-2xl font-medium leading-[1.35] tracking-tight text-foreground sm:text-3xl md:text-4xl"
+          />
 
-          <div className="space-y-6 sm:space-y-8 order-2 lg:order-2">
-            {/* Bio */}
-            <div className="space-y-3 sm:space-y-4">
-              <Text variant="default">
-                {profileData.bio.description}
-              </Text>
-            </div>
-
-            {/* Quick Facts */}
-            <div className="space-y-4 sm:space-y-6">
-              <Heading as="h3" className="text-lg sm:text-xl md:text-2xl">Quick Facts</Heading>
-              <div className="space-y-3 sm:space-y-4">
-                {profileData.quickFacts.map((fact) => (
-                  <div key={fact.label} className="flex items-start sm:items-center gap-3 sm:gap-4">
-                    {(() => {
-                      const FactIcon = factIcons[fact.label];
-                      return FactIcon ? (
-                        <FactIcon className="mt-0.5 h-4 w-4 flex-shrink-0 text-foreground/50 sm:mt-0" aria-hidden="true" />
-                      ) : (
-                        <span className="mt-2 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-primary sm:mt-0" />
-                      );
-                    })()}
-                    <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2 min-w-0">
-                      <span className="font-mono text-xs font-medium text-headline whitespace-nowrap sm:text-sm">
-                        {fact.label}:
-                      </span>
-                      <Text as="span" variant="small" className="text-sm sm:text-base break-words">
-                        {fact.value}
-                      </Text>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
+          <dl className="mt-14 grid gap-x-10 gap-y-6 border-t border-foreground/15 pt-8 sm:grid-cols-2">
+            {profileData.quickFacts.map((fact) => {
+              const FactIcon = factIcons[fact.label];
+              return (
+                <motion.div
+                  key={fact.label}
+                  initial={{ opacity: 0, y: 14 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-10% 0px" }}
+                  transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+                >
+                  <dt className="flex items-center gap-2 font-mono text-xs text-foreground/60">
+                    {FactIcon && <FactIcon className="h-3.5 w-3.5" aria-hidden="true" />}
+                    {fact.label}
+                  </dt>
+                  <dd className="mt-1.5 text-base text-foreground">{fact.value}</dd>
+                </motion.div>
+              );
+            })}
+          </dl>
         </div>
       </div>
 

@@ -173,7 +173,7 @@ export default function ProjectPage() {
                   </div>
                 </figure>
               ) : (
-                <div className="overflow-hidden rounded-xl border border-foreground/15 bg-card">
+                <div>
                   <ProjectVisual id={project.id} className="aspect-[4/3] w-full p-4 sm:aspect-video" />
                 </div>
               )}
