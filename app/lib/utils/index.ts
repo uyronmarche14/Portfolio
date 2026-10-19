@@ -26,7 +26,6 @@ export * from "./errorHandling";
 export * from "./uiInteractions";
 
 // Tech icons utility
-export { getTechIcon } from "./techIcons";
 
 // Code splitting utilities
 export * from "./codeSplitting";
