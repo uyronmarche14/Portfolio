@@ -23,16 +23,17 @@ export const docsLinkClass = (active: boolean) =>
  */
 export function DocsLayout({ sidebar, rail, children }: DocsLayoutProps) {
   return (
-    <div className="flex min-h-screen w-full pt-28">
-      <aside className="hidden w-[280px] shrink-0 lg:block">
-        <div className="sticky top-28 max-h-[calc(100vh-8rem)] overflow-y-auto px-6 pb-8">{sidebar}</div>
+    <div className="flex min-h-screen w-full">
+      {/* the divider lines run the full page height, from the very top edge */}
+      <aside className="hidden w-[280px] shrink-0 border-r border-foreground/10 lg:block">
+        <div className="sticky top-0 max-h-screen overflow-y-auto px-6 pb-8 pt-28">{sidebar}</div>
       </aside>
-      <main className="min-w-0 flex-1 px-6 pb-24 md:px-10 lg:px-14">
+      <main className="min-w-0 flex-1 px-6 pb-24 pt-28 md:px-10 lg:px-14">
         <div className="mx-auto w-full max-w-[780px]">{children}</div>
       </main>
       {rail && (
-        <aside className="hidden w-[240px] shrink-0 xl:block">
-          <div className="sticky top-28 px-6">{rail}</div>
+        <aside className="hidden w-[240px] shrink-0 border-l border-foreground/10 xl:block">
+          <div className="sticky top-0 px-6 pt-28">{rail}</div>
         </aside>
       )}
     </div>

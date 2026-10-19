@@ -26,7 +26,6 @@ const SPIED_SECTIONS = Object.keys(SECTION_TO_NAV);
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [isScrolled, setIsScrolled] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
   const hidden = useHideOnScroll(isOpen);
@@ -40,21 +39,6 @@ const Navbar = () => {
       ? "about"
       : "";
   const toggleMenu = () => setIsOpen((value) => (value ? false : true));
-
-  useEffect(() => {
-    if (pathname !== "/") {
-      setIsScrolled(true);
-      return;
-    }
-
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
-    };
-
-    handleScroll();
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [pathname]);
 
   const navigationItems = useMemo(
     (): NavigationItem[] =>
@@ -102,10 +86,7 @@ const Navbar = () => {
   };
 
 
-  const navFrameClass =
-    isScrolled
-      ? "bg-background/95 supports-[backdrop-filter]:bg-background/85 backdrop-blur"
-      : "bg-background/90 supports-[backdrop-filter]:bg-background/75 backdrop-blur";
+  const navFrameClass = "bg-background shadow-soft-sm";
 
   return (
     <nav
