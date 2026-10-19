@@ -14,7 +14,9 @@ interface DocsLayoutProps {
 export const docsLinkClass = (active: boolean) =>
   cn(
     "block rounded-md px-3 py-1.5 text-sm transition-colors duration-150",
-    active ? "bg-foreground/[0.07] font-medium text-foreground" : "text-foreground/60 hover:text-foreground"
+    active
+      ? "bg-background font-medium text-foreground shadow-soft-sm ring-1 ring-foreground/10"
+      : "text-foreground/60 hover:bg-foreground/[0.04] hover:text-foreground"
   );
 
 /**
@@ -24,8 +26,10 @@ export const docsLinkClass = (active: boolean) =>
 export function DocsLayout({ sidebar, rail, children }: DocsLayoutProps) {
   return (
     <div className="flex min-h-screen w-full pt-24">
-      <aside className="hidden w-[280px] shrink-0 border-r border-foreground/10 lg:block">
-        <div className="sticky top-24 h-[calc(100vh-6rem)] overflow-y-auto px-6 py-8">{sidebar}</div>
+      <aside className="hidden w-[300px] shrink-0 p-4 lg:block">
+        <div className="sticky top-24 h-[calc(100vh-7rem)] overflow-y-auto rounded-2xl border border-foreground/10 bg-gradient-to-b from-card to-card/60 p-5 shadow-soft-lg">
+          {sidebar}
+        </div>
       </aside>
       <main className="min-w-0 flex-1 px-6 pb-24 pt-10 md:px-10 lg:px-14">
         <div className="mx-auto w-full max-w-[780px]">{children}</div>

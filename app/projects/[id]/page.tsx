@@ -17,6 +17,7 @@ import Link from "next/link";
 import { notFound, useParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 
+import { BackLink } from "@/components/layout/BackLink";
 import { DocsLayout, DocsRail, docsLinkClass } from "@/components/layout/DocsLayout";
 import Footer from "@/components/layout/footer";
 import ScreenshotCarousel from "@/components/ui/ScreenshotCarousel";
@@ -79,13 +80,7 @@ export default function ProjectPage() {
       <DocsLayout
         sidebar={
           <>
-            <Link
-              href="/"
-              className="inline-flex items-center gap-2 text-sm text-foreground/60 transition-colors hover:text-foreground"
-            >
-              <ArrowLeft className="h-4 w-4" />
-              {PROJECTS_CONTENT.backToHome}
-            </Link>
+            <BackLink href="/">{PROJECTS_CONTENT.backToHome}</BackLink>
             <p className="mt-8 text-sm font-semibold text-foreground">Projects</p>
             <ul className="mt-3 space-y-0.5">
               {projects.map((item) => (
@@ -101,13 +96,7 @@ export default function ProjectPage() {
         rail={<DocsRail items={tocItems} active={activeSection} />}
       >
         <article>
-          <Link
-            href="/"
-            className="mb-8 inline-flex items-center gap-2 text-sm text-foreground/60 hover:text-foreground lg:hidden"
-          >
-            <ArrowLeft className="h-4 w-4" />
-            {PROJECTS_CONTENT.backToHome}
-          </Link>
+          <BackLink href="/" className="mb-8 lg:hidden">{PROJECTS_CONTENT.backToHome}</BackLink>
 
           <header>
             <p className="font-mono text-xs text-primary">{project.category || "Project"}</p>
