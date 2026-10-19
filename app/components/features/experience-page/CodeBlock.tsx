@@ -24,7 +24,7 @@ export function CodeBlock({ label, code }: CodeBlockProps) {
   };
 
   return (
-    <div className="overflow-hidden rounded-xl border border-foreground/15 bg-foreground/[0.03]">
+    <div data-cursor="Select to copy" className="overflow-hidden rounded-xl border border-foreground/15 bg-foreground/[0.03]">
       <div className="flex items-center justify-between border-b border-foreground/10 px-4 py-2">
         <span className="font-mono text-xs text-foreground/60">{label}</span>
         <Button variant="ghost" size="sm" onClick={copy} className="h-7 px-2 text-xs">

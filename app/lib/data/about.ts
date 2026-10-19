@@ -67,7 +67,7 @@ export const timelineYears: TimelineYear[] = [
     features: [
       {
         title: "Advanced Programming & Leadership",
-        description: "Mastered Java OOP, SQL, and robotics. Explored Python, Flask, and Django. Became VP External for Robotics and won 1st place in Python Competition at TCU",
+        description: "Mastered Java OOP, SQL, and robotics. Explored Python, Flask, and Django. Served as ROBOTCU Vice President for External Affairs (2022 - 2023) and won 1st place in the Python Competition at TCU",
         icon: "trophy"
       }
     ]
@@ -77,7 +77,7 @@ export const timelineYears: TimelineYear[] = [
     features: [
       {
         title: "Third Year & Mobile Development",
-        description: "Learned React, React Native, Android Studio, and Expo Router. Became Auditor for ICT-SF and VP External for CSS organization",
+        description: "Learned React, React Native, Android Studio, and Expo Router. Served as ICT-SF Auditor and Computer Science Society Vice President for External Affairs (2023 - 2024)",
         icon: "smartphone"
       },
       {
@@ -92,15 +92,29 @@ export const timelineYears: TimelineYear[] = [
     features: [
       {
         title: "Web Development Mastery",
-        description: "Explored JavaScript, TypeScript, Next.js, React, and Tailwind CSS. Studied algorithms and became department course president",
+        description: "Explored JavaScript, TypeScript, Next.js, React, and Tailwind CSS, and studied algorithms",
         icon: "code"
+      },
+      {
+        title: "ICT-SF Student Director (2024 - 2025)",
+        description: "Led student representation, coordination, and communication across the ICT student formation",
+        icon: "trophy"
+      },
+      {
+        title: "SwiftPass Guard thesis (2024 - 2025)",
+        description: "Built a mobile and ESP32 access-control thesis: QR scanning, a Supabase backend, and a relay-controlled lock",
+        icon: "shield"
+      },
+      {
+        title: "Started freelance development (Jan 2024)",
+        description: "Began self-described independent work across web and mobile, from requirements to delivery",
+        icon: "briefcase"
       },
       {
         title: "IT Olympics - Android Productivity",
         description: "Competed in the IT Olympics at UMAK in the Android Productivity category",
         icon: "android"
       },
-
     ]
   },
   {

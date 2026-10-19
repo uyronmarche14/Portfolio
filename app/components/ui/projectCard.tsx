@@ -41,6 +41,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, index }) => {
     <article className="group flex w-full flex-col">
       <Link
         href={`/projects/${project.id}`}
+        data-cursor="View project"
         className="relative block aspect-[16/10] w-full overflow-hidden rounded-lg border border-foreground/15 bg-foreground/[0.04]"
       >
         {hasProjectVisual(project.id) ? (
