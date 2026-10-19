@@ -3,6 +3,7 @@ import nextVitals from "eslint-config-next/core-web-vitals";
 export default [
     ...nextVitals,
     {
+        files: ["**/*.{js,jsx,mjs,ts,tsx}"],
         // React-compiler rules flag existing code; warn until the redesign phases rewrite those files.
         rules: {
             "react-hooks/refs": "warn",
