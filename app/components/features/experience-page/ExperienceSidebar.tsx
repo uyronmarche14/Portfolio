@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
+import { BackLink } from "@/components/layout/BackLink";
 import { docsLinkClass } from "@/components/layout/DocsLayout";
 import { workExperience } from "@/lib/data/workExperience";
 
@@ -12,9 +13,7 @@ export function ExperienceSidebar() {
 
   return (
     <>
-      <Link href="/" className="text-sm text-foreground/60 transition-colors hover:text-foreground">
-        &larr; Back to home
-      </Link>
+      <BackLink href="/">Back to home</BackLink>
       <p className="mt-8 font-mono text-xs text-foreground/50">Experience</p>
       <ul className="mt-3 space-y-0.5">
         <li>
