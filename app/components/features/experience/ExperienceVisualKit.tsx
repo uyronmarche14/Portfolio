@@ -36,8 +36,8 @@ export function VisualFrame({ children }: { children: ReactNode }) {
     <PlayContext.Provider value={inView && !reduce}>
       <svg
         ref={ref}
-        viewBox="0 0 560 440"
-        className="h-full w-full"
+        viewBox="20 30 520 380"
+        className="h-full w-full overflow-visible"
         preserveAspectRatio="xMidYMid meet"
         aria-hidden="true"
         focusable="false"

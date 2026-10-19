@@ -140,7 +140,7 @@ export default function ProjectPage() {
           </header>
 
           {(project.image || hasProjectVisual(project.id)) && (
-            <div className="mt-10">
+            <div className="mt-10 lg:-mx-16 xl:-mx-28">
               {project.image && hasProjectVisual(project.id) && (
                 <FilterTabs
                   label="Project media"
@@ -174,7 +174,7 @@ export default function ProjectPage() {
                 </figure>
               ) : (
                 <div>
-                  <ProjectVisual id={project.id} className="aspect-[4/3] w-full p-4 sm:aspect-video" />
+                  <ProjectVisual id={project.id} className="aspect-[4/3] w-full sm:aspect-[16/10]" />
                 </div>
               )}
             </div>
