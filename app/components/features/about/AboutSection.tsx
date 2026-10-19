@@ -3,7 +3,6 @@ import { motion } from "framer-motion";
 import { lazy, Suspense } from "react";
 
 import HeaderTitle from "@/components/ui/header";
-import { factIcons } from "@/components/ui/icons/factIcons";
 import { ScrollRevealText } from "@/components/ui/ScrollRevealText";
 import { profileData } from "@/lib/data/profile";
 import ExperienceSection from "../experience/ExperienceSection";
@@ -40,57 +39,23 @@ const AboutSection = () => {
             text={profileData.about.lead}
             className="font-sans text-2xl font-medium leading-[1.4] tracking-tight text-foreground sm:text-3xl"
           />
-          <motion.p
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-10% 0px" }}
-            transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-            className="mt-8 max-w-[62ch] text-base leading-relaxed text-foreground/70 md:text-lg"
-          >
-            {profileData.about.body}
-          </motion.p>
         </div>
 
-        <ul className="mx-auto mt-14 grid max-w-5xl gap-4 sm:grid-cols-2">
+        <ul className="mx-auto mt-12 grid max-w-3xl gap-x-10 gap-y-5 border-t border-foreground/15 pt-8 sm:grid-cols-2">
           {profileData.about.pillars.map((pillar, i) => (
             <motion.li
               key={pillar.title}
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 14 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-8% 0px" }}
-              transition={{ duration: 0.5, delay: (i % 2) * 0.08, ease: [0.22, 1, 0.36, 1] }}
-              className="group rounded-2xl border border-foreground/15 bg-card p-6 transition-colors duration-200 hover:border-foreground/35"
+              transition={{ duration: 0.45, delay: (i % 2) * 0.06, ease: [0.22, 1, 0.36, 1] }}
+              className="flex items-center gap-3"
             >
-              <span
-                aria-hidden="true"
-                className={`block h-1 w-8 rounded-full transition-all duration-300 group-hover:w-14 ${TONE_BAR[pillar.tone]}`}
-              />
-              <h3 className="mt-4 font-sans text-lg font-semibold tracking-tight text-foreground">{pillar.title}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-foreground/70">{pillar.text}</p>
+              <span aria-hidden="true" className={`h-5 w-1 rounded-full ${TONE_BAR[pillar.tone]}`} />
+              <span className="text-base font-medium text-foreground">{pillar.title}</span>
             </motion.li>
           ))}
         </ul>
-
-        <dl className="mx-auto mt-14 grid max-w-5xl gap-x-10 gap-y-6 border-t border-foreground/15 pt-8 sm:grid-cols-2 lg:grid-cols-4">
-          {profileData.quickFacts.slice(0, 4).map((fact) => {
-            const FactIcon = factIcons[fact.label];
-            return (
-              <motion.div
-                key={fact.label}
-                initial={{ opacity: 0, y: 14 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-10% 0px" }}
-                transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-              >
-                <dt className="flex items-center gap-2 font-mono text-xs text-foreground/60">
-                  {FactIcon && <FactIcon className="h-3.5 w-3.5" aria-hidden="true" />}
-                  {fact.label}
-                </dt>
-                <dd className="mt-1.5 text-sm leading-snug text-foreground">{fact.value}</dd>
-              </motion.div>
-            );
-          })}
-        </dl>
       </div>
 
       {/* Experience Bento */}

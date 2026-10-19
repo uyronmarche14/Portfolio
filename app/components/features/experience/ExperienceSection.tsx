@@ -141,9 +141,9 @@ const ExperienceSection = () => {
       <div className="mx-auto mb-10 max-w-6xl px-4 sm:px-6 md:mb-12 lg:px-4">
         <HeaderTitle
           index="02"
-          introText="Resume-Backed"
-          highlightText="Experience"
-          description="My work history is prioritized from the updated resume first, then adapted into clearer portfolio summaries for the roles, systems, and product environments I’ve worked in."
+          introText="Experience"
+          highlightText="Where I have worked"
+          description="Each role has its own page with what I did and the stack behind it."
         />
       </div>
 
