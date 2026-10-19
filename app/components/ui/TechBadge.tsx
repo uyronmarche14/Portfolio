@@ -1,11 +1,10 @@
 "use client";
 
-import { techIconMap } from "@/lib/data/icons";
+import { getTech } from "@/lib/data/techStack";
 import { badgeVariants } from "@/components/ui/shadcn/badge";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 import * as React from "react";
-import { SiReact } from "react-icons/si";
 
 export interface TechBadgeProps {
   /**
@@ -31,7 +30,7 @@ export interface TechBadgeProps {
  */
 const TechBadge = React.forwardRef<HTMLDivElement, TechBadgeProps>(
   ({ technology, index = 0, className, size = "default", ...props }, ref) => {
-    const IconComponent = techIconMap[technology] || SiReact;
+    const IconComponent = getTech(technology).icon;
 
     const sizeClasses = {
       sm: "px-2 py-1 text-xs",
