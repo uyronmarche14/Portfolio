@@ -28,6 +28,7 @@ export default function ExperienceIndex() {
             <li key={entry.id}>
               <Link
                 href={`/experience/${entry.id}`}
+                data-cursor="Read role"
                 className="group block rounded-2xl border border-foreground/15 bg-card p-6 transition-colors duration-200 hover:border-foreground/35 sm:p-7"
               >
                 <div className="flex items-start justify-between gap-4">

@@ -118,7 +118,7 @@ const HomeSection: React.FC = () => {
         </div>
           </div>
 
-          <figure className="relative mx-auto w-full max-w-sm lg:max-w-none">
+          <figure data-cursor="Hi, I'm Ron" className="relative mx-auto w-full max-w-sm lg:max-w-none">
               <div
                 aria-hidden="true"
                 className="absolute -inset-2 -z-10 rounded-[2rem] bg-gradient-to-br from-tone-violet/15 via-transparent to-primary/15 blur-xl"
