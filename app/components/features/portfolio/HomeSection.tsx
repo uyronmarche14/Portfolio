@@ -76,7 +76,7 @@ const HomeSection: React.FC = () => {
               , and I&apos;m now a Technical Business Analyst at{" "}
               <HoverWord
                 title={iopex?.company}
-                href="/experience#iopex"
+                href="/experience/iopex"
                 text={`${iopex?.role}, ${iopex?.dateRange}`}
               >
                 iOPEX Technologies
@@ -85,7 +85,7 @@ const HomeSection: React.FC = () => {
               quality management at{" "}
               <HoverWord
                 title={beyondgen?.company}
-                href="/experience#beyondgen"
+                href="/experience/beyondgen"
                 text={`${beyondgen?.role}, ${beyondgen?.dateRange}`}
                 image={beyondgen?.image}
               >
