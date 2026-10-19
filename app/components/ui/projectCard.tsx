@@ -5,6 +5,8 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
+import { ProjectVisual, hasProjectVisual } from "@/components/features/projects/ProjectVisuals";
+
 interface Project {
   id: string;
   title: string;
@@ -41,7 +43,20 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, index }) => {
         href={`/projects/${project.id}`}
         className="relative block aspect-[16/10] w-full overflow-hidden rounded-lg border border-foreground/15 bg-foreground/5"
       >
-        {hasImage ? (
+        {hasProjectVisual(project.id) ? (
+          <>
+            <ProjectVisual id={project.id} className="h-full w-full p-4" />
+            {hasImage && (
+              <Image
+                src={heroSrc}
+                alt={`${project.title} screenshot`}
+                fill
+                sizes="(max-width: 768px) 100vw, 50vw"
+                className="object-cover opacity-0 transition-opacity duration-300 group-hover:opacity-100 motion-reduce:transition-none"
+              />
+            )}
+          </>
+        ) : hasImage ? (
           <Image
             src={heroSrc}
             alt={project.title}

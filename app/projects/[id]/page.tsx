@@ -17,12 +17,15 @@ import Link from "next/link";
 import { notFound, useParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 
+import { ProjectVisual, hasProjectVisual } from "@/components/features/projects/ProjectVisuals";
+import { FilterTabs } from "@/components/ui/FilterTabs";
 import { BackLink } from "@/components/layout/BackLink";
 import { DocsLayout, DocsRail, docsLinkClass } from "@/components/layout/DocsLayout";
 import Footer from "@/components/layout/footer";
 import ScreenshotCarousel from "@/components/ui/ScreenshotCarousel";
 import TechBadge from "@/components/ui/TechBadge";
 
+import { groupTech } from "@/lib/data/techStack";
 import { useScrollSpy } from "@/lib/hooks/useScrollSpy";
 import { projects } from "@/lib/data/projects";
 import { PROJECTS_CONTENT } from "@/lib/data/projectsContent";
@@ -32,12 +35,14 @@ export default function ProjectPage() {
   const project = projects.find((p) => p.id === id);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [media, setMedia] = useState<"visual" | "screenshot">("visual");
 
   if (!project) notFound();
 
   const tocItems = [
     project.paragraph ? { id: "overview", label: "Overview" } : null,
     project.features?.length ? { id: "features", label: "Key features" } : null,
+    project.technologies?.length ? { id: "stack", label: "Stack" } : null,
     project.screenshots?.length ? { id: "screenshots", label: "Screenshots" } : null,
   ].filter((item): item is { id: string; label: string } => item !== null);
   const activeSection = useScrollSpy(tocItems.map((item) => item.id));
@@ -134,25 +139,45 @@ export default function ProjectPage() {
             </div>
           </header>
 
-          {project.image && (
-            <figure
-              className="mt-10 cursor-pointer"
-              onClick={() => {
-                setSelectedImage(project.screenshots?.[0] ?? project.image);
-                setCurrentImageIndex(0);
-              }}
-            >
-              <div className="relative overflow-hidden rounded-xl border border-foreground/15">
-                <Image
-                  width={1200}
-                  height={675}
-                  src={project.screenshots?.[0] ?? project.image}
-                  alt={project.title}
-                  className="aspect-video w-full object-cover"
-                  priority
+          {(project.image || hasProjectVisual(project.id)) && (
+            <div className="mt-10">
+              {project.image && hasProjectVisual(project.id) && (
+                <FilterTabs
+                  label="Project media"
+                  className="mb-3"
+                  value={media}
+                  onChange={setMedia}
+                  items={[
+                    { key: "visual", label: "Visual" },
+                    { key: "screenshot", label: "Screenshot" },
+                  ]}
                 />
-              </div>
-            </figure>
+              )}
+              {project.image && (media === "screenshot" || !hasProjectVisual(project.id)) ? (
+                <figure
+                  className="cursor-pointer"
+                  onClick={() => {
+                    setSelectedImage(project.screenshots?.[0] ?? project.image);
+                    setCurrentImageIndex(0);
+                  }}
+                >
+                  <div className="relative overflow-hidden rounded-xl border border-foreground/15">
+                    <Image
+                      width={1200}
+                      height={675}
+                      src={project.screenshots?.[0] ?? project.image}
+                      alt={project.title}
+                      className="aspect-video w-full object-cover"
+                      priority
+                    />
+                  </div>
+                </figure>
+              ) : (
+                <div className="overflow-hidden rounded-xl border border-foreground/15 bg-card">
+                  <ProjectVisual id={project.id} className="aspect-[4/3] w-full p-4 sm:aspect-video" />
+                </div>
+              )}
+            </div>
           )}
 
           {project.paragraph && (
@@ -173,6 +198,24 @@ export default function ProjectPage() {
                   </li>
                 ))}
               </ul>
+            </section>
+          )}
+
+          {project.technologies && project.technologies.length > 0 && (
+            <section id="stack" className="scroll-mt-28 pt-14">
+              <h2 className="font-sans text-2xl font-semibold tracking-tight text-foreground">Stack</h2>
+              <dl className="mt-5 divide-y divide-foreground/10 border-y border-foreground/10">
+                {groupTech(project.technologies).map((group) => (
+                  <div key={group.category} className="grid gap-3 py-4 sm:grid-cols-[8rem_minmax(0,1fr)]">
+                    <dt className="font-mono text-xs text-foreground/60">{group.category}</dt>
+                    <dd className="flex flex-wrap gap-2">
+                      {group.items.map((tech, i) => (
+                        <TechBadge key={tech} technology={tech} index={i} size="sm" />
+                      ))}
+                    </dd>
+                  </div>
+                ))}
+              </dl>
             </section>
           )}
 
