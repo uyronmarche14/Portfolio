@@ -86,9 +86,9 @@ export default function SinglePageLayout() {
 
       <ContactSection />
 
-      <SectionLayout id="footer" spacing="sm">
+      <div id="footer" className="w-full">
         <Footer />
-      </SectionLayout>
+      </div>
     </PageLayout>
   );
 }
