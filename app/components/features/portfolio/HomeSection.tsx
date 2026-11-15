@@ -6,6 +6,7 @@ import React, { useState } from "react";
 
 import { Badge } from "@/components/ui/shadcn/badge";
 import { Button } from "@/components/ui/shadcn/button";
+import { Mascot } from "@/components/ui/illustrations";
 import { HoverWord } from "./HoverWord";
 import { achievementsData } from "@/lib/data/achievements";
 import { projects } from "@/lib/data/projects";
@@ -133,6 +134,11 @@ const HomeSection: React.FC = () => {
                 className="object-cover object-top"
               />
             </div>
+            <Mascot
+              pose="wave"
+              aria-hidden="true"
+              className="pointer-events-none absolute -right-3 -top-12 h-40 w-auto sm:-right-8 sm:-top-16 sm:h-52 lg:-right-10"
+            />
             <figcaption className="absolute -bottom-5 left-4 right-4 rounded-xl border border-foreground/15 bg-card/95 px-4 py-3 shadow-soft-lg backdrop-blur sm:left-auto sm:right-auto sm:-left-6 sm:max-w-[16rem] lg:-left-10">
               <span className="block font-mono text-xs text-primary">Role</span>
               <span className="mt-1 block text-sm text-foreground">{HOME_CONTENT.subtitle}</span>
