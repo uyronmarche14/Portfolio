@@ -8,14 +8,15 @@ import { HighlightedText } from "@/components/features/experience/HighlightedTex
 import { DocsLayout, DocsRail } from "@/components/layout/DocsLayout";
 import Footer from "@/components/layout/footer";
 import { Badge } from "@/components/ui/shadcn/badge";
+import { projects } from "@/lib/data/projects";
 import { workExperience } from "@/lib/data/workExperience";
 import { useScrollSpy } from "@/lib/hooks/useScrollSpy";
 import { formatDuration, monthsBetween } from "@/lib/tenure";
 
-import { CodeBlock } from "./CodeBlock";
 import { ExperienceSidebar } from "./ExperienceSidebar";
+import { TenureChart } from "./TenureChart";
 
-const H2 = "scroll-mt-28 font-sans text-2xl font-semibold tracking-tight text-foreground";
+const H2 = "scroll-mt-28 font-display text-2xl tracking-tight text-foreground";
 
 /** One role as its own docs page. */
 export default function ExperienceRolePage({ id }: { id: string }) {
@@ -23,6 +24,7 @@ export default function ExperienceRolePage({ id }: { id: string }) {
   const entry = workExperience[index];
   const prev = workExperience[index - 1] ?? null;
   const next = workExperience[index + 1] ?? null;
+  const related = projects.filter((project) => project.experienceId === id);
 
   const sections = useMemo(
     () =>
@@ -31,10 +33,9 @@ export default function ExperienceRolePage({ id }: { id: string }) {
         { id: `${id}-did`, label: "What I did", show: !!entry?.details?.length },
         { id: `${id}-stack`, label: "Stack", show: true },
         { id: `${id}-highlight`, label: "Highlight", show: true },
-        { id: `${id}-photo`, label: "Photo", show: !!entry?.image },
-        { id: `${id}-data`, label: "Data", show: true },
+        { id: `${id}-related`, label: "Related project", show: related.length > 0 },
       ].filter((section) => section.show),
-    [id, entry]
+    [id, entry, related.length]
   );
   const ids = useMemo(() => sections.map((section) => section.id), [sections]);
   const active = useScrollSpy(ids);
@@ -43,17 +44,7 @@ export default function ExperienceRolePage({ id }: { id: string }) {
 
   const now = new Date().toISOString().slice(0, 7);
   const duration = entry.approximate ? null : formatDuration(monthsBetween(entry, now));
-  const json = JSON.stringify(
-    { role: entry.role, company: entry.company, period: entry.dateRange, stack: entry.stack },
-    null,
-    2
-  );
-  const facts: Array<[string, string]> = [
-    ["Role", entry.role],
-    ["Company", entry.company],
-    ["Period", entry.dateRange],
-    ...(duration ? ([["Duration", duration]] as Array<[string, string]>) : []),
-  ];
+  const num = String(index + 1).padStart(2, "0");
 
   return (
     <>
@@ -66,26 +57,47 @@ export default function ExperienceRolePage({ id }: { id: string }) {
           <span className="text-foreground/80">{entry.company}</span>
         </nav>
 
-        <header className="mt-6">
-          <p className="font-mono text-xs text-foreground/60">
-            <span className="text-primary">{String(index + 1).padStart(2, "0")}</span>
+        {/* Solid header band with a ghost numeral and the role's place on the shared timeline */}
+        <header className="relative mt-6 overflow-hidden rounded-2xl border border-foreground/15 bg-card p-6 md:p-8">
+          <span
+            aria-hidden="true"
+            className="pointer-events-none absolute -right-3 -top-8 select-none font-display text-[11rem] leading-none text-transparent md:text-[14rem]"
+            style={{ WebkitTextStroke: "1px rgb(var(--foreground) / 0.09)" }}
+          >
+            {num}
+          </span>
+          <p className="relative font-mono text-xs text-foreground/60">
+            <span className="text-primary">{num}</span>
             <span className="mx-2 text-foreground/30">/</span>
             {entry.dateRange}
+            {duration && <span className="text-foreground/50"> · {duration}</span>}
           </p>
-          <h1 className="mt-3 font-sans text-4xl font-semibold tracking-tight text-foreground md:text-5xl">
+          <h1 className="relative mt-3 max-w-[22ch] font-display text-3xl leading-[1.05] tracking-tight text-foreground md:text-5xl">
             {entry.role}
           </h1>
-          <p className="mt-3 text-lg text-foreground/70">{entry.company}</p>
+          <p className="relative mt-3 text-lg text-foreground/70">{entry.company}</p>
+
+          <div className="relative mt-8 border-t border-foreground/15 pt-2">
+            <TenureChart entries={workExperience} now={now} activeId={entry.id} compact />
+          </div>
         </header>
 
-        <dl className="mt-10 grid grid-cols-2 gap-3 sm:grid-cols-4">
-          {facts.map(([term, value]) => (
-            <div key={term} className="rounded-xl border border-foreground/15 bg-card p-4">
-              <dt className="font-mono text-xs text-foreground/60">{term}</dt>
-              <dd className="mt-1.5 text-sm font-medium leading-snug text-foreground">{value}</dd>
+        {entry.image && (
+          <figure className="mt-6">
+            <div className="relative aspect-[16/7] w-full overflow-hidden rounded-xl border border-foreground/15 bg-foreground/5">
+              <Image
+                src={entry.image}
+                alt={`${entry.company} work photo`}
+                fill
+                preload
+                fetchPriority="high"
+                quality={55}
+                sizes="(max-width: 1280px) 100vw, 780px"
+                className="object-cover"
+              />
             </div>
-          ))}
-        </dl>
+          </figure>
+        )}
 
         <section className="pt-14">
           <h2 id={`${id}-overview`} className={H2}>Overview</h2>
@@ -99,8 +111,8 @@ export default function ExperienceRolePage({ id }: { id: string }) {
             <h2 id={`${id}-did`} className={H2}>What I did</h2>
             <ul className="mt-5 divide-y divide-foreground/10 border-y border-foreground/10">
               {entry.details.map((detail) => (
-                <li key={detail} className="max-w-[66ch] py-3.5 text-[16px] leading-relaxed text-foreground/80">
-                  {detail}
+                <li key={detail} className="py-3.5">
+                  <p className="max-w-[66ch] text-[16px] leading-relaxed text-foreground/80">{detail}</p>
                 </li>
               ))}
             </ul>
@@ -125,30 +137,26 @@ export default function ExperienceRolePage({ id }: { id: string }) {
           </p>
         </section>
 
-        {entry.image && (
+        {related.length > 0 && (
           <section className="pt-14">
-            <h2 id={`${id}-photo`} className={H2}>Photo</h2>
-            <figure className="mt-5">
-              <div className="relative aspect-[16/9] w-full overflow-hidden rounded-xl border border-foreground/15 bg-foreground/5">
-                <Image
-                  src={entry.image}
-                  alt={`${entry.company} work photo`}
-                  fill
-                  sizes="(max-width: 1280px) 100vw, 780px"
-                  className="object-cover"
-                />
-              </div>
-              <figcaption className="mt-3 font-mono text-xs text-foreground/60">{entry.company}</figcaption>
-            </figure>
+            <h2 id={`${id}-related`} className={H2}>Related project</h2>
+            <ul className="mt-5 grid gap-3">
+              {related.map((project) => (
+                <li key={project.id}>
+                  <Link
+                    href={`/projects/${project.id}`}
+                    className="group block rounded-xl border border-foreground/15 bg-card p-5 transition-colors hover:border-primary"
+                  >
+                    <span className="font-mono text-xs text-primary">{project.category ?? "Project"}</span>
+                    <span className="mt-1 block font-display text-xl text-foreground">{project.title}</span>
+                    <span className="mt-2 block max-w-[66ch] text-sm leading-relaxed text-foreground/70">{project.description}</span>
+                    <span className="mt-3 inline-block text-sm font-medium text-foreground group-hover:text-primary">Case study &rarr;</span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
           </section>
         )}
-
-        <section className="pt-14">
-          <h2 id={`${id}-data`} className={H2}>Data</h2>
-          <div className="mt-5">
-            <CodeBlock label={`experience/${entry.id}`} code={json} />
-          </div>
-        </section>
 
         <nav aria-label="Role navigation" className="mt-16 grid gap-3 border-t border-foreground/10 pt-8 sm:grid-cols-2">
           {prev ? (
@@ -167,7 +175,7 @@ export default function ExperienceRolePage({ id }: { id: string }) {
           )}
         </nav>
       </DocsLayout>
-      <Footer />
+      <Footer compact />
     </>
   );
 }

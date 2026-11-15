@@ -46,6 +46,7 @@ export default function ScreenshotCarousel({ screenshots, alt, onImageClick }: S
               src={screenshot}
               alt={`${alt} - Screenshot ${index + 1}`}
               fill
+              sizes="(max-width: 768px) 100vw, 50vw"
               className="object-cover"
               priority={index < 2}
             />

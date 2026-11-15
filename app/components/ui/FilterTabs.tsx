@@ -23,10 +23,12 @@ interface FilterTabsProps<K extends string> {
   className?: string;
   /** stretch the tabs to fill the full width, sharing it equally */
   fullWidth?: boolean;
+  /** center the tab row; on narrow screens the tabs wrap onto centered lines instead of scrolling */
+  centered?: boolean;
 }
 
 /** Segmented tabs with a pill that slides to the active item. */
-export function FilterTabs<K extends string>({ items, value, onChange, label, className, fullWidth }: FilterTabsProps<K>) {
+export function FilterTabs<K extends string>({ items, value, onChange, label, className, fullWidth, centered }: FilterTabsProps<K>) {
   const reduceMotion = useReducedMotion();
   const groupId = useId();
 
@@ -48,8 +50,10 @@ export function FilterTabs<K extends string>({ items, value, onChange, label, cl
         role="tablist"
         aria-label={label}
         className={cn(
-          "flex min-w-max gap-1 rounded-full border border-foreground/15 bg-foreground/[0.04] p-1",
-          fullWidth ? "w-full" : "w-fit"
+          "flex gap-1 rounded-full border border-foreground/15 bg-foreground/[0.04] p-1",
+          centered ? "max-w-full flex-wrap justify-center rounded-3xl" : "min-w-max",
+          fullWidth ? "w-full" : "w-fit",
+          centered && "mx-auto"
         )}
       >
         {items.map((item, i) => {

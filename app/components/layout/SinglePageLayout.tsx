@@ -19,6 +19,11 @@ const ProjectsSection = dynamic(() => import("@/components/features/projects/Pro
   ssr: true,
 });
 
+const TechStackSection = dynamic(() => import("@/components/features/stack/TechStackSection"), {
+  loading: () => <div className="py-20 flex items-center justify-center text-zinc-500">Loading tech stack...</div>,
+  ssr: true,
+});
+
 const HobbyCarousel = dynamic(() => import("@/components/features/about/HobbyCarousel"), {
   loading: () => <div className="min-h-screen flex items-center justify-center">Loading Hobbies...</div>,
   ssr: true,
@@ -60,14 +65,14 @@ import { SectionLayout } from "./SectionLayout";
 export default function SinglePageLayout() {
   return (
     <PageLayout
-      className="h-screen overflow-y-scroll"
+      className="relative h-screen overflow-y-scroll"
       withPadding={false}
       maxWidth="full"
     >
       <SectionTracker />
       <CleanGridBackground
         cellSize={20}
-        className="z-0"
+        className="grid-bg z-0 dark:hidden"
         aria-hidden="true"
       />     
        <SectionLayout id="home" spacing="xl">
@@ -79,6 +84,8 @@ export default function SinglePageLayout() {
       <HobbyCarousel />
 
       <AchievementExplorer />
+
+      <TechStackSection />
 
       <ProjectsSection />
 

@@ -3,7 +3,7 @@ import ResumeDrawer from "@/components/ui/drawer/resumeDrawer";
 import { Button } from "@/components/ui/shadcn/button";
 import { NAV_ITEMS, NAVBAR_LABELS } from "@/lib/data/navbar";
 import { motion } from "framer-motion";
-import { FileText, Menu, X } from "lucide-react";
+import { FileText, Menu, Search, X } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { useHideOnScroll } from "@/lib/hooks/useHideOnScroll";
@@ -18,6 +18,7 @@ const SECTION_TO_NAV: Record<string, string> = {
   journey: "about",
   activities: "about",
   achievements: "about",
+  stack: "projects",
   projects: "projects",
   "work-with-me": "projects",
   contact: "contact",
@@ -35,9 +36,18 @@ const Navbar = () => {
       ? SECTION_TO_NAV[spied ?? "home"] ?? "home"
       : pathname.startsWith("/projects")
       ? "projects"
-      : pathname.startsWith("/experience")
-      ? "about"
       : "";
+  const openPalette = () => window.dispatchEvent(new Event("open-command-palette"));
+
+  useEffect(() => {
+    if (!isOpen) return;
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setIsOpen(false);
+    };
+    document.addEventListener("keydown", onKeyDown);
+    return () => document.removeEventListener("keydown", onKeyDown);
+  }, [isOpen]);
+
   const toggleMenu = () => setIsOpen((value) => (value ? false : true));
 
   const navigationItems = useMemo(
@@ -47,7 +57,7 @@ const Navbar = () => {
         href: item.href,
         active:
           item.kind === "route"
-            ? pathname === item.href
+            ? pathname === item.href || pathname.startsWith(item.href + "/")
             : activeSection === item.href.substring(1),
       })),
     [activeSection, pathname]
@@ -90,6 +100,7 @@ const Navbar = () => {
 
   return (
     <nav
+      aria-label="Primary"
       className={
         "fixed inset-x-0 top-4 z-50 px-4 transition-all duration-300 ease-out motion-reduce:transition-none sm:px-6 lg:px-8 " +
         (hidden ? "pointer-events-none -translate-y-[150%] opacity-0" : "translate-y-0 opacity-100")
@@ -101,9 +112,9 @@ const Navbar = () => {
           <div className={"flex items-center rounded-full border border-foreground/15 shadow-soft-sm transition-all duration-200 " + navFrameClass}>
             {/* Brand */}
             <div className="flex items-center px-5 py-3">
-              <h1 className="text-xl font-extrabold font-display text-primary">
+              <p className="font-display text-2xl leading-none text-foreground">
                 Rhyss
-              </h1>
+              </p>
             </div>
 
             <div className="h-6 w-px bg-foreground/15" />
@@ -114,6 +125,7 @@ const Navbar = () => {
                 <button
                   key={item.label}
                   onClick={(e) => handleNavigationClick(item, e)}
+                  aria-current={item.active ? "location" : undefined}
                   className={
                     "relative mx-0.5 rounded-full px-4 py-2 text-sm font-medium transition-colors duration-150 " +
                     (item.active
@@ -132,6 +144,19 @@ const Navbar = () => {
                 </button>
               ))}
             </div>
+
+            <div className="h-6 w-px bg-foreground/15" />
+
+            {/* Command palette */}
+            <button
+              type="button"
+              onClick={openPalette}
+              aria-label="Search portfolio (Ctrl or Cmd + K)"
+              className="mx-2 flex items-center gap-2 rounded-full px-3 py-2 text-sm text-foreground/60 transition-colors hover:bg-foreground/10 hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring"
+            >
+              <Search size={15} aria-hidden="true" />
+              <kbd className="font-mono text-[11px]">Ctrl K</kbd>
+            </button>
 
             <div className="h-6 w-px bg-foreground/15" />
 
@@ -168,13 +193,14 @@ const Navbar = () => {
         transition={{ duration: 0.2, ease: [0.4, 0, 0.2, 1] }}
         className="mx-auto mt-3 w-full max-w-6xl overflow-hidden md:hidden"
         aria-hidden={!isOpen}
+        inert={!isOpen}
       >
         <div className={"space-y-4 rounded-2xl border border-foreground/15 p-6 shadow-soft " + navFrameClass}>
           {/* Brand */}
           <div className="flex items-center gap-3 border-b border-foreground/15 pb-4">
-            <h1 className="text-xl font-extrabold font-display text-primary">
+            <p className="font-display text-2xl leading-none text-foreground">
               Rhyss
-            </h1>
+            </p>
           </div>
 
           {/* Links */}

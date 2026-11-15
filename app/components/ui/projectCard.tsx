@@ -42,6 +42,8 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, index }) => {
       <Link
         href={`/projects/${project.id}`}
         data-cursor="View project"
+        aria-hidden="true"
+        tabIndex={-1}
         className="relative block aspect-[16/10] w-full overflow-hidden rounded-lg border border-foreground/15 bg-foreground/[0.04]"
       >
         {hasProjectVisual(project.id) ? (

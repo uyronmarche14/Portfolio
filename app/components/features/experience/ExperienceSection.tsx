@@ -138,7 +138,7 @@ const ExperienceSection = () => {
 
   return (
     <div id="experience" className="relative w-full py-12 md:py-16">
-      <div className="mx-auto mb-10 max-w-6xl px-4 sm:px-6 md:mb-12 lg:px-4">
+      <div className="mx-auto mb-10 max-w-7xl px-4 sm:px-6 md:mb-12 lg:px-8">
         <HeaderTitle
           index="02"
           introText="Experience"
@@ -147,7 +147,7 @@ const ExperienceSection = () => {
         />
       </div>
 
-      <ol className="mx-auto max-w-6xl space-y-6 px-4 sm:px-6 md:space-y-8 lg:px-4">
+      <ol className="mx-auto max-w-7xl space-y-6 px-4 sm:px-6 md:space-y-8 lg:px-8">
         {workExperience.map((entry, i) => (
           <li key={entry.id}>
             <ExperienceCard entry={entry} index={i} now={now} />

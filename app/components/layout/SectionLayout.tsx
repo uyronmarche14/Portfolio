@@ -41,7 +41,7 @@ export interface SectionLayoutProps {
 }
 
 const variantClasses = {
-  default: 'bg-background',
+  default: '',
   muted: 'bg-muted/50',
   accent: 'bg-accent/5',
 };
@@ -55,12 +55,12 @@ const spacingClasses = {
 
 /**
  * SectionLayout component for consistent section structure
- * 
+ *
  * @example
  * ```tsx
- * <SectionLayout 
+ * <SectionLayout
  *   id="about"
- *   title="About Me" 
+ *   title="About Me"
  *   subtitle="Learn more about my background"
  *   spacing="lg"
  *   withSeparator
@@ -70,17 +70,17 @@ const spacingClasses = {
  * ```
  */
 const SectionLayout = React.forwardRef<HTMLElement, SectionLayoutProps>(
-  ({ 
-    children, 
-    title, 
-    subtitle, 
-    id, 
-    className, 
+  ({
+    children,
+    title,
+    subtitle,
+    id,
+    className,
     variant = 'default',
     spacing = 'md',
     withSeparator = false,
     headerContent,
-    ...props 
+    ...props
   }, ref) => {
     return (
       <section

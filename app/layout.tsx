@@ -1,5 +1,8 @@
+import { CommandPalette } from "@/components/ui/CommandPalette";
 import { Navbar } from "@/components/layout";
+import { PageBackground } from "@/components/layout/PageBackground";
 import ThemeSwitcher from "@/components/ui/ThemeSwitcher";
+import { SITE_URL } from "@/lib/site";
 import { Providers } from "@/providers";
 import type { Metadata } from "next";
 import { Geist_Mono, Inter } from 'next/font/google';
@@ -28,21 +31,21 @@ const MonoFont = Geist_Mono({
     variable: '--font-mono',
 });
 
+const DESCRIPTION =
+  "Technical Business Analyst and full-stack developer connecting business workflows, system architecture, data reporting, and practical software delivery.";
+
 export const metadata: Metadata = {
-  title: "Ron Marche - Portfolio",
-  description:
-    "Personal portfolio website showcasing UI/UX design and development work",
-  keywords: ["portfolio", "web development", "UI/UX", "React", "Next.js"],
-  authors: [{ name: "Ron Marche" }],
-  icons: {
-    icon: "/favicon.ico",
-    shortcut: "/favicon.ico",
-    apple: "/apple-touch-icon.png",
-  },
+  metadataBase: new URL(SITE_URL),
+  title: "Ron Marche Rhyss Q. Uy | Technical Business Analyst & Full-Stack Developer",
+  description: DESCRIPTION,
+  keywords: ["Technical Business Analyst", "full-stack developer", "React", "Next.js", "TypeScript", "portfolio"],
+  authors: [{ name: "Ron Marche Rhyss Q. Uy" }],
+  alternates: { canonical: "/" },
   openGraph: {
-    title: "Ron Marche - Portfolio",
-    description:
-      "Personal portfolio website showcasing UI/UX design and development work",
+    title: "Ron Marche Rhyss Q. Uy | Technical Business Analyst & Full-Stack Developer",
+    description: DESCRIPTION,
+    url: "/",
+    siteName: "Rhyss Portfolio",
     type: "website",
   },
 };
@@ -60,6 +63,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning className={`${DisplayFont.variable} ${SansFont.variable} ${MonoFont.variable}`}>
       <body className="bg-background font-sans text-foreground">
+        <PageBackground />
         <Providers>
           <div className="flex min-h-screen flex-col">
             <Navbar />
@@ -68,6 +72,7 @@ export default function RootLayout({
             </main>
           </div>
           <ThemeSwitcher />
+          <CommandPalette />
         </Providers>
       </body>
     </html>

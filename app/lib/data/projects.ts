@@ -12,6 +12,8 @@ export interface LegacyProject {
   paragraph: string;
   features: string[];
   category?: string;
+  /** Optional: id of a workExperience entry this project was built in, so the role is shown from that single source */
+  experienceId?: string;
   status?: 'completed' | 'in-development' | 'planned';
   timeline?: {
     date: string;
@@ -383,6 +385,7 @@ export const projects: LegacyProject[] = [
     githubUrl: "https://github.com/uyronmarche14/sqm-v3",
     liveDemoUrl: "",
     category: "Enterprise",
+    experienceId: "beyondgen",
     features: [
       "5M1E supplier-change process: draft, submission, review, approval, conditional approval, rejection, action tracking, and notification rules",
       "Role and permission logic for suppliers, checkers, SQE staff, and approvers",

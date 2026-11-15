@@ -17,7 +17,7 @@ A modern, responsive portfolio website built with Next.js 15, TypeScript, and Re
 ### Prerequisites
 
 - Node.js 18.x or 20.x
-- npm, yarn, or pnpm
+- [Bun](https://bun.sh)
 
 ### Installation
 
@@ -31,21 +31,13 @@ cd portfolio
 2. Install dependencies:
 
 ```bash
-npm install
-# or
-yarn install
-# or
-pnpm install
+bun install
 ```
 
 3. Start the development server:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
+bun run dev
 ```
 
 4. Open [http://localhost:3000](http://localhost:3000) in your browser.
@@ -75,36 +67,36 @@ app/
 ### Development
 
 ```bash
-npm run dev          # Start development server with Turbopack
-npm run build        # Build for production
-npm run start        # Start production server
+bun run dev          # Start development server with Turbopack
+bun run build        # Build for production
+bun run start        # Start production server
 ```
 
 ### Code Quality
 
 ```bash
-npm run lint         # Run ESLint
-npm run lint:fix     # Fix ESLint issues automatically
-npm run format       # Format code with Prettier
-npm run format:check # Check code formatting
-npm run type-check   # Run TypeScript type checking
+bun run lint         # Run ESLint
+bun run lint:fix     # Fix ESLint issues automatically
+bun run format       # Format code with Prettier
+bun run format:check # Check code formatting
+bun run type-check   # Run TypeScript type checking
 ```
 
 ### Testing
 
 ```bash
-npm run test         # Run tests
-npm run test:watch   # Run tests in watch mode
-npm run test:coverage # Run tests with coverage
-npm run test:ci      # Run tests for CI
+bun run test         # Run tests
+bun run test:watch   # Run tests in watch mode
+bun run test:coverage # Run tests with coverage
+bun run test:ci      # Run tests for CI
 ```
 
 ### Quality Assurance
 
 ```bash
-npm run quality:check # Run all quality checks
-npm run quality:fix   # Fix all auto-fixable issues
-npm run pre-commit    # Pre-commit quality check
+bun run quality:check # Run all quality checks
+bun run quality:fix   # Fix all auto-fixable issues
+bun run pre-commit    # Pre-commit quality check
 ```
 
 ## 🏗️ Architecture
@@ -263,7 +255,7 @@ NEXT_PUBLIC_ANALYTICS_ID=your-analytics-id
 1. **Fork** the repository
 2. **Create** a feature branch
 3. **Make** your changes
-4. **Run** quality checks: `npm run quality:check`
+4. **Run** quality checks: `bun run quality:check`
 5. **Commit** your changes
 6. **Push** to your branch
 7. **Create** a Pull Request

@@ -10,15 +10,15 @@
 :root {
     --background: 244 241 234;
     --foreground: 10 10 10;
-    --primary: 200 66 6;
+    --primary: 180 55 0;
     --secondary: 98 94 86;
     --accent: 255 192 152;
     --primary-foreground: 244 241 234;
-    --tone-violet: 109 91 230;
-    --tone-teal: 13 148 136;
-    --tone-amber: 180 108 0;
-    --tone-rose: 205 52 100;
-    --muted: 107 114 128;
+    --tone-violet: 88 70 200;
+    --tone-teal: 8 112 104;
+    --tone-amber: 140 80 0;
+    --tone-rose: 175 35 80;
+    --muted: 84 90 102;
     --card: 255 253 248;
     --popover: 255 253 248;
     --destructive: 220 38 38;
@@ -26,32 +26,42 @@
     --tertiary: 229 49 112;
     --border: 10 10 10;
     --input: 10 10 10;
-    --ring: 200 66 6;
+    --ring: 180 55 0;
     --radius: 8px;
     --border-width: 1px;
     --shadow-offset: 0px;
     --shadow-color: 10 10 10;
     --grid-dot-opacity: 0.12;
+    --accent-2: 120 150 30;
+    --accent-2-text: 78 100 8;
+    --on-accent-2: 10 10 10;
+    --band: 255 253 248;
 }
 
 [data-theme="dark"], .dark {
-    --background: 10 10 10;
-    --foreground: 244 241 234;
-    --primary: 255 122 56;
-    --secondary: 160 156 148;
-    --accent: 255 160 110;
-    --primary-foreground: 10 10 10;
-    --tone-violet: 139 123 255;
-    --tone-teal: 45 212 191;
-    --tone-amber: 245 181 68;
-    --tone-rose: 240 113 143;
-    --card: 23 23 23;
-    --popover: 23 23 23;
-    --border: 244 241 234;
-    --input: 244 241 234;
-    --ring: 255 122 56;
-    --shadow-color: 244 241 234;
+    /* RHYSS V2: dark technical editorial palette */
+    --background: 11 13 14;
+    --foreground: 234 236 231;
+    --primary: 255 122 69;
+    --secondary: 166 175 171;
+    --accent: 255 164 122;
+    --primary-foreground: 11 13 14;
+    --tone-violet: 176 178 198;
+    --tone-teal: 190 220 110;
+    --tone-amber: 196 186 150;
+    --tone-rose: 196 160 168;
+    --muted: 131 140 136;
+    --card: 20 23 24;
+    --band: 23 21 20;
+    --popover: 28 32 33;
+    --border: 48 54 55;
+    --input: 48 54 55;
+    --ring: 255 122 69;
+    --shadow-color: 0 0 0;
     --grid-dot-opacity: 0.08;
+    --accent-2: 190 220 110;
+    --accent-2-text: 190 220 110;
+    --on-accent-2: 11 13 14;
 }
 
 /* Black & White Monochrome Theme */
@@ -71,27 +81,36 @@
     --ring: 255 255 255;
     --shadow-color: 255 255 255;
     --grid-dot-opacity: 0.1;
+    --accent-2: 200 200 200;
+    --accent-2-text: 200 200 200;
+    --on-accent-2: 0 0 0;
+    --band: 10 10 10;
 }
 
 /* Light Theme */
 [data-theme="light"], .light {
     --background: 244 241 234;
     --foreground: 10 10 10;
-    --primary: 200 66 6;
+    --primary: 180 55 0;
     --secondary: 98 94 86;
     --accent: 255 192 152;
     --primary-foreground: 244 241 234;
-    --tone-violet: 109 91 230;
-    --tone-teal: 13 148 136;
-    --tone-amber: 180 108 0;
-    --tone-rose: 205 52 100;
+    --tone-violet: 88 70 200;
+    --tone-teal: 8 112 104;
+    --tone-amber: 140 80 0;
+    --tone-rose: 175 35 80;
     --card: 255 253 248;
     --popover: 255 253 248;
     --border: 10 10 10;
     --input: 10 10 10;
-    --ring: 200 66 6;
+    --ring: 180 55 0;
     --shadow-color: 10 10 10;
     --grid-dot-opacity: 0.1;
+    --accent-2: 120 150 30;
+    --accent-2-text: 78 100 8;
+    --on-accent-2: 10 10 10;
+    --band: 255 253 248;
+    --muted: 84 90 102;
 }
 
 /* ─── Base Styles ─── */
@@ -363,4 +382,147 @@ html.has-custom-cursor input,
 html.has-custom-cursor textarea,
 html.has-custom-cursor select {
     cursor: text !important;
+}
+
+/* ─── Alternating sections: full width, rounded top corners, fading down into the page colour ───
+   The panel colour is strongest at the rounded top edge and dissolves into the page background toward the bottom,
+   so each section blends into the next instead of ending on a hard edge. */
+html:not(.brutal) #experience,
+html:not(.brutal) #activities,
+html:not(.brutal) #stack,
+html:not(.brutal) #work-with-me {
+    width: auto;
+    margin: clamp(1.5rem, 4vw, 3.5rem) 0 0;
+    padding-block: clamp(3rem, 6vw, 5.5rem);
+    border-radius: clamp(2rem, 5vw, 3.75rem) clamp(2rem, 5vw, 3.75rem) 0 0;
+    border: 0;
+    border-top: 1px solid rgb(var(--border) / 0.8);
+    background: linear-gradient(
+        180deg,
+        rgb(var(--band)) 0%,
+        rgb(var(--band) / 0.92) 38%,
+        rgb(var(--band) / 0.45) 78%,
+        rgb(var(--band) / 0) 100%
+    );
+}
+
+/* Experience is the main section, so its panel is the roomiest */
+html:not(.brutal) #experience {
+    padding-block: clamp(4rem, 8vw, 7.5rem);
+}
+
+/* the lower part of a fading panel is background-coloured; keep its content on a readable colour regardless of the fade */
+html:not(.brutal) #experience > *, html:not(.brutal) #activities > *, html:not(.brutal) #stack > *, html:not(.brutal) #work-with-me > * { position: relative; }
+
+/* Plain sections get more breathing room too */
+html:not(.brutal) #about,
+html:not(.brutal) #achievements,
+html:not(.brutal) #projects,
+html:not(.brutal) #contact {
+    padding-block: clamp(3rem, 6vw, 6rem);
+}
+
+/* Footer: full width with the same rounded top corners, solid at the bottom of the page */
+html:not(.brutal) footer {
+    width: auto;
+    margin-top: clamp(1.5rem, 4vw, 3.5rem);
+    border: 1px solid rgb(var(--border) / 0.7);
+    border-bottom: 0;
+    border-radius: clamp(2rem, 5vw, 3.75rem) clamp(2rem, 5vw, 3.75rem) 0 0;
+    background-color: rgb(var(--band));
+}
+
+/* ─── Page "poster" background: one fixed layer behind every page ───
+   base + three soft colour glows + thin vertical guide lines. Floating panels rest on top of it. */
+.page-poster {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+}
+
+/* the original dot grid: 1px dots on a 20px grid, same colours and opacities the Light theme always used */
+.page-poster::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(circle, rgb(var(--dot-rgb) / var(--grid-dot-opacity)) 1px, transparent 1px);
+    background-size: 20px 20px;
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 10%, #000 90%, transparent 100%);
+    mask-image: linear-gradient(to bottom, transparent 0%, #000 10%, #000 90%, transparent 100%);
+}
+
+/* light: the cream editorial palette (cream, coral, peach, dusty blue) */
+html.light .page-poster {
+    --dot-rgb: 0 0 0;
+    background:
+        radial-gradient(circle at 100% 0%, rgb(233 138 121 / 0.85), transparent 19%),
+        radial-gradient(circle at 104% 56%, rgb(240 160 110 / 0.70), transparent 20%),
+        radial-gradient(circle at -2% 100%, rgb(168 186 198 / 0.80), transparent 20%),
+        linear-gradient(180deg, #e9e3d7 0%, #ece6da 100%);
+}
+
+/* dark: the same composition re-toned to the site's orange, with a cool slate at the bottom */
+html.dark .page-poster {
+    --dot-rgb: 255 255 255;
+    background:
+        radial-gradient(circle at 100% 0%, rgb(var(--primary) / 0.40), transparent 21%),
+        radial-gradient(circle at 104% 56%, rgb(240 150 100 / 0.22), transparent 22%),
+        radial-gradient(circle at -2% 100%, rgb(110 135 160 / 0.28), transparent 22%),
+        linear-gradient(180deg, rgb(var(--band)) 0%, rgb(var(--background)) 100%);
+}
+
+html.bw .page-poster {
+    --dot-rgb: 255 255 255;
+    background:
+        radial-gradient(circle at 88% 8%, rgb(255 255 255 / 0.14), transparent 28%),
+        linear-gradient(180deg, #0a0a0a, #000);
+}
+
+/* the old dot grid is superseded by the poster layer */
+html:not(.brutal) .grid-bg { display: none; }
+
+/* ─── Hero portrait: a plain rounded rectangle with a formal frame ─── */
+.portrait-photo {
+    border-radius: 1.25rem;
+    border: 1px solid rgb(var(--border) / 0.9);
+}
+
+/* hairline outline offset behind the photo */
+.portrait-offset {
+    position: absolute;
+    inset: 0;
+    translate: 14px 14px;
+    border-radius: 1.25rem;
+    border: 1px solid rgb(var(--foreground) / 0.28);
+    pointer-events: none;
+}
+
+/* accent corner brackets that sit just outside the photo, like crop marks */
+.portrait-corner {
+    position: absolute;
+    width: 26px;
+    height: 26px;
+    border-color: rgb(var(--primary));
+    border-style: solid;
+    border-width: 0;
+    pointer-events: none;
+}
+.portrait-corner--tl { top: -9px; left: -9px; border-top-width: 2px; border-left-width: 2px; border-top-left-radius: 6px; }
+.portrait-corner--tr { top: -9px; right: -9px; border-top-width: 2px; border-right-width: 2px; border-top-right-radius: 6px; }
+.portrait-corner--bl { bottom: -9px; left: -9px; border-bottom-width: 2px; border-left-width: 2px; border-bottom-left-radius: 6px; }
+.portrait-corner--br { bottom: -9px; right: -9px; border-bottom-width: 2px; border-right-width: 2px; border-bottom-right-radius: 6px; }
+
+/* the hero text sits over the strongest glows in the light theme, so keep it near-solid */
+html.light #home [class*="text-foreground/"] {
+    color: rgb(var(--foreground) / 0.9);
+}
+
+
+/* Light theme: small translucent greys were below AA on cream. Raise the floor without flattening the hierarchy. */
+html.light [class*="text-foreground/3"],
+html.light [class*="text-foreground/4"],
+html.light [class*="text-foreground/5"],
+html.light [class*="text-foreground/6"] {
+    color: rgb(var(--foreground) / 0.76);
 }

@@ -11,12 +11,6 @@ import ExperienceSection from "../experience/ExperienceSection";
 const AboutDoGrid = lazy(() => import("@/components/ui/aboutDo").then(mod => ({ default: mod.AboutDoGrid })));
 const AboutTimeline = lazy(() => import("@/components/ui/timeline/AboutTimeline"));
 
-const TONE_TEXT: Record<string, string> = {
-  violet: "text-tone-violet",
-  teal: "text-tone-teal",
-  amber: "text-tone-amber",
-  rose: "text-tone-rose",
-};
 
 const ABOUT_STATS = [
   { label: "Roles", value: String(workExperience.length) },
@@ -30,10 +24,10 @@ const AboutSection = () => {
       id="about"
       className="relative flex flex-col snap-start overflow-hidden py-12 md:py-16 w-full"
     >
-      <div className="relative mx-auto grid w-full max-w-6xl gap-10 px-4 sm:px-6 lg:grid-cols-[minmax(0,360px)_minmax(0,1fr)] lg:gap-16 lg:px-4">
+      <div className="relative mx-auto grid w-full max-w-7xl gap-10 px-4 sm:px-6 lg:grid-cols-[minmax(0,360px)_minmax(0,1fr)] lg:gap-16 lg:px-8">
         {/* left: sticky heading */}
         <div className="lg:sticky lg:top-28 lg:self-start">
-          <p className="font-mono text-xs font-medium text-tone-violet">01 / About</p>
+          <p className="font-mono text-xs font-medium text-primary">01 / About</p>
           <h2 className="mt-4 font-display text-4xl font-semibold leading-[1.08] text-headline">
             {profileData.about.title}
           </h2>
@@ -64,7 +58,7 @@ const AboutSection = () => {
                 transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
                 className="group grid grid-cols-[2.5rem_minmax(0,1fr)] gap-x-4 py-6"
               >
-                <span className={`font-mono text-xs ${TONE_TEXT[pillar.tone]}`}>{String(i + 1).padStart(2, "0")}</span>
+                <span className="font-mono text-xs text-primary">{String(i + 1).padStart(2, "0")}</span>
                 <div>
                   <h3 className="font-sans text-lg font-semibold tracking-tight text-foreground transition-colors duration-200 group-hover:text-primary">
                     {pillar.title}

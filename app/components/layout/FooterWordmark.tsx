@@ -26,9 +26,10 @@ export function FooterWordmark() {
     <svg viewBox={box} className="mt-6 block w-full" aria-hidden="true" focusable="false">
       <defs>
         <linearGradient id="rhyss-fade" x1="0" x2="0" y1="0" y2="1">
-          <stop offset="0" stopColor="rgb(var(--foreground))" />
-          <stop offset="0.55" stopColor="rgb(var(--foreground))" stopOpacity="0.7" />
-          <stop offset="1" stopColor="rgb(var(--foreground))" stopOpacity="0.08" />
+          {/* soft lime at the top easing into the orange accent, then fading out */}
+          <stop offset="0" stopColor="rgb(var(--accent-2))" stopOpacity="0.78" />
+          <stop offset="0.5" stopColor="rgb(var(--primary))" stopOpacity="0.5" />
+          <stop offset="1" stopColor="rgb(var(--primary))" stopOpacity="0.06" />
         </linearGradient>
       </defs>
       <text

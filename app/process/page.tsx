@@ -300,7 +300,7 @@ export default function ProcessPage() {
 
       {/* Header */}
       <header className="absolute left-0 right-0 top-28 z-30 px-4 sm:top-32 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-6xl">
+        <div className="mx-auto max-w-7xl">
           <Link
             href="/"
             className="inline-flex items-center gap-2 text-sm text-foreground/60 hover:text-foreground transition-colors duration-150 group"

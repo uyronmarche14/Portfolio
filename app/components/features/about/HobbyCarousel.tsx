@@ -5,10 +5,13 @@ import { Badge } from "@/components/ui/shadcn/badge";
 import { motion, AnimatePresence } from "framer-motion";
 import { hobbiesData } from "@/lib/data/hobbies";
 import HeaderTitle from "@/components/ui/header";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, Maximize2 } from "lucide-react";
+import { ActivityLightbox } from "./ActivityLightbox";
 
 export default function HobbyCarousel() {
   const [activeIndex, setActiveIndex] = useState(0);
+  const [lightboxId, setLightboxId] = useState<string | null>(null);
+  const photoItems = useMemo(() => hobbiesData.filter((hobby) => hobby.image), []);
 
   const handleNext = useCallback(() => {
     setActiveIndex((prev) => (prev + 1) % hobbiesData.length);
@@ -21,12 +24,13 @@ export default function HobbyCarousel() {
   // Keyboard navigation
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
+      if (lightboxId) return;
       if (e.key === "ArrowRight") handleNext();
       if (e.key === "ArrowLeft") handlePrev();
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [handleNext, handlePrev]);
+  }, [handleNext, handlePrev, lightboxId]);
 
   const activeHobby = useMemo(() => hobbiesData[activeIndex], [activeIndex]);
 
@@ -34,7 +38,7 @@ export default function HobbyCarousel() {
     <section id="activities" className="relative w-full flex flex-col py-12 md:py-16 overflow-hidden transition-colors duration-700">
       
       {/* === Section Header === */}
-      <div className="relative z-10 w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-4 mb-10 md:mb-12">
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-10 md:mb-12">
         <HeaderTitle 
           index="03"
           introText="Off Screen"
@@ -123,7 +127,7 @@ export default function HobbyCarousel() {
                       }
                     }}
                     className={`
-                      absolute w-[calc(100%-2rem)] md:w-[calc(100%-4rem)] max-w-6xl h-full 
+                      absolute w-[calc(100%-2rem)] md:w-[calc(100%-4rem)] max-w-7xl h-full
                       overflow-hidden cursor-pointer rounded-2xl border bg-background group
                       transition-all duration-300
                       ${isActive 
@@ -137,7 +141,9 @@ export default function HobbyCarousel() {
                       <>
                         <div 
                           className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105"
-                          style={{ backgroundImage: `url(${hobby.image})` }} 
+                          style={{ backgroundImage: `url(${hobby.image})` }}
+                          role="img"
+                          aria-label={`${hobby.title}: photo`}
                         />
                         {/* Bottom gradient for text readability */}
                         <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-black/10 pointer-events-none" />
@@ -225,6 +231,22 @@ export default function HobbyCarousel() {
                           </div>
                         )}
 
+                        {hasImage && isActive && (
+                          <div className="pointer-events-auto">
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setLightboxId(hobby.id);
+                              }}
+                              className="inline-flex min-h-9 items-center gap-2 rounded-full border border-white/50 bg-white/10 px-3 py-1.5 text-xs font-medium text-white backdrop-blur-sm transition-colors hover:bg-white/20 focus-visible:ring-2 focus-visible:ring-white"
+                            >
+                              <Maximize2 className="h-3.5 w-3.5" aria-hidden="true" />
+                              View photo
+                            </button>
+                          </div>
+                        )}
+
                         {/* External Links */}
                         {hobby.links && hobby.links.length > 0 && (
                           <div className="flex flex-wrap items-center gap-2 pt-2 pointer-events-auto">
@@ -271,17 +293,23 @@ export default function HobbyCarousel() {
               <button
                 key={`indicator-${hobby.id}`}
                 onClick={() => setActiveIndex(index)}
-                className={`
-                  relative h-2 rounded-full transition-all duration-300 ease-out
-                  ${isActive ? 'w-10 sm:w-14 bg-primary' : 'w-2 bg-foreground/25 hover:bg-foreground/50'}
-                `}
+                className="flex h-6 min-w-6 items-center justify-center"
                 aria-label={`Select ${hobby.title}`}
+                aria-current={isActive}
                 title={hobby.title}
-              />
+              >
+                <span
+                  aria-hidden="true"
+                  className={`block h-2 rounded-full transition-all duration-300 ease-out ${
+                    isActive ? 'w-10 bg-primary sm:w-14' : 'w-2 bg-foreground/25 hover:bg-foreground/50'
+                  }`}
+                />
+              </button>
             );
           })}
         </div>
       </div>
+      <ActivityLightbox items={photoItems} openId={lightboxId} onOpenChange={setLightboxId} />
     </section>
   );
 }

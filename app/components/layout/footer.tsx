@@ -4,7 +4,14 @@ import { FooterWordmark } from "./FooterWordmark";
 import { Button } from "@/components/ui/shadcn/button";
 import { contactInfo, socialLinks as profileSocialLinks } from "@/lib/data/contacts";
 
-const Footer = () => {
+interface FooterProps {
+  /** hide the giant wordmark (used on documentation-style pages) */
+  compact?: boolean;
+  /** accepted for dynamic-import callers; unused */
+  onLoad?: () => void;
+}
+
+const Footer = ({ compact = false }: FooterProps) => {
     const primaryEmail = contactInfo.emails[0]?.address || "uyronmarcherhyssq@gmail.com";
     const linkedInUrl =
       profileSocialLinks.find((link) => link.label === "LinkedIn")?.href ||
@@ -38,8 +45,19 @@ const Footer = () => {
     ];
   
     return (
-      <footer className="relative w-full overflow-hidden border-t border-foreground/15 pt-10">
-        <div className="mx-auto flex w-full max-w-6xl flex-col items-center justify-between gap-4 px-4 sm:flex-row sm:px-6 lg:px-8">
+      <footer className={`relative w-full overflow-hidden border-t border-foreground/15 pt-10${compact ? " pb-8" : ""}`}>
+        {/* flare: a thin lime-to-orange line and a faint lime glow in the corner (plain gradients, no blur) */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-x-10 top-0 h-px"
+          style={{ background: "linear-gradient(90deg, transparent, rgb(var(--accent-2) / 0.7), rgb(var(--primary) / 0.7), transparent)" }}
+        />
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute -left-24 -top-24 h-72 w-72"
+          style={{ background: "radial-gradient(closest-side, rgb(var(--accent-2) / 0.10), transparent)" }}
+        />
+        <div className="mx-auto flex w-full max-w-7xl flex-col items-center justify-between gap-4 px-4 sm:flex-row sm:px-6 lg:px-8">
           <p className="font-mono text-xs text-foreground/50">
             &copy; {new Date().getFullYear()} Rhyss. All rights reserved.
           </p>
@@ -54,7 +72,7 @@ const Footer = () => {
           </div>
         </div>
 
-        <FooterWordmark />
+        {!compact && <FooterWordmark />}
       </footer>
     );
   };

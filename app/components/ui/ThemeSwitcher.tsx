@@ -16,7 +16,7 @@ const ThemeSwitcher = () => {
   if (!mounted) return null;
 
   const themes = [
-    { id: "dark", label: "Dark", icon: "🎨", description: "Orange accent" },
+    { id: "dark", label: "Dark", icon: "🎨", description: "Monochrome accent" },
     { id: "bw", label: "B&W", icon: "⚫", description: "Monochrome" },
     { id: "light", label: "Light", icon: "☀️", description: "White mode" },
   ];

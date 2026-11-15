@@ -28,6 +28,13 @@ import TechBadge from "@/components/ui/TechBadge";
 import { groupTech } from "@/lib/data/techStack";
 import { useScrollSpy } from "@/lib/hooks/useScrollSpy";
 import { projects } from "@/lib/data/projects";
+import { architectures } from "@/lib/data/architectures";
+import dynamic from "next/dynamic";
+
+const ArchitectureDiagram = dynamic(() => import("@/components/architecture/ArchitectureDiagram"), {
+  ssr: false,
+  loading: () => <div aria-hidden="true" className="h-64 w-full rounded-lg border border-foreground/15" />,
+});
 import { PROJECTS_CONTENT } from "@/lib/data/projectsContent";
 
 export default function ProjectPage() {
@@ -43,6 +50,7 @@ export default function ProjectPage() {
     project.paragraph ? { id: "overview", label: "Overview" } : null,
     project.features?.length ? { id: "features", label: "Key features" } : null,
     project.technologies?.length ? { id: "stack", label: "Stack" } : null,
+    architectures[project.id] ? { id: "architecture", label: "Architecture" } : null,
     project.screenshots?.length ? { id: "screenshots", label: "Screenshots" } : null,
   ].filter((item): item is { id: string; label: string } => item !== null);
   const activeSection = useScrollSpy(tocItems.map((item) => item.id));
@@ -140,7 +148,7 @@ export default function ProjectPage() {
           </header>
 
           {(project.image || hasProjectVisual(project.id)) && (
-            <div className="mt-10 lg:-mx-16 xl:-mx-28">
+            <div className="mt-10 lg:-mx-6 xl:-mx-28">
               {project.image && hasProjectVisual(project.id) && (
                 <FilterTabs
                   label="Project media"
@@ -216,6 +224,15 @@ export default function ProjectPage() {
                   </div>
                 ))}
               </dl>
+            </section>
+          )}
+
+          {architectures[project.id] && (
+            <section id="architecture" className="scroll-mt-28 pt-14">
+              <h2 className="font-sans text-2xl font-semibold tracking-tight text-foreground">Architecture</h2>
+              <div className="mt-5">
+                <ArchitectureDiagram architecture={architectures[project.id]} />
+              </div>
             </section>
           )}
 

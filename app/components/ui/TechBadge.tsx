@@ -58,7 +58,7 @@ const TechBadge = React.forwardRef<HTMLDivElement, TechBadgeProps>(
         )}
         {...props}
       >
-        <IconComponent size={iconSizes[size]} />
+        <span aria-hidden="true" className="inline-flex"><IconComponent size={iconSizes[size]} /></span>
         <span>{technology}</span>
       </motion.div>
     );
