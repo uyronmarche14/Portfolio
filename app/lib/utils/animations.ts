@@ -288,3 +288,14 @@ export const durations = {
   slow: 0.5,
   slower: 0.8,
 } as const;
+
+/** Shared, restrained motion for the portfolio's content and graphics. */
+export const editorialTransition = {
+  duration: durations.slow,
+  ease: [0.22, 1, 0.36, 1] as [number, number, number, number],
+};
+
+export const editorialReveal: Variants = {
+  hidden: { opacity: 0, y: 14 },
+  visible: { opacity: 1, y: 0, transition: editorialTransition },
+};

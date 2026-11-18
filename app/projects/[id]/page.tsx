@@ -25,6 +25,8 @@ import Footer from "@/components/layout/footer";
 import ScreenshotCarousel from "@/components/ui/ScreenshotCarousel";
 import TechBadge from "@/components/ui/TechBadge";
 
+import { ProjectAnalysisSection } from "@/components/features/projects/ProjectAnalysisSection";
+import { projectAccent, projectAnalysis } from "@/lib/data/projectAnalysis";
 import { groupTech } from "@/lib/data/techStack";
 import { useScrollSpy } from "@/lib/hooks/useScrollSpy";
 import { projects } from "@/lib/data/projects";
@@ -49,6 +51,7 @@ export default function ProjectPage() {
   const tocItems = [
     project.paragraph ? { id: "overview", label: "Overview" } : null,
     project.features?.length ? { id: "features", label: "Key features" } : null,
+    projectAnalysis[project.id] ? { id: "analysis", label: "Analysis" } : null,
     project.technologies?.length ? { id: "stack", label: "Stack" } : null,
     architectures[project.id] ? { id: "architecture", label: "Architecture" } : null,
     project.screenshots?.length ? { id: "screenshots", label: "Screenshots" } : null,
@@ -88,8 +91,11 @@ export default function ProjectPage() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [handleKeyDown]);
 
+  const accent = projectAccent[project.id];
+  const accentStyle = accent ? ({ "--primary": `var(--tone-${accent})`, "--ring": `var(--tone-${accent})` } as React.CSSProperties) : undefined;
+
   return (
-    <>
+    <div style={accentStyle}>
       <DocsLayout
         sidebar={
           <>
@@ -208,6 +214,8 @@ export default function ProjectPage() {
               </ul>
             </section>
           )}
+
+          {projectAnalysis[project.id] && <ProjectAnalysisSection analysis={projectAnalysis[project.id]} projectId={project.id} />}
 
           {project.technologies && project.technologies.length > 0 && (
             <section id="stack" className="scroll-mt-28 pt-14">
@@ -344,6 +352,6 @@ export default function ProjectPage() {
       </AnimatePresence>
 
       <Footer />
-    </>
+    </div>
   );
 }

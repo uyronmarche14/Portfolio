@@ -136,6 +136,7 @@ Comprehensive documentation is available:
 - **[Component Documentation](./COMPONENTS.md)** - Component usage and examples
 - **[Data Models](./DATA_MODELS.md)** - Data models and API interfaces
 - **[Code Quality](./CODE_QUALITY.md)** - Code quality tools and standards
+- **[Business analysis and dashboard](./docs/ai-drafts/BUSINESS-ANALYSIS-AND-DASHBOARD.md)** - Implementation documentation draft covering page flow, sample records, KPI rules, and data limits
 
 ### Component READMEs
 

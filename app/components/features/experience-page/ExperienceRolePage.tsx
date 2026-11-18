@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useMemo } from "react";
 
 import { HighlightedText } from "@/components/features/experience/HighlightedText";
+import { BusinessAnalysisShowcase } from "@/components/features/experience/BusinessAnalysisShowcase";
 import { DocsLayout, DocsRail } from "@/components/layout/DocsLayout";
 import Footer from "@/components/layout/footer";
 import { Badge } from "@/components/ui/shadcn/badge";
@@ -14,6 +15,7 @@ import { useScrollSpy } from "@/lib/hooks/useScrollSpy";
 import { formatDuration, monthsBetween } from "@/lib/tenure";
 
 import { ExperienceSidebar } from "./ExperienceSidebar";
+import { RoleBadge } from "./RoleBadge";
 import { TenureChart } from "./TenureChart";
 
 const H2 = "scroll-mt-28 font-display text-2xl tracking-tight text-foreground";
@@ -31,6 +33,9 @@ export default function ExperienceRolePage({ id }: { id: string }) {
       [
         { id: `${id}-overview`, label: "Overview", show: true },
         { id: `${id}-did`, label: "What I did", show: !!entry?.details?.length },
+        { id: `${id}-analysis`, label: "Business analysis", show: id === "iopex" },
+        { id: `${id}-data-sources`, label: "Data sources", show: id === "iopex" },
+        { id: `${id}-records`, label: "Sample records", show: id === "iopex" },
         { id: `${id}-stack`, label: "Stack", show: true },
         { id: `${id}-highlight`, label: "Highlight", show: true },
         { id: `${id}-related`, label: "Related project", show: related.length > 0 },
@@ -77,6 +82,8 @@ export default function ExperienceRolePage({ id }: { id: string }) {
           </h1>
           <p className="relative mt-3 text-lg text-foreground/70">{entry.company}</p>
 
+          <RoleBadge entry={entry} />
+
           <div className="relative mt-8 border-t border-foreground/15 pt-2">
             <TenureChart entries={workExperience} now={now} activeId={entry.id} compact />
           </div>
@@ -116,6 +123,15 @@ export default function ExperienceRolePage({ id }: { id: string }) {
                 </li>
               ))}
             </ul>
+          </section>
+        )}
+
+        {id === "iopex" && (
+          <section className="pt-14">
+            <h2 id={`${id}-analysis`} className={H2}>Business analysis & dashboards</h2>
+            <div className="mt-6">
+              <BusinessAnalysisShowcase />
+            </div>
           </section>
         )}
 

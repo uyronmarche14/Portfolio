@@ -57,6 +57,9 @@ export default function ExperienceIndex() {
                   <h2 className="mt-2 font-display text-xl tracking-tight text-foreground sm:text-2xl">{entry.role}</h2>
                   <p className="mt-1 text-sm text-foreground/70">{entry.company}</p>
                   <p className="mt-4 line-clamp-3 max-w-[68ch] text-sm leading-relaxed text-foreground/70">{entry.summary}</p>
+                  {entry.id === "iopex" && (
+                    <p className="mt-3 text-sm text-primary">Includes business analysis, data sources, and a sample dashboard.</p>
+                  )}
                   <ul className="mt-4 flex flex-wrap gap-1.5">
                     {entry.stack.map((tag) => (
                       <li key={tag}>

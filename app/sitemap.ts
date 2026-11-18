@@ -9,6 +9,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "",
     "/experience",
     "/process",
+    "/analytics",
+    "/design",
     ...workExperience.map((entry) => `/experience/${entry.id}`),
     ...projects.map((project) => `/projects/${project.id}`),
   ];

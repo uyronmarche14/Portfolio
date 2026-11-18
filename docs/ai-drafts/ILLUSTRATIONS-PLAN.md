@@ -1,6 +1,8 @@
 # Illustrations & Mascot Plan (AI draft — not approved)
 
-Status: proposal. Not an approved requirement. Do not build until reviewed.
+Status: partly superseded (2026-11-18). Not an approved requirement.
+
+**Update 2026-11-18:** the owner does not want the mascot on the site; mascot items below are dropped (a `Mascot` component remains in `app/components/ui/illustrations/` as unused code, to delete on request). Built instead: flat-editorial banners for three flagship projects (SQM, CICT, LMS) in `app/components/features/projects/ProjectBanner.tsx`, per-project accents via `projectAccent` in `app/lib/data/projectAnalysis.ts`, a hero sample-KPI card, `/analytics` and `/design`. Still open: banners for the other projects, experience scenes, section illustrations.
 
 ## Goal
 Replace small icons with large, modern flat-editorial vector illustrations plus one recurring mascot, themed per project, to position the portfolio as Technical Business Analyst + full-stack (requirements, dashboards, data).

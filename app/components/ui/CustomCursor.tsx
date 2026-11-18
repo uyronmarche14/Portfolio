@@ -103,7 +103,7 @@ export function CustomCursor() {
 
       {text && (
         <motion.div
-          style={{ x: chipX, y: chipY, opacity: hide ? 0 : 1 }}
+          style={{ x: reduce ? x : chipX, y: reduce ? y : chipY, opacity: hide ? 0 : 1 }}
           className="absolute left-0 top-0"
         >
           <motion.span

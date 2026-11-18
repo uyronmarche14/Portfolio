@@ -1,6 +1,7 @@
 "use client";
 
 import { ThemeProvider } from "next-themes";
+import { MotionConfig } from "framer-motion";
 import type { ReactNode } from "react";
 
 import { CustomCursor } from "@/components/ui/CustomCursor";
@@ -18,8 +19,10 @@ export function Providers({ children }: ProvidersProps) {
       enableSystem={false}
       disableTransitionOnChange
     >
-      {children}
-      <CustomCursor />
+      <MotionConfig reducedMotion="user">
+        {children}
+        <CustomCursor />
+      </MotionConfig>
     </ThemeProvider>
   );
 }

@@ -61,6 +61,16 @@ const Footer = ({ compact = false }: FooterProps) => {
           <p className="font-mono text-xs text-foreground/50">
             &copy; {new Date().getFullYear()} Rhyss. All rights reserved.
           </p>
+          <nav aria-label="More pages" className="flex flex-wrap justify-center gap-x-5 gap-y-1 font-mono text-xs text-foreground/60">
+            {[
+              ["Analytics", "/analytics"],
+              ["Design", "/design"],
+              ["Process", "/process"],
+              ["Experience", "/experience"],
+            ].map(([label, href]) => (
+              <a key={href} href={href} className="underline-offset-4 hover:text-foreground hover:underline">{label}</a>
+            ))}
+          </nav>
           <div className="flex gap-2">
             {socialLinks.map(({ label, href, icon: Icon }) => (
               <Button key={label} asChild variant="ghost" size="icon" title={label}>

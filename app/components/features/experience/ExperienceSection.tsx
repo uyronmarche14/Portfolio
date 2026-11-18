@@ -1,6 +1,7 @@
 "use client";
 
 import { motion, useReducedMotion } from "framer-motion";
+import { ArrowUpRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useState, type CSSProperties } from "react";
@@ -42,6 +43,7 @@ const ExperienceCard = ({ entry, index, now }: ExperienceCardProps) => {
 
   return (
     <motion.article
+      id={`experience-${entry.id}`}
       style={tone ? ({ "--primary": `var(${tone})` } as CSSProperties) : undefined}
       initial={reduceMotion ? false : { opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
@@ -96,12 +98,13 @@ const ExperienceCard = ({ entry, index, now }: ExperienceCardProps) => {
       <div
         className={cn(
           "relative min-h-[300px] md:min-h-0",
+          entry.id === "iopex" && "min-h-[360px]",
           reversed && "md:order-1"
         )}
       >
         <div className="absolute inset-0">
           {view === "art" || !entry.image ? (
-            <div className="h-full w-full p-4 sm:p-6">
+            <div className={cn("h-full w-full p-4 sm:p-6", entry.id === "iopex" && "pb-28 sm:pb-28")}>
               <Visual />
             </div>
           ) : (
@@ -127,6 +130,19 @@ const ExperienceCard = ({ entry, index, now }: ExperienceCardProps) => {
             ]}
           />
         </div>
+        )}
+        {entry.id === "iopex" && (
+          <Link
+            href="/analytics"
+            data-cursor="Open dashboard"
+            className="absolute bottom-4 left-4 right-4 z-10 inline-flex min-h-16 items-center justify-between gap-6 rounded-xl border border-primary/25 bg-card px-4 py-3 shadow-soft-lg transition-colors hover:border-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-card sm:left-auto sm:bottom-6 sm:right-6"
+          >
+            <span>
+              <span className="block font-mono text-[11px] text-primary">Synthetic sample</span>
+              <span className="mt-1 block text-sm font-medium text-foreground">Explore dashboard</span>
+            </span>
+            <ArrowUpRight aria-hidden="true" className="h-5 w-5 shrink-0 text-primary" />
+          </Link>
         )}
       </div>
     </motion.article>

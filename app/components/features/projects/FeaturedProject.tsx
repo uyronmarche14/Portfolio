@@ -1,5 +1,6 @@
 "use client";
 
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { ArrowRight, ExternalLink, Github } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -9,6 +10,7 @@ import { ProjectVisual, hasProjectVisual } from "./ProjectVisuals";
 import type { LegacyProject } from "@/lib/data/projects";
 import { workExperience } from "@/lib/data/workExperience";
 import { cn } from "@/lib/utils";
+import { durations, editorialReveal } from "@/lib/utils/animations";
 
 interface FeaturedProjectProps {
   project: LegacyProject;
@@ -20,6 +22,7 @@ const MAX_THUMBS = 5;
 /** Editorial row: number, category, summary, role, key features and stack beside a visual. Alternates sides by index. */
 export function FeaturedProject({ project, index }: FeaturedProjectProps) {
   const [shotIndex, setShotIndex] = useState(0);
+  const reduceMotion = useReducedMotion();
   const num = String(index + 1).padStart(2, "0");
   const shots = (project.screenshots ?? []).slice(0, MAX_THUMBS);
   const currentShot = shots[shotIndex];
@@ -29,7 +32,13 @@ export function FeaturedProject({ project, index }: FeaturedProjectProps) {
   const keyFeatures = (project.features ?? []).slice(0, 2);
 
   return (
-    <article className="grid items-center gap-8 border-t border-foreground/15 py-10 md:grid-cols-2 md:gap-14 md:py-14">
+    <motion.article
+      variants={editorialReveal}
+      initial={reduceMotion ? false : "hidden"}
+      whileInView="visible"
+      viewport={{ once: true, amount: 0.15 }}
+      className="grid items-center gap-8 border-t border-foreground/15 py-10 md:grid-cols-2 md:gap-14 md:py-14"
+    >
       <div className={cn("space-y-5", reversed && "md:order-2")}>
         <p className="font-mono text-xs text-muted">
           <span className="text-primary">{num}</span> / {project.category ?? "Project"}
@@ -104,15 +113,25 @@ export function FeaturedProject({ project, index }: FeaturedProjectProps) {
           className="relative block aspect-[16/10] w-full overflow-hidden rounded-lg border border-foreground/15 bg-card"
         >
           {currentShot ? (
-            <Image
-              key={currentShot}
-              src={currentShot}
-              alt={`${project.title} screenshot ${shotIndex + 1}`}
-              fill
-              loading="lazy"
-              sizes="(max-width: 768px) 100vw, 50vw"
-              className="object-cover object-top"
-            />
+            <AnimatePresence initial={false}>
+              <motion.div
+                key={currentShot}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: reduceMotion ? 0 : durations.fast }}
+                className="absolute inset-0"
+              >
+                <Image
+                  src={currentShot}
+                  alt={`${project.title} screenshot ${shotIndex + 1}`}
+                  fill
+                  loading="lazy"
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  className="object-cover object-top"
+                />
+              </motion.div>
+            </AnimatePresence>
           ) : hasProjectVisual(project.id) ? (
             <ProjectVisual id={project.id} className="h-full w-full p-4" />
           ) : null}
@@ -128,7 +147,7 @@ export function FeaturedProject({ project, index }: FeaturedProjectProps) {
                 aria-pressed={i === shotIndex}
                 onClick={() => setShotIndex(i)}
                 className={cn(
-                  "relative h-11 w-16 overflow-hidden rounded-md border outline-none focus-visible:ring-2 focus-visible:ring-ring",
+                  "relative h-11 w-16 overflow-hidden rounded-md border outline-none transition-colors duration-200 focus-visible:ring-2 focus-visible:ring-ring motion-reduce:transition-none",
                   i === shotIndex ? "border-primary" : "border-foreground/15 opacity-70 hover:opacity-100"
                 )}
               >
@@ -140,6 +159,6 @@ export function FeaturedProject({ project, index }: FeaturedProjectProps) {
           !currentShot && <p className="mt-3 font-mono text-xs text-muted">Illustrative preview, not a screenshot.</p>
         )}
       </div>
-    </article>
+    </motion.article>
   );
 }

@@ -24,7 +24,7 @@ const ThemeSwitcher = () => {
   const currentTheme = themes.find(t => t.id === theme) || themes[0];
 
   return (
-    <div className="fixed bottom-6 right-6 z-50">
+    <div className="fixed bottom-4 right-4 z-50 sm:bottom-6 sm:right-6">
       <AnimatePresence>
         {isOpen && (
           <motion.div
@@ -32,7 +32,7 @@ const ThemeSwitcher = () => {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 10 }}
             transition={{ duration: 0.15 }}
-            className="absolute bottom-16 right-0 bg-background border border-foreground/15 rounded-xl shadow-soft p-2 min-w-[160px]"
+            className="absolute bottom-12 right-0 sm:bottom-16 bg-background border border-foreground/15 rounded-xl shadow-soft p-2 min-w-[160px]"
           >
             {themes.map((t) => (
               <button
@@ -62,7 +62,7 @@ const ThemeSwitcher = () => {
       <motion.button
         whileTap={{ scale: 0.95 }}
         onClick={() => setIsOpen(!isOpen)}
-        className="h-12 w-12 border border-foreground/15 rounded-full bg-background shadow-soft flex items-center justify-center text-xl hover:shadow-soft-lg transition-all duration-150"
+        className="h-10 w-10 border border-foreground/15 rounded-full bg-background shadow-soft flex items-center justify-center text-lg opacity-80 hover:opacity-100 sm:h-12 sm:w-12 sm:text-xl sm:opacity-100 hover:shadow-soft-lg transition-all duration-150"
         aria-label="Toggle theme"
       >
         {currentTheme.icon}
