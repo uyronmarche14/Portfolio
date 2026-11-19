@@ -1,70 +1,153 @@
 "use client";
 
-import { C, Loop, Surface, Text, VisualFrame } from "../ExperienceVisualKit";
+import { AnimatePresence, motion, useInView, useReducedMotion } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
 
-/** Beyondgen: multi-step approval workflow with an audit trail. */
+import { FilterTabs } from "@/components/ui/FilterTabs";
+
+import { C, Panel, Text, VisualFrame } from "../ExperienceVisualKit";
+import { AUTO_CHIP_CLASS } from "../useAutoplay";
+
+const ROLES = ["Supplier", "Checker", "Approver"] as const;
+type Role = (typeof ROLES)[number];
+
+/** Status 0 draft, 1 submitted, 2 reviewed, 3 approved. Each move is allowed for exactly one role. */
+const STEPS: { from: number; role: Role; action: string; log: string }[] = [
+  { from: 0, role: "Supplier", action: "Submit form", log: "supplier form submitted" },
+  { from: 1, role: "Checker", action: "Mark reviewed", log: "checker reviewed the submission" },
+  { from: 2, role: "Approver", action: "Approve", log: "approver approved the request" },
+];
+const NODES = [
+  { x: 82, label: "Submitted", at: 1 },
+  { x: 244, label: "Reviewed", at: 2 },
+  { x: 406, label: "Approved", at: 3 },
+];
+const TIMES = ["11:31", "11:40", "11:42"];
+const roleFor = (status: number): Role => STEPS[status]?.role ?? "Supplier";
+
+/** Beyondgen: a role-gated approval workflow. Pick a role, act when it is that role's turn, and the audit log records each step. */
 export const BeyondgenVisual = () => {
-  const nodes = [
-    { x: 120, label: "Submitted", t: 0.05 },
-    { x: 280, label: "Reviewed", t: 0.38 },
-    { x: 440, label: "Approved", t: 0.7 },
-  ];
-  const rows = [
-    { text: "supplier form submitted", time: "11:31", t: 0.05 },
-    { text: "approver assigned", time: "11:40", t: 0.38 },
-    { text: "status → approved", time: "11:42", t: 0.7 },
-  ];
-  const timesFor = (t: number) => [0, t, t + 0.08, 0.9, 0.96, 1];
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { amount: 0.4 });
+  const reduce = useReducedMotion();
+  const [status, setStatus] = useState(0);
+  const [manualRole, setManualRole] = useState<Role>("Supplier");
+  const [auto, setAuto] = useState(true);
+  // while it plays by itself the acting role always matches the step; once you take over, the role is whatever you picked
+  const role: Role = auto ? roleFor(status) : manualRole;
+
+  // while nobody has touched it, play the workflow through: the right role acts each step, then it restarts
+  useEffect(() => {
+    if (!auto || reduce || !inView) return;
+    const timer = window.setInterval(() => setStatus((s) => (s >= 3 ? 0 : s + 1)), 2300);
+    return () => window.clearInterval(timer);
+  }, [auto, reduce, inView]);
+
+  const step = STEPS[status];
+  const myTurn = step?.role === role;
+  const done = status >= 3;
+
+  const act = () => {
+    setAuto(false);
+    if (done) {
+      setStatus(0);
+      setManualRole("Supplier");
+      return;
+    }
+    if (!myTurn) return;
+    const next = status + 1;
+    setStatus(next);
+    setManualRole(roleFor(next));
+  };
 
   return (
-    <VisualFrame>
-      {/* back layer: workflow track */}
-      <Surface x={36} y={56} w={488} h={150} e={1} />
-      <path d="M120 120H440" stroke={C.line} strokeWidth={3} strokeLinecap="round" />
-      <Loop
-        a={{ scaleX: [0, 0, 0.5, 0.5, 1, 1, 1, 0], opacity: [1, 1, 1, 1, 1, 1, 0, 0] }}
-        d={10}
-        times={[0, 0.05, 0.38, 0.4, 0.7, 0.92, 0.96, 1]}
-        origin="left center"
-      >
-        <rect x={120} y={118.5} width={320} height={3} rx={1.5} fill={C.accent} />
-      </Loop>
-      {nodes.map((n) => (
-        <g key={n.label}>
-          <circle cx={n.x} cy={120} r={22} fill={C.paper} stroke={C.bar} strokeWidth={1.5} />
-          <Loop
-            a={{ opacity: [0, 0, 1, 1, 0, 0], scale: [0.6, 0.6, 1, 1, 1, 0.6] }}
-            d={10}
-            times={timesFor(n.t)}
-            ease="easeOut"
-          >
-            <circle cx={n.x} cy={120} r={22} fill={C.accent} />
-            <path d={`m${n.x - 8} 120 6 6 11-12`} stroke={C.onAccent} strokeWidth={2.4} fill="none" strokeLinecap="round" strokeLinejoin="round" />
-          </Loop>
-          <Text x={n.x} y={170} size={12} anchor="middle" opacity={0.7}>{n.label}</Text>
-        </g>
-      ))}
+    <div ref={ref} className="flex h-full flex-col gap-3">
+      <div className="flex items-center justify-between gap-2">
+        <FilterTabs<Role>
+          label="Acting as"
+          className="pb-0"
+          value={role}
+          onChange={(r) => {
+            setAuto(false);
+            setManualRole(r);
+          }}
+          items={ROLES.map((r) => ({ key: r, label: r }))}
+        />
+        {!auto && (
+          <button type="button" onClick={() => setAuto(true)} className={AUTO_CHIP_CLASS}>
+            Auto
+          </button>
+        )}
+      </div>
 
-      {/* front layer: audit log */}
-      <Surface x={150} y={190} w={374} h={196} e={2} />
-      <Text x={174} y={222} size={11} opacity={0.5}>AUDIT LOG</Text>
-      <path d="M174 234h326" stroke={C.line} />
-      {rows.map((row, i) => {
-        const y = 266 + i * 40;
-        return (
-          <Loop
-            key={row.text}
-            a={{ opacity: [0, 0, 1, 1, 0, 0], y: [8, 8, 0, 0, 0, 0] }}
-            d={10}
-            times={timesFor(row.t)}
-            ease="easeOut"
-          >
-            <circle cx={182} cy={y - 4} r={4} fill={i === 2 ? C.accent : C.bar} />
-            <Text x={200} y={y} size={13} opacity={0.85}>{row.text}</Text>
-            <Text x={500} y={y} size={12} anchor="end" opacity={0.4}>{row.time}</Text>
-          </Loop>
-        );
-      })}
-    </VisualFrame>
+      <div className="min-h-0 flex-1">
+        <VisualFrame>
+          <Panel title="APPROVAL WORKFLOW" tag="synthetic sample" h={300}>
+            <path d="M82 100H406" stroke={C.line} strokeWidth={3} strokeLinecap="round" />
+            <motion.rect
+              x={82}
+              y={98.5}
+              height={3}
+              rx={1.5}
+              fill={C.accent}
+              initial={false}
+              animate={{ width: (Math.max(0, status - 1) / 2) * 324 }}
+              transition={{ duration: 0.5, ease: "easeInOut" }}
+            />
+            {NODES.map((n) => {
+              const on = status >= n.at;
+              return (
+                <g key={n.label}>
+                  <circle cx={n.x} cy={100} r={20} fill={C.paper} stroke={C.bar} strokeWidth={1.5} />
+                  <motion.circle cx={n.x} cy={100} r={20} fill={C.accent} initial={false} animate={{ opacity: on ? 1 : 0 }} transition={{ duration: 0.3 }} />
+                  <motion.path
+                    d={`m${n.x - 7} 100 5 5 10-11`}
+                    stroke={C.onAccent}
+                    strokeWidth={2.4}
+                    fill="none"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    initial={false}
+                    animate={{ opacity: on ? 1 : 0 }}
+                  />
+                  <Text x={n.x} y={144} size={12} anchor="middle" opacity={on ? 0.95 : 0.6}>{n.label}</Text>
+                </g>
+              );
+            })}
+
+            <Text x={22} y={186} size={11} opacity={0.55}>AUDIT LOG</Text>
+            <path d="M22 198H466" stroke={C.line} />
+            <AnimatePresence initial={false}>
+              {STEPS.slice(0, status).map((s, i) => (
+                <motion.g key={s.log} initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} transition={{ duration: 0.3 }}>
+                  <circle cx={30} cy={222 + i * 28} r={4} fill={i === status - 1 ? C.accent : C.bar} />
+                  <Text x={48} y={226 + i * 28} size={13} opacity={0.85}>{s.log}</Text>
+                  <Text x={466} y={226 + i * 28} size={12} anchor="end" opacity={0.45}>{TIMES[i]}</Text>
+                </motion.g>
+              ))}
+            </AnimatePresence>
+            {status === 0 && <Text x={22} y={226} size={12} opacity={0.45}>No activity yet</Text>}
+          </Panel>
+        </VisualFrame>
+      </div>
+
+      <div className="flex min-h-[2.5rem] items-center justify-between gap-3">
+        <p className="text-xs leading-relaxed text-foreground/70">
+          {done
+            ? "Approved. Every step above is in the audit log."
+            : myTurn
+              ? `Your turn as ${role}.`
+              : `Waiting for the ${step?.role.toLowerCase()}. As ${role}, you cannot do this step.`}
+        </p>
+        <button
+          type="button"
+          onClick={act}
+          disabled={!done && !myTurn}
+          className="shrink-0 rounded-full bg-primary px-4 py-1.5 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-card disabled:cursor-not-allowed disabled:opacity-40"
+        >
+          {done ? "Start over" : step?.action}
+        </button>
+      </div>
+    </div>
   );
 };

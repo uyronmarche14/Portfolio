@@ -526,3 +526,102 @@ html.light [class*="text-foreground/5"],
 html.light [class*="text-foreground/6"] {
     color: rgb(var(--foreground) / 0.76);
 }
+
+/* Process map: node entrance and connection pop. Backwards fill so the end state is whatever the node's own styles say. */
+@keyframes sys-node-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.92);
+  }
+}
+.sys-node-in {
+  animation: sys-node-in 0.55s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+}
+@media (prefers-reduced-motion: reduce) {
+  .sys-node-in {
+    animation: none;
+  }
+}
+
+/* Process map: nodes glide to their new positions when a selection re-arranges the map. */
+.sys-map .react-flow__node {
+  transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.sys-map .sys-lift {
+  transition: transform 0.2s ease, opacity 0.25s ease;
+}
+.sys-map .sys-lift:hover {
+  transform: translateY(-2px);
+}
+/* hovering a node lights its own lines and quiets the rest, with no React re-render */
+.sys-map.sys-hovering .react-flow__edge:not(.sys-edge-hot) .react-flow__edge-path {
+  opacity: 0.05 !important;
+}
+.sys-map .sys-edge-hot .react-flow__edge-path {
+  stroke: rgb(var(--primary)) !important;
+  opacity: 0.85 !important;
+  stroke-width: 2px !important;
+}
+@keyframes sys-pop {
+  from {
+    opacity: 0.55;
+    transform: scale(0.92);
+  }
+}
+.sys-pop-a {
+  animation: sys-pop 0.45s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+}
+.sys-pop-b {
+  animation: sys-pop-2 0.45s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+}
+@keyframes sys-pop-2 {
+  from {
+    opacity: 0.55;
+    transform: scale(0.92);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sys-map .react-flow__node,
+  .sys-map .sys-lift,
+  .sys-pop-a,
+  .sys-pop-b {
+    transition: none;
+    animation: none;
+  }
+}
+
+/* Process map: a soft pulse on the selected node (small, so it never reads as a second outline). */
+@keyframes sys-ping {
+  0% {
+    transform: scale(1);
+    opacity: 0.55;
+  }
+  100% {
+    transform: scale(1.12);
+    opacity: 0;
+  }
+}
+.sys-ping {
+  animation: sys-ping 1.8s ease-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .sys-ping {
+    animation: none;
+  }
+}
+
+/* process explorer modal: content rises in, one row after another */
+@keyframes sheet-rise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+.sheet-rise { animation: sheet-rise 0.38s cubic-bezier(0.22, 1, 0.36, 1) both; }
+@media (prefers-reduced-motion: reduce) { .sheet-rise { animation: none; } }
+
+/* footer analytics strip: the line draws in, the end point pulses, a faint sweep scans across */
+@keyframes fp-draw { from { stroke-dasharray: 1; stroke-dashoffset: 1; } to { stroke-dasharray: 1; stroke-dashoffset: 0; } }
+@keyframes fp-fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes fp-ping { 0% { box-shadow: 0 0 0 0 rgb(var(--primary) / 0.55); } 100% { box-shadow: 0 0 0 10px rgb(var(--primary) / 0); } }
+.fp-line { animation: fp-draw 1.8s cubic-bezier(0.22, 1, 0.36, 1) both; }
+.fp-area { animation: fp-fade 1.8s ease-out both; }
+.fp-dot { animation: fp-fade 0.4s ease 1.7s both, fp-ping 2s ease-out 2s infinite; }
+@keyframes fp-glint { from { stroke-dashoffset: 1.12; } to { stroke-dashoffset: -0.04; } }
+.fp-glint { stroke-dasharray: 0.07 1; stroke-dashoffset: 1.12; animation: fp-glint 5s cubic-bezier(0.4, 0, 0.2, 1) 2s infinite; }
+@media (prefers-reduced-motion: reduce) { .fp-line, .fp-area, .fp-dot { animation: none; } .fp-glint { display: none; } }

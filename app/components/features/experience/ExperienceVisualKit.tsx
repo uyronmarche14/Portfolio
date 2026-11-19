@@ -149,3 +149,68 @@ export const Text = ({
     {children}
   </text>
 );
+
+const PANEL_W = 488;
+
+/**
+ * The single flat panel every role illustration is drawn in: a header strip (title left, tag right) and an aligned content area.
+ * Children use LOCAL coordinates: x 22..466 is the content width, y 64.. is below the header. The panel is centered vertically in the frame.
+ */
+export function Panel({ title, tag, h, children }: { title: string; tag?: string; h: number; children: ReactNode }) {
+  const y0 = 30 + (380 - h) / 2;
+  return (
+    <g transform={`translate(36 ${y0})`}>
+      <rect x={0} y={0} width={PANEL_W} height={h} rx={16} fill={C.paper} stroke={C.bar} />
+      <Text x={22} y={31} size={11} opacity={0.55}>{title}</Text>
+      {tag && <Text x={PANEL_W - 22} y={31} size={11} anchor="end" fill={C.accent}>{tag}</Text>}
+      <path d={`M0 46h${PANEL_W}`} stroke={C.line} />
+      {children}
+    </g>
+  );
+}
+
+interface GrowProps {
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+  rx?: number;
+  fill: string;
+  /** grow along x from the left edge, or along y from the bottom edge */
+  axis: "x" | "y";
+  /** fraction of full size at each keyframe, for example [0, 0.7, 0.7, 0] */
+  to: number[];
+  times?: number[];
+  d?: number;
+}
+
+/**
+ * A bar that grows and shrinks by animating its own width/height (and y), not a CSS scale.
+ * Scaling grouped SVG shapes uses the wrong origin here and throws them off to the side. At rest it is drawn full size.
+ */
+export function Grow({ x, y, w, h, rx = 0, fill, axis, to, times, d = 9 }: GrowProps) {
+  const play = usePlay();
+  const animate = play
+    ? axis === "x"
+      ? { width: to.map((f) => w * f) }
+      : { height: to.map((f) => h * f), attrY: to.map((f) => y + h * (1 - f)) }
+    : undefined;
+  return <motion.rect x={x} y={y} width={w} height={h} rx={rx} fill={fill} animate={animate} transition={{ duration: d, times, ease: "easeInOut", repeat: Infinity }} />;
+}
+
+/** A stroked path that draws itself in, using the path's own pathLength. Fully drawn at rest. */
+export function DrawPath({ d: path, stroke, strokeWidth = 2.4, dur = 9, times }: { d: string; stroke: string; strokeWidth?: number; dur?: number; times?: number[] }) {
+  const play = usePlay();
+  return (
+    <motion.path
+      d={path}
+      stroke={stroke}
+      strokeWidth={strokeWidth}
+      fill="none"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      animate={play ? { pathLength: [0, 1, 1, 1], opacity: [1, 1, 1, 0] } : undefined}
+      transition={{ duration: dur, times: times ?? [0, 0.5, 0.92, 1], ease: "easeInOut", repeat: Infinity }}
+    />
+  );
+}

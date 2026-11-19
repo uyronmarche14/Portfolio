@@ -87,24 +87,44 @@ const ExperienceCard = ({ entry, index, now }: ExperienceCardProps) => {
             </li>
           ))}
         </ul>
-        <Link
-          href={`/experience/${entry.id}`}
-          className="w-fit text-sm font-medium text-foreground/70 underline-offset-4 transition-colors hover:text-primary hover:underline"
-        >
-          Read more
-        </Link>
+        <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
+          <Link
+            href={`/experience/${entry.id}`}
+            className="w-fit text-sm font-medium text-foreground/70 underline-offset-4 transition-colors hover:text-primary hover:underline"
+          >
+            Read more
+          </Link>
+          {entry.id === "iopex" && (
+            <Link
+              href="/analytics"
+              data-cursor="Open dashboard"
+              className="inline-flex w-fit items-center gap-1 text-sm font-medium text-primary underline-offset-4 hover:underline"
+            >
+              Explore the sample dashboard
+              <ArrowUpRight aria-hidden="true" className="h-4 w-4" />
+            </Link>
+          )}
+        </div>
       </div>
 
-      <div
-        className={cn(
-          "relative min-h-[300px] md:min-h-0",
-          entry.id === "iopex" && "min-h-[360px]",
-          reversed && "md:order-1"
+      <div className={cn("flex min-h-[380px] flex-col md:min-h-0", reversed && "md:order-1")}>
+        {entry.image && (
+          <div className={cn("flex px-4 pt-4 sm:px-6", reversed ? "justify-start" : "justify-end")}>
+            <FilterTabs
+              label={`${entry.company} view`}
+              className="pb-0"
+              value={view}
+              onChange={setView}
+              items={[
+                { key: "art", label: "Visual" },
+                { key: "photo", label: "Photo" },
+              ]}
+            />
+          </div>
         )}
-      >
-        <div className="absolute inset-0">
+        <div className="relative min-h-[320px] flex-1 md:min-h-0">
           {view === "art" || !entry.image ? (
-            <div className={cn("h-full w-full p-4 sm:p-6", entry.id === "iopex" && "pb-28 sm:pb-28")}>
+            <div className="absolute inset-0 p-4 sm:p-6">
               <Visual />
             </div>
           ) : (
@@ -117,33 +137,6 @@ const ExperienceCard = ({ entry, index, now }: ExperienceCardProps) => {
             />
           )}
         </div>
-        {entry.image && (
-        <div className={cn("absolute top-4 z-10 rounded-full bg-card/80 backdrop-blur", reversed ? "left-4" : "right-4")}>
-          <FilterTabs
-            label={`${entry.company} view`}
-            className="pb-0"
-            value={view}
-            onChange={setView}
-            items={[
-              { key: "art", label: "Visual" },
-              { key: "photo", label: "Photo" },
-            ]}
-          />
-        </div>
-        )}
-        {entry.id === "iopex" && (
-          <Link
-            href="/analytics"
-            data-cursor="Open dashboard"
-            className="absolute bottom-4 left-4 right-4 z-10 inline-flex min-h-16 items-center justify-between gap-6 rounded-xl border border-primary/25 bg-card px-4 py-3 shadow-soft-lg transition-colors hover:border-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-card sm:left-auto sm:bottom-6 sm:right-6"
-          >
-            <span>
-              <span className="block font-mono text-[11px] text-primary">Synthetic sample</span>
-              <span className="mt-1 block text-sm font-medium text-foreground">Explore dashboard</span>
-            </span>
-            <ArrowUpRight aria-hidden="true" className="h-5 w-5 shrink-0 text-primary" />
-          </Link>
-        )}
       </div>
     </motion.article>
   );

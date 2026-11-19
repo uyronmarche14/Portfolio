@@ -9,6 +9,7 @@ import { BusinessAnalysisShowcase } from "@/components/features/experience/Busin
 import { DocsLayout, DocsRail } from "@/components/layout/DocsLayout";
 import Footer from "@/components/layout/footer";
 import { Badge } from "@/components/ui/shadcn/badge";
+import { experienceVisuals } from "@/components/features/experience/ExperienceVisuals";
 import { projects } from "@/lib/data/projects";
 import { workExperience } from "@/lib/data/workExperience";
 import { useScrollSpy } from "@/lib/hooks/useScrollSpy";
@@ -32,6 +33,7 @@ export default function ExperienceRolePage({ id }: { id: string }) {
     () =>
       [
         { id: `${id}-overview`, label: "Overview", show: true },
+        { id: `${id}-glance`, label: "At a glance", show: id in experienceVisuals },
         { id: `${id}-did`, label: "What I did", show: !!entry?.details?.length },
         { id: `${id}-analysis`, label: "Business analysis", show: id === "iopex" },
         { id: `${id}-data-sources`, label: "Data sources", show: id === "iopex" },
@@ -46,6 +48,7 @@ export default function ExperienceRolePage({ id }: { id: string }) {
   const active = useScrollSpy(ids);
 
   if (!entry) return null;
+  const Visual = experienceVisuals[id as keyof typeof experienceVisuals];
 
   const now = new Date().toISOString().slice(0, 7);
   const duration = entry.approximate ? null : formatDuration(monthsBetween(entry, now));
@@ -112,6 +115,16 @@ export default function ExperienceRolePage({ id }: { id: string }) {
             <HighlightedText text={entry.summary} terms={entry.highlights} variant="plain" />
           </p>
         </section>
+
+        {Visual && (
+          <section className="pt-14">
+            <h2 id={`${id}-glance`} className={H2}>At a glance</h2>
+            <p className="mt-2 text-sm text-foreground/60">A small working version of the kind of thing this role dealt with. Try it.</p>
+            <div className="mt-5 h-[520px] rounded-2xl border border-foreground/15 bg-card p-4 sm:p-6">
+              <Visual />
+            </div>
+          </section>
+        )}
 
         {entry.details && entry.details.length > 0 && (
           <section className="pt-14">

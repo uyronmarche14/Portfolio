@@ -26,7 +26,9 @@ import ScreenshotCarousel from "@/components/ui/ScreenshotCarousel";
 import TechBadge from "@/components/ui/TechBadge";
 
 import { ProjectAnalysisSection } from "@/components/features/projects/ProjectAnalysisSection";
+import { ProjectDeepDiveSection } from "@/components/features/projects/ProjectDeepDive";
 import { projectAccent, projectAnalysis } from "@/lib/data/projectAnalysis";
+import { projectDeepDive } from "@/lib/data/projectDeepDive";
 import { groupTech } from "@/lib/data/techStack";
 import { useScrollSpy } from "@/lib/hooks/useScrollSpy";
 import { projects } from "@/lib/data/projects";
@@ -51,6 +53,7 @@ export default function ProjectPage() {
   const tocItems = [
     project.paragraph ? { id: "overview", label: "Overview" } : null,
     project.features?.length ? { id: "features", label: "Key features" } : null,
+    projectDeepDive[project.id] ? { id: "how-it-works", label: "How it works" } : null,
     projectAnalysis[project.id] ? { id: "analysis", label: "Analysis" } : null,
     project.technologies?.length ? { id: "stack", label: "Stack" } : null,
     architectures[project.id] ? { id: "architecture", label: "Architecture" } : null,
@@ -214,6 +217,8 @@ export default function ProjectPage() {
               </ul>
             </section>
           )}
+
+          {projectDeepDive[project.id] && <ProjectDeepDiveSection dive={projectDeepDive[project.id]} />}
 
           {projectAnalysis[project.id] && <ProjectAnalysisSection analysis={projectAnalysis[project.id]} projectId={project.id} />}
 

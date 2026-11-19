@@ -1,3 +1,6 @@
+"use client";
+
+import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 
 import type { ProjectAnalysis } from "@/lib/data/projectAnalysis";
@@ -44,13 +47,20 @@ export function ProjectAnalysisSection({ analysis, projectId }: { analysis: Proj
           <h3 className="mt-10 font-mono text-xs text-primary">{analysis.flow.title}</h3>
           <ol className="mt-3 flex flex-wrap items-center gap-2">
             {analysis.flow.steps.map((step, i) => (
-              <li key={step} className="flex items-center gap-2">
+              <motion.li
+                key={step}
+                className="flex items-center gap-2"
+                initial={{ opacity: 0, x: -10 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true, margin: "-40px" }}
+                transition={{ duration: 0.4, delay: i * 0.1 }}
+              >
                 <span className="rounded-lg border border-foreground/15 bg-card px-3 py-1.5 text-sm text-foreground">
                   <span className="mr-2 font-mono text-xs text-primary">{String(i + 1).padStart(2, "0")}</span>
                   {step}
                 </span>
                 {i < analysis.flow!.steps.length - 1 && <ArrowRight aria-hidden="true" className="h-4 w-4 text-foreground/40" />}
-              </li>
+              </motion.li>
             ))}
           </ol>
           {analysis.flow.note && <p className="mt-2 text-xs text-foreground/55">{analysis.flow.note}</p>}

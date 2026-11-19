@@ -1,5 +1,6 @@
 "use client";
 import { Calendar, Github, Linkedin, Mail } from "lucide-react";
+import { FooterPulse } from "./FooterPulse";
 import { FooterWordmark } from "./FooterWordmark";
 import { Button } from "@/components/ui/shadcn/button";
 import { contactInfo, socialLinks as profileSocialLinks } from "@/lib/data/contacts";
@@ -47,6 +48,7 @@ const Footer = ({ compact = false }: FooterProps) => {
     return (
       <footer className={`relative w-full overflow-hidden border-t border-foreground/15 pt-10${compact ? " pb-8" : ""}`}>
         {/* flare: a thin lime-to-orange line and a faint lime glow in the corner (plain gradients, no blur) */}
+        {!compact && <FooterPulse />}
         <div
           aria-hidden="true"
           className="pointer-events-none absolute inset-x-10 top-0 h-px"
@@ -57,7 +59,7 @@ const Footer = ({ compact = false }: FooterProps) => {
           className="pointer-events-none absolute -left-24 -top-24 h-72 w-72"
           style={{ background: "radial-gradient(closest-side, rgb(var(--accent-2) / 0.10), transparent)" }}
         />
-        <div className="mx-auto flex w-full max-w-7xl flex-col items-center justify-between gap-4 px-4 sm:flex-row sm:px-6 lg:px-8">
+        <div className="relative mx-auto flex w-full max-w-7xl flex-col items-center justify-between gap-4 px-4 sm:flex-row sm:px-6 lg:px-8">
           <p className="font-mono text-xs text-foreground/50">
             &copy; {new Date().getFullYear()} Rhyss. All rights reserved.
           </p>
