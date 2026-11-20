@@ -2,13 +2,11 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 import ItemPage from "@/components/features/process/explorer/ItemPage";
-import { explorerNodeById, explorerNodes } from "@/lib/data/explorerMap";
+import { explorerNodeById } from "@/lib/data/explorerMap";
 
-export const dynamicParams = false;
-
-export function generateStaticParams() {
-  return explorerNodes.map((n) => ({ id: n.id }));
-}
+// Rendered on demand: the Cloudflare runtime this site is deployed on does not serve pages that Next pre-generates for dynamic routes
+// (they returned 404), so unknown ids are handled by notFound() below instead of dynamicParams = false.
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
   const { id } = await params;

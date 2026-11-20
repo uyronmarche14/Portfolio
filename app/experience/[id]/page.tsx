@@ -8,11 +8,9 @@ interface PageProps {
   params: Promise<{ id: string }>;
 }
 
-export const dynamicParams = false;
-
-export function generateStaticParams() {
-  return workExperience.map((entry) => ({ id: entry.id }));
-}
+// Rendered on demand: the Cloudflare runtime this site is deployed on does not serve pages that Next pre-generates for dynamic routes
+// (they returned 404), so unknown ids are handled by notFound() below instead of dynamicParams = false.
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { id } = await params;
