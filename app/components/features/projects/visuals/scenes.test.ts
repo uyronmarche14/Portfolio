@@ -27,11 +27,11 @@ describe("project scenes", () => {
     });
   });
 
-  it("scenes stay inside the canvas and use no glow filters", () => {
+  it("scenes stay inside the canvas and use only the one shared shadow filter", () => {
     [...sceneFiles, "kit.tsx"].forEach((f) => {
       const src = read(f);
       expect({ f, visible: src.includes("overflow-visible") }).toEqual({ f, visible: false });
-      expect({ f, glow: src.includes("ev-sh") }).toEqual({ f, glow: false });
+      expect({ f, own: /<filter/.test(src) && f !== "kit.tsx" }).toEqual({ f, own: false });
     });
   });
 

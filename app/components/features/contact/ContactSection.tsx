@@ -118,7 +118,7 @@ const ContactSection = () => {
             quality={40}
             className="-z-30 scale-125 object-cover blur-2xl"
           />
-          <div aria-hidden="true" className="absolute inset-0 -z-20 bg-[#1a0d04]/70" />
+          <div aria-hidden="true" className="absolute inset-0 -z-20 bg-[#120a0b]/70" />
           <div aria-hidden="true" className="absolute inset-0 -z-10 bg-gradient-to-br from-primary/45 via-primary/10 to-transparent mix-blend-soft-light" />
           <div aria-hidden="true" className="absolute -right-24 -top-24 -z-10 h-80 w-80 rounded-full bg-primary/25 blur-3xl" />
 
@@ -154,7 +154,7 @@ const ContactSection = () => {
             <div className="flex flex-col justify-center rounded-3xl border border-white/15 bg-white/[0.07] p-6 text-white shadow-[inset_0_1px_0_rgb(255_255_255/0.12)] backdrop-blur-2xl sm:p-8">
               {status === 'sent' ? (
                 <div role="status" className="space-y-4 py-10 text-center">
-                  <span className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-primary/90 text-white"><Check aria-hidden="true" className="h-6 w-6" /></span>
+                  <span className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-primary text-primary-foreground"><Check aria-hidden="true" className="h-6 w-6" /></span>
                   <h4 className="font-display text-2xl">Message sent</h4>
                   <p className="text-sm text-white/70">Thank you, I will reply by email.</p>
                   <button type="button" onClick={() => setStatus('idle')} className="font-mono text-xs uppercase tracking-wider text-white/80 underline underline-offset-4 hover:text-white">
@@ -186,7 +186,7 @@ const ContactSection = () => {
                             role="radio"
                             aria-checked={on}
                             onClick={() => setTopic(option)}
-                            className={`rounded-full border px-3.5 py-1.5 text-xs outline-none transition-colors focus-visible:ring-2 focus-visible:ring-white/70 ${on ? "border-primary bg-primary text-white" : "border-white/20 text-white/75 hover:border-white/50 hover:text-white"}`}
+                            className={`rounded-full border px-3.5 py-1.5 text-xs outline-none transition-colors focus-visible:ring-2 focus-visible:ring-white/70 ${on ? "border-primary bg-primary text-primary-foreground" : "border-white/20 text-white/75 hover:border-white/50 hover:text-white"}`}
                           >
                             {option}
                           </button>
@@ -208,7 +208,7 @@ const ContactSection = () => {
                   <button
                     type="submit"
                     disabled={status === 'sending'}
-                    className="group inline-flex h-12 items-center justify-center gap-2 rounded-full bg-gradient-to-r from-primary to-[#ff9a3c] px-6 text-sm font-medium text-white outline-none transition-[filter,transform] hover:brightness-110 focus-visible:ring-2 focus-visible:ring-white/80 disabled:opacity-60"
+                    className="group inline-flex h-12 items-center justify-center gap-2 rounded-full bg-gradient-to-r from-primary to-accent px-6 text-sm font-medium text-primary-foreground outline-none transition-[filter,transform] hover:brightness-110 focus-visible:ring-2 focus-visible:ring-white/80 disabled:opacity-60"
                   >
                     {status === 'sending' ? "Sending..." : "Send message"}
                     <ArrowRight aria-hidden="true" className="h-4 w-4 transition-transform group-hover:translate-x-1" />

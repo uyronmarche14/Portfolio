@@ -10,9 +10,9 @@
 :root {
     --background: 244 241 234;
     --foreground: 10 10 10;
-    --primary: 180 55 0;
+    --primary: 172 34 42;
     --secondary: 98 94 86;
-    --accent: 255 192 152;
+    --accent: 238 192 190;
     --primary-foreground: 244 241 234;
     --tone-violet: 88 70 200;
     --tone-teal: 8 112 104;
@@ -26,42 +26,42 @@
     --tertiary: 229 49 112;
     --border: 10 10 10;
     --input: 10 10 10;
-    --ring: 180 55 0;
+    --ring: 172 34 42;
     --radius: 8px;
     --border-width: 1px;
     --shadow-offset: 0px;
     --shadow-color: 10 10 10;
     --grid-dot-opacity: 0.12;
-    --accent-2: 120 150 30;
-    --accent-2-text: 78 100 8;
+    --accent-2: 160 104 72;
+    --accent-2-text: 118 70 44;
     --on-accent-2: 10 10 10;
     --band: 255 253 248;
 }
 
 [data-theme="dark"], .dark {
     /* RHYSS V2: dark technical editorial palette */
-    --background: 11 13 14;
+    --background: 8 10 11;
     --foreground: 234 236 231;
-    --primary: 255 122 69;
+    --primary: 228 94 94;
     --secondary: 166 175 171;
-    --accent: 255 164 122;
-    --primary-foreground: 11 13 14;
+    --accent: 242 152 148;
+    --primary-foreground: 8 10 11;
     --tone-violet: 176 178 198;
-    --tone-teal: 190 220 110;
-    --tone-amber: 196 186 150;
+    --tone-teal: 176 150 160;
+    --tone-amber: 204 190 150;
     --tone-rose: 196 160 168;
     --muted: 131 140 136;
-    --card: 20 23 24;
-    --band: 23 21 20;
-    --popover: 28 32 33;
-    --border: 48 54 55;
-    --input: 48 54 55;
-    --ring: 255 122 69;
+    --card: 16 18 19;
+    --band: 17 18 18;
+    --popover: 23 26 27;
+    --border: 42 47 48;
+    --input: 42 47 48;
+    --ring: 228 94 94;
     --shadow-color: 0 0 0;
     --grid-dot-opacity: 0.08;
-    --accent-2: 190 220 110;
-    --accent-2-text: 190 220 110;
-    --on-accent-2: 11 13 14;
+    --accent-2: 214 172 140;
+    --accent-2-text: 214 172 140;
+    --on-accent-2: 8 10 11;
 }
 
 /* Black & White Monochrome Theme */
@@ -91,9 +91,9 @@
 [data-theme="light"], .light {
     --background: 244 241 234;
     --foreground: 10 10 10;
-    --primary: 180 55 0;
+    --primary: 172 34 42;
     --secondary: 98 94 86;
-    --accent: 255 192 152;
+    --accent: 238 192 190;
     --primary-foreground: 244 241 234;
     --tone-violet: 88 70 200;
     --tone-teal: 8 112 104;
@@ -103,11 +103,11 @@
     --popover: 255 253 248;
     --border: 10 10 10;
     --input: 10 10 10;
-    --ring: 180 55 0;
+    --ring: 172 34 42;
     --shadow-color: 10 10 10;
     --grid-dot-opacity: 0.1;
-    --accent-2: 120 150 30;
-    --accent-2-text: 78 100 8;
+    --accent-2: 160 104 72;
+    --accent-2-text: 118 70 44;
     --on-accent-2: 10 10 10;
     --band: 255 253 248;
     --muted: 84 90 102;
@@ -460,8 +460,8 @@ html:not(.brutal) footer {
 html.light .page-poster {
     --dot-rgb: 0 0 0;
     background:
-        radial-gradient(circle at 100% 0%, rgb(233 138 121 / 0.85), transparent 19%),
-        radial-gradient(circle at 104% 56%, rgb(240 160 110 / 0.70), transparent 20%),
+        radial-gradient(circle at 100% 0%, rgb(224 112 108 / 0.72), transparent 19%),
+        radial-gradient(circle at 104% 56%, rgb(218 204 164 / 0.60), transparent 20%),
         radial-gradient(circle at -2% 100%, rgb(168 186 198 / 0.80), transparent 20%),
         linear-gradient(180deg, #e9e3d7 0%, #ece6da 100%);
 }
@@ -470,8 +470,8 @@ html.light .page-poster {
 html.dark .page-poster {
     --dot-rgb: 255 255 255;
     background:
-        radial-gradient(circle at 100% 0%, rgb(var(--primary) / 0.40), transparent 21%),
-        radial-gradient(circle at 104% 56%, rgb(240 150 100 / 0.22), transparent 22%),
+        radial-gradient(circle at 100% 0%, rgb(var(--primary) / 0.26), transparent 21%),
+        radial-gradient(circle at 104% 56%, rgb(200 120 110 / 0.14), transparent 22%),
         radial-gradient(circle at -2% 100%, rgb(110 135 160 / 0.28), transparent 22%),
         linear-gradient(180deg, rgb(var(--band)) 0%, rgb(var(--background)) 100%);
 }
@@ -482,6 +482,36 @@ html.bw .page-poster {
         radial-gradient(circle at 88% 8%, rgb(255 255 255 / 0.14), transparent 28%),
         linear-gradient(180deg, #0a0a0a, #000);
 }
+
+/* texture: a fine film grain over the whole page, and a halftone flare that follows the colour glows in two corners.
+   The grain is a tiny cached SVG tile (speckle made from noise), drawn behind the content so text stays crisp. */
+.page-poster .poster-grain,
+.page-poster .poster-flare {
+    position: absolute;
+    inset: 0;
+}
+
+.page-poster .poster-grain {
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n' x='0' y='0' width='100%25' height='100%25'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  9 0 0 0 -4.6'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+    opacity: 0.08;
+}
+
+html.light .page-poster .poster-grain {
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n' x='0' y='0' width='100%25' height='100%25'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  9 0 0 0 -4.6'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+    opacity: 0.065;
+}
+
+html.bw .page-poster .poster-grain { opacity: 0.05; }
+
+.page-poster .poster-flare {
+    background-image: radial-gradient(circle, rgb(var(--dot-rgb) / 0.28) 1px, transparent 1.6px);
+    background-size: 6px 6px;
+    -webkit-mask-image: radial-gradient(circle at 100% 0%, #000, transparent 38%), radial-gradient(circle at 0% 100%, #000, transparent 34%);
+    mask-image: radial-gradient(circle at 100% 0%, #000, transparent 38%), radial-gradient(circle at 0% 100%, #000, transparent 34%);
+}
+
+html.light .page-poster .poster-flare { opacity: 0.55; }
+html.bw .page-poster .poster-flare { display: none; }
 
 /* the old dot grid is superseded by the poster layer */
 html:not(.brutal) .grid-bg { display: none; }

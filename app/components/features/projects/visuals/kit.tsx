@@ -67,6 +67,12 @@ export function SceneFrame({ beats, ms = 1500, label, children }: { beats: numbe
     <SceneContext.Provider value={{ beat: still ? last : beat, last, running: running && !still, run, reduce: still }}>
       <div ref={wrap} className="relative h-full w-full overflow-hidden">
         <svg viewBox={`0 0 ${W} ${H}`} className="h-full w-full" preserveAspectRatio="xMidYMid meet" role="img" aria-label={label} focusable="false">
+          {/* the same accent-tinted lift the experience graphics use, on raised panels */}
+          <defs>
+            <filter id="pv-sh" x="-10%" y="-10%" width="120%" height="130%">
+              <feDropShadow dx="0" dy="5" stdDeviation="6" floodColor="rgb(var(--primary))" floodOpacity="0.24" />
+            </filter>
+          </defs>
           {children}
         </svg>
         {!still && (
@@ -87,7 +93,7 @@ export function SceneFrame({ beats, ms = 1500, label, children }: { beats: numbe
 
 // ------------------------------------------------------------------------------------------------------------------ primitives
 export function Card({ x, y, w, h, r = 12, active = false }: { x: number; y: number; w: number; h: number; r?: number; active?: boolean }) {
-  return <rect x={x} y={y} width={w} height={h} rx={r} fill={C.paper} stroke={active ? C.accent : C.line} strokeWidth={active ? 1.5 : 1} />;
+  return <rect x={x} y={y} width={w} height={h} rx={r} fill={C.paper} stroke={active ? C.accent : C.line} strokeWidth={active ? 1.5 : 1} filter="url(#pv-sh)" />;
 }
 
 interface TextProps {
