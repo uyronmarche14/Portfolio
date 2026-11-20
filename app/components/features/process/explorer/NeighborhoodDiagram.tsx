@@ -1,5 +1,9 @@
 "use client";
 
+import { motion, useReducedMotion } from "framer-motion";
+import { useRouter } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
+
 import { neighborhoodGroups, sideCaption, type ExplorerNode, type Side } from "@/lib/data/explorerMap";
 
 const W = 132;
@@ -26,6 +30,19 @@ const short = (s: string, max: number) => (s.length > max ? `${s.slice(0, max - 
  * documents above, tools below. Plain SVG (no canvas, no animation), clickable, and capped so it stays readable; the full lists sit under it.
  */
 export default function NeighborhoodDiagram({ center, onSelect }: { center: ExplorerNode; onSelect: (id: string) => void }) {
+  const reduce = useReducedMotion();
+  const router = useRouter();
+  const [picked, setPicked] = useState<string | null>(null);
+  const timer = useRef<number | null>(null);
+  useEffect(() => () => { if (timer.current) window.clearTimeout(timer.current); }, []);
+  // clicking a node grows it into the centre while everything else fades, then opens it
+  const pick = (id: string) => {
+    if (reduce) return onSelect(id);
+    if (picked) return;
+    setPicked(id);
+    // start the navigation while the node is still growing, so the next page is ready as the animation lands
+    timer.current = window.setTimeout(() => onSelect(id), 200);
+  };
   const groups = neighborhoodGroups(center.id);
   const placed: Record<Side, Placed[]> = { left: [], right: [], top: [], bottom: [] };
   const hidden: Record<Side, number> = { left: 0, right: 0, top: 0, bottom: 0 };
@@ -91,26 +108,51 @@ export default function NeighborhoodDiagram({ center, onSelect }: { center: Expl
     return <path key={`l-${p.node.id}`} d={d} fill="none" stroke="rgb(var(--foreground) / 0.28)" strokeWidth={1.2} />;
   };
 
-  const box = (p: Placed) => (
-    <g key={p.node.id} role="button" tabIndex={0} aria-label={`Open ${p.node.title}`} style={{ cursor: "pointer", outline: "none" }} onClick={() => onSelect(p.node.id)} onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && onSelect(p.node.id)}>
-      <rect x={p.x} y={p.y} width={p.w} height={p.h} rx={10} fill="rgb(var(--card))" stroke="rgb(var(--foreground) / 0.2)" />
-      <text x={p.x + p.w / 2} y={p.y + p.h / 2 + 4} textAnchor="middle" fontSize={11} fill="rgb(var(--foreground))" fontFamily="var(--font-sans), sans-serif">
-        {short(p.node.title, 19)}
-      </text>
-    </g>
-  );
+  const box = (p: Placed) => {
+    const mine = picked === p.node.id;
+    const grow = { x: CW / 2 - (p.x + p.w / 2), y: CH / 2 - (p.y + p.h / 2), scale: CW / p.w, opacity: 1 };
+    return (
+      <motion.g
+        key={p.node.id}
+        role="button"
+        tabIndex={0}
+        aria-label={`Open ${p.node.title}`}
+        style={{ cursor: "pointer", outline: "none", transformBox: "fill-box", transformOrigin: "center" }}
+        initial={reduce ? false : { opacity: 0, scale: 0.92 }}
+        animate={picked ? (mine ? grow : { opacity: 0, scale: 0.9 }) : { opacity: 1, scale: 1, x: 0, y: 0 }}
+        whileHover={picked || reduce ? undefined : { scale: 1.05 }}
+        transition={{ duration: mine ? 0.32 : 0.2, ease: [0.32, 0.72, 0, 1] }}
+        onPointerEnter={() => router.prefetch(`/process/${p.node.id}`)}
+        onFocus={() => router.prefetch(`/process/${p.node.id}`)}
+        onClick={() => pick(p.node.id)}
+        onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && pick(p.node.id)}
+      >
+        <rect x={p.x} y={p.y} width={p.w} height={p.h} rx={10} fill="rgb(var(--card))" stroke="rgb(var(--foreground) / 0.2)" />
+        <text x={p.x + p.w / 2} y={p.y + p.h / 2 + 4} textAnchor="middle" fontSize={11} fill="rgb(var(--foreground))" fontFamily="var(--font-sans), sans-serif">
+          {short(p.node.title, 19)}
+        </text>
+      </motion.g>
+    );
+  };
 
   return (
     <svg viewBox={`${minX} ${minY} ${maxX - minX} ${maxY - minY}`} role="group" aria-label={`${center.title} and what it connects to`} className="h-auto w-full">
-      {(["left", "right", "top", "bottom"] as Side[]).flatMap((s) => placed[s].map((p) => link(p, s)))}
-      {(["left", "right", "top", "bottom"] as Side[]).map((s) => caption(s, placed[s]))}
+      <motion.g animate={{ opacity: picked ? 0 : 1 }} transition={{ duration: 0.2 }}>
+        {(["left", "right", "top", "bottom"] as Side[]).flatMap((s) => placed[s].map((p) => link(p, s)))}
+        {(["left", "right", "top", "bottom"] as Side[]).map((s) => caption(s, placed[s]))}
+      </motion.g>
       {all.map(box)}
-      <g>
+      <motion.g
+        style={{ transformBox: "fill-box", transformOrigin: "center" }}
+        initial={reduce ? false : { opacity: 0, scale: 0.85 }}
+        animate={picked ? { opacity: 0, scale: 0.8 } : { opacity: 1, scale: 1 }}
+        transition={{ duration: picked ? 0.25 : 0.4, ease: [0.22, 1, 0.36, 1] }}
+      >
         <rect x={0} y={0} width={CW} height={CH} rx={12} fill="rgb(var(--primary) / 0.1)" stroke="rgb(var(--primary))" strokeWidth={1.5} />
         <text x={CW / 2} y={CH / 2 + 4} textAnchor="middle" fontSize={12} fontWeight={600} fill="rgb(var(--foreground))" fontFamily="var(--font-sans), sans-serif">
           {short(center.title, 22)}
         </text>
-      </g>
+      </motion.g>
     </svg>
   );
 }

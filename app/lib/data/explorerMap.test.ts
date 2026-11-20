@@ -1,8 +1,9 @@
 import { EVIDENCE } from "./processMap";
-import { explorerEdges, explorerIncident, explorerNodeById, explorerNodes, neighborhoodGroups, scenariosFor, tabGroups, tabOf, type TabId } from "./explorerMap";
+import { explorerEdges, explorerIncident, explorerNodeById, explorerNodes, neighborhoodGroups, roadmapFor, scenariosFor, tabGroups, tabOf, type TabId } from "./explorerMap";
 import { infraGroups, infraNodes } from "./infraMap";
 import { artifactExamples, scenarioContent, stepContent } from "./systemContent";
-import { artifactNodes, processSysNodes, scenarios, sysNodes } from "./systemMap";
+import { toolNotes } from "./toolContent";
+import { artifactNodes, processSysNodes, scenarios, sysNodes, toolNodes } from "./systemMap";
 
 const LIST_TABS: TabId[] = ["process", "documents", "tools", "request", "delivery", "operations"];
 
@@ -37,7 +38,7 @@ describe("infrastructure map", () => {
   });
 
   it("everything with no evidence of use is labelled concept", () => {
-    ["j-proxy", "j-cache", "r-registry", "o-logs", "o-monitor", "o-backup", "o-restore"].forEach((id) => expect(explorerNodeById.get(id)?.evidence).toBe("concept"));
+    ["j-proxy", "j-cache", "r-registry", "o-monitor", "o-backup", "o-restore", "j-waf", "j-private", "o-trace", "o-rpo", "o-incident"].forEach((id) => expect(explorerNodeById.get(id)?.evidence).toBe("concept"));
   });
 
   it("never claims Kubernetes, Terraform or Helm, and names no employer applications", () => {
@@ -115,5 +116,74 @@ describe("explorer graph", () => {
     const kpi = scenariosFor("a-kpi");
     expect(kpi.some((a) => a.scenario.id === "kpi")).toBe(true);
     expect(scenariosFor("t-excel").length).toBeGreaterThan(0);
+  });
+});
+
+describe("roadmap", () => {
+  it("every item has a roadmap, with a lit point or an across-the-flow marker", () => {
+    explorerNodes.forEach((n) => {
+      const r = roadmapFor(n.id);
+      expect({ id: n.id, ok: Boolean(r) }).toEqual({ id: n.id, ok: true });
+      expect({ id: n.id, lit: r!.points.some((p) => p.lit) || r!.across }).toEqual({ id: n.id, lit: true });
+    });
+  });
+
+  it("a process step lights its own phase and marks it current", () => {
+    const r = roadmapFor("m-workflow")!;
+    expect(r.points).toHaveLength(7);
+    const cur = r.points.filter((p) => p.current);
+    expect(cur).toHaveLength(1);
+    expect(cur[0].label).toBe("Model");
+    expect(cur[0].items.map((i) => i.id)).toContain("m-workflow");
+  });
+
+  it("a production item sits on its own chain", () => {
+    const r = roadmapFor("j-dns")!;
+    expect(r.points.find((p) => p.current)?.id).toBe("j-dns");
+    expect(roadmapFor("r-staging")!.points.find((p) => p.current)?.id).toBe("r-staging");
+    expect(roadmapFor("o-health")!.points.some((p) => p.current)).toBe(false);
+    expect(roadmapFor("o-logs")!.across).toBe(true);
+  });
+});
+
+describe("tab groups", () => {
+  it("group ids are unique inside each tab, so every section has its own anchor", () => {
+    (["process", "documents", "tools", "request", "delivery", "operations"] as const).forEach((t) => {
+      const ids = tabGroups(t).map((g) => g.id);
+      expect({ tab: t, unique: new Set(ids).size === ids.length }).toEqual({ tab: t, unique: true });
+    });
+  });
+});
+
+describe("tool notes", () => {
+  it("every tool says how it was used, what for, and what it connects to", () => {
+    toolNodes.forEach((t) => {
+      const n = toolNotes[t.id];
+      expect({ id: t.id, has: Boolean(n) }).toEqual({ id: t.id, has: true });
+      expect(n.how.length).toBeGreaterThan(40);
+      expect(n.used.length).toBeGreaterThan(0);
+      expect(n.with.length).toBeGreaterThan(0);
+    });
+  });
+
+  it("every connected tool is real, is not the tool itself, and has a reason", () => {
+    Object.entries(toolNotes).forEach(([id, n]) =>
+      n.with.forEach(([other, how]) => {
+        expect({ id, other, real: explorerNodeById.get(other)?.lane === "tool" }).toEqual({ id, other, real: true });
+        expect(other).not.toBe(id);
+        expect(how.length).toBeGreaterThan(10);
+      })
+    );
+  });
+
+  it("tools that were only explored or proposed say so instead of describing use", () => {
+    toolNodes.filter((t) => t.evidence === "concept").forEach((t) => {
+      expect({ id: t.id, honest: /explor|propos|not |only|experiment|unverified/i.test(toolNotes[t.id].how) }).toEqual({ id: t.id, honest: true });
+    });
+  });
+
+  it("the notes keep employer application names out", () => {
+    const text = JSON.stringify(toolNotes).toLowerCase();
+    ["iopex", "hris", "iconnect", "cdr", "rove", "techskolar"].forEach((w) => expect(new RegExp(`\\b${w}\\b`).test(text)).toBe(false));
   });
 });

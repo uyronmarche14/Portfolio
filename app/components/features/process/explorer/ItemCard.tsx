@@ -17,6 +17,7 @@ const SUBTITLE: Record<ExplorerNode["lane"], string> = {
   journey: "Request path",
   release: "Release",
   ops: "Operations",
+  code: "Practice",
 };
 
 /** One compact card in a tab's index. Plain markup, memoized, no animation libraries: a tab can show 70 of these cheaply. */

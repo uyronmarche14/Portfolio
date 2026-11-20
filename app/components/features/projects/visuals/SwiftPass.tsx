@@ -1,36 +1,58 @@
 "use client";
 
-import { C, Loop, Surface, Text, VisualFrame } from "@/components/features/experience/ExperienceVisualKit";
-import { rows } from "./rows";
+import { motion } from "framer-motion";
 
-/** SwiftPass Guard: a QR scan at an ESP32 reader that opens a lock. */
+import { C } from "@/components/features/experience/ExperienceVisualKit";
+
+import { Beam, Card, Chip, Label, Reveal, SceneFrame, T, useBeat } from "./kit";
+
+/** SwiftPass Guard: a student shows a QR code, the device checks it, the lock opens, and the entry is logged and synced. */
+const QR = Array.from({ length: 49 }, (_, i) => ((i * 7 + Math.floor(i / 7) * 3) % 5 !== 0 ? 1 : 0));
+
+const Lock = () => {
+  const { beat } = useBeat();
+  const open = beat >= 2;
+  return (
+    <g>
+      <motion.path d="M444 124 v-14 a16 16 0 0 1 32 0 v14" fill="none" stroke={open ? C.accent : C.bar} strokeWidth={5} strokeLinecap="round" initial={false} animate={{ y: open ? -10 : 0 }} transition={{ duration: 0.5, ease: [0.32, 0.72, 0, 1] }} />
+      <rect x={436} y={124} width={48} height={38} rx={9} fill={open ? C.accent : C.faint} stroke={C.line} />
+    </g>
+  );
+};
+
 export const SwiftPass = () => (
-  <VisualFrame>
-    <Surface x={36} y={90} w={150} h={260} r={26} e={2} />
-    <Text x={54} y={126} size={11} opacity={0.5}>STUDENT</Text>
-    <rect x={66} y={150} width={90} height={90} rx={10} fill={C.paper} stroke={C.line} />
-    {rows(25).map((i) => (
-      <rect key={i} x={74 + (i % 5) * 16} y={158 + Math.floor(i / 5) * 16} width={11} height={11} rx={2} fill={C.ink} opacity={[0, 2, 4, 6, 8, 10, 12, 14, 18, 20, 22, 24].includes(i) ? 0.85 : 0.2} />
+  <SceneFrame beats={4} ms={1500} label="A student shows a QR code, the device checks it, the door lock opens, and the entry is logged and synced">
+    <Card x={24} y={24} w={168} h={200} />
+    <Label x={40} y={52}>STUDENT</Label>
+    {QR.map((on, i) => (on ? <rect key={i} x={50 + (i % 7) * 15} y={68 + Math.floor(i / 7) * 15} width={11} height={11} rx={2} fill={C.ink} opacity={0.85} /> : null))}
+    <Chip x={50} y={186} at={0} active w={100}>Show QR</Chip>
+
+    <Card x={224} y={24} w={152} h={200} />
+    <Label x={240} y={52}>DEVICE</Label>
+    <rect x={240} y={68} width={120} height={44} rx={8} fill={C.faint} />
+    {[0, 1, 2, 3, 4, 5].map((i) => (
+      <rect key={i} x={250 + i * 17} y={80} width={8} height={20} rx={2} fill={C.bar} />
     ))}
-    <rect x={66} y={268} width={90} height={26} rx={13} fill={C.accent} />
-    <Text x={111} y={286} size={12} anchor="middle" fill={C.onAccent} weight={500} mono={false}>Show QR</Text>
-    <Loop a={{ x: [0, 0, 110, 110, 0] }} d={8} times={[0, 0.15, 0.42, 0.85, 1]} ease="easeInOut">
-      <rect x={186} y={186} width={22} height={22} rx={5} fill={C.accent} opacity={0.85} />
-    </Loop>
-    <Surface x={290} y={120} w={130} h={80} r={12} e={1} />
-    <Text x={305} y={146} size={11} opacity={0.55}>ESP32</Text>
-    {rows(6).map((i) => <rect key={i} x={304 + i * 16} y={158} width={9} height={22} rx={2} fill={C.bar} />)}
-    <Loop a={{ opacity: [0, 0, 1, 1, 0] }} d={8} times={[0, 0.4, 0.46, 0.85, 1]} ease="linear">
-      <path d="M420 160h40" stroke={C.accent} strokeWidth={2} strokeDasharray="4 4" />
-    </Loop>
-    <Surface x={444} y={130} w={80} h={120} r={14} e={2} />
-    <rect x={466} y={150} width={36} height={36} rx={10} fill={C.faint} />
-    <Loop a={{ rotate: [0, 0, -35, -35, 0] }} d={8} times={[0, 0.4, 0.55, 0.85, 1]} origin="left bottom">
-      <path d="M472 168v-14a12 12 0 0 1 24 0v14" stroke={C.accent} strokeWidth={4} fill="none" strokeLinecap="round" />
-    </Loop>
-    <rect x={462} y={186} width={44} height={36} rx={8} fill={C.accent} />
-    <Surface x={290} y={240} w={130} h={80} r={12} e={1} />
-    <Text x={305} y={264} size={11} opacity={0.5}>ATTENDANCE</Text>
-    {rows(2).map((i) => <rect key={i} x={305} y={278 + i * 18} width={100 - i * 22} height={8} rx={4} fill={C.bar} />)}
-  </VisualFrame>
+    <Reveal at={1}>
+      <T x={240} y={140} size={11} mono o={0.6}>Checking role…</T>
+    </Reveal>
+    <Chip x={240} y={186} at={2} active w={118}>Access granted</Chip>
+
+    <Card x={408} y={24} w={128} h={200} />
+    <Label x={424} y={52}>DOOR</Label>
+    <Lock />
+    <Beam d="M192 124 H224" at={1} />
+    <Beam d="M376 124 H408" at={2} />
+
+    <Card x={24} y={240} w={512} h={116} />
+    <Label x={44} y={268}>ATTENDANCE LOG (SAMPLE)</Label>
+    <Reveal at={3}>
+      <circle cx={52} cy={298} r={4} fill={C.accent} />
+      <T x={66} y={302} size={13} o={0.9}>Entry logged at the main gate</T>
+      <Chip x={420} y={286} active w={96}>Synced</Chip>
+    </Reveal>
+    <Reveal at={3}>
+      <rect x={44} y={322} width={472} height={4} rx={2} fill={C.faint} />
+    </Reveal>
+  </SceneFrame>
 );

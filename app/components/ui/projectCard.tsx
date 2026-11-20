@@ -48,7 +48,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, index }) => {
       >
         {hasProjectVisual(project.id) ? (
           <>
-            <ProjectVisual id={project.id} className="h-full w-full p-4" />
+            <ProjectVisual id={project.id} mode="card" className="h-full w-full p-4" />
             {hasImage && (
               <Image
                 src={heroSrc}

@@ -6,7 +6,6 @@ import { motion } from "framer-motion";
 import { FileText, Menu, Search, X } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
-import { useHideOnScroll } from "@/lib/hooks/useHideOnScroll";
 import { useScrollSpy } from "@/lib/hooks/useScrollSpy";
 import { type NavigationItem } from "./Navigation";
 
@@ -29,7 +28,6 @@ const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
-  const hidden = useHideOnScroll(isOpen);
   const spied = useScrollSpy(SPIED_SECTIONS, "30%");
   const activeSection =
     pathname === "/"
@@ -102,8 +100,7 @@ const Navbar = () => {
     <nav
       aria-label="Primary"
       className={
-        "fixed inset-x-0 top-4 z-50 px-4 transition-all duration-300 ease-out motion-reduce:transition-none sm:px-6 lg:px-8 " +
-        (hidden ? "pointer-events-none -translate-y-[150%] opacity-0" : "translate-y-0 opacity-100")
+        "fixed inset-x-0 top-4 z-50 px-4 sm:px-6 lg:px-8"
       }
     >
       <div className="relative mx-auto flex w-full max-w-6xl items-center justify-center">

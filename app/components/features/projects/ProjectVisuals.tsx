@@ -2,32 +2,27 @@
 
 import type { ComponentType, CSSProperties } from "react";
 
-import { CodexExpress } from "./visuals/CodexExpress";
-import { ReservationDesktop } from "./visuals/ReservationDesktop";
-import { Jobint } from "./visuals/Jobint";
-import { BestBrew } from "./visuals/BestBrew";
-import { SwiftPass } from "./visuals/SwiftPass";
-import { SolaceHotel } from "./visuals/SolaceHotel";
-import { Lms } from "./visuals/Lms";
-import { Sqm } from "./visuals/Sqm";
-import { Cict } from "./visuals/Cict";
-import { Archon } from "./visuals/Archon";
-import { CommandCenter } from "./visuals/CommandCenter";
-import { AiLead } from "./visuals/AiLead";
+import dynamic from "next/dynamic";
+
+import { SceneMode } from "./visuals/kit";
+
+// each scene loads on its own, so a page (or a card) only downloads the scenes it shows
+const scene = <K extends string>(load: () => Promise<Record<K, ComponentType>>, name: K) =>
+  dynamic(() => load().then((m) => ({ default: m[name] })), { ssr: false, loading: () => <div aria-hidden="true" className="h-full w-full" /> });
 
 export const projectVisuals: Record<string, ComponentType> = {
-  "codex-express": CodexExpress,
-  "reservation-desktop": ReservationDesktop,
-  "jobint-ai-interview": Jobint,
-  "best-brew-coffee": BestBrew,
-  "swiftpass-guard": SwiftPass,
-  "solace-hotel": SolaceHotel,
-  "lms-learning-management": Lms,
-  "sqm-supplier-quality": Sqm,
-  "cict-organization-website": Cict,
-  "archon-project-workspace": Archon,
-  "ai-command-center-fitness": CommandCenter,
-  "ai-script-video-generator": AiLead,
+  "codex-express": scene(() => import("./visuals/CodexExpress"), "CodexExpress"),
+  "reservation-desktop": scene(() => import("./visuals/ReservationDesktop"), "ReservationDesktop"),
+  "jobint-ai-interview": scene(() => import("./visuals/Jobint"), "Jobint"),
+  "best-brew-coffee": scene(() => import("./visuals/BestBrew"), "BestBrew"),
+  "swiftpass-guard": scene(() => import("./visuals/SwiftPass"), "SwiftPass"),
+  "solace-hotel": scene(() => import("./visuals/SolaceHotel"), "SolaceHotel"),
+  "lms-learning-management": scene(() => import("./visuals/Lms"), "Lms"),
+  "sqm-supplier-quality": scene(() => import("./visuals/Sqm"), "Sqm"),
+  "cict-organization-website": scene(() => import("./visuals/Cict"), "Cict"),
+  "archon-project-workspace": scene(() => import("./visuals/Archon"), "Archon"),
+  "ai-command-center-fitness": scene(() => import("./visuals/CommandCenter"), "CommandCenter"),
+  "ai-script-video-generator": scene(() => import("./visuals/AiLead"), "AiLead"),
 };
 
 const PROJECT_TONE: Record<string, string> = {
@@ -47,14 +42,16 @@ const PROJECT_TONE: Record<string, string> = {
 export const hasProjectVisual = (id: string): boolean => id in projectVisuals;
 
 /** Renders a project's scene, tinted with its own accent, or nothing when it has none. */
-export function ProjectVisual({ id, className }: { id: string; className?: string }) {
+export function ProjectVisual({ id, className, mode = "page" }: { id: string; className?: string; mode?: "page" | "card" }) {
   const Scene = projectVisuals[id];
   if (!Scene) return null;
   const tone = PROJECT_TONE[id];
   const style = tone ? ({ "--primary": `var(${tone})` } as CSSProperties) : undefined;
   return (
     <div className={className} style={style}>
-      <Scene />
+      <SceneMode.Provider value={mode}>
+        <Scene />
+      </SceneMode.Provider>
     </div>
   );
 }

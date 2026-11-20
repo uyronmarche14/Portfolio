@@ -278,7 +278,7 @@ export function ProjectDeepDiveSection({ dive }: { dive: DeepDive }) {
   return (
     <section id="how-it-works" className="scroll-mt-28 pt-14">
       <Reveal>
-        <h2 className="font-sans text-2xl font-semibold tracking-tight text-foreground">How it works</h2>
+        <h2 className="border-b border-foreground/10 pb-2 font-display text-2xl tracking-tight text-foreground">How it works</h2>
         <p className="mt-4 max-w-[66ch] text-[17px] leading-[1.75] text-foreground/80">{dive.intro}</p>
       </Reveal>
 

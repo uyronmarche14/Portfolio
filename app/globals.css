@@ -360,15 +360,19 @@
     box-shadow: none;
 }
 
-.react-flow__controls-button {
+.react-flow .react-flow__controls-button {
     background: rgb(var(--card));
     border-bottom: 1px solid rgb(var(--foreground) / 0.1);
     color: rgb(var(--foreground));
     fill: rgb(var(--foreground));
 }
 
-.react-flow__controls-button:hover {
-    background: rgb(var(--foreground) / 0.06);
+.react-flow .react-flow__controls-button:hover {
+    background: rgb(var(--foreground) / 0.08);
+}
+
+.react-flow .react-flow__controls-button svg {
+    fill: currentColor;
 }
 
 
@@ -625,3 +629,8 @@ html.light [class*="text-foreground/6"] {
 @keyframes fp-glint { from { stroke-dashoffset: 1.12; } to { stroke-dashoffset: -0.04; } }
 .fp-glint { stroke-dasharray: 0.07 1; stroke-dashoffset: 1.12; animation: fp-glint 5s cubic-bezier(0.4, 0, 0.2, 1) 2s infinite; }
 @media (prefers-reduced-motion: reduce) { .fp-line, .fp-area, .fp-dot { animation: none; } .fp-glint { display: none; } }
+
+/* roadmap: the item's own point pulses */
+@keyframes rm-ping { 0% { transform: scale(1); opacity: 0.7; } 100% { transform: scale(2.4); opacity: 0; } }
+.rm-ping { animation: rm-ping 2s ease-out infinite; }
+@media (prefers-reduced-motion: reduce) { .rm-ping { animation: none; opacity: 0; } }

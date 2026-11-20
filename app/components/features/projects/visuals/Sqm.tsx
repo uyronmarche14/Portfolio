@@ -1,38 +1,64 @@
 "use client";
 
-import { C, Loop, Surface, Text, VisualFrame } from "@/components/features/experience/ExperienceVisualKit";
-import { rows } from "./rows";
+import { C } from "@/components/features/experience/ExperienceVisualKit";
 
-/** SQM: a multi-step approval track beside a role and permission matrix. */
+import { Beam, Card, Chip, Dot, Highlight, Label, Reveal, SceneFrame, T, Tick } from "./kit";
+
+/**
+ * SQM: a supplier change request moves Draft, Submitted, Review, Approved while the role matrix shows who may act at each step.
+ * The matrix is a sample rule set from the analysis, not live data.
+ */
+const STEPS = ["Draft", "Submitted", "Review", "Approved"];
+const SX = (i: number) => 80 + i * 133.3;
+const ROLES = ["Supplier", "Checker", "SQE", "Approver"];
+const CAN: Record<string, number[]> = { View: [1, 1, 1, 1], Edit: [1, 1, 0, 0], Approve: [0, 0, 0, 1] };
+// which role acts at each beat
+const ACTOR = [0, 0, 1, 3];
+const LOG = ["Supplier saved a draft", "Supplier submitted it", "Checker reviewed it", "Approver approved it"];
+
 export const Sqm = () => (
-  <VisualFrame>
-    <Surface x={36} y={56} w={488} h={130} e={1} />
-    <path d="M110 120H450" stroke={C.line} strokeWidth={3} strokeLinecap="round" />
-    <Loop a={{ scaleX: [0, 0, 1, 1, 0], opacity: [1, 1, 1, 1, 0] }} d={10} times={[0, 0.08, 0.7, 0.92, 1]} origin="left center">
-      <rect x={110} y={118.5} width={340} height={3} rx={1.5} fill={C.accent} />
-    </Loop>
-    {["Draft", "Submitted", "Review", "Approved"].map((l, i) => (
-      <g key={l}>
-        <circle cx={110 + i * (340 / 3)} cy={120} r={18} fill={C.paper} stroke={C.bar} strokeWidth={1.5} />
-        <Loop a={{ opacity: [0, 0, 1, 1, 0] }} d={10} times={[0, 0.08 + i * 0.2, 0.14 + i * 0.2, 0.92, 1]} ease="linear">
-          <circle cx={110 + i * (340 / 3)} cy={120} r={18} fill={C.accent} />
-        </Loop>
-        <Text x={110 + i * (340 / 3)} y={160} size={11} anchor="middle" opacity={0.65}>{l}</Text>
+  <SceneFrame beats={4} ms={1500} label="A supplier change request moves from draft to approved while the permission matrix shows who may act at each step">
+    {/* approval track */}
+    <Card x={24} y={24} w={512} h={124} />
+    <Label x={44} y={52}>SUPPLIER CHANGE REQUEST</Label>
+    <line x1={SX(0)} x2={SX(3)} y1={92} y2={92} stroke={C.line} strokeWidth={2} strokeLinecap="round" />
+    {[0, 1, 2].map((i) => (
+      <Beam key={i} d={`M${SX(i)} 92 H${SX(i + 1)}`} at={i + 1} />
+    ))}
+    {STEPS.map((s, i) => (
+      <g key={s}>
+        <Dot cx={SX(i)} cy={92} r={14} at={i} ring />
+        <Tick x={SX(i)} y={92} at={i} />
+        <T x={SX(i)} y={128} size={11} mono anchor="middle" o={0.65}>{s}</T>
       </g>
     ))}
-    <Surface x={36} y={206} w={488} h={180} r={16} e={2} />
-    <Text x={58} y={236} size={11} opacity={0.5}>PERMISSIONS</Text>
-    {["Supplier", "Checker", "SQE", "Approver"].map((r, i) => (
-      <Text key={r} x={58} y={268 + i * 30} size={12} opacity={0.75} mono={false}>{r}</Text>
+
+    {/* permission matrix */}
+    <Card x={24} y={164} w={308} h={192} />
+    <Label x={44} y={192}>WHO CAN DO WHAT</Label>
+    {Object.keys(CAN).map((a, c) => (
+      <Label key={a} x={196 + c * 52} y={192} anchor="middle">{a.toUpperCase()}</Label>
     ))}
-    {["View", "Edit", "Approve"].map((a, c) => (
-      <g key={a}>
-        <Text x={236 + c * 96} y={236} size={11} anchor="middle" opacity={0.5}>{a}</Text>
-        {rows(4).map((r) => {
-          const on = c === 0 || (c === 1 && r < 2) || (c === 2 && r === 3);
-          return <circle key={r} cx={236 + c * 96} cy={264 + r * 30} r={7} fill={on ? C.accent : "none"} stroke={on ? C.accent : C.line} />;
+    {ROLES.map((r, i) => (
+      <g key={r}>
+        {ACTOR.map((actor, beat) => (actor === i ? <Highlight key={beat} x={36} y={208 + i * 36} w={284} h={32} from={beat} /> : null))}
+        <T x={48} y={229 + i * 36} size={13} o={0.85}>{r}</T>
+        {Object.keys(CAN).map((a, c) => {
+          const on = CAN[a][i] === 1;
+          return on ? <circle key={a} cx={196 + c * 52} cy={224 + i * 36} r={6} fill={C.accent} /> : <circle key={a} cx={196 + c * 52} cy={224 + i * 36} r={6} fill="none" stroke={C.line} strokeWidth={1.5} />;
         })}
       </g>
     ))}
-  </VisualFrame>
+
+    {/* activity */}
+    <Card x={348} y={164} w={188} h={192} />
+    <Label x={364} y={192}>ACTIVITY</Label>
+    {LOG.map((l, i) => (
+      <Reveal key={l} at={i}>
+        <circle cx={368} cy={220 + i * 30} r={3.5} fill={C.accent} />
+        <T x={380} y={224 + i * 30} size={11} mono o={0.8}>{l}</T>
+      </Reveal>
+    ))}
+    <Chip x={364} y={330} at={3} active>Notice sent</Chip>
+  </SceneFrame>
 );

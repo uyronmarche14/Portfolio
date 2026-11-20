@@ -2,16 +2,18 @@
 
 import { ArrowLeft, Search, X } from "lucide-react";
 import dynamic from "next/dynamic";
+import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
+import { DocsLayout, DocsRail } from "@/components/layout/DocsLayout";
 import Footer from "@/components/layout/footer";
-import { explorerNodeById, tabGroups, tabOf, TABS, type TabId } from "@/lib/data/explorerMap";
+import { useScrollSpy } from "@/lib/hooks/useScrollSpy";
+import { explorerNodeById, tabGroups, TABS, type TabId } from "@/lib/data/explorerMap";
 import { EVIDENCE, type Evidence } from "@/lib/data/processMap";
 import { cn } from "@/lib/utils";
 
 import { EvidenceDot } from "../evidence";
-import SystemSheet, { SHEET_W } from "../SystemSheet";
-import ItemSheet, { SheetNav, type SheetTab } from "./ItemSheet";
+import ProcessSidebar from "./ProcessSidebar";
 import ScenariosTab from "./ScenariosTab";
 import TabPanel from "./TabPanel";
 
@@ -24,9 +26,16 @@ const isTab = (v: string | null): v is TabId => TABS.some((t) => t.id === v);
 export default function ProcessExplorer() {
   const [tab, setTab] = useState<TabId>("process");
   const [item, setItem] = useState<string | null>(null);
-  const [sheetTab, setSheetTab] = useState<SheetTab>("overview");
+  const router = useRouter();
   const [query, setQuery] = useState("");
   const [evidence, setEvidence] = useState<Evidence[]>([]);
+
+  // a fresh visit to the explorer starts a new trail of visited items
+  useEffect(() => {
+    try {
+      sessionStorage.removeItem("process-trail");
+    } catch {}
+  }, []);
 
   // read the deep link once on mount (kept out of the initial state so server and client markup match)
   useEffect(() => {
@@ -50,49 +59,23 @@ export default function ProcessExplorer() {
     setQuery("");
     sync(t, item);
   };
-  const open = useCallback(
-    (id: string | null, st: SheetTab = "overview") => {
-      setItem(id);
-      setSheetTab(st);
-      sync(tab, id);
-    },
-    [sync, tab]
-  );
-
-  useEffect(() => {
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape" && item) open(null);
-    };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [item, open]);
-
-  // previous / next follow the list of the tab the item lives in
-  const siblings = useMemo(() => {
-    if (!item) return [] as string[];
-    const n = explorerNodeById.get(item);
-    const t = n ? tabOf(n) : "process";
-    return tabGroups(t).flatMap((g) => g.nodes.map((x) => x.id));
-  }, [item]);
-  const pos = item ? siblings.indexOf(item) : -1;
-  const current = item ? explorerNodeById.get(item) : null;
+  // every item has its own page
+  const open = useCallback((id: string) => router.push(`/process/${id}`), [router]);
 
   const isList = LIST_TABS.includes(tab);
   const toggleEvidence = (e: Evidence) => setEvidence((v) => (v.includes(e) ? v.filter((x) => x !== e) : [...v, e]));
-  const openOnMap = (id: string) => {
-    setTab("map");
-    setItem(id);
-    setSheetTab("overview");
-    sync("map", id);
-  };
 
   const fullMap = tab === "map";
 
+  const rail = useMemo(() => (isList ? tabGroups(tab).map((g) => ({ id: `grp-${g.id}`, label: g.title.replace(/^\d+\s+/, "") })) : []), [isList, tab]);
+  const railIds = useMemo(() => rail.map((r) => r.id), [rail]);
+  const spy = useScrollSpy(railIds);
+
   return (
-    <div className="w-full">
+    <>
       {fullMap && (
         <div className="fixed inset-0 z-30 bg-background">
-          <MapTab focusId={item} rightInset={SHEET_W} onOpenItem={(id) => open(id)} />
+          <MapTab focusId={item} rightInset={0} onOpenItem={open} />
           <button
             type="button"
             onClick={() => changeTab("process")}
@@ -103,32 +86,41 @@ export default function ProcessExplorer() {
           </button>
         </div>
       )}
-      <div className={cn("mx-auto max-w-7xl px-4 pb-16 pt-28 sm:px-6 lg:px-8", fullMap && "invisible h-screen overflow-hidden")}>
-        <p className="font-mono text-xs text-primary">Process</p>
-        <h1 className="mt-2 font-display text-4xl tracking-tight text-foreground sm:text-5xl">How a request becomes a trusted change</h1>
-        <p className="mt-3 max-w-[62ch] text-base leading-relaxed text-foreground/70">
-          The steps, the documents they produce, the tools behind them and what it takes to run a site in production. Pick a tab, open anything for the why, the example and how it connects.
-        </p>
+      <div className={cn(fullMap && "invisible h-screen overflow-hidden")}>
+        <DocsLayout
+          wide
+          sidebar={
+            <>
+              <ProcessSidebar tab={tab} onTab={changeTab} />
+            </>
+          }
+          rail={rail.length > 1 ? <DocsRail items={rail} active={spy} /> : undefined}
+        >
+          <header>
+            <p className="font-mono text-xs text-primary">Process</p>
+            <h1 className="mt-3 font-display text-4xl leading-[1.05] tracking-tight text-foreground md:text-5xl">How a request becomes a trusted change</h1>
+            <p className="mt-4 max-w-[62ch] text-lg leading-relaxed text-foreground/70">
+              The steps, the documents they produce, the tools behind them and what it takes to run a site in production. Open anything for the why, an example and how it connects.
+            </p>
+          </header>
 
-        <div role="tablist" aria-label="Sections" className="mt-8 flex gap-1 overflow-x-auto border-b border-foreground/10">
-          {TABS.map((t, i) => {
-            const on = t.id === tab;
-            return (
-              <div key={t.id} className="flex shrink-0 items-center">
-                {t.production && !TABS[i - 1]?.production && <span className="mx-2 hidden font-mono text-[10px] uppercase tracking-wider text-foreground/35 sm:block">Production</span>}
+          <div role="tablist" aria-label="Sections" className="mt-8 flex gap-1 overflow-x-auto border-b border-foreground/10 lg:hidden">
+            {TABS.map((t) => {
+              const on = t.id === tab;
+              return (
                 <button
+                  key={t.id}
                   role="tab"
                   type="button"
                   aria-selected={on}
                   onClick={() => changeTab(t.id)}
-                  className={cn("-mb-px border-b-2 px-3 pb-2.5 pt-2 text-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring", on ? "border-primary font-medium text-foreground" : "border-transparent text-foreground/55 hover:text-foreground/85")}
+                  className={cn("-mb-px shrink-0 border-b-2 px-3 pb-2.5 pt-2 text-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring", on ? "border-primary font-medium text-foreground" : "border-transparent text-foreground/55 hover:text-foreground/85")}
                 >
                   {t.label}
                 </button>
-              </div>
-            );
-          })}
-        </div>
+              );
+            })}
+          </div>
 
         {isList && (
           <div className="mt-5 flex flex-wrap items-center gap-3">
@@ -165,30 +157,14 @@ export default function ProcessExplorer() {
           </div>
         )}
 
-        <div className="mt-8">
-          {isList && <TabPanel tab={tab} query={query} evidence={evidence} selectedId={item} onOpen={(id) => open(id)} />}
-          {tab === "scenarios" && <ScenariosTab onOpen={(id) => open(id, "scenarios")} />}
-        </div>
+          <div className="mt-8">
+            {isList && <TabPanel tab={tab} query={query} evidence={evidence} selectedId={null} onOpen={open} />}
+            {tab === "scenarios" && <ScenariosTab onOpen={open} />}
+          </div>
+        </DocsLayout>
       </div>
 
-      <SystemSheet
-        open={Boolean(current)}
-        label={current?.title ?? ""}
-        onClose={() => open(null)}
-        footer={
-          current && (
-            <SheetNav
-              label={pos >= 0 ? `${pos + 1} of ${siblings.length}` : ""}
-              onPrev={pos > 0 ? () => open(siblings[pos - 1], sheetTab) : undefined}
-              onNext={pos >= 0 && pos < siblings.length - 1 ? () => open(siblings[pos + 1], sheetTab) : undefined}
-            />
-          )
-        }
-      >
-        {item && <ItemSheet id={item} sheetTab={sheetTab} setSheetTab={setSheetTab} onSelect={(id) => open(id, sheetTab)} onOpenMap={openOnMap} />}
-      </SystemSheet>
-
       <Footer />
-    </div>
+    </>
   );
 }

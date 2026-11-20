@@ -1,5 +1,6 @@
 "use client";
 
+import { useReducedMotion } from "framer-motion";
 import { useMemo, useState } from "react";
 import ReactFlow, { Background, Controls, MarkerType, Position, type Edge, type Node } from "reactflow";
 import "reactflow/dist/style.css";
@@ -13,6 +14,7 @@ const EDGE_TYPES = {};
 /** Read-only, code-split diagram. Selecting a node shows its explanation; a text list below covers keyboard and screen-reader users. */
 export default function ArchitectureDiagram({ architecture }: { architecture: ProjectArchitecture }) {
   const [selectedId, setSelectedId] = useState(architecture.nodes[0]?.id);
+  const reduce = useReducedMotion();
 
   const nodes = useMemo<Node[]>(
     () =>
@@ -42,23 +44,30 @@ export default function ArchitectureDiagram({ architecture }: { architecture: Pr
         source: edge.from,
         target: edge.to,
         label: edge.label,
-        markerEnd: { type: MarkerType.ArrowClosed },
-        style: { stroke: "rgb(var(--secondary))" },
-        labelStyle: { fill: "rgb(var(--secondary))", fontSize: 11 },
+        // the same travelling-dash flow as the project scenes, switched off for reduced motion
+        animated: !reduce,
+        markerEnd: { type: MarkerType.ArrowClosed, color: "rgb(var(--primary))" },
+        style: { stroke: "rgb(var(--primary))", strokeWidth: 1.6 },
+        labelStyle: { fill: "rgb(var(--foreground) / 0.7)", fontSize: 11 },
         labelBgStyle: { fill: "rgb(var(--background))" },
       })),
-    [architecture.edges]
+    [architecture.edges, reduce]
   );
 
   const selected = architecture.nodes.find((node) => node.id === selectedId);
 
+  // size the frame to the diagram instead of leaving a tall empty box under a single row of nodes
+  const ys = architecture.nodes.map((n) => n.y);
+  const frameHeight = Math.min(380, Math.max(200, Math.max(...ys) - Math.min(...ys) + 150));
+
   return (
     <div>
-      <div className="h-64 w-full overflow-hidden rounded-lg border border-foreground/15 bg-background" role="region" aria-label="Interactive architecture diagram. The same information is listed as text below.">
+      <div style={{ height: frameHeight }} className="w-full overflow-hidden rounded-xl border border-foreground/15 bg-card" role="region" aria-label="Interactive architecture diagram. The same information is listed as text below.">
         <ReactFlow
           nodes={nodes}
           edges={edges}
           fitView
+          fitViewOptions={{ padding: 0.18 }}
           nodeTypes={NODE_TYPES}
           edgeTypes={EDGE_TYPES}
           nodesDraggable={false}

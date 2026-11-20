@@ -27,7 +27,7 @@ export const projects: LegacyProject[] = [
     id: "codex-express",
     title: "Codex Express",
     description:
-      "A modern appointment scheduling web application built with Next.js and TypeScript for seamless booking management.",
+      "An appointment scheduling web application built with Next.js and TypeScript for booking and managing appointments.",
     image: "/images/codex-express-preview.png",
     technologies: ["Next.js", "TypeScript", "TailwindCSS", "React"],
     githubUrl: "https://github.com/uyronmarche14/codex-express",
@@ -41,7 +41,7 @@ export const projects: LegacyProject[] = [
       "Interactive calendar scheduling interface",
     ],
     paragraph:
-      "Codex Express revolutionizes appointment scheduling with a modern, intuitive interface that simplifies booking, tracking, and managing appointments. Built with cutting-edge technologies including Next.js 14 for optimal performance, TypeScript for type safety, and TailwindCSS for responsive design. The application features real-time availability checking, automated email notifications, and a comprehensive admin dashboard for managing appointments across multiple locations.",
+      "Codex Express is an appointment scheduling web application for booking, tracking and managing appointments. It is built with Next.js, TypeScript and Tailwind CSS. It includes real-time availability checking, automated email notifications and an admin dashboard for managing appointments across multiple locations.",
     screenshots: [
       "https://res.cloudinary.com/ddnxfpziq/image/upload/v1754572290/Screenshot_2025-01-12_193709_pbh8ue.png",
       "https://res.cloudinary.com/ddnxfpziq/image/upload/v1754572290/Screenshot_2025-01-12_193718_mmsb4q.png",
@@ -70,7 +70,7 @@ export const projects: LegacyProject[] = [
     id: "reservation-desktop",
     title: "Reservation Desktop Application",
     description:
-      "A comprehensive clinic reservation system built with C# and MySQL for efficient appointment management.",
+      "A clinic reservation desktop app built with C# and MySQL for managing appointments.",
     image: "/images/reservation-desktop-preview.png",
     technologies: ["C#", "MySQL", "WinForms"],
     githubUrl: "https://github.com/uyronmarche14/clinic-reservation-system",
@@ -84,7 +84,7 @@ export const projects: LegacyProject[] = [
       "Integrated billing management system",
     ],
     paragraph:
-      "A robust desktop application designed specifically for medical clinics to manage patient appointments, doctor schedules, and billing processes. Features include multi-user access control, automated appointment reminders via SMS, comprehensive reporting with Crystal Reports integration, and real-time availability checking across multiple clinic locations.",
+      "A desktop application for medical clinics to manage patient appointments, doctor schedules and billing. It includes multi-user access control, SMS appointment reminders, Crystal Reports integration for reporting, and availability tracking across clinic locations.",
     screenshots: [
       "https://res.cloudinary.com/ddnxfpziq/image/upload/v1754572284/cs1_zribt6.png",
       "https://res.cloudinary.com/ddnxfpziq/image/upload/v1754572288/cs5_rv2q9p.png",
@@ -192,7 +192,7 @@ export const projects: LegacyProject[] = [
       "Personalized drink recommendations",
     ],
     paragraph:
-      "Best Brew Coffee is a comprehensive mobile application that transforms the coffee shop experience. Customers can browse the menu, place orders ahead of time, earn loyalty points, and locate nearby stores. For coffee shop owners, the app provides inventory management, sales analytics, and customer engagement tools. Features include real-time order tracking, mobile payments, and personalized recommendations based on purchase history.",
+      "Best Brew Coffee is a mobile coffee shop app. Customers can browse the menu, order ahead, earn loyalty points and find nearby stores. It also includes an inventory management dashboard, order tracking, mobile payments and drink recommendations.",
     screenshots: [
       "https://res.cloudinary.com/ddnxfpziq/image/upload/v1754572284/bbc1_1_nozgkp.jpg",
       "https://res.cloudinary.com/ddnxfpziq/image/upload/v1754572284/bbc1_n9rvis.jpg",

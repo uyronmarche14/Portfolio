@@ -24,12 +24,8 @@ export default function ScreenshotCarousel({ screenshots, alt, onImageClick }: S
     onImageClick?.(screenshot, index);
   };
 
-  const getGridLayout = () => {
-    if (screenshots.length === 1) return 'grid-cols-1 max-w-3xl mx-auto';
-    if (screenshots.length === 2) return 'grid-cols-2';
-    if (screenshots.length === 3) return 'grid-cols-3';
-    return 'grid-cols-2 md:grid-cols-4';
-  };
+  // the page column is narrow, so two columns keep every screenshot readable
+  const getGridLayout = () => (screenshots.length === 1 ? 'grid-cols-1' : 'grid-cols-1 sm:grid-cols-2');
 
   const visibleImages = screenshots.length === 3 ? screenshots : screenshots.slice(0, screenshots.length)
 
@@ -46,8 +42,8 @@ export default function ScreenshotCarousel({ screenshots, alt, onImageClick }: S
               src={screenshot}
               alt={`${alt} - Screenshot ${index + 1}`}
               fill
-              sizes="(max-width: 768px) 100vw, 50vw"
-              className="object-cover"
+              sizes="(max-width: 640px) 100vw, 390px"
+              className="object-cover object-top"
               priority={index < 2}
             />
             <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity duration-150 flex items-center justify-center">

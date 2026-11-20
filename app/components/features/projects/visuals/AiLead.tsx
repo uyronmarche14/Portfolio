@@ -1,40 +1,53 @@
 "use client";
 
-import { C, Loop, Surface, Text, VisualFrame } from "@/components/features/experience/ExperienceVisualKit";
-import { rows } from "./rows";
+import { C } from "@/components/features/experience/ExperienceVisualKit";
 
-/** AiLead: a prompt becomes a script and then a video timeline. */
+import { Beam, Card, Chip, Fill, Label, Reveal, SceneFrame, T } from "./kit";
+
+/** AiLead: a structured prompt becomes a script, the script becomes an avatar video, and the result is saved to history. */
 export const AiLead = () => (
-  <VisualFrame>
-    <Surface x={36} y={56} w={200} h={120} e={1} />
-    <Text x={54} y={82} size={11} opacity={0.5}>PROMPT</Text>
-    <rect x={54} y={98} width={150} height={8} rx={4} fill={C.ink} opacity={0.6} />
-    <rect x={54} y={116} width={110} height={8} rx={4} fill={C.bar} />
-    <Loop a={{ opacity: [1, 0, 1, 0, 1] }} d={1.2} ease="linear">
-      <rect x={172} y={113} width={3} height={14} fill={C.accent} />
-    </Loop>
-    <Surface x={256} y={56} w={268} h={120} e={1} />
-    <Text x={274} y={82} size={11} opacity={0.5}>SCRIPT</Text>
-    {rows(3).map((i) => (
-      <Loop key={i} a={{ scaleX: [0, 1, 1, 0] }} d={9} times={[0, 0.2 + i * 0.12, 0.9, 1]} origin="left center">
-        <rect x={274} y={98 + i * 22} width={220 - i * 40} height={8} rx={4} fill={i === 1 ? C.accent : C.bar} />
-      </Loop>
-    ))}
-    <path d="M236 116h20" stroke={C.accent} strokeWidth={1.5} strokeDasharray="3 3" />
-    <Surface x={36} y={198} w={488} h={188} r={16} e={2} />
-    <rect x={56} y={218} width={150} height={96} rx={10} fill={C.faint} />
-    <circle cx={131} cy={266} r={20} fill={C.paper} stroke={C.line} />
-    <path d="M125 256l18 10-18 10z" fill={C.accent} />
-    {["Avatar", "Voice", "Language"].map((l, i) => (
-      <g key={l}>
-        <rect x={226} y={222 + i * 34} width={278} height={26} rx={13} fill={C.faint} />
-        <Text x={242} y={239 + i * 34} size={12} opacity={0.7} mono={false}>{l}</Text>
-        <rect x={340} y={230 + i * 34} width={150 - i * 24} height={8} rx={4} fill={C.bar} />
+  <SceneFrame beats={4} ms={1500} label="A structured prompt becomes a script, the script becomes an avatar video, and the result is saved to history">
+    <Card x={24} y={24} w={152} h={196} />
+    <Label x={40} y={52}>PROMPT</Label>
+    <Reveal at={0}>
+      <rect x={40} y={68} width={120} height={7} rx={3.5} fill={C.bar} />
+      <rect x={40} y={84} width={96} height={7} rx={3.5} fill={C.bar} />
+      <rect x={40} y={100} width={108} height={7} rx={3.5} fill={C.line} />
+    </Reveal>
+    <Chip x={40} y={176} at={0} w={96}>Topic · tone</Chip>
+
+    <Card x={204} y={24} w={152} h={196} />
+    <Label x={220} y={52}>SCRIPT</Label>
+    <Reveal at={1}>
+      {[120, 100, 112, 84].map((w, i) => (
+        <rect key={i} x={220} y={68 + i * 16} width={w} height={7} rx={3.5} fill={i === 3 ? C.line : C.bar} />
+      ))}
+    </Reveal>
+    <Chip x={220} y={176} at={1} w={86}>Generated</Chip>
+
+    <Card x={384} y={24} w={152} h={196} />
+    <Label x={400} y={52}>VIDEO</Label>
+    <rect x={400} y={68} width={120} height={72} rx={9} fill={C.faint} />
+    <Reveal at={2}>
+      <circle cx={460} cy={104} r={16} fill={C.accent} />
+      <path d="M455 96 L469 104 L455 112 Z" fill={C.onAccent} />
+    </Reveal>
+    <Fill x={400} y={156} w={120} h={5} pct={0.7} at={2} />
+    <Beam d="M176 122 H204" at={1} />
+    <Beam d="M356 122 H384" at={2} />
+
+    <Card x={24} y={236} w={512} h={120} />
+    <Label x={44} y={264}>OPTIONS</Label>
+    {[
+      ["Avatar", "Presenter 2"],
+      ["Voice", "Warm"],
+      ["Language", "English"],
+    ].map(([k, v], i) => (
+      <g key={k}>
+        <T x={44 + i * 168} y={292} size={11} mono o={0.55}>{k}</T>
+        <T x={44 + i * 168} y={312} size={13} o={0.9}>{v}</T>
       </g>
     ))}
-    <rect x={56} y={334} width={448} height={8} rx={4} fill={C.faint} />
-    <Loop a={{ scaleX: [0, 1, 1, 0] }} d={9} times={[0, 0.8, 0.94, 1]} origin="left center" ease="linear">
-      <rect x={56} y={334} width={448} height={8} rx={4} fill={C.accent} opacity={0.7} />
-    </Loop>
-  </VisualFrame>
+    <Chip x={400} y={320} at={3} active w={116}>Saved to history</Chip>
+  </SceneFrame>
 );

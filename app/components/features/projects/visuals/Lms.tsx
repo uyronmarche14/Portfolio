@@ -1,42 +1,50 @@
 "use client";
 
-import { C, Loop, Surface, Text, VisualFrame } from "@/components/features/experience/ExperienceVisualKit";
-import { rows } from "./rows";
+import { C } from "@/components/features/experience/ExperienceVisualKit";
 
-/** LMS: role-gated courses, progress, and a file going to cloud storage. */
+import { Beam, Card, Chip, Fill, Label, Reveal, SceneFrame, T, Tick } from "./kit";
+
+/** LMS: only an admin may upload; the file goes to object storage through a pre-signed link, and learners then open the course. */
 export const Lms = () => (
-  <VisualFrame>
-    <Surface x={36} y={56} w={300} h={200} e={1} />
-    <Text x={58} y={86} size={11} opacity={0.5}>COURSES</Text>
-    {rows(3).map((i) => (
-      <g key={i}>
-        <rect x={58} y={104 + i * 50} width={256} height={40} rx={10} fill={C.faint} />
-        <rect x={72} y={118 + i * 50} width={90} height={8} rx={4} fill={C.ink} opacity={0.55} />
-        <rect x={72} y={132 + i * 50} width={256 - 40 - 10} height={4} rx={2} fill={C.line} />
-        <Loop a={{ scaleX: [0, 1, 1, 0] }} d={9} times={[0, 0.3 + i * 0.1, 0.92, 1]} origin="left center">
-          <rect x={72} y={132 + i * 50} width={(0.8 - i * 0.2) * 216} height={4} rx={2} fill={C.accent} />
-        </Loop>
+  <SceneFrame beats={4} ms={1500} label="A role-gated upload: an admin uploads a file to storage through a pre-signed link, and learners then open the course and see progress">
+    <Card x={24} y={24} w={236} h={150} />
+    <Label x={40} y={52}>ACCESS</Label>
+    <Chip x={40} y={66} at={0} w={80}>Learner</Chip>
+    <Reveal at={0}>
+      <rect x={128} y={66} width={72} height={22} rx={11} fill={C.accent} />
+      <T x={164} y={81} size={11} mono anchor="middle" o={1} fill={C.onAccent}>Admin</T>
+    </Reveal>
+    <Reveal at={0}>
+      <circle cx={52} cy={122} r={10} fill={C.accent} />
+      <Tick x={52} y={123} at={0} size={9} />
+      <T x={72} y={127} size={13} o={0.9}>Upload allowed</T>
+    </Reveal>
+
+    <Card x={24} y={190} w={236} h={166} />
+    <Label x={40} y={218}>UPLOAD</Label>
+    <rect x={40} y={232} width={204} height={96} rx={10} fill="none" stroke={C.bar} strokeDasharray="5 5" />
+    <Reveal at={1} y={-14}>
+      <rect x={96} y={254} width={92} height={50} rx={8} fill={C.accentSoft} stroke={C.accent} />
+      <T x={142} y={284} size={11} mono anchor="middle" o={1}>lesson.mp4</T>
+    </Reveal>
+
+    <Card x={284} y={24} w={252} h={150} />
+    <Label x={300} y={52}>OBJECT STORAGE</Label>
+    <rect x={300} y={68} width={220} height={34} rx={8} fill={C.faint} />
+    <Reveal at={2}>
+      <rect x={300} y={68} width={220} height={34} rx={8} fill={C.accentSoft} />
+      <T x={314} y={90} size={11} mono o={1}>lesson.mp4</T>
+    </Reveal>
+    <Chip x={300} y={122} at={2} active w={140}>Pre-signed link</Chip>
+    <Beam d="M260 282 C272 282 272 85 284 85" at={2} />
+
+    <Card x={284} y={190} w={252} h={166} />
+    <Label x={300} y={218}>COURSE PROGRESS</Label>
+    {["Intro", "Module 1", "Module 2"].map((l, i) => (
+      <g key={l}>
+        <T x={300} y={248 + i * 34} size={13} o={0.85}>{l}</T>
+        <Fill x={300} y={256 + i * 34} w={220} h={5} pct={[1, 0.6, 0.25][i]} at={3} />
       </g>
     ))}
-    <Surface x={36} y={276} w={140} h={110} e={2} />
-    <Text x={52} y={302} size={11} opacity={0.5}>UPLOAD</Text>
-    <rect x={52} y={316} width={108} height={50} rx={10} fill={C.faint} stroke={C.line} strokeDasharray="4 4" />
-    <Loop a={{ y: [0, 0, 22, 22, 0], opacity: [0, 1, 1, 0, 0] }} d={8} times={[0, 0.1, 0.45, 0.6, 1]}>
-      <rect x={90} y={322} width={32} height={26} rx={5} fill={C.accent} />
-    </Loop>
-    <Loop a={{ x: [0, 0, 140, 140, 0], opacity: [0, 1, 1, 0, 0] }} d={8} times={[0, 0.5, 0.75, 0.8, 1]} ease="easeInOut">
-      <circle cx={190} cy={331} r={6} fill={C.accent} />
-    </Loop>
-    <Surface x={346} y={286} w={178} h={100} e={1} />
-    <Text x={362} y={312} size={11} opacity={0.5}>STORAGE</Text>
-    <rect x={362} y={326} width={146} height={42} rx={10} fill={C.accentSoft} stroke={C.accent} strokeOpacity={0.5} />
-    <Surface x={356} y={96} w={168} h={150} r={14} e={2} />
-    <Text x={372} y={122} size={11} opacity={0.5}>ACCESS</Text>
-    {["Learner", "Admin"].map((r, i) => (
-      <g key={r}>
-        <rect x={372} y={136 + i * 44} width={136} height={34} rx={17} fill={i === 1 ? C.accent : "none"} stroke={i === 1 ? C.accent : C.line} />
-        <Text x={440} y={158 + i * 44} size={12} anchor="middle" fill={i === 1 ? C.onAccent : C.ink} opacity={i === 1 ? 1 : 0.65}>{r}</Text>
-      </g>
-    ))}
-  </VisualFrame>
+  </SceneFrame>
 );

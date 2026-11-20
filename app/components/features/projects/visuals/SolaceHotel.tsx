@@ -1,33 +1,59 @@
 "use client";
 
-import { C, Loop, Surface, Text, VisualFrame } from "@/components/features/experience/ExperienceVisualKit";
-import { rows } from "./rows";
+import { C } from "@/components/features/experience/ExperienceVisualKit";
 
-/** Solace Hotel: room availability with a booking state. */
+import { Card, Chip, Label, Reveal, SceneFrame, T, Between } from "./kit";
+
+/** Solace Hotel: a date range is picked, a room is held, the guest sees the reservation and the admin sees the booking. */
+const ROOMS = ["Room 101", "Room 102", "Room 103", "Room 104"];
+const BUSY = new Set(["0-1", "0-4", "1-0", "1-5", "2-6", "3-2", "3-3"]);
+const DAYS = ["M", "T", "W", "T", "F", "S", "S"];
+
 export const SolaceHotel = () => (
-  <VisualFrame>
-    <Surface x={36} y={56} w={360} h={330} e={1} />
-    <Text x={58} y={86} size={11} opacity={0.5}>ROOMS</Text>
-    {rows(4).map((r) => (
+  <SceneFrame beats={4} ms={1500} label="A hotel room is found by date range and held, the guest sees the reservation, and the admin sees the booking">
+    <Card x={24} y={24} w={332} h={332} />
+    <Label x={44} y={52}>AVAILABILITY</Label>
+    {DAYS.map((d, i) => (
+      <Label key={i} x={148 + i * 30} y={80} anchor="middle">{d}</Label>
+    ))}
+    {ROOMS.map((r, ri) => (
       <g key={r}>
-        <Text x={58} y={130 + r * 62} size={12} opacity={0.7} mono={false}>{`Room ${101 + r}`}</Text>
-        {rows(7).map((c) => {
-          const busy = (r + c) % 3 === 0;
-          return <rect key={c} x={130 + c * 36} y={112 + r * 62} width={30} height={30} rx={7} fill={busy ? C.accentSoft : C.faint} />;
-        })}
+        <T x={44} y={118 + ri * 54} size={13} o={0.8}>{r}</T>
+        {DAYS.map((_, ci) => (
+          <rect key={ci} x={134 + ci * 30} y={98 + ri * 54} width={26} height={30} rx={7} fill={BUSY.has(`${ri}-${ci}`) ? C.accentSoft : C.faint} />
+        ))}
       </g>
     ))}
-    <Loop a={{ scaleX: [0, 0, 1, 1, 0] }} d={9} times={[0, 0.2, 0.4, 0.85, 1]} origin="left center">
-      <rect x={202} y={236} width={102} height={30} rx={8} fill={C.accent} />
-    </Loop>
-    <Surface x={416} y={96} w={108} h={130} r={14} e={2} />
-    <Text x={430} y={122} size={11} opacity={0.5}>GUEST</Text>
-    <circle cx={470} cy={158} r={16} fill={C.faint} />
-    <rect x={434} y={186} width={72} height={8} rx={4} fill={C.bar} />
-    <rect x={434} y={204} width={48} height={8} rx={4} fill={C.line} />
-    <Surface x={416} y={246} w={108} h={96} r={14} e={1} />
-    <Text x={430} y={272} size={11} opacity={0.5}>ADMIN</Text>
-    <rect x={430} y={286} width={78} height={22} rx={11} fill={C.faint} stroke={C.line} />
-    <rect x={430} y={314} width={56} height={14} rx={7} fill={C.accentSoft} />
-  </VisualFrame>
+    {/* the picked range on Room 103, days Wed to Fri */}
+    <Reveal at={0}>
+      <rect x={194} y={206} width={86} height={30} rx={8} fill="none" stroke={C.accent} strokeWidth={1.5} strokeDasharray="4 4" />
+    </Reveal>
+    <Reveal at={1}>
+      <rect x={194} y={206} width={86} height={30} rx={8} fill={C.accent} />
+      <T x={237} y={226} size={11} mono anchor="middle" o={1} fill={C.onAccent}>HELD</T>
+    </Reveal>
+    <Between from={0} to={0}>
+      <T x={44} y={316} size={11} mono o={0.55}>Choose dates and guests</T>
+    </Between>
+    <Between from={1} to={3}>
+      <T x={44} y={316} size={11} mono o={0.55}>3 nights, 2 guests</T>
+    </Between>
+
+    <Card x={372} y={24} w={164} h={160} />
+    <Label x={388} y={52}>GUEST</Label>
+    <circle cx={414} cy={92} r={14} fill={C.faint} />
+    <rect x={438} y={84} width={76} height={8} rx={4} fill={C.bar} />
+    <rect x={438} y={98} width={50} height={6} rx={3} fill={C.line} />
+    <Chip x={388} y={134} at={2} active w={110}>Reservation sent</Chip>
+
+    <Card x={372} y={200} w={164} h={156} />
+    <Label x={388} y={228}>ADMIN</Label>
+    {[0, 1].map((i) => (
+      <rect key={i} x={388} y={242 + i * 28} width={132} height={22} rx={8} fill={C.faint} />
+    ))}
+    <Reveal at={3}>
+      <rect x={388} y={298} width={132} height={26} rx={8} fill={C.accentSoft} stroke={C.accent} />
+      <T x={400} y={315} size={11} mono o={1}>Room 103 booked</T>
+    </Reveal>
+  </SceneFrame>
 );

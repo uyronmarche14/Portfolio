@@ -11,7 +11,7 @@ import { ProjectBanner } from "./ProjectBanner";
 export function ProjectAnalysisSection({ analysis, projectId }: { analysis: ProjectAnalysis; projectId: string }) {
   return (
     <section id="analysis" className="scroll-mt-28 pt-14">
-      <h2 className="font-sans text-2xl font-semibold tracking-tight text-foreground">Analysis</h2>
+      <h2 className="border-b border-foreground/10 pb-2 font-display text-2xl tracking-tight text-foreground">Analysis</h2>
       <p className="mt-1 text-sm text-foreground/60">The requirements thinking behind the build.</p>
 
       <ProjectBanner id={projectId} className="mt-6 w-full rounded-2xl border border-foreground/15" />

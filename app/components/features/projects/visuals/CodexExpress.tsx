@@ -1,39 +1,74 @@
 "use client";
 
-import { C, Loop, Surface, Text, VisualFrame } from "@/components/features/experience/ExperienceVisualKit";
-import { rows } from "./rows";
+import { C } from "@/components/features/experience/ExperienceVisualKit";
 
-/** Codex Express: a calendar where a free slot gets booked, then a notification arrives. */
+import { Card, Chip, Dot, Highlight, Label, Reveal, SceneFrame, T, Tick, Between } from "./kit";
+
+/** Codex Express: pick a day and a slot at a location, the booking confirms, an email goes out. */
+const DAYS = ["S", "M", "T", "W", "T", "F", "S"];
+const BUSY = new Set([3, 9, 12, 16, 17, 23, 26, 30]);
+const PICK = 15;
+const SLOTS = ["09:00", "10:30", "13:00", "15:30"];
+const PLACES = ["Main office", "Clinic east", "Clinic west"];
+
 export const CodexExpress = () => (
-  <VisualFrame>
-    <Surface x={36} y={56} w={330} h={330} e={1} />
-    <Text x={58} y={86} size={11} opacity={0.5}>APPOINTMENTS</Text>
-    {rows(7).map((c) => (
-      <Text key={c} x={66 + c * 44} y={116} size={11} anchor="middle" opacity={0.45}>{"SMTWTFS"[c]}</Text>
+  <SceneFrame beats={4} ms={1500} label="An appointment is booked from a calendar, confirmed, and an email notification is sent">
+    <Card x={24} y={24} w={308} h={332} />
+    <Label x={44} y={52}>AVAILABILITY</Label>
+    {DAYS.map((d, i) => (
+      <Label key={i} x={62 + i * 40} y={80} anchor="middle">{d}</Label>
     ))}
-    {rows(28).map((i) => {
-      const x = 48 + (i % 7) * 44;
-      const y = 130 + Math.floor(i / 7) * 56;
-      const booked = [3, 9, 16, 20].includes(i);
-      return <rect key={i} x={x} y={y} width={36} height={44} rx={8} fill={booked ? C.accentSoft : C.faint} />;
+    {Array.from({ length: 35 }, (_, n) => {
+      const col = n % 7;
+      const row = Math.floor(n / 7);
+      const day = n - 2;
+      const x = 48 + col * 40;
+      const y = 92 + row * 34;
+      if (day < 1 || day > 31) return null;
+      const picked = day === PICK;
+      return (
+        <g key={n}>
+          <rect x={x} y={y} width={28} height={28} rx={7} fill={BUSY.has(day) ? C.accentSoft : C.faint} />
+          {picked && <Highlight x={x - 2} y={y - 2} w={32} h={32} r={9} from={0} to={3} />}
+          {picked && (
+            <Reveal at={0}>
+              <rect x={x} y={y} width={28} height={28} rx={7} fill="none" stroke={C.accent} strokeWidth={1.5} />
+            </Reveal>
+          )}
+          <T x={x + 14} y={y + 18} size={11} mono anchor="middle" o={picked ? 1 : 0.55}>{day}</T>
+        </g>
+      );
     })}
-    <Loop a={{ opacity: [0, 0, 1, 1, 0] }} d={8} times={[0, 0.2, 0.28, 0.9, 1]} ease="linear">
-      <rect x={224} y={242} width={36} height={44} rx={8} fill={C.accent} />
-      <path d="m234 264 5 5 9-10" stroke={C.onAccent} strokeWidth={2.2} fill="none" strokeLinecap="round" strokeLinejoin="round" />
-    </Loop>
-    <Loop a={{ x: [0, 0, 0, 0], y: [0, 0, 0, 0], opacity: [0, 0, 1, 1, 0, 0] }} d={8} times={[0, 0.34, 0.42, 0.8, 0.88, 1]} ease="easeOut">
-      <Surface x={320} y={300} w={204} h={68} r={14} e={2} />
-      <circle cx={346} cy={334} r={11} fill={C.accentSoft} stroke={C.accent} strokeOpacity={0.6} />
-      <Text x={366} y={330} size={12} weight={600} mono={false}>Booking confirmed</Text>
-      <Text x={366} y={348} size={11} opacity={0.55}>email sent</Text>
-    </Loop>
-    <Surface x={388} y={72} w={136} h={150} e={1} />
-    <Text x={404} y={98} size={11} opacity={0.5}>LOCATIONS</Text>
-    {rows(3).map((i) => (
-      <g key={i}>
-        <circle cx={410} cy={124 + i * 32} r={5} fill={i === 0 ? C.accent : C.bar} />
-        <rect x={426} y={119 + i * 32} width={70 - i * 8} height={8} rx={4} fill={C.bar} />
+    <Reveal at={2}>
+      <circle cx={52} cy={332} r={12} fill={C.accent} />
+      <Tick x={52} y={333} at={2} size={11} />
+      <T x={74} y={337} size={13} o={0.9}>Booking confirmed</T>
+    </Reveal>
+    <Chip x={226} y={321} at={3} active>Email sent</Chip>
+
+    <Card x={348} y={24} w={188} h={196} />
+    <Label x={364} y={52}>TIME SLOTS</Label>
+    {SLOTS.map((s, i) => (
+      <Chip key={s} x={364 + (i % 2) * 78} y={68 + Math.floor(i / 2) * 32} w={66} at={0} active={false}>{s}</Chip>
+    ))}
+    <Reveal at={1}>
+      <rect x={442} y={68} width={66} height={22} rx={11} fill={C.accent} />
+      <T x={475} y={83} size={11} mono anchor="middle" o={1} fill={C.onAccent}>10:30</T>
+    </Reveal>
+    <Between from={0} to={0}>
+      <T x={364} y={160} size={11} mono o={0.5}>Checking availability…</T>
+    </Between>
+    <Between from={1} to={3}>
+      <T x={364} y={160} size={11} mono o={0.5}>Slot held for you</T>
+    </Between>
+
+    <Card x={348} y={236} w={188} h={120} />
+    <Label x={364} y={264}>LOCATIONS</Label>
+    {PLACES.map((p, i) => (
+      <g key={p}>
+        <Dot cx={372} cy={286 + i * 26} r={5} at={i === 1 ? 1 : 99} />
+        <T x={388} y={290 + i * 26} size={11} mono o={0.8}>{p}</T>
       </g>
     ))}
-  </VisualFrame>
+  </SceneFrame>
 );

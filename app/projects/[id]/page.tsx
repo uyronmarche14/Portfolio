@@ -55,7 +55,7 @@ export default function ProjectPage() {
     project.features?.length ? { id: "features", label: "Key features" } : null,
     projectDeepDive[project.id] ? { id: "how-it-works", label: "How it works" } : null,
     projectAnalysis[project.id] ? { id: "analysis", label: "Analysis" } : null,
-    project.technologies?.length ? { id: "stack", label: "Stack" } : null,
+    project.technologies?.length ? { id: "tech-stack", label: "Stack" } : null,
     architectures[project.id] ? { id: "architecture", label: "Architecture" } : null,
     project.screenshots?.length ? { id: "screenshots", label: "Screenshots" } : null,
   ].filter((item): item is { id: string; label: string } => item !== null);
@@ -122,7 +122,7 @@ export default function ProjectPage() {
 
           <header>
             <p className="font-mono text-xs text-primary">{project.category || "Project"}</p>
-            <h1 className="mt-3 font-sans text-4xl font-semibold tracking-tight text-foreground md:text-5xl">
+            <h1 className="mt-3 font-display text-4xl leading-[1.05] tracking-tight text-foreground md:text-5xl">
               {project.title}
             </h1>
             <p className="mt-4 max-w-[60ch] text-lg leading-relaxed text-foreground/70">{project.description}</p>
@@ -157,7 +157,7 @@ export default function ProjectPage() {
           </header>
 
           {(project.image || hasProjectVisual(project.id)) && (
-            <div className="mt-10 lg:-mx-6 xl:-mx-28">
+            <div className="mt-10">
               {project.image && hasProjectVisual(project.id) && (
                 <FilterTabs
                   label="Project media"
@@ -191,7 +191,7 @@ export default function ProjectPage() {
                 </figure>
               ) : (
                 <div>
-                  <ProjectVisual id={project.id} className="aspect-[4/3] w-full sm:aspect-[16/10]" />
+                  <ProjectVisual id={project.id} className="aspect-[56/38] w-full overflow-hidden rounded-xl border border-foreground/10 bg-card/40" />
                 </div>
               )}
             </div>
@@ -199,14 +199,14 @@ export default function ProjectPage() {
 
           {project.paragraph && (
             <section id="overview" className="scroll-mt-28 pt-14">
-              <h2 className="font-sans text-2xl font-semibold tracking-tight text-foreground">Overview</h2>
+              <h2 className="border-b border-foreground/10 pb-2 font-display text-2xl tracking-tight text-foreground">Overview</h2>
               <p className="mt-4 max-w-[66ch] text-[17px] leading-[1.75] text-foreground/80">{project.paragraph}</p>
             </section>
           )}
 
           {project.features && project.features.length > 0 && (
             <section id="features" className="scroll-mt-28 pt-14">
-              <h2 className="font-sans text-2xl font-semibold tracking-tight text-foreground">Key features</h2>
+              <h2 className="border-b border-foreground/10 pb-2 font-display text-2xl tracking-tight text-foreground">Key features</h2>
               <ul className="mt-5 divide-y divide-foreground/10 border-y border-foreground/10">
                 {project.features.map((feature, index) => (
                   <li key={index} className="flex items-start gap-3 py-3.5">
@@ -223,8 +223,8 @@ export default function ProjectPage() {
           {projectAnalysis[project.id] && <ProjectAnalysisSection analysis={projectAnalysis[project.id]} projectId={project.id} />}
 
           {project.technologies && project.technologies.length > 0 && (
-            <section id="stack" className="scroll-mt-28 pt-14">
-              <h2 className="font-sans text-2xl font-semibold tracking-tight text-foreground">Stack</h2>
+            <section id="tech-stack" className="scroll-mt-28 pt-14">
+              <h2 className="border-b border-foreground/10 pb-2 font-display text-2xl tracking-tight text-foreground">Stack</h2>
               <dl className="mt-5 divide-y divide-foreground/10 border-y border-foreground/10">
                 {groupTech(project.technologies).map((group) => (
                   <div key={group.category} className="grid gap-3 py-4 sm:grid-cols-[8rem_minmax(0,1fr)]">
@@ -242,7 +242,7 @@ export default function ProjectPage() {
 
           {architectures[project.id] && (
             <section id="architecture" className="scroll-mt-28 pt-14">
-              <h2 className="font-sans text-2xl font-semibold tracking-tight text-foreground">Architecture</h2>
+              <h2 className="border-b border-foreground/10 pb-2 font-display text-2xl tracking-tight text-foreground">Architecture</h2>
               <div className="mt-5">
                 <ArchitectureDiagram architecture={architectures[project.id]} />
               </div>
@@ -251,7 +251,7 @@ export default function ProjectPage() {
 
           {project.screenshots && project.screenshots.length > 0 && (
             <section id="screenshots" className="scroll-mt-28 pt-14">
-              <h2 className="font-sans text-2xl font-semibold tracking-tight text-foreground">Screenshots</h2>
+              <h2 className="border-b border-foreground/10 pb-2 font-display text-2xl tracking-tight text-foreground">Screenshots</h2>
               <div className="mt-5">
                 <ScreenshotCarousel
                   screenshots={project.screenshots}

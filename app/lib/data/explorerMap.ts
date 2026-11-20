@@ -17,6 +17,7 @@ import {
   type SysNode,
 } from "./systemMap";
 import { scenarioContent } from "./systemContent";
+import { toolNotes } from "./toolContent";
 
 /**
  * The explorer graph: the four map lanes (steps, documents, tools, this site's pipeline) plus the production lanes (request path,
@@ -42,7 +43,22 @@ export const explorerNodes: ExplorerNode[] = [...sysNodes, ...infraNodes];
 export const explorerNodeById = new Map<string, ExplorerNode>(explorerNodes.map((n) => [n.id, n]));
 
 const infraEdges: ExplorerEdge[] = buildInfraEdges();
-export const explorerEdges: ExplorerEdge[] = [...sysEdges, ...infraEdges];
+// tools that were used together, from the notes written for each tool (one edge per pair)
+const toolEdges: ExplorerEdge[] = (() => {
+  const seen = new Set<string>();
+  const out: ExplorerEdge[] = [];
+  Object.entries(toolNotes).forEach(([a, note]) =>
+    note.with.forEach(([b, how]) => {
+      const key = [a, b].sort().join("~");
+      if (seen.has(key)) return;
+      seen.add(key);
+      out.push({ id: `${a}~${b}`, from: a, to: b, kind: "relates", carries: "Used together", why: how });
+    })
+  );
+  return out;
+})();
+
+export const explorerEdges: ExplorerEdge[] = [...sysEdges, ...infraEdges, ...toolEdges];
 
 export const explorerIncident = (id: string): ExplorerEdge[] => explorerEdges.filter((e) => e.from === id || e.to === id);
 
@@ -74,6 +90,8 @@ export function tabOf(n: ExplorerNode): TabId {
       return "delivery";
     case "ops":
       return "operations";
+    case "code":
+      return "tools";
   }
 }
 
@@ -94,7 +112,11 @@ export function tabGroups(tab: TabId): TabGroup[] {
         .map((s, i) => ({ id: s.id, title: `${String(i + 1).padStart(2, "0")}  ${s.title}`, nodes: artifactNodes.filter((a) => a.stage === s.id).sort((a, b) => a.row - b.row) as ExplorerNode[] }))
         .filter((g) => g.nodes.length > 0);
     case "tools":
-      return TOOL_CATEGORIES.map((c) => ({ id: c.id, title: c.title, blurb: c.blurb, nodes: toolNodes.filter((t) => t.category === c.id).sort((a, b) => a.row - b.row) as ExplorerNode[] }));
+      return [
+        ...TOOL_CATEGORIES.map((c) => ({ id: c.id, title: c.title, blurb: c.blurb, nodes: toolNodes.filter((t) => t.category === c.id).sort((a, b) => a.row - b.row) as ExplorerNode[] })),
+        // the engineering practices sit with the tech stack they are done in
+        ...infraGroups.filter((g) => g.lane === "code").map((g) => ({ id: `practice-${g.id}`, title: `In practice: ${g.title}`, blurb: g.blurb, nodes: infraNodes.filter((x) => x.group === g.id) as ExplorerNode[] })),
+      ];
     case "request":
     case "operations": {
       const lane = tab === "request" ? "journey" : "ops";
@@ -137,7 +159,7 @@ export const sideCaption = (center: ExplorerNode, side: Side): string => {
   const c = center.lane;
   if (side === "left") return c === "artifact" ? "Produced by" : c === "tool" ? "Used in" : "Comes before";
   if (side === "right") return c === "artifact" ? "Needed by" : "Leads to";
-  if (side === "top") return c === "process" ? "Documents and checks" : c === "tool" ? "Also used by" : "Related";
+  if (side === "top") return c === "process" ? "Documents and checks" : c === "tool" ? "Used together with" : "Related";
   return "Tools";
 };
 
@@ -182,3 +204,74 @@ export function scenariosFor(id: string): ScenarioAppearance[] {
 export const evidenceOf = (n: ExplorerNode): Evidence => n.evidence;
 export const seenInOf = (n: ExplorerNode): SeenIn[] => n.seenIn;
 export { infraNodeById, sysNodeById };
+
+export interface RoadmapPoint {
+  id: string;
+  label: string;
+  /** where clicking the point goes */
+  href: string;
+  /** this point is where the item lives or is used */
+  lit: boolean;
+  /** this point is the item itself (or the phase of the step itself) */
+  current: boolean;
+  /** the related steps or items that make the point lit, shown under it */
+  items: { id: string; title: string }[];
+}
+
+export interface Roadmap {
+  title: string;
+  caption: string;
+  /** the item applies to the whole flow rather than one point */
+  across: boolean;
+  points: RoadmapPoint[];
+}
+
+const chainOf = (groupIds: string[]) =>
+  infraGroups
+    .filter((g) => groupIds.includes(g.id))
+    .sort((a, b) => groupIds.indexOf(a.id) - groupIds.indexOf(b.id))
+    .flatMap((g) => infraNodes.filter((x) => x.group === g.id).sort((a, b) => a.order - b.order));
+
+const REQUEST_CHAIN = ["visit"];
+const RELEASE_CHAIN = ["integrate", "ship"];
+
+function chainRoadmap(id: string, groups: string[], title: string, caption: string): Roadmap {
+  const n = explorerNodeById.get(id)!;
+  const chain = chainOf(groups);
+  const linked = new Set(explorerIncident(id).map((e) => (e.from === id ? e.to : e.from)));
+  const points = chain.map((c) => ({ id: c.id, label: c.title, href: `/process/${c.id}`, lit: c.id === id || linked.has(c.id), current: c.id === id, items: [] as { id: string; title: string }[] }));
+  // an item that sits beside the chain (monitoring, caching, security headers) applies to the whole flow rather than one point
+  return { title, caption: points.some((p) => p.lit) ? caption : `${caption} ${n.title} applies across the whole flow.`, across: !points.some((p) => p.lit), points };
+}
+
+/**
+ * A sample roadmap for one item: the seven phases for steps and documents (lit where the item shows up), or the request path /
+ * release chain for production items, hosting tools and pipeline items (lit where the item sits or what it is linked to).
+ */
+export function roadmapFor(id: string): Roadmap | null {
+  const n = explorerNodeById.get(id);
+  if (!n) return null;
+
+  if (n.lane === "journey") return chainRoadmap(id, REQUEST_CHAIN, "Where it sits on the request path", "A visitor's request, from the browser to the data.");
+  if (n.lane === "release" || n.lane === "ops") return chainRoadmap(id, RELEASE_CHAIN, "Where it sits in a release", "A change, from pull request to production.");
+
+  const rel = new Set(relatedStepIds(id));
+  const phases: Roadmap = {
+    title: n.lane === "process" ? "Where it sits in the process" : "Where it shows up in the process",
+    caption: "The seven phases of how a request becomes a trusted change.",
+    across: false,
+    points: stages.map((s) => {
+      const steps = processSysNodes.filter((p) => p.stage === s.id && rel.has(p.id));
+      return { id: s.id, label: s.title, href: `/process#grp-${s.id}`, lit: steps.length > 0, current: n.lane === "process" && n.stage === s.id, items: steps.map((p) => ({ id: p.id, title: p.title })) };
+    }),
+  };
+  if (phases.points.some((p) => p.lit)) return phases;
+
+  // hosting tools and CI-only pipeline items are not tied to a phase: show them on the production chain they belong to
+  const linked = explorerIncident(id).map((e) => (e.from === id ? e.to : e.from));
+  const onRequest = linked.filter((x) => chainOf(REQUEST_CHAIN).some((c) => c.id === x)).length;
+  const onRelease = linked.filter((x) => chainOf(RELEASE_CHAIN).some((c) => c.id === x)).length;
+  return onRequest > onRelease
+    ? chainRoadmap(id, REQUEST_CHAIN, "Where it shows up on the request path", "A visitor's request, from the browser to the data.")
+    : chainRoadmap(id, RELEASE_CHAIN, "Where it shows up in a release", "A change, from pull request to production.");
+}

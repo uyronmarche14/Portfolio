@@ -1,3 +1,5 @@
+import { codingGroups, codingNodes } from "./codingMap";
+import { moreGroups, moreNodes } from "./moreInfra";
 import type { Evidence, SeenIn } from "./processMap";
 
 /**
@@ -7,7 +9,7 @@ import type { Evidence, SeenIn } from "./processMap";
  * (monitoring, backups, a container registry, a reverse proxy) is "concept". Kubernetes, Terraform and Helm are not used and are not nodes.
  */
 
-export type InfraLane = "journey" | "release" | "ops";
+export type InfraLane = "journey" | "release" | "ops" | "code";
 
 export interface InfraGroup {
   id: string;
@@ -27,6 +29,8 @@ export interface InfraNode {
   why: string;
   /** how it works, in a few short points */
   how: string[];
+  /** a worked example in one or two sentences */
+  example?: string;
   group: string;
   order: number;
   evidence: Evidence;
@@ -38,7 +42,9 @@ export interface InfraNode {
 const CICT: SeenIn = { label: "CICT platform", href: "/projects/cict-organization-website" };
 const SITE: SeenIn = { label: "This portfolio", href: "/" };
 
-export const infraGroups: InfraGroup[] = [
+const rawGroups: InfraGroup[] = [
+  ...codingGroups,
+  ...moreGroups,
   { id: "visit", lane: "journey", title: "A visitor's request", blurb: "What happens, in order, between typing an address and seeing a page.", chain: true },
   { id: "around", lane: "journey", title: "Around the request", blurb: "Parts that protect or speed up the path without being on every request.", chain: false },
   { id: "integrate", lane: "release", title: "Integrate", blurb: "Every change is checked before it can reach a user.", chain: true },
@@ -49,6 +55,9 @@ export const infraGroups: InfraGroup[] = [
   { id: "protect", lane: "ops", title: "Protect", blurb: "Keeping the site, its data and its dependencies safe.", chain: false },
   { id: "restore", lane: "ops", title: "Restore", blurb: "Getting back after something is lost.", chain: false },
 ];
+
+const GROUP_ORDER = ["visit", "dns", "hosting", "around", "integrate", "ship", "targets", "recover", "config", "observe", "protect", "restore", "govern", "server", "ui", "platform", "quality", "ai"];
+export const infraGroups: InfraGroup[] = GROUP_ORDER.map((id) => rawGroups.find((g) => g.id === id)!);
 
 const n = (
   lane: InfraLane,
@@ -65,6 +74,8 @@ const n = (
 ): InfraNode => ({ lane, id, title, group, order, evidence, summary, why, how, links, seenIn });
 
 export const infraNodes: InfraNode[] = [
+  ...codingNodes,
+  ...moreNodes,
   // ---------------------------------------------------------------- request path
   n("journey", "j-browser", "The visitor's browser", "visit", 0, "method", "Starts every request: it needs an address, and it only knows the name.", "Everything below exists to turn a name someone types into a page that appears quickly and safely.", ["Takes a URL such as a hostname and a path", "Checks its own caches first", "Otherwise asks the next layer down to find the server"], [["j-dns", "The browser cannot connect to a name, so it asks DNS for an address."]]),
   n("journey", "j-dns", "DNS lookup", "visit", 1, "built", "Turns a hostname into the address of a server.", "If DNS is wrong, the site is unreachable no matter how healthy the servers are. It is also where a migration is switched over.", ["The browser asks a resolver, which asks the root, then the top-level domain, then the zone's authoritative name server", "The answer is a record: A or AAAA for an address, CNAME for an alias", "Each answer is cached for its time to live, so changes take time to spread", "In CICT the custom domains are declared in the Worker configuration and the DNS record is created on the first deploy, in the Cloudflare zone"], [["t-cf", "Cloudflare holds the zone and the custom domain."], ["r-staging", "A hostname for staging is created the first time staging deploys."], ["r-env-prod", "Production has its own hostname."]], [CICT]),
@@ -108,6 +119,31 @@ export const infraNodes: InfraNode[] = [
   n("ops", "o-backup", "Backups", "restore", 0, "concept", "Regular copies of the database and files, kept somewhere else.", "Hosting is not a backup. Deleted or corrupted data only comes back if a copy exists.", ["A documented requirement for the delivered projects, not shown as verified", "Needs a schedule, a separate location and a retention rule"], [["j-data", "The data layer is what is being protected."]]),
   n("ops", "o-restore", "Restore drills", "restore", 1, "concept", "Practising getting back from a backup.", "A backup you have never restored is a hope, not a plan.", ["Restore into a non-production target", "Record how long it took and what was missing"], [["o-backup", "A drill proves the backup works."]]),
 ];
+
+// Updates to the first-draft entries, from reading more of my projects' deploy notes and configuration.
+const PATCH: Record<string, Partial<InfraNode> & { addLinks?: [string, string][] }> = {
+  "c-ai-loop": { addLinks: [["c-ai-instructions", "Instructions are what bound the task."], ["c-ai-subagents", "Narrow jobs can be delegated."], ["c-ai-orchestration", "Several agents need a coordinator."], ["c-ai-guardrails", "Permissions limit the worst case."], ["c-ai-drafts", "Output stays a draft until approved."], ["c-ai-mcp", "Connected tools extend what it can reach."], ["t-skills", "Skills carry reusable instructions."], ["t-harness", "The harness runs the loop."]] },
+  "j-dns": { addLinks: [["j-registrar", "Nameservers decide who answers."], ["j-zone", "The zone holds the records."], ["j-records", "Records are what a lookup returns."], ["j-ttl", "TTL controls how long an answer is cached."], ["j-cutover", "Moving a site changes what the lookup returns."]] },
+  "j-edge": { addLinks: [["j-media", "Images are cached and resized at the edge."], ["j-static-headers", "Security headers are sent from the edge."], ["j-pages", "Static sites are served from the edge."]] },
+  "j-web": { addLinks: [["j-workers", "The CRM frontend runs on Workers."], ["j-pages", "A static site runs on Pages."], ["j-vercel", "Another site ran on Vercel."], ["j-spa", "Single-page apps need a fallback route."]] },
+  "j-api": { addLinks: [["j-render", "Render runs the API."], ["t-helmet", "Helmet, CORS and rate limiting protect it."]] },
+  "j-rate": { how: ["The CICT API applies a general limiter to its /api routes, with the window and maximum set by environment variables", "Limits are kept inside the process, which suits one instance; coordinate limiting at the edge before running several", "A managed web application firewall is not used"], addLinks: [["j-waf", "A firewall is the next layer up."]] },
+  "o-logs": { evidence: "built", summary: "Application logs go to the platform's output, and Cloudflare logs and traces are switched on in the Worker configuration.", how: ["The API logs an event and code, not request bodies, tokens or database addresses", "The log level is a setting, and logging to files is off: output goes to the platform", "Workers observability is enabled in the Worker configuration", "Retention and sampling still need review in the real account, and request correlation is still to add"], example: "A failed request logs its event and code, so someone can find it without the log holding a password or a token.", addLinks: [["o-trace", "Correlation is the next step."]] },
+  "o-monitor": { addLinks: [["o-trace", "Error monitoring needs correlation."], ["o-incident", "Alerts need someone to receive them."]] },
+  "o-headers": { how: ["This site sets HSTS, content-type, frame and referrer headers", "The API uses Helmet for the same purpose", "A demo app ships a strict Content-Security-Policy in its headers file", "This portfolio does not set a Content-Security-Policy yet"], addLinks: [["o-csp", "The policy is the strongest of these headers."], ["j-static-headers", "A headers file is how static hosts send them."]] },
+  "o-backup": { how: ["A documented requirement for the delivered projects, not shown as verified", "Needs a schedule, a separate location and a retention rule", "A planning target is written down (24 hours of data, 4 hours of downtime) but not measured", "A provider's backup switch is not a recovery drill"], addLinks: [["o-rpo", "Backups are chosen against a recovery target."]] },
+  "r-rollback": { how: ["Redeploy the previous release, or restore the previous origin", "CICT's notes keep the previous origin allowed during a rollback window", "Rolling back the app does not reverse database migrations, so changes are made in expand-then-contract steps", "Stop and inspect after an unclear deploy result instead of creating replacement resources"], addLinks: [["r-migrate", "Database changes need their own plan."], ["j-cutover", "A DNS move has a rollback window too."]] },
+  "r-iac": { how: ["A Wrangler configuration with a staging and a production environment", "A Render blueprint with the build command, health path and secret placeholders", "A headers file for static hosts", "Terraform, Helm and Kubernetes are not used here"], addLinks: [["r-wrangler", "Wrangler reads the Worker configuration."], ["r-render-bp", "Render reads the blueprint."]] },
+  "r-staging": { addLinks: [["r-wrangler", "The frontend deploys with Wrangler."], ["j-subdomains", "Staging gets its own hostname."]] },
+  "r-prod": { addLinks: [["r-wrangler", "The frontend deploys with Wrangler."], ["r-token", "A scoped token performs the deploy."]] },
+};
+infraNodes.forEach((x) => {
+  const patch = PATCH[x.id];
+  if (!patch) return;
+  const { addLinks, ...rest } = patch;
+  Object.assign(x, rest);
+  if (addLinks) x.links = [...x.links, ...addLinks];
+});
 
 export const infraNodeById = new Map(infraNodes.map((x) => [x.id, x]));
 export const infraGroupById = new Map(infraGroups.map((g) => [g.id, g]));

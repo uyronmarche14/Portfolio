@@ -1,7 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { ArrowLeft, ArrowRight, Map as MapIcon } from "lucide-react";
+import { ArrowRight, Map as MapIcon } from "lucide-react";
 import Link from "next/link";
 import { useMemo } from "react";
 
@@ -17,23 +16,19 @@ import {
 } from "@/lib/data/explorerMap";
 import { EVIDENCE } from "@/lib/data/processMap";
 import { artifactExamples, scenarioContent, stepContent } from "@/lib/data/systemContent";
-import { TOOL_CATEGORIES, artifactsForPath, toolsForPath } from "@/lib/data/systemMap";
+import { toolNotes } from "@/lib/data/toolContent";
+import type { InfraNode } from "@/lib/data/infraMap";
+import { projects } from "@/lib/data/projects";
+import { TOOL_CATEGORIES, artifactsForPath, scenarios, toolsForPath } from "@/lib/data/systemMap";
 import { cn } from "@/lib/utils";
 
 import { EvidenceDot } from "../evidence";
-import { EvidenceChip } from "../ProcessDetail";
 import NeighborhoodDiagram from "./NeighborhoodDiagram";
 import ScenarioStrip from "./ScenarioStrip";
 
-export type SheetTab = "overview" | "connections" | "scenarios" | "work";
-export const SHEET_TABS: { id: SheetTab; label: string }[] = [
-  { id: "overview", label: "Overview" },
-  { id: "connections", label: "Connections" },
-  { id: "scenarios", label: "Scenarios" },
-  { id: "work", label: "In my work" },
-];
 
-const LANE_TAG: Record<ExplorerNode["lane"], string> = { process: "Step", artifact: "Document", tool: "Tool", pipeline: "Pipeline", journey: "Request path", release: "Release", ops: "Operations" };
+const LANE_TAG: Record<ExplorerNode["lane"], string> = { process: "Step", artifact: "Document", tool: "Tool", pipeline: "Pipeline", journey: "Request path", release: "Release", ops: "Operations", code: "Practice" };
+const isInfra = (n: ExplorerNode): n is InfraNode => n.lane === "journey" || n.lane === "release" || n.lane === "ops" || n.lane === "code";
 const H = "font-mono text-[11px] uppercase tracking-wider text-foreground/45";
 const CHIP =
   "rounded-full border border-foreground/15 px-3 py-1 text-sm text-foreground/80 transition-colors hover:border-primary hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring";
@@ -57,11 +52,12 @@ const Callout = ({ label, children }: { label: string; children: React.ReactNode
 );
 
 // ------------------------------------------------------------------------------------------------------------------ overview
-function Overview({ node, onSelect }: { node: ExplorerNode; onSelect: (id: string) => void }) {
+export function Overview({ node, onSelect }: { node: ExplorerNode; onSelect: (id: string) => void }) {
   const usedBy = useMemo(() => {
     if (node.lane !== "tool") return [];
-    return explorerIncident(node.id).map((e) => explorerNodeById.get(e.from === node.id ? e.to : e.from)!).filter(Boolean);
+    return explorerIncident(node.id).map((e) => explorerNodeById.get(e.from === node.id ? e.to : e.from)!).filter((x) => Boolean(x) && x.lane !== "tool");
   }, [node]);
+  const note = node.lane === "tool" ? toolNotes[node.id] : undefined;
   const content = node.lane === "process" ? stepContent[node.id] : undefined;
   const category = node.lane === "tool" ? TOOL_CATEGORIES.find((c) => c.id === node.category)?.title : undefined;
 
@@ -70,11 +66,13 @@ function Overview({ node, onSelect }: { node: ExplorerNode; onSelect: (id: strin
       <p className="max-w-[70ch] text-[15px] leading-relaxed text-foreground/75">{node.summary}</p>
 
       {content && <Callout label="Why it matters">{content.why}</Callout>}
-      {node.lane === "journey" || node.lane === "release" || node.lane === "ops" ? <Callout label="Why it matters">{node.why}</Callout> : null}
+      {isInfra(node) && <Callout label="Why it matters">{node.why}</Callout>}
       {content && <Callout label="Example">{content.example}</Callout>}
+      {isInfra(node) && node.example && <Callout label="Example">{node.example}</Callout>}
+      {note && <Callout label="How I used it">{note.how}</Callout>}
       {node.lane === "artifact" && artifactExamples[node.id] && <Callout label="Example">{artifactExamples[node.id]}</Callout>}
 
-      {(node.lane === "journey" || node.lane === "release" || node.lane === "ops") && (
+      {isInfra(node) && (
         <>
           <h4 className={cn(H, "mt-6")}>How it works</h4>
           <List items={node.how} />
@@ -151,6 +149,34 @@ function Overview({ node, onSelect }: { node: ExplorerNode; onSelect: (id: strin
               </ul>
             </>
           )}
+          {note && note.used.length > 0 && (
+            <>
+              <h4 className={cn(H, "mt-6")}>What I used it for</h4>
+              <List items={note.used} />
+            </>
+          )}
+          {note && note.with.length > 0 && (
+            <>
+              <h4 className={cn(H, "mt-6")}>Connected to</h4>
+              <ul className="mt-2 divide-y divide-foreground/[0.07]">
+                {note.with.map(([id, how]) => {
+                  const other = explorerNodeById.get(id);
+                  if (!other) return null;
+                  return (
+                    <li key={id} className="py-2">
+                      <button type="button" onClick={() => onSelect(id)} className="group flex w-full flex-col items-start gap-0.5 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+                        <span className="flex items-center gap-2 text-[13px] font-medium text-foreground group-hover:text-primary">
+                          <EvidenceDot evidence={other.evidence} />
+                          {other.title}
+                        </span>
+                        <span className="pl-4 text-xs leading-relaxed text-foreground/55">{how}</span>
+                      </button>
+                    </li>
+                  );
+                })}
+              </ul>
+            </>
+          )}
         </>
       )}
 
@@ -165,7 +191,7 @@ function Overview({ node, onSelect }: { node: ExplorerNode; onSelect: (id: strin
 }
 
 // ------------------------------------------------------------------------------------------------------------------ connections
-function Connections({ node, onSelect }: { node: ExplorerNode; onSelect: (id: string) => void }) {
+export function Connections({ node, onSelect }: { node: ExplorerNode; onSelect: (id: string) => void }) {
   const groups = neighborhoodGroups(node.id);
   const sides: Side[] = ["left", "right", "top", "bottom"];
   const total = sides.reduce((n, s) => n + groups[s].length, 0);
@@ -173,8 +199,8 @@ function Connections({ node, onSelect }: { node: ExplorerNode; onSelect: (id: st
   return (
     <div>
       <p className="text-sm text-foreground/60">{total} connections. Click anything to open it.</p>
-      <div className="mx-auto mt-3 max-w-2xl">
-        <NeighborhoodDiagram center={node} onSelect={onSelect} />
+      <div className="mx-auto mt-3 max-w-xl">
+        <NeighborhoodDiagram key={node.id} center={node} onSelect={onSelect} />
       </div>
       {sides
         .filter((s) => groups[s].length > 0)
@@ -202,12 +228,12 @@ function Connections({ node, onSelect }: { node: ExplorerNode; onSelect: (id: st
 }
 
 // ------------------------------------------------------------------------------------------------------------------ scenarios
-function Scenarios({ node, onSelect }: { node: ExplorerNode; onSelect: (id: string) => void }) {
+export function Scenarios({ node, onSelect }: { node: ExplorerNode; onSelect: (id: string) => void }) {
   const list = useMemo(() => scenariosFor(node.id), [node.id]);
-  if (list.length === 0) return <p className="text-sm text-foreground/60">This does not appear in any of the four situations yet.</p>;
+  if (list.length === 0) return <p className="text-sm text-foreground/60">This does not appear in any of the situations yet.</p>;
   return (
     <div className="space-y-8">
-      <p className="text-sm text-foreground/60">Appears in {list.length} of 4 situations. Pick a step to jump to it.</p>
+      <p className="text-sm text-foreground/60">Appears in {list.length} of {scenarios.length} situations. Pick a step to jump to it.</p>
       {list.map(({ scenario, steps, direct, note }) => {
         const c = scenarioContent[scenario.id];
         const tools = toolsForPath(scenario.path);
@@ -232,22 +258,38 @@ function Scenarios({ node, onSelect }: { node: ExplorerNode; onSelect: (id: stri
 }
 
 // ------------------------------------------------------------------------------------------------------------------ in my work
-function Work({ node, onOpenMap }: { node: ExplorerNode; onOpenMap: (id: string) => void }) {
+export function Work({ node, onOpenMap }: { node: ExplorerNode; onOpenMap: (id: string) => void }) {
   const onMap = node.lane === "process" || node.lane === "artifact" || node.lane === "tool" || node.lane === "pipeline";
   return (
     <div>
       {node.seenIn.length > 0 ? (
         <>
-          <h4 className={H}>See it in my work</h4>
-          <ul className="mt-2 flex flex-wrap gap-2">
-            {node.seenIn.map((s) => (
-              <li key={s.href}>
-                <Link href={s.href} className={cn(CHIP, "inline-flex items-center gap-1")}>
-                  {s.label}
-                  <ArrowRight aria-hidden="true" className="h-3.5 w-3.5" />
-                </Link>
-              </li>
-            ))}
+          <h4 className={H}>Where I have used it</h4>
+          <ul className="mt-3 grid gap-3 sm:grid-cols-2">
+            {node.seenIn.map((s) => {
+              const id = s.href.startsWith("/projects/") ? s.href.replace("/projects/", "") : null;
+              const project = id ? projects.find((p) => p.id === id) : null;
+              return (
+                <li key={s.href}>
+                  <Link href={s.href} className="group block h-full rounded-xl border border-foreground/15 p-4 transition-colors hover:border-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+                    <span className="flex items-center justify-between gap-2 text-[15px] font-medium text-foreground group-hover:text-primary">
+                      {project?.title ?? s.label}
+                      <ArrowRight aria-hidden="true" className="h-4 w-4 shrink-0" />
+                    </span>
+                    {project && (
+                      <>
+                        <span className="mt-1.5 line-clamp-3 block text-[13px] leading-relaxed text-foreground/60">{project.description}</span>
+                        <span className="mt-3 flex flex-wrap gap-1">
+                          {project.technologies.slice(0, 4).map((t) => (
+                            <span key={t} className="rounded-full border border-foreground/12 px-2 py-0.5 font-mono text-[10px] text-foreground/55">{t}</span>
+                          ))}
+                        </span>
+                      </>
+                    )}
+                  </Link>
+                </li>
+              );
+            })}
           </ul>
         </>
       ) : (
@@ -259,73 +301,6 @@ function Work({ node, onOpenMap }: { node: ExplorerNode; onOpenMap: (id: string)
           Show it on the map
         </button>
       )}
-    </div>
-  );
-}
-
-// ------------------------------------------------------------------------------------------------------------------ the sheet body
-export default function ItemSheet({
-  id,
-  sheetTab,
-  setSheetTab,
-  onSelect,
-  onOpenMap,
-}: {
-  id: string;
-  sheetTab: SheetTab;
-  setSheetTab: (t: SheetTab) => void;
-  onSelect: (id: string) => void;
-  onOpenMap: (id: string) => void;
-}) {
-  const node = explorerNodeById.get(id);
-  if (!node) return null;
-  return (
-    <div>
-      <div className="flex flex-wrap items-center gap-2">
-        <span className="rounded-full border border-primary/40 bg-primary/10 px-2 py-0.5 font-mono text-[11px] text-primary">{LANE_TAG[node.lane]}</span>
-        <EvidenceChip evidence={node.evidence} />
-      </div>
-      <h3 className="mt-3 font-display text-2xl tracking-tight text-foreground sm:text-3xl">{node.title}</h3>
-
-      <div role="tablist" aria-label="Details" className="mt-4 flex gap-6 overflow-x-auto border-b border-foreground/10">
-        {SHEET_TABS.map((t) => {
-          const on = t.id === sheetTab;
-          return (
-            <button
-              key={t.id}
-              role="tab"
-              type="button"
-              aria-selected={on}
-              onClick={() => setSheetTab(t.id)}
-              className={cn("relative -mb-px shrink-0 pb-2 text-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring", on ? "text-foreground" : "text-foreground/50 hover:text-foreground/80")}
-            >
-              {t.label}
-              {on && <motion.span layoutId="sheet-tab-underline" className="absolute inset-x-0 -bottom-px h-0.5 rounded-full bg-primary" transition={{ type: "spring", damping: 30, stiffness: 400 }} />}
-            </button>
-          );
-        })}
-      </div>
-
-      <div role="tabpanel" className="mt-5">
-        {sheetTab === "overview" && <Overview node={node} onSelect={onSelect} />}
-        {sheetTab === "connections" && <Connections node={node} onSelect={onSelect} />}
-        {sheetTab === "scenarios" && <Scenarios node={node} onSelect={onSelect} />}
-        {sheetTab === "work" && <Work node={node} onOpenMap={onOpenMap} />}
-      </div>
-    </div>
-  );
-}
-
-export function SheetNav({ onPrev, onNext, label }: { onPrev?: () => void; onNext?: () => void; label: string }) {
-  return (
-    <div className="flex items-center justify-between gap-3">
-      <button type="button" onClick={onPrev} disabled={!onPrev} className="inline-flex items-center gap-2 rounded-full border border-foreground/15 px-4 py-2 text-sm text-foreground/80 transition-colors hover:border-primary disabled:cursor-not-allowed disabled:opacity-35 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
-        <ArrowLeft aria-hidden="true" className="h-4 w-4" /> Previous
-      </button>
-      <span className="font-mono text-xs text-foreground/50">{label}</span>
-      <button type="button" onClick={onNext} disabled={!onNext} className="inline-flex items-center gap-2 rounded-full bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-35 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
-        Next <ArrowRight aria-hidden="true" className="h-4 w-4" />
-      </button>
     </div>
   );
 }

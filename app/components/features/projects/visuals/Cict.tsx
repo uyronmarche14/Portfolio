@@ -1,39 +1,49 @@
 "use client";
 
-import { C, Loop, Surface, Text, VisualFrame } from "@/components/features/experience/ExperienceVisualKit";
-import { rows } from "./rows";
+import { C } from "@/components/features/experience/ExperienceVisualKit";
 
-/** CICT: web admin and a phone sharing one API, with a QR scan. */
+import { Beam, Card, Chip, Label, Reveal, SceneFrame, T, Tick, Between } from "./kit";
+
+/** CICT platform: an admin publishes an event on the web, the shared API carries it, and the student app shows it and records attendance. */
+const API = ["Content", "Events", "Roles", "Attendance"];
+
 export const Cict = () => (
-  <VisualFrame>
-    <Surface x={36} y={56} w={290} h={200} e={1} />
-    <path d="M36 90h290" stroke={C.line} />
-    {rows(3).map((i) => <circle key={i} cx={54 + i * 13} cy={73} r={3.5} fill={C.faint} />)}
-    <Text x={56} y={118} size={11} opacity={0.5}>EVENTS</Text>
-    {rows(3).map((i) => (
+  <SceneFrame beats={4} ms={1500} label="An event published in the admin web app travels through one shared API to the student mobile app, where attendance is recorded">
+    <Card x={24} y={24} w={228} h={164} />
+    <Label x={40} y={52}>ADMIN WEB</Label>
+    {[0, 1].map((i) => (
       <g key={i}>
-        <rect x={56} y={130 + i * 38} width={250} height={30} rx={8} fill={C.faint} />
-        <rect x={68} y={141 + i * 38} width={84} height={7} rx={3.5} fill={C.bar} />
-        <rect x={252} y={138 + i * 38} width={44} height={14} rx={7} fill={i === 0 ? C.accent : C.line} />
+        <rect x={40} y={68 + i * 36} width={196} height={28} rx={8} fill={C.faint} />
+        <rect x={52} y={78 + i * 36} width={90} height={7} rx={3.5} fill={C.bar} />
       </g>
     ))}
-    <Surface x={384} y={80} w={120} h={240} r={24} e={2} />
-    <rect x={426} y={92} width={36} height={6} rx={3} fill={C.faint} />
-    <rect x={402} y={124} width={84} height={84} rx={10} fill={C.paper} stroke={C.line} />
-    {rows(16).map((i) => <rect key={i} x={412 + (i % 4) * 17} y={134 + Math.floor(i / 4) * 17} width={11} height={11} rx={2} fill={C.ink} opacity={i % 3 === 0 ? 0.8 : 0.2} />)}
-    <Loop a={{ y: [0, 72, 0] }} d={3.2} ease="linear">
-      <rect x={402} y={126} width={84} height={3} rx={1.5} fill={C.accent} />
-    </Loop>
-    <rect x={402} y={232} width={84} height={26} rx={13} fill={C.accent} />
-    <Text x={444} y={250} size={12} anchor="middle" fill={C.onAccent} weight={500} mono={false}>Attendance</Text>
-    <path d="M326 156h58" stroke={C.accent} strokeWidth={2} strokeDasharray="5 5" />
-    <Surface x={36} y={290} w={488} h={96} e={1} />
-    <Text x={58} y={318} size={11} opacity={0.5}>SHARED API</Text>
-    {["Content", "Events", "Roles", "Attendance"].map((l, i) => (
-      <g key={l}>
-        <rect x={58 + i * 114} y={332} width={100} height={32} rx={16} fill={i === 3 ? C.accentSoft : C.faint} stroke={i === 3 ? C.accent : "none"} strokeOpacity={0.5} />
-        <Text x={108 + i * 114} y={353} size={12} anchor="middle" opacity={0.8}>{l}</Text>
-      </g>
+    <Reveal at={0}>
+      <rect x={40} y={140} width={196} height={30} rx={8} fill={C.accentSoft} stroke={C.accent} />
+      <T x={52} y={160} size={11} mono o={1}>New event · published</T>
+    </Reveal>
+
+    <Card x={308} y={24} w={228} h={164} />
+    <Label x={324} y={52}>STUDENT APP</Label>
+    <Between from={0} to={2}>
+      <rect x={324} y={68} width={196} height={28} rx={8} fill={C.faint} />
+      <T x={338} y={86} size={11} mono o={0.5}>No new events yet</T>
+    </Between>
+    <Reveal at={3}>
+      <rect x={324} y={68} width={196} height={28} rx={8} fill={C.accentSoft} stroke={C.accent} />
+      <T x={338} y={86} size={11} mono o={1}>New event · register</T>
+      <circle cx={340} cy={136} r={11} fill={C.accent} />
+      <Tick x={340} y={137} at={3} size={9} />
+      <T x={360} y={141} size={13} o={0.9}>Attendance recorded</T>
+    </Reveal>
+
+    <Beam d="M138 188 V224" at={1} />
+    <Beam d="M422 224 V188" at={2} />
+
+    <Card x={24} y={224} w={512} h={132} />
+    <Label x={44} y={252}>SHARED API</Label>
+    {API.map((a, i) => (
+      <Chip key={a} x={44 + i * 118} y={274} w={104} at={0} active={i === 1}>{a}</Chip>
     ))}
-  </VisualFrame>
+    <T x={44} y={334} size={11} mono o={0.5}>One backend, role-aware access for web and mobile</T>
+  </SceneFrame>
 );

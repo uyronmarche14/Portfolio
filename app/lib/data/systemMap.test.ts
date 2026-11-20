@@ -114,7 +114,7 @@ describe("tools", () => {
 
   it("proposed or unproven items are labelled concept", () => {
     const byId = new Map(toolNodes.map((t) => [t.id, t]));
-    ["t-cf", "t-homelab", "t-mcp", "t-pq", "t-rag", "t-vercel", "t-imu", "t-gps", "t-game"].forEach((id) => expect(byId.get(id)?.evidence).toBe("concept"));
+    ["t-homelab", "t-mcp", "t-pq", "t-rag", "t-imu", "t-gps", "t-game"].forEach((id) => expect(byId.get(id)?.evidence).toBe("concept"));
   });
 });
 
@@ -132,10 +132,11 @@ describe("delivery pipeline", () => {
     });
   });
 
-  it("does not claim a deployment", () => {
+  it("states where the build settings live instead of implying a config file", () => {
     const host = pipelineNodes.find((p) => p.id === "p-host");
-    expect(host?.evidence).toBe("concept");
-    expect(host?.title.toLowerCase()).toContain("target");
+    expect(host?.evidence).toBe("built");
+    expect(host?.summary.toLowerCase()).toContain("dashboard");
+    expect(host?.summary.toLowerCase()).toContain("not in this repository");
   });
 });
 

@@ -133,7 +133,7 @@ export function FeaturedProject({ project, index }: FeaturedProjectProps) {
               </motion.div>
             </AnimatePresence>
           ) : hasProjectVisual(project.id) ? (
-            <ProjectVisual id={project.id} className="h-full w-full p-4" />
+            <ProjectVisual id={project.id} mode="card" className="h-full w-full p-4" />
           ) : null}
         </Link>
 

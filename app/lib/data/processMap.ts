@@ -479,6 +479,30 @@ export const scenarios: Scenario[] = [
     description: "A product idea starts rough. Frame it, state the problem, choose the first audience, cut the first version and write the requirements.",
     path: ["d-interviews", "d-frame", "d-problem", "d-users", "s-mvp", "s-biz", "s-req", "s-ac", "s-gate", "g-feature", "g-schema"],
   },
+  {
+    id: "access",
+    label: "Role-based module",
+    description: "A module with approvals and different permissions. Map the process, define the states and roles, fix the data, then specify, design and build it.",
+    path: ["m-asis", "m-workflow", "m-roles", "m-data", "s-ac", "s-gate", "g-feature", "g-schema", "b-handoff", "b-build", "v-uat", "v-gate"],
+  },
+  {
+    id: "ai",
+    label: "AI-assisted build",
+    description: "A baselined change is built with an AI assistant: a bounded task, a reviewed result, then the usual validation and gate.",
+    path: ["s-ac", "s-gate", "b-handoff", "b-ai", "b-build", "v-uat", "v-triage", "v-gate", "c-log"],
+  },
+  {
+    id: "change",
+    label: "Change after release",
+    description: "Testing finds that a requirement was wrong. The change goes back through the baseline, is built again and is checked again.",
+    path: ["v-uat", "v-triage", "v-gate", "c-change", "s-req", "s-ac", "s-gate", "b-handoff", "b-build"],
+  },
+  {
+    id: "release",
+    label: "Release and handover",
+    description: "A built and accepted release is recorded, traced and explained, and the next versions are planned.",
+    path: ["b-build", "v-uat", "v-gate", "c-change", "c-log", "c-readout", "c-roadmap"],
+  },
 ];
 
 export interface ResolvedNode extends MapNode {

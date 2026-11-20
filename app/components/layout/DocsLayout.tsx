@@ -7,6 +7,8 @@ interface DocsLayoutProps {
   sidebar: ReactNode;
   /** right "On this page" list */
   rail?: ReactNode;
+  /** let the content use the full width instead of a reading column */
+  wide?: boolean;
   children: ReactNode;
 }
 
@@ -21,7 +23,7 @@ export const docsLinkClass = (active: boolean) =>
  * Full-width documentation layout: navigation pinned to the left edge, a
  * reading column in the middle and an "On this page" rail on the right.
  */
-export function DocsLayout({ sidebar, rail, children }: DocsLayoutProps) {
+export function DocsLayout({ sidebar, rail, wide, children }: DocsLayoutProps) {
   return (
     <div className="flex min-h-screen w-full">
       {/* the divider lines run the full page height, from the very top edge */}
@@ -29,7 +31,7 @@ export function DocsLayout({ sidebar, rail, children }: DocsLayoutProps) {
         <div className="sticky top-0 max-h-screen overflow-y-auto px-6 pb-8 pt-28">{sidebar}</div>
       </aside>
       <main className="min-w-0 flex-1 px-6 pb-24 pt-28 md:px-10 lg:px-14">
-        <div className="mx-auto w-full max-w-[780px]">{children}</div>
+        <div className={cn("mx-auto w-full", wide ? "max-w-none" : "max-w-[780px]")}>{children}</div>
       </main>
       {rail && (
         <aside className="hidden w-[240px] shrink-0 border-l border-foreground/10 xl:block">
